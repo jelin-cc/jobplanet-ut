@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>잡플래닛 - 리뷰 더보기</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    /* ===== Design Tokens ===== */
+    :root {
+      --gray-50: #f7f8f9;
+      --gray-100: #f0f1f3;
+      --gray-200: #dfe1e5;
+      --gray-300: #cdd0d6;
+      --gray-400: #b0b5bd;
+      --gray-500: #949ba8;
+      --gray-600: #768091;
+      --gray-700: #606876;
+      --gray-800: #3e434b;
+      --gray-900: #2b2e33;
+      --gray-950: #1a1a1e;
+
+      --brand-primary: #00c362;
+      --brand-primary-light: #ebf9ef;
+      --brand-primary-dark: #00a855;
+
+      --red-500: #fc3b3b;
+      --green-500: #0dbc7c;
+      --blue-600: #207cf4;
+
+      --bg-primary: #ffffff;
+      --bg-secondary: var(--gray-50);
+      --bg-tertiary: var(--gray-100);
+      --bg-inverse: var(--gray-950);
+
+      --text-primary: var(--gray-950);
+      --text-secondary: var(--gray-800);
+      --text-tertiary: var(--gray-600);
+      --text-disabled: var(--gray-500);
+      --text-inverse: #ffffff;
+      --text-brand: var(--brand-primary);
+
+      --line-primary: var(--gray-200);
+      --line-secondary: var(--gray-100);
+
+      --icon-primary: var(--gray-950);
+      --icon-secondary: var(--gray-600);
+
+      --radius-sm: 10px;
+      --radius-md: 10px;
+      --radius-lg: 10px;
+      --radius-xl: 12px;
+      --radius-xl2: 16px;
+      --radius-full: 999px;
+
+      --font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --font-regular: 400;
+      --font-medium: 500;
+      --font-semibold: 600;
+      --font-bold: 700;
+
+      --shadow-default: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    }
+
+    /* ===== Reset ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-family);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== GNB ===== */
+    .desktop-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--line-secondary);
+      width: 100%;
+    }
+    .desktop-nav-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 40px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .desktop-nav-logo {
+      font-size: 22px;
+      font-weight: var(--font-bold);
+      color: var(--brand-primary);
+      cursor: pointer;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+    .desktop-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+    }
+    .desktop-nav-links a {
+      padding: 0 12px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+      font-weight: var(--font-medium);
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+    }
+    .desktop-nav-links a.active {
+      color: var(--brand-primary);
+      border-bottom-color: var(--brand-primary);
+      font-weight: var(--font-semibold);
+    }
+    .desktop-nav-links .membership-btn {
+      border: 1px solid var(--line-primary);
+      border-radius: var(--radius-sm);
+      padding: 4px 12px;
+      height: auto;
+      font-size: 13px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--line-primary);
+    }
+    .desktop-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .desktop-nav-right .icon-btn {
+      cursor: pointer;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+    }
+    .desktop-nav-right .divider-v {
+      width: 1px;
+      height: 14px;
+      background: var(--line-primary);
+    }
+    .desktop-nav-right .corp-btn {
+      font-size: 14px;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .profile-circle {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--bg-tertiary); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ===== Search Bar ===== */
+    .rd-search-bar {
+      border-bottom: 1px solid #e5e6e9;
+      background: #fff;
+    }
+    .rd-search-bar__inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .rd-search-input {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      border: 1.5px solid #00c362;
+      border-radius: 8px;
+      padding: 10px 16px;
+      background: #fff;
+    }
+    .rd-search-input input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: 'Pretendard', sans-serif;
+      font-size: 15px;
+      color: #323438;
+      background: none;
+    }
+    .rd-search-input input::placeholder { color: #b0b5bd; }
+    .rd-search-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+    }
+    .rd-search-rank {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      padding: 10px 16px;
+      border: 1px solid #e5e6e9;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #323438;
+      min-width: 200px;
+    }
+    .rd-search-rank__num {
+      font-weight: 700;
+      color: #323438;
+    }
+    .rd-search-rank__company {
+      font-weight: 500;
+      flex: 1;
+    }
+    .rd-search-rank__change {
+      color: #f44336;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* ===== Section Header ===== */
+    .rd-section-header {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .rd-section-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #000;
+      line-height: 40px;
+    }
+
+    /* ===== Tab Menu (sticky below GNB) ===== */
+    .tab-menu {
+      position: sticky;
+      top: 56px;
+      z-index: 90;
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--line-secondary);
+    }
+    .tab-menu-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0;
+    }
+    .tab-menu-item {
+      padding: 16px 20px;
+      font-size: 15px;
+      font-weight: var(--font-medium);
+      color: #C5C7CC;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: color 0.2s;
+      user-select: none;
+    }
+    .tab-menu-item.active {
+      color: var(--text-primary);
+      font-weight: var(--font-bold);
+      border-bottom-color: var(--text-primary);
+    }
+    .tab-menu-item:hover:not(.active) {
+      color: var(--gray-500);
+    }
+
+    /* ===== Chip Filter Row ===== */
+    .chip-row {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 20px 0 0;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: var(--font-medium);
+      color: var(--text-tertiary);
+      background: var(--bg-primary);
+      border: 1px solid var(--line-primary);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .chip.active {
+      color: var(--text-primary);
+      border-color: var(--text-primary);
+      font-weight: var(--font-semibold);
+    }
+    .chip:hover:not(.active) {
+      border-color: var(--gray-400);
+    }
+
+    /* ===== Main Layout ===== */
+    .main-wrap {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 20px 0 60px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .left-col {
+      width: 740px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .right-col {
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 120px;
+    }
+
+    /* ===== Review Card ===== */
+    .review-card {
+      background: var(--bg-primary);
+      border: 1px solid #E5E6E9;
+      border-radius: 12px;
+      padding: 32px;
+      display: flex;
+      gap: 0;
+    }
+    .review-left {
+      width: 229px;
+      flex-shrink: 0;
+      padding-right: 28px;
+    }
+    .review-right {
+      flex: 1;
+      min-width: 0;
+      padding-left: 28px;
+      border-left: 1px solid var(--line-secondary);
+    }
+
+    /* Review Left */
+    .review-company-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .review-company-name {
+      font-size: 20px;
+      font-weight: var(--font-bold);
+      color: var(--text-primary);
+    }
+    .review-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: var(--font-medium);
+      white-space: nowrap;
+    }
+    .review-badge.current {
+      background: var(--brand-primary-light);
+      color: var(--brand-primary-dark);
+    }
+    .review-badge.former {
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+    .review-writer {
+      font-size: 14px;
+      color: #85878C;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+    .review-rating-num {
+      font-size: 24px;
+      font-weight: var(--font-bold);
+      color: var(--text-primary);
+      margin-right: 8px;
+    }
+    .review-stars {
+      display: inline-flex;
+      gap: 2px;
+      vertical-align: middle;
+    }
+    .review-star {
+      color: var(--brand-primary);
+      font-size: 18px;
+    }
+    .review-star.empty {
+      color: var(--gray-200);
+    }
+    .review-rating-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .rating-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .rating-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .rating-bar-label {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      width: 60px;
+      flex-shrink: 0;
+    }
+    .rating-bar-track {
+      flex: 1;
+      height: 6px;
+      background: var(--gray-100);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .rating-bar-fill {
+      height: 100%;
+      background: var(--brand-primary);
+      border-radius: 3px;
+    }
+    .rating-bar-value {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      width: 24px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* Review Right */
+    .review-title {
+      font-size: 18px;
+      font-weight: var(--font-bold);
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      line-height: 1.5;
+      max-width: 454px;
+    }
+    .review-section {
+      margin-bottom: 16px;
+    }
+    .review-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: var(--font-semibold);
+      margin-bottom: 6px;
+    }
+    .review-tag.pros {
+      background: #E8F4FD;
+      color: #1976D2;
+    }
+    .review-tag.cons {
+      background: #FDECEA;
+      color: #D32F2F;
+    }
+    .review-tag.wish {
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+    .review-section-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .review-prediction {
+      display: flex;
+      gap: 16px;
+      margin-top: 16px;
+      margin-bottom: 20px;
+    }
+    .review-prediction-item {
+      font-size: 12px;
+      color: #686A6D;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .review-prediction-icon {
+      font-size: 14px;
+    }
+    .review-bottom {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line-secondary);
+    }
+    .review-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border: 1px solid var(--line-primary);
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: var(--font-medium);
+      color: var(--text-secondary);
+      background: var(--bg-primary);
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .review-btn:hover {
+      background: var(--bg-secondary);
+    }
+    .review-report {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--text-disabled);
+      cursor: pointer;
+    }
+    .review-report:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== Sidebar ===== */
+    .sidebar-block {
+      border-radius: 12px;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      min-height: 263px;
+    }
+    .sidebar-block.cta {
+      background: #ECF6FE;
+    }
+    .sidebar-block.company-list {
+      background: #F3F3F4;
+    }
+    .sidebar-title {
+      font-size: 16px;
+      font-weight: var(--font-bold);
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .sidebar-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: auto;
+    }
+    .sidebar-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 24px;
+      background: var(--brand-primary);
+      color: #fff;
+      font-size: 15px;
+      font-weight: var(--font-semibold);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.15s;
+    }
+    .sidebar-cta-btn:hover {
+      background: var(--brand-primary-dark);
+    }
+    .sidebar-company-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+    }
+    .sidebar-company-item + .sidebar-company-item {
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .sidebar-company-logo {
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      background: var(--gray-300);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: var(--font-bold); color: #fff;
+      flex-shrink: 0;
+    }
+    .sidebar-company-name {
+      font-size: 14px;
+      font-weight: var(--font-medium);
+      color: var(--text-primary);
+    }
+    .sidebar-company-type {
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    /* ===== Toast ===== */
+    .toast {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--bg-inverse);
+      color: var(--text-inverse);
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: var(--font-medium);
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 9999;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== GNB ===== -->
+  <nav class="desktop-nav">
+    <div class="desktop-nav-inner">
+      <a class="desktop-nav-logo" href="index.html">Jobplanet</a>
+      <div class="desktop-nav-links">
+        <a href="#">기업 랭킹</a>
+        <a href="#" class="active">리뷰</a>
+        <a href="#">채용</a>
+        <a href="#">뉴스</a>
+        <a href="#">연봉</a>
+        <a href="#" class="membership-btn">멤버십</a>
+      </div>
+      <div class="desktop-nav-right">
+        <span class="icon-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </span>
+        <span class="icon-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="22" height="22"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </span>
+        <div class="profile-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="divider-v"></div>
+        <a href="#" class="corp-btn">기업 회원 서비스</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Search Bar ===== -->
+  <div class="rd-search-bar">
+    <div class="rd-search-bar__inner">
+      <div class="rd-search-input">
+        <input type="text" placeholder="채용, 기업 등 키워드를 입력해 주세요.">
+        <button class="rd-search-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#00c362" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+      </div>
+      <div class="rd-search-rank">
+        <span class="rd-search-rank__num">6</span>
+        <span class="rd-search-rank__company">(주)페이스북</span>
+        <span class="rd-search-rank__change">↑ 2</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#b0b5bd" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Tab Menu ===== -->
+  <div class="tab-menu">
+    <div class="tab-menu-inner">
+      <div class="tab-menu-item active" data-tab="current">전/현직장</div>
+      <div class="tab-menu-item" data-tab="interest">관심 기업</div>
+      <div class="tab-menu-item" data-tab="popular">주목받는 리뷰</div>
+      <div class="tab-menu-item" data-tab="theme">테마별 기업 리뷰</div>
+      <div class="tab-menu-item" data-tab="interview">생생한 면접 후기</div>
+    </div>
+  </div>
+
+  <!-- ===== Section Title + Chip Filter ===== -->
+  <div class="rd-section-header">
+    <div class="chip-row" style="padding:0; margin-top:16px;">
+      <div class="chip active" data-chip="all">전체</div>
+      <div class="chip" data-chip="naver">네이버클라우드(주)</div>
+      <div class="chip" data-chip="yeogi">(주)여기어때컴퍼니</div>
+      <div class="chip" data-chip="viva">(주)비바웨이브</div>
+      <div class="chip" data-chip="lg">LG 에너지솔루션</div>
+    </div>
+  </div>
+
+  <!-- ===== Main Content ===== -->
+  <div class="main-wrap">
+
+    <!-- Left Column: Review Cards -->
+    <div class="left-col">
+
+      <!-- Review Card 1 -->
+      <div class="review-card">
+        <div class="review-left">
+          <div class="review-company-row">
+            <span class="review-company-name">(주)여기어때컴퍼니</span>
+            <span class="review-badge current">현직장</span>
+          </div>
+          <div class="review-writer">개발 | 현직원 | 서울 | 2026.03</div>
+          <div class="review-rating-row">
+            <span class="review-rating-num">4.0</span>
+            <span class="review-stars">
+              <span class="review-star">&#9733;</span>
+              <span class="review-star">&#9733;</span>
+              <span class="review-star">&#9733;</span>
+              <span class="review-star">&#9733;</span>
+              <span class="review-star empty">&#9733;</span>
+            </span>
+          </div>
+          <div class="rating-bars">
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">승진 기회</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:60%"></div></div>
+              <span class="rating-bar-value">3.0</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">복지/급여</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:80%"></div></div>
+              <span class="rating-bar-value">4.0</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">워라밸</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:90%"></div></div>
+              <span class="rating-bar-value">4.5</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">사내문화</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:80%"></div></div>
+              <span class="rating-bar-value">4.0</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">경영진</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:70%"></div></div>
+              <span class="rating-bar-value">3.5</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-right">
+          <div class="review-title">자유로운 문화와 성장할 수 있는 환경</div>
+          <div class="review-section">
+            <div class="review-tag pros">장점</div>
+            <div class="review-section-text">자유로운 근무 환경과 수평적인 조직 문화가 좋습니다. 개인의 성장을 중시하며 다양한 교육 프로그램을 지원해주고 있어 직무 역량을 키우기에 좋은 환경입니다.</div>
+          </div>
+          <div class="review-section">
+            <div class="review-tag cons">단점</div>
+            <div class="review-section-text">급격한 성장으로 인해 일부 프로세스가 아직 정비되지 않은 부분이 있습니다. 부서 간 커뮤니케이션이 원활하지 않을 때가 있어요.</div>
+          </div>
+          <div class="review-section">
+            <div class="review-tag wish">경영진에 바라는 점</div>
+            <div class="review-section-text">내부 프로세스 개선과 부서 간 소통 채널 강화를 바랍니다. 복지 제도도 조금 더 다양해지면 좋겠습니다.</div>
+          </div>
+          <div class="review-prediction">
+            <span class="review-prediction-item"><span class="review-prediction-icon">📈</span> 1년 후 성장하고 있을 것 같아요</span>
+            <span class="review-prediction-item"><span class="review-prediction-icon">👍</span> 기업을 추천해요</span>
+          </div>
+          <div class="review-bottom">
+            <button class="review-btn" onclick="showToast('도움이 돼요를 눌렀습니다')">👍 도움이 돼요 23</button>
+            <button class="review-btn" onclick="showToast('리포스트 되었습니다')">🔄 리포스트</button>
+            <span class="review-report" onclick="showToast('신고가 접수되었습니다')">신고하기</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Review Card 2 -->
+      <div class="review-card">
+        <div class="review-left">
+          <div class="review-company-row">
+            <span class="review-company-name">(주)네이버클라우드</span>
+            <span class="review-badge former">전직장</span>
+          </div>
+          <div class="review-writer">기획 | 전직원 | 성남 | 2024.04</div>
+          <div class="review-rating-row">
+            <span class="review-rating-num">3.5</span>
+            <span class="review-stars">
+              <span class="review-star">&#9733;</span>
+              <span class="review-star">&#9733;</span>
+              <span class="review-star">&#9733;</span>
+              <span class="review-star half">&#9733;</span>
+              <span class="review-star empty">&#9733;</span>
+            </span>
+          </div>
+          <div class="rating-bars">
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">승진 기회</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:50%"></div></div>
+              <span class="rating-bar-value">2.5</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">복지/급여</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:90%"></div></div>
+              <span class="rating-bar-value">4.5</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">워라밸</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:70%"></div></div>
+              <span class="rating-bar-value">3.5</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">사내문화</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:60%"></div></div>
+              <span class="rating-bar-value">3.0</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">경영진</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:80%"></div></div>
+              <span class="rating-bar-value">4.0</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-right">
+          <div class="review-title">클라우드 기술을 깊이 배울 수 있는 곳</div>
+          <div class="review-section">
+            <div class="review-tag pros">장점</div>
+            <div class="review-section-text">네이버의 인프라와 기술력을 바탕으로 클라우드 분야에서 깊이 있는 경험을 쌓을 수 있습니다. 복지가 훌륭하고 급여 수준도 업계 상위권입니다.</div>
+          </div>
+          <div class="review-section">
+            <div class="review-tag cons">단점</div>
+            <div class="review-section-text">대기업 특유의 의사결정 속도가 느린 편이며, 수직적인 구조가 아직 남아있는 부분이 있습니다. 야근이 잦은 팀도 있어요.</div>
+          </div>
+          <div class="review-section">
+            <div class="review-tag wish">경영진에 바라는 점</div>
+            <div class="review-section-text">조직 구조의 유연성을 높이고, 새로운 기술 도입에 더 적극적이었으면 합니다.</div>
+          </div>
+          <div class="review-prediction">
+            <span class="review-prediction-item"><span class="review-prediction-icon">📈</span> 1년 후 성장하고 있을 것 같아요</span>
+            <span class="review-prediction-item"><span class="review-prediction-icon">👍</span> 기업을 추천해요</span>
+          </div>
+          <div class="review-bottom">
+            <button class="review-btn" onclick="showToast('도움이 돼요를 눌렀습니다')">👍 도움이 돼요 15</button>
+            <button class="review-btn" onclick="showToast('리포스트 되었습니다')">🔄 리포스트</button>
+            <span class="review-report" onclick="showToast('신고가 접수되었습니다')">신고하기</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Review Card 3 -->
+      <div class="review-card">
+        <div class="review-left">
+          <div class="review-company-row">
+            <span class="review-company-name">(주)네이버클라우드</span>
+            <span class="review-badge former">전직장</span>
+          </div>
+          <div class="review-writer">디자인 | 전직원 | 성남 | 2024.04</div>
+          <div class="review-rating-row">
+            <span class="review-rating-num">3.0</span>
+            <span class="review-stars">
+              <span class="review-star">&#9733;</span>
+              <span class="review-star">&#9733;</span>
+              <span class="review-star">&#9733;</span>
+              <span class="review-star empty">&#9733;</span>
+              <span class="review-star empty">&#9733;</span>
+            </span>
+          </div>
+          <div class="rating-bars">
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">승진 기회</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:40%"></div></div>
+              <span class="rating-bar-value">2.0</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">복지/급여</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:70%"></div></div>
+              <span class="rating-bar-value">3.5</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">워라밸</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:60%"></div></div>
+              <span class="rating-bar-value">3.0</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">사내문화</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:50%"></div></div>
+              <span class="rating-bar-value">2.5</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">경영진</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:70%"></div></div>
+              <span class="rating-bar-value">3.5</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-right">
+          <div class="review-title">안정적이지만 변화가 느린 조직</div>
+          <div class="review-section">
+            <div class="review-tag pros">장점</div>
+            <div class="review-section-text">안정적인 근무 환경과 네이버 계열사로서의 브랜드 파워가 있습니다. 사내 카페테리아 등 복지 시설이 잘 갖추어져 있습니다.</div>
+          </div>
+          <div class="review-section">
+            <div class="review-tag cons">단점</div>
+            <div class="review-section-text">디자인 직군의 경우 기획이나 개발에 비해 발언권이 적은 편이며, 새로운 디자인 트렌드를 반영하는 속도가 느립니다.</div>
+          </div>
+          <div class="review-section">
+            <div class="review-tag wish">경영진에 바라는 점</div>
+            <div class="review-section-text">디자인 조직의 목소리에 더 귀 기울여 주시고, UX 리서치에 대한 투자를 확대해 주시면 좋겠습니다.</div>
+          </div>
+          <div class="review-prediction">
+            <span class="review-prediction-item"><span class="review-prediction-icon">📊</span> 1년 후 비슷할 것 같아요</span>
+            <span class="review-prediction-item"><span class="review-prediction-icon">🤔</span> 추천을 고민해요</span>
+          </div>
+          <div class="review-bottom">
+            <button class="review-btn" onclick="showToast('도움이 돼요를 눌렀습니다')">👍 도움이 돼요 8</button>
+            <button class="review-btn" onclick="showToast('리포스트 되었습니다')">🔄 리포스트</button>
+            <span class="review-report" onclick="showToast('신고가 접수되었습니다')">신고하기</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Review Card 4 -->
+      <div class="review-card">
+        <div class="review-left">
+          <div class="review-company-row">
+            <span class="review-company-name">(주)네이버클라우드</span>
+            <span class="review-badge former">전직장</span>
+          </div>
+          <div class="review-writer">마케팅 | 전직원 | 성남 | 2024.04</div>
+          <div class="review-rating-row">
+            <span class="review-rating-num">4.5</span>
+            <span class="review-stars">
+              <span class="review-star">&#9733;</span>
+              <span class="review-star">&#9733;</span>
+              <span class="review-star">&#9733;</span>
+              <span class="review-star">&#9733;</span>
+              <span class="review-star half">&#9733;</span>
+            </span>
+          </div>
+          <div class="rating-bars">
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">승진 기회</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:80%"></div></div>
+              <span class="rating-bar-value">4.0</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">복지/급여</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:90%"></div></div>
+              <span class="rating-bar-value">4.5</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">워라밸</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:80%"></div></div>
+              <span class="rating-bar-value">4.0</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">사내문화</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:90%"></div></div>
+              <span class="rating-bar-value">4.5</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="rating-bar-label">경영진</span>
+              <div class="rating-bar-track"><div class="rating-bar-fill" style="width:100%"></div></div>
+              <span class="rating-bar-value">5.0</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-right">
+          <div class="review-title">B2B 마케팅 역량을 키우기 최적의 환경</div>
+          <div class="review-section">
+            <div class="review-tag pros">장점</div>
+            <div class="review-section-text">B2B 클라우드 마케팅이라는 독특한 분야에서 깊이 있는 경험을 쌓을 수 있습니다. 리더십이 좋고 팀 분위기가 매우 협조적입니다. 글로벌 시장 진출 경험도 가능합니다.</div>
+          </div>
+          <div class="review-section">
+            <div class="review-tag cons">단점</div>
+            <div class="review-section-text">클라우드 시장 자체가 아직 국내에서 성장 중이라 AWS, Azure 대비 인지도 면에서 아쉬운 부분이 있습니다.</div>
+          </div>
+          <div class="review-section">
+            <div class="review-tag wish">경영진에 바라는 점</div>
+            <div class="review-section-text">마케팅 예산을 더 확보하여 브랜드 인지도 향상에 힘써 주시면 좋겠습니다. 해외 컨퍼런스 참가 기회도 늘려주세요.</div>
+          </div>
+          <div class="review-prediction">
+            <span class="review-prediction-item"><span class="review-prediction-icon">📈</span> 1년 후 성장하고 있을 것 같아요</span>
+            <span class="review-prediction-item"><span class="review-prediction-icon">👍</span> 기업을 추천해요</span>
+          </div>
+          <div class="review-bottom">
+            <button class="review-btn" onclick="showToast('도움이 돼요를 눌렀습니다')">👍 도움이 돼요 31</button>
+            <button class="review-btn" onclick="showToast('리포스트 되었습니다')">🔄 리포스트</button>
+            <span class="review-report" onclick="showToast('신고가 접수되었습니다')">신고하기</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column: Sidebar -->
+    <div class="right-col">
+
+      <!-- CTA Block -->
+      <div class="sidebar-block cta">
+        <div class="sidebar-title">나의 회사도 리뷰해 보세요</div>
+        <div class="sidebar-desc">솔직한 리뷰를 남기면 다른 직장인들에게 큰 도움이 됩니다. 익명으로 작성되니 걱정 마세요!</div>
+        <button class="sidebar-cta-btn" onclick="showToast('리뷰 작성 페이지로 이동합니다')">리뷰 작성하러 가기</button>
+      </div>
+
+      <!-- Company List Block -->
+      <div class="sidebar-block company-list">
+        <div class="sidebar-title">전/현직 회사 리스트</div>
+        <div style="margin-top:12px;">
+          <div class="sidebar-company-item">
+            <div class="sidebar-company-logo" style="background:#1EC800;">N</div>
+            <div>
+              <div class="sidebar-company-name">네이버클라우드(주)</div>
+              <div class="sidebar-company-type">IT/웹/통신</div>
+            </div>
+          </div>
+          <div class="sidebar-company-item">
+            <div class="sidebar-company-logo" style="background:#FF2D55;">여</div>
+            <div>
+              <div class="sidebar-company-name">(주)여기어때컴퍼니</div>
+              <div class="sidebar-company-type">IT/웹/통신</div>
+            </div>
+          </div>
+          <div class="sidebar-company-item">
+            <div class="sidebar-company-logo" style="background:#6C5CE7;">비</div>
+            <div>
+              <div class="sidebar-company-name">(주)비바웨이브</div>
+              <div class="sidebar-company-type">IT/웹/통신</div>
+            </div>
+          </div>
+          <div class="sidebar-company-item">
+            <div class="sidebar-company-logo" style="background:#A10115;">LG</div>
+            <div>
+              <div class="sidebar-company-name">LG 에너지솔루션</div>
+              <div class="sidebar-company-type">제조/화학</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // Tab switching (visual only)
+    document.querySelectorAll('.tab-menu-item').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab-menu-item').forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        showToast(tab.textContent + ' 탭 선택');
+      });
+    });
+
+    // Chip filter (visual toggle)
+    document.querySelectorAll('.chip').forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
+        chip.classList.add('active');
+        showToast(chip.textContent + ' 필터 선택');
+      });
+    });
+
+    // Toast function
+    var toastTimer;
+    function showToast(msg) {
+      var el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() {
+        el.classList.remove('show');
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
