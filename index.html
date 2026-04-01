@@ -1114,74 +1114,167 @@
       box-shadow: var(--shadow-default);
     }
 
-    /* ===== 내가 다녔던 기업 — 카드 (PC 가로형) ===== */
-    .mine-card {
+    /* ===== 내가 다녔던 기업 — 3열 카드 그리드 ===== */
+    .mine-section-title-row {
       display: flex;
-      gap: 20px;
-      padding: 20px;
-      border: 1px solid var(--line-primary);
-      border-left: 4px solid var(--brand-primary);
-      border-radius: 10px;
-      background: var(--bg-primary);
-      margin-bottom: 12px;
-      transition: box-shadow 0.15s;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 16px;
     }
-    .mine-card:last-child { margin-bottom: 0; }
-    .mine-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-    .mine-card--prev { border-left-color: var(--text-tertiary); }
-    .mine-card-left {
-      flex-shrink: 0;
-      width: 120px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    .mine-section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+      line-height: 1.4;
     }
-    .mine-card-company { font-size: 15px; font-weight: 700; color: var(--text-primary); }
-    .mine-card-badge {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 20px;
-      width: fit-content;
-    }
-    .mine-card-badge--current { background: #e8f5e9; color: #2e7d32; }
-    .mine-card-badge--prev    { background: #f3f4f6; color: #6b7280; }
-    .mine-card-meta { font-size: 12px; color: var(--text-tertiary); line-height: 1.5; }
-    .mine-card-rating { font-size: 13px; margin-top: 4px; }
-    .mine-card-divider {
-      width: 1px;
-      background: var(--line-secondary);
-      flex-shrink: 0;
-      align-self: stretch;
-    }
-    .mine-card-right { flex: 1; min-width: 0; }
-    .mine-card-body {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.75;
-      margin: 0 0 12px;
-    }
-    .mine-card-body strong { color: var(--text-primary); font-weight: 600; }
-    .mine-card-action {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+    .mine-section-annotation {
       font-size: 13px;
       font-weight: 600;
-      color: var(--brand-primary);
-      background: #f0faf4;
-      border: none;
-      border-radius: 6px;
-      padding: 6px 12px;
-      cursor: pointer;
+      color: #e53935;
+      flex-shrink: 0;
+      margin-left: 12px;
     }
-    .mine-card-action:hover { background: #d4edda; }
+    .mine-notice {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-bottom: 14px;
+    }
+
+    /* 3열 그리드 */
+    .mine-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    /* 개별 카드 */
+    .mine-card3 {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--line-primary);
+      border-radius: 12px;
+      background: var(--bg-primary);
+      overflow: hidden;
+      transition: box-shadow 0.15s;
+    }
+    .mine-card3:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+
+    .mine-card3-head {
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--line-secondary);
+    }
+    .mine-card3-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .mine-card3-company {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .mine-card3-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+    .mine-card3-badge--current { background: #e8f5e9; color: #2e7d32; }
+    .mine-card3-badge--prev    { background: #f3f4f6; color: #6b7280; }
+    .mine-card3-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-tertiary);
+    }
+    .mine-card3-rating { color: #f59e0b; font-weight: 600; }
+
+    .mine-card3-body { padding: 12px 14px; flex: 1; }
+    .mine-card3-quote {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .mine-card3-pros-cons { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+    .mine-card3-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      margin-bottom: 2px;
+    }
+    .mine-card3-content {
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .mine-card3-more {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-top: 4px;
+    }
+    .mine-card3-more:hover { color: var(--text-primary); }
+
+    /* 카드 하단 피드백 영역 */
+    .mine-card3-foot {
+      padding: 12px 14px;
+      background: #f9fafb;
+      border-top: 1px solid var(--line-secondary);
+    }
+    .mine-card3-foot-q {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .mine-card3-foot-q strong { color: var(--text-primary); }
+    .mine-card3-btns { display: flex; gap: 6px; }
+    .mine-card3-btn {
+      flex: 1;
+      padding: 8px 4px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      transition: opacity 0.15s;
+    }
+    .mine-card3-btn:hover { opacity: 0.85; }
+    .mine-card3-btn--diff {
+      background: var(--brand-primary);
+      color: #fff;
+      border: none;
+    }
+    .mine-card3-btn--agree {
+      background: #fff;
+      color: var(--brand-primary);
+      border: 1.5px solid var(--brand-primary);
+    }
 
     /* 섹션 A — 동적 CTA */
     .mine-cta {
-      margin-top: 20px;
-      padding: 20px 22px;
+      margin-top: 16px;
+      padding: 18px 22px;
       background: #f0faf2;
       border: 1.5px dashed #a5d6a7;
       border-radius: 10px;
@@ -3315,9 +3408,9 @@
 
       <!-- 섹션 A: 내 전/현직장 리뷰 -->
       <div class="review-pc-section">
-        <div class="review-pc-section-header">
-          <h2 class="review-pc-section-title">내가 다녔던 기업 리뷰</h2>
-          <span class="hypothesis-label">가설 ① 리뷰 작성 전환</span>
+        <div class="mine-section-title-row">
+          <h2 class="mine-section-title">경미님, 회사의 이런 평가<br>어떻게 생각하세요?</h2>
+          <span class="mine-section-annotation">(전/현직장 리뷰 노출)</span>
         </div>
 
         <!-- 회사 chip 필터 -->
@@ -3330,76 +3423,158 @@
           <button class="rpc-chip" data-mine="line" onclick="filterMineReview('line')">라인플러스</button>
         </div>
 
-        <!-- 리뷰 카드 목록 -->
-        <div id="mine-review-list">
+        <p class="mine-notice">최근 한 달간 새로운 리뷰 총 3건이 올라왔어요</p>
 
-          <div class="mine-card" data-company="jobplanet">
-            <div class="mine-card-left">
-              <span class="mine-card-company">(주)잡플래닛</span>
-              <span class="mine-card-badge mine-card-badge--current">현직장</span>
-              <span class="mine-card-meta">프로덕트 디자이너<br>3년차</span>
-              <span class="mine-card-rating"><span style="color:#f5c518;">★★★★</span><span style="color:#ddd;">★</span> 4.0</span>
+        <!-- 3열 카드 그리드 -->
+        <div class="mine-grid" id="mine-review-list">
+
+          <!-- 잡플래닛 -->
+          <div class="mine-card3" data-company="jobplanet">
+            <div class="mine-card3-head">
+              <div class="mine-card3-top">
+                <span class="mine-card3-company">(주)잡플래닛</span>
+                <span class="mine-card3-badge mine-card3-badge--current">현직장</span>
+              </div>
+              <div class="mine-card3-meta">
+                <span class="mine-card3-rating">⭐ 4.0</span>
+                <span>·</span><span>IT/웹/통신</span>
+                <span>·</span><span>2025.12</span>
+              </div>
             </div>
-            <div class="mine-card-divider"></div>
-            <div class="mine-card-right">
-              <p class="mine-card-body">팀 분위기가 수평적이고 자유롭게 의견을 낼 수 있어요. 디자이너가 기획 단계부터 참여하는 구조라 <strong>주도적으로 일하는 느낌</strong>이 강합니다. 다만 스타트업 특성상 인력이 부족해 멀티 롤을 요구받는 경우가 많아요.</p>
-              <button class="mine-card-action">✏️ 잡플래닛 리뷰 남기기</button>
+            <div class="mine-card3-body">
+              <div class="mine-card3-quote">"주도적으로 일하기 좋은 환경, 멀티롤은 각오해야"</div>
+              <div class="mine-card3-label">장점</div>
+              <div class="mine-card3-content">수평적인 분위기, 디자이너가 기획 단계부터 참여해 주도적으로 일하는 느낌이 강해요.</div>
+              <div class="mine-card3-label">단점</div>
+              <div class="mine-card3-content">스타트업 특성상 인력 부족으로 멀티 롤이 잦고, 번아웃 주의가 필요해요.</div>
+              <button class="mine-card3-more">리뷰 자세히 보기 ›</button>
+            </div>
+            <div class="mine-card3-foot">
+              <div class="mine-card3-foot-q"><strong>경미님,</strong> 이 리뷰가 지금 우리 회사의 모습을 잘 나타내고 있나요?</div>
+              <div class="mine-card3-btns">
+                <button class="mine-card3-btn mine-card3-btn--diff" onclick="showToast('의견이 반영됩니다.')">제 생각은 달라요</button>
+                <button class="mine-card3-btn mine-card3-btn--agree" onclick="showToast('공감해주셔서 감사해요 🔥')">너무 공감해요 🔥</button>
+              </div>
             </div>
           </div>
 
-          <div class="mine-card mine-card--prev" data-company="kakao">
-            <div class="mine-card-left">
-              <span class="mine-card-company">카카오</span>
-              <span class="mine-card-badge mine-card-badge--prev">전직장</span>
-              <span class="mine-card-meta">UX 디자이너<br>2년차</span>
-              <span class="mine-card-rating"><span style="color:#f5c518;">★★★</span><span style="color:#ddd;">★★</span> 3.2</span>
+          <!-- 카카오 -->
+          <div class="mine-card3" data-company="kakao">
+            <div class="mine-card3-head">
+              <div class="mine-card3-top">
+                <span class="mine-card3-company">카카오</span>
+                <span class="mine-card3-badge mine-card3-badge--prev">전직장</span>
+              </div>
+              <div class="mine-card3-meta">
+                <span class="mine-card3-rating">⭐ 3.2</span>
+                <span>·</span><span>IT/웹/통신</span>
+                <span>·</span><span>2025.11</span>
+              </div>
             </div>
-            <div class="mine-card-divider"></div>
-            <div class="mine-card-right">
-              <p class="mine-card-body">브랜드 가치는 높지만 <strong>실제 업무 환경은 많이 달랐어요.</strong> 디자인 의사결정권이 제한적이고, 프로세스가 복잡해 작은 변경도 오래 걸립니다. 연봉은 만족스럽지만 성장 속도는 개인 역량에 달렸어요.</p>
-              <button class="mine-card-action">✏️ 카카오 리뷰 남기기</button>
+            <div class="mine-card3-body">
+              <div class="mine-card3-quote">"브랜드와 현실의 괴리, 연봉은 좋지만 성장은 스스로"</div>
+              <div class="mine-card3-label">장점</div>
+              <div class="mine-card3-content">연봉 수준이 높고 네임밸류가 있어 이직 시 유리해요.</div>
+              <div class="mine-card3-label">단점</div>
+              <div class="mine-card3-content">디자인 의사결정권이 제한적이고 프로세스가 복잡해 작은 변경도 오래 걸려요.</div>
+              <button class="mine-card3-more">리뷰 자세히 보기 ›</button>
             </div>
-          </div>
-
-          <div class="mine-card mine-card--prev" data-company="naver">
-            <div class="mine-card-left">
-              <span class="mine-card-company">네이버</span>
-              <span class="mine-card-badge mine-card-badge--prev">전직장</span>
-              <span class="mine-card-meta">서비스 기획<br>4년차</span>
-              <span class="mine-card-rating"><span style="color:#f5c518;">★★★★</span><span style="color:#ddd;">★</span> 3.8</span>
-            </div>
-            <div class="mine-card-divider"></div>
-            <div class="mine-card-right">
-              <p class="mine-card-body">규모가 크다 보니 개인이 기여할 수 있는 영역이 제한적이에요. 안정적인 환경이지만 <strong>빠른 실행보다 합의 중심의 문화</strong>라 스피드에 익숙한 분들은 답답할 수 있어요.</p>
-              <button class="mine-card-action">✏️ 네이버 리뷰 남기기</button>
-            </div>
-          </div>
-
-          <div class="mine-card mine-card--prev" data-company="toss">
-            <div class="mine-card-left">
-              <span class="mine-card-company">토스</span>
-              <span class="mine-card-badge mine-card-badge--prev">전직장</span>
-              <span class="mine-card-meta">프로덕트 디자이너<br>2년차</span>
-              <span class="mine-card-rating"><span style="color:#f5c518;">★★★★★</span> 4.7</span>
-            </div>
-            <div class="mine-card-divider"></div>
-            <div class="mine-card-right">
-              <p class="mine-card-body">디자이너가 실질적인 의사결정권을 갖고 있고, 데이터 기반 문화가 잘 정착돼 있어요. <strong>연봉과 성장 속도 모두 업계 최상위</strong>지만, 심리적 압박과 경쟁 강도가 높아 번아웃을 경험하는 동료도 많았어요.</p>
-              <button class="mine-card-action">✏️ 토스 리뷰 남기기</button>
+            <div class="mine-card3-foot">
+              <div class="mine-card3-foot-q"><strong>경미님,</strong> 이 리뷰가 당시 카카오의 모습을 잘 나타내고 있나요?</div>
+              <div class="mine-card3-btns">
+                <button class="mine-card3-btn mine-card3-btn--diff" onclick="showToast('의견이 반영됩니다.')">제 생각은 달라요</button>
+                <button class="mine-card3-btn mine-card3-btn--agree" onclick="showToast('공감해주셔서 감사해요 🔥')">너무 공감해요 🔥</button>
+              </div>
             </div>
           </div>
 
-          <div class="mine-card mine-card--prev" data-company="line">
-            <div class="mine-card-left">
-              <span class="mine-card-company">라인플러스</span>
-              <span class="mine-card-badge mine-card-badge--prev">전직장</span>
-              <span class="mine-card-meta">서비스 디자이너<br>3년차</span>
-              <span class="mine-card-rating"><span style="color:#f5c518;">★★★</span><span style="color:#ddd;">★★</span> 2.9</span>
+          <!-- 네이버 -->
+          <div class="mine-card3" data-company="naver">
+            <div class="mine-card3-head">
+              <div class="mine-card3-top">
+                <span class="mine-card3-company">네이버</span>
+                <span class="mine-card3-badge mine-card3-badge--prev">전직장</span>
+              </div>
+              <div class="mine-card3-meta">
+                <span class="mine-card3-rating">⭐ 3.8</span>
+                <span>·</span><span>IT/웹/통신</span>
+                <span>·</span><span>2025.10</span>
+              </div>
             </div>
-            <div class="mine-card-divider"></div>
-            <div class="mine-card-right">
-              <p class="mine-card-body">글로벌 서비스라는 기대와 달리 국내팀은 예산 우선순위에서 항상 밀렸어요. 디자인 시스템도 사실상 방치 수준이었고, <strong>성장보다 유지에 초점 맞춰진 조직 문화</strong>가 아쉬웠습니다.</p>
-              <button class="mine-card-action">✏️ 라인플러스 리뷰 남기기</button>
+            <div class="mine-card3-body">
+              <div class="mine-card3-quote">"안정적이지만 빠른 실행은 기대하기 어려워요"</div>
+              <div class="mine-card3-label">장점</div>
+              <div class="mine-card3-content">복지 수준이 높고 고용 안정성이 뛰어나요. 워라밸도 잘 지켜지는 편.</div>
+              <div class="mine-card3-label">단점</div>
+              <div class="mine-card3-content">합의 중심 문화라 의사결정이 느리고, 개인 기여 영역이 제한적이에요.</div>
+              <button class="mine-card3-more">리뷰 자세히 보기 ›</button>
+            </div>
+            <div class="mine-card3-foot">
+              <div class="mine-card3-foot-q"><strong>경미님,</strong> 이 리뷰가 당시 네이버의 모습을 잘 나타내고 있나요?</div>
+              <div class="mine-card3-btns">
+                <button class="mine-card3-btn mine-card3-btn--diff" onclick="showToast('의견이 반영됩니다.')">제 생각은 달라요</button>
+                <button class="mine-card3-btn mine-card3-btn--agree" onclick="showToast('공감해주셔서 감사해요 🔥')">너무 공감해요 🔥</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 토스 -->
+          <div class="mine-card3" data-company="toss" style="display:none;">
+            <div class="mine-card3-head">
+              <div class="mine-card3-top">
+                <span class="mine-card3-company">토스</span>
+                <span class="mine-card3-badge mine-card3-badge--prev">전직장</span>
+              </div>
+              <div class="mine-card3-meta">
+                <span class="mine-card3-rating">⭐ 4.7</span>
+                <span>·</span><span>IT/핀테크</span>
+                <span>·</span><span>2025.09</span>
+              </div>
+            </div>
+            <div class="mine-card3-body">
+              <div class="mine-card3-quote">"성장과 압박이 공존, 번아웃은 각오해야"</div>
+              <div class="mine-card3-label">장점</div>
+              <div class="mine-card3-content">디자이너 의사결정권이 강하고 연봉 업계 최상위, 성장 속도도 빨라요.</div>
+              <div class="mine-card3-label">단점</div>
+              <div class="mine-card3-content">심리적 압박과 경쟁 강도가 높아 번아웃 경험자가 많아요.</div>
+              <button class="mine-card3-more">리뷰 자세히 보기 ›</button>
+            </div>
+            <div class="mine-card3-foot">
+              <div class="mine-card3-foot-q"><strong>경미님,</strong> 이 리뷰가 당시 토스의 모습을 잘 나타내고 있나요?</div>
+              <div class="mine-card3-btns">
+                <button class="mine-card3-btn mine-card3-btn--diff" onclick="showToast('의견이 반영됩니다.')">제 생각은 달라요</button>
+                <button class="mine-card3-btn mine-card3-btn--agree" onclick="showToast('공감해주셔서 감사해요 🔥')">너무 공감해요 🔥</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 라인플러스 -->
+          <div class="mine-card3" data-company="line" style="display:none;">
+            <div class="mine-card3-head">
+              <div class="mine-card3-top">
+                <span class="mine-card3-company">라인플러스</span>
+                <span class="mine-card3-badge mine-card3-badge--prev">전직장</span>
+              </div>
+              <div class="mine-card3-meta">
+                <span class="mine-card3-rating">⭐ 2.9</span>
+                <span>·</span><span>IT/웹/통신</span>
+                <span>·</span><span>2025.08</span>
+              </div>
+            </div>
+            <div class="mine-card3-body">
+              <div class="mine-card3-quote">"기대와 현실의 괴리, 글로벌보다 국내팀의 현실"</div>
+              <div class="mine-card3-label">장점</div>
+              <div class="mine-card3-content">글로벌 서비스 경험과 네임밸류는 인정받아요.</div>
+              <div class="mine-card3-label">단점</div>
+              <div class="mine-card3-content">국내팀은 예산 우선순위에서 밀리고 디자인 시스템도 방치 수준이에요.</div>
+              <button class="mine-card3-more">리뷰 자세히 보기 ›</button>
+            </div>
+            <div class="mine-card3-foot">
+              <div class="mine-card3-foot-q"><strong>경미님,</strong> 이 리뷰가 당시 라인플러스의 모습을 잘 나타내고 있나요?</div>
+              <div class="mine-card3-btns">
+                <button class="mine-card3-btn mine-card3-btn--diff" onclick="showToast('의견이 반영됩니다.')">제 생각은 달라요</button>
+                <button class="mine-card3-btn mine-card3-btn--agree" onclick="showToast('공감해주셔서 감사해요 🔥')">너무 공감해요 🔥</button>
+              </div>
             </div>
           </div>
 
@@ -4770,7 +4945,7 @@
         c.classList.toggle('active', c.dataset.mine === key);
       });
       // 카드 표시/숨김
-      document.querySelectorAll('#mine-review-list .mine-card').forEach(function(card) {
+      document.querySelectorAll('#mine-review-list .mine-card3').forEach(function(card) {
         card.style.display = (key === 'all' || card.dataset.company === key) ? '' : 'none';
       });
       // CTA 업데이트
