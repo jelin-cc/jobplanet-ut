@@ -883,14 +883,14 @@
             </div>
 
             <!-- CTA 배너 -->
-            <div id="sal-cta-btn" onclick="showSalInput()" style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--surface);border-radius:10px;border:1.5px solid rgba(0,194,116,.3);cursor:pointer;transition:border-color .15s;" onmouseover="this.style.borderColor='var(--brand)'" onmouseout="this.style.borderColor='rgba(0,194,116,.3)'">
+            <div id="sal-cta-btn" onclick="showSalInput()" style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(0,194,116,.06);border-radius:10px;border:1.5px solid rgba(0,194,116,.15);cursor:pointer;transition:border-color .15s;" onmouseover="this.style.borderColor='var(--brand)'" onmouseout="this.style.borderColor='rgba(0,194,116,.2)'">
               <div style="display:flex;align-items:center;gap:10px;">
-                <div style="width:18px;height:18px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                  <span style="font-size:9px;font-weight:700;color:#fff;">W</span>
+                <div style="width:16px;height:16px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <span style="font-size:8px;font-weight:700;color:#fff;">W</span>
                 </div>
                 <span style="font-size:14px;font-weight:600;color:var(--tx2);">내 연봉을 입력하면 평균과 비교해볼 수 있어요!</span>
               </div>
-              <span style="font-size:14px;font-weight:700;color:var(--brand);white-space:nowrap;">입력하기 ></span>
+              <span style="font-size:14px;font-weight:700;color:var(--brand);white-space:nowrap;display:flex;align-items:center;gap:3px;">입력하기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
             </div>
             <!-- 인풋 (CTA 클릭 후 노출) -->
             <div id="sal-inp-wrap" style="display:none;align-items:center;gap:8px;padding:12px 16px;background:rgba(0,194,116,.06);border-radius:var(--rsm);border:1.5px solid var(--brand);margin-top:8px;">
@@ -928,8 +928,8 @@
       <div style="margin-bottom:14px;">
         <h2 style="font-size:20px;font-weight:700;margin-bottom:12px;">지금 주목받는 리뷰</h2>
         <div style="display:flex;gap:6px;">
-          <button style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:700;border:1.5px solid var(--tx);background:var(--tx);color:#fff;cursor:pointer;font-family:var(--font);"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-fire.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 반응 많은 순</button>
-          <button style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:500;border:1.5px solid var(--ln);background:var(--surface);color:var(--tx3);cursor:pointer;font-family:var(--font);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:2px;"><path d="M12 2C8 6 6 10 6 14l3 3c4 0 8-2 12-6C17 7 14 4 12 2z" fill="#3B82F6"/><path d="M6 14l-2 4 4-2-2-2z" fill="#FF6B35"/><path d="M9 17l-4 2 2-4 2 2z" fill="#FFB800"/><circle cx="14" cy="10" r="2" fill="#fff"/></svg> 조회 급상승</button>
+          <button style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:700;border:1.5px solid var(--tx);background:var(--tx);color:#fff;cursor:pointer;font-family:var(--font);"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-thumbsup.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 반응 많은 순</button>
+          <button style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:500;border:1.5px solid var(--ln);background:var(--surface);color:var(--tx3);cursor:pointer;font-family:var(--font);"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-rocket.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 조회 급상승</button>
         </div>
       </div>
       <div class="rv-list" style="margin-bottom:48px;">
@@ -953,8 +953,8 @@
             </div>
           </div>
           <div class="rv-foot">
-            <span style="font-size:12px;color:var(--tx4);display:flex;align-items:center;gap:4px;"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-fire.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 47 명에게 도움이 됐어요</span>
-            <button class="rv-btn fill" onclick="go('review')" style="font-size:12px;">리뷰 자세히 보기 ></button>
+            <span style="font-size:12px;color:var(--tx4);display:flex;align-items:center;gap:4px;"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-thumbsup.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 47 명에게 도움이 됐어요</span>
+            <button onclick="go('review')" style="font-size:12px;font-weight:600;color:var(--brand);background:none;border:none;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:3px;">리뷰 자세히 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
           </div>
         </div>
         <!-- 리뷰 2 -->
@@ -977,8 +977,8 @@
             </div>
           </div>
           <div class="rv-foot">
-            <span style="font-size:12px;color:var(--tx4);display:flex;align-items:center;gap:4px;"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-fire.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 32 명에게 도움이 됐어요</span>
-            <button class="rv-btn fill" onclick="go('review')" style="font-size:12px;">리뷰 자세히 보기 ></button>
+            <span style="font-size:12px;color:var(--tx4);display:flex;align-items:center;gap:4px;"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-thumbsup.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 32 명에게 도움이 됐어요</span>
+            <button onclick="go('review')" style="font-size:12px;font-weight:600;color:var(--brand);background:none;border:none;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:3px;">리뷰 자세히 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
           </div>
         </div>
       </div>
@@ -992,11 +992,11 @@
 
       <!-- 카테고리 탭 + 초기화 -->
       <div style="display:flex;align-items:center;gap:7px;margin-bottom:12px;margin-top:14px;">
-        <button id="cat-0" onclick="setCat(0)" style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:700;border:1.5px solid var(--tx);background:var(--tx);color:#fff;cursor:pointer;font-family:var(--font);transition:all .2s;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#3B82F6" style="vertical-align:middle;margin-right:2px;"><path d="M2 20h2c.55 0 1-.45 1-1v-9c0-.55-.45-1-1-1H2v11zm19.83-7.12c.11-.25.17-.52.17-.8V11c0-1.1-.9-2-2-2h-5.5l.92-4.65c.05-.22.02-.46-.08-.66-.23-.45-.52-.86-.88-1.22L14 2 7.59 8.41C7.21 8.79 7 9.3 7 9.83v7.84C7 18.95 8.05 20 9.34 20h8.11c.7 0 1.36-.37 1.72-.97l2.66-6.15z"/></svg> 승진·연봉</button>
-        <button id="cat-1" onclick="setCat(1)" style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:500;border:1.5px solid var(--ln);background:var(--surface);color:var(--tx3);cursor:pointer;font-family:var(--font);transition:all .2s;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#22C55E" style="vertical-align:middle;margin-right:2px;"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg> 워라밸</button>
-        <button id="cat-2" onclick="setCat(2)" style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:500;border:1.5px solid var(--ln);background:var(--surface);color:var(--tx3);cursor:pointer;font-family:var(--font);transition:all .2s;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#6B7280" style="vertical-align:middle;margin-right:2px;"><path d="M4 21V3h16v18H4zm2-2h3v-3H6v3zm0-5h3v-3H6v3zm0-5h3V6H6v3zm5 10h3v-3h-3v3zm0-5h3v-3h-3v3zm0-5h3V6h-3v3zm5 10h3v-3h-3v3zm0-5h3v-3h-3v3zm0-5h3V6h-3v3z"/></svg> 수평문화</button>
-        <button id="cat-3" onclick="setCat(3)" style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:500;border:1.5px solid var(--ln);background:var(--surface);color:var(--tx3);cursor:pointer;font-family:var(--font);transition:all .2s;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#8B5CF6" style="vertical-align:middle;margin-right:2px;"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/></svg> 성장·학습</button>
-        <button id="cat-4" onclick="setCat(0)" style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:500;border:1.5px solid var(--ln);background:var(--surface);color:var(--tx3);cursor:pointer;font-family:var(--font);transition:all .2s;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:2px;"><circle cx="12" cy="12" r="10" fill="#FEE2E2"/><circle cx="12" cy="12" r="7" fill="#FECACA"/><circle cx="12" cy="12" r="4" fill="#EF4444"/><circle cx="12" cy="12" r="1.5" fill="#fff"/></svg> 직군 맞춤</button>
+        <button id="cat-0" onclick="setCat(0)" style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:700;border:1.5px solid var(--tx);background:var(--tx);color:#fff;cursor:pointer;font-family:var(--font);transition:all .2s;"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-moneybag.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 승진·연봉</button>
+        <button id="cat-1" onclick="setCat(1)" style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:500;border:1.5px solid var(--ln);background:var(--surface);color:var(--tx3);cursor:pointer;font-family:var(--font);transition:all .2s;"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-clover.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 워라밸</button>
+        <button id="cat-2" onclick="setCat(2)" style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:500;border:1.5px solid var(--ln);background:var(--surface);color:var(--tx3);cursor:pointer;font-family:var(--font);transition:all .2s;"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-institution.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 수평문화</button>
+        <button id="cat-3" onclick="setCat(3)" style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:500;border:1.5px solid var(--ln);background:var(--surface);color:var(--tx3);cursor:pointer;font-family:var(--font);transition:all .2s;"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-books.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 성장·학습</button>
+        <button id="cat-4" onclick="setCatCustom()" style="padding:7px 16px;border-radius:var(--rfull);font-size:13px;font-weight:500;border:1.5px solid var(--ln);background:var(--surface);color:var(--tx3);cursor:pointer;font-family:var(--font);transition:all .2s;"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-briefcase.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 직군 맞춤</button>
       </div>
 
       <!-- 공고 리스트 -->
@@ -1009,11 +1009,11 @@
             <div style="font-size:12px;color:var(--tx4);margin-bottom:8px;">서울 · 경력 3년↑ · 학력무관</div>
             <div style="display:flex;gap:8px;align-items:center;">
               <span style="font-size:12px;font-weight:700;color:var(--brand);background:var(--brand-lt);padding:3px 8px;border-radius:var(--rfull);">승진 언급 <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--brand)" style="vertical-align:middle;"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg>12건</span>
-              <span style="font-size:12px;color:var(--tx4);">현직자 비중 61%</span>
-              <span style="font-size:12px;color:var(--tx4);">최근 4개월 기준</span>
+              <span style="font-size:12px;font-weight:600;color:var(--tx4);background:var(--ln2);padding:3px 8px;border-radius:var(--rfull);">현직자 비중 61%</span>
+              <span style="font-size:12px;font-weight:600;color:var(--tx4);background:var(--ln2);padding:3px 8px;border-radius:var(--rfull);">최근 4개월 기준</span>
             </div>
           </div>
-          <div class="job-dday urgent" style="flex-shrink:0;">D-3</div>
+          <span class="urg-dday" style="flex-shrink:0;">D-3</span>
         </div>
         <div class="job-item" style="padding:18px 20px;">
           <div class="job-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/toss.png" alt=""></div>
@@ -1023,11 +1023,11 @@
             <div style="font-size:12px;color:var(--tx4);margin-bottom:8px;">서울 · 경력 10년↑ · 학력무관</div>
             <div style="display:flex;gap:8px;align-items:center;">
               <span style="font-size:12px;font-weight:700;color:var(--brand);background:var(--brand-lt);padding:3px 8px;border-radius:var(--rfull);">승진 언급 <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--brand)" style="vertical-align:middle;"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg>8건</span>
-              <span style="font-size:12px;color:var(--tx4);">현직자 비중 78%</span>
-              <span style="font-size:12px;color:var(--tx4);">최근 6개월 기준</span>
+              <span style="font-size:12px;font-weight:600;color:var(--tx4);background:var(--ln2);padding:3px 8px;border-radius:var(--rfull);">현직자 비중 78%</span>
+              <span style="font-size:12px;font-weight:600;color:var(--tx4);background:var(--ln2);padding:3px 8px;border-radius:var(--rfull);">최근 6개월 기준</span>
             </div>
           </div>
-          <div class="job-dday urgent" style="flex-shrink:0;">D-3</div>
+          <span class="urg-dday" style="flex-shrink:0;">D-3</span>
         </div>
         <div class="job-item" style="padding:18px 20px;">
           <div class="job-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/kakao.png" alt=""></div>
@@ -1037,11 +1037,11 @@
             <div style="font-size:12px;color:var(--tx4);margin-bottom:8px;">서울 · 경력 2년↑ · 학력무관</div>
             <div style="display:flex;gap:8px;align-items:center;">
               <span style="font-size:12px;font-weight:700;color:var(--brand);background:var(--brand-lt);padding:3px 8px;border-radius:var(--rfull);">승진 언급 <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--brand)" style="vertical-align:middle;"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg>7건</span>
-              <span style="font-size:12px;color:var(--tx4);">현직자 비중 49%</span>
-              <span style="font-size:12px;color:var(--tx4);">최근 6개월 기준</span>
+              <span style="font-size:12px;font-weight:600;color:var(--tx4);background:var(--ln2);padding:3px 8px;border-radius:var(--rfull);">현직자 비중 49%</span>
+              <span style="font-size:12px;font-weight:600;color:var(--tx4);background:var(--ln2);padding:3px 8px;border-radius:var(--rfull);">최근 6개월 기준</span>
             </div>
           </div>
-          <div class="job-dday urgent" style="flex-shrink:0;">D-3</div>
+          <span class="urg-dday" style="flex-shrink:0;">D-3</span>
         </div>
       </div>
 
@@ -1095,9 +1095,57 @@
               '</div>'+
             '</div>';
           }).join('');
-          [0,1,2,3].forEach(function(i){
+          [0,1,2,3,4].forEach(function(i){
             var b = document.getElementById('cat-'+i);
+            if(!b) return;
             if(i===idx){
+              b.style.background='var(--brand)'; b.style.borderColor='var(--brand)';
+              b.style.color='#fff'; b.style.fontWeight='700';
+            } else {
+              b.style.background='var(--surface)'; b.style.borderColor='var(--ln)';
+              b.style.color='var(--tx3)'; b.style.fontWeight='500';
+            }
+          });
+        }
+
+        function setCatCustom(){
+          // 비로그인 → 로그인 팝업
+          var isLoggedIn = document.getElementById('gnb-user').style.display !== 'none';
+          if(!isLoggedIn){ openOB(); return; }
+          // 로그인했지만 직군 미입력 → 직군 맞춤 팝업
+          if(!obSelectedJob){
+            openCatJob();
+            return;
+          }
+          // 직군 입력된 경우 → 맞춤 공고 표시
+          var customJobs = [
+            {logo:'T',co:'토스 · 서울 · 경력 3년↑',title:obSelectedJob+' (3년 이상)',kw:obSelectedJob+' 추천',dday:'D-5',urgent:true},
+            {logo:'K',co:'카카오 · 판교 · 경력 무관',title:obSelectedJob+' (신입/경력)',kw:obSelectedJob+' 추천',dday:'D-12',urgent:false},
+            {logo:'N',co:'네이버 · 판교 · 경력 2년↑',title:obSelectedJob+' (주니어)',kw:obSelectedJob+' 추천',dday:'D-18',urgent:false}
+          ];
+          document.getElementById('rjob-title').textContent = obSelectedJob+' 분들께 추천해요';
+          var list = document.getElementById('rjob-list');
+          list.innerHTML = customJobs.map(function(j){
+            var jImgFile = logoMap[j.logo];
+            var jLogoInner = jImgFile
+              ? '<img src="' + jImgFile + '" alt="">'
+              : '<span style="font-size:11px;font-weight:700;color:var(--tx3);">' + j.logo + '</span>';
+            return '<div class="job-item">'+
+              '<div class="job-logo">'+jLogoInner+'</div>'+
+              '<div class="job-info">'+
+                '<div class="job-co">'+j.co+'</div>'+
+                '<div class="job-title">'+j.title+'</div>'+
+              '</div>'+
+              '<div style="text-align:right;flex-shrink:0;">'+
+                '<div style="font-size:12px;font-weight:700;color:var(--brand);margin-bottom:3px;">'+j.kw+'</div>'+
+                '<div class="job-dday '+(j.urgent?'urgent':'safe')+'">'+j.dday+'</div>'+
+              '</div>'+
+            '</div>';
+          }).join('');
+          [0,1,2,3,4].forEach(function(i){
+            var b = document.getElementById('cat-'+i);
+            if(!b) return;
+            if(i===4){
               b.style.background='var(--brand)'; b.style.borderColor='var(--brand)';
               b.style.color='#fff'; b.style.fontWeight='700';
             } else {
@@ -6139,6 +6187,26 @@ filterInterest('all');
   </div>
 </div>
 
+<!-- 직군 맞춤 팝업 -->
+<div class="ob-overlay" id="catJobOverlay">
+  <div class="ob-popup" id="catJobPopup">
+    <h2>어떤 직무에서<br>일하고 계신가요?</h2>
+    <p class="ob-sub">직무에 맞는 기업을 추천해 드려요</p>
+    <div class="ob-cols">
+      <div class="ob-col" id="catJobCatCol">
+        <div class="ob-col-label">직군</div>
+      </div>
+      <div class="ob-col" id="catJobJobCol">
+        <div class="ob-col-label">직무</div>
+      </div>
+    </div>
+    <div class="ob-btn-row">
+      <button class="ob-next ghost" onclick="closeCatJob()">나중에 할게요</button>
+      <button class="ob-next primary" id="catJobApplyBtn" disabled onclick="applyCatJob()">적용</button>
+    </div>
+  </div>
+</div>
+
 <!-- 온보딩 팝업 -->
 <div class="ob-overlay" id="obOverlay" onclick="if(event.target===this)closeOB()">
   <!-- Step 1: 직무 선택 -->
@@ -6253,10 +6321,6 @@ filterInterest('all');
 </div>
 
 <footer class="footer"><div class="fi"><div class="flinks"><a href="#">회사소개</a><a href="#" class="bold">이용약관</a><a href="#">개인정보처리방침</a><a href="#">고객 문의</a></div><div class="finfo">(주)브레인커머스 | 서울특별시 강남구 테헤란로 142 | &copy; 2026 Jobplanet.</div></div></footer>
-<div class="fab" style="width:56px;height:56px;flex-direction:column;gap:1px;">
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-  <span>리뷰작성</span>
-</div>
 
 <script>
   /* 온보딩 팝업 */
@@ -6438,6 +6502,70 @@ filterInterest('all');
     }
     showToast('맞춤 조건이 설정되었어요!');
   }
+
+  /* 직군 맞춤 팝업 */
+  var catJobSelectedCat='';
+  var catJobSelectedJob='';
+  function openCatJob(){
+    catJobSelectedCat=''; catJobSelectedJob='';
+    document.getElementById('catJobApplyBtn').disabled=true;
+    renderCatJobCats();
+    document.getElementById('catJobJobCol').innerHTML='<div class="ob-col-label">직무</div>';
+    document.getElementById('catJobOverlay').classList.add('open');
+  }
+  function closeCatJob(){
+    document.getElementById('catJobOverlay').classList.remove('open');
+  }
+  function renderCatJobCats(){
+    var cats=Object.keys(obJobData);
+    var html='<div class="ob-col-label">직군</div>';
+    cats.forEach(function(c){
+      var sel=c===catJobSelectedCat?' selected':'';
+      html+='<div class="ob-col-item'+sel+'" onclick="catJobSelectCat(\''+c+'\')">'+c+'<span class="ob-dot-indicator"></span></div>';
+    });
+    document.getElementById('catJobCatCol').innerHTML=html;
+  }
+  function catJobSelectCat(cat){
+    catJobSelectedCat=cat; catJobSelectedJob='';
+    document.getElementById('catJobApplyBtn').disabled=true;
+    renderCatJobCats();
+    var jobs=obJobData[cat];
+    var html='<div class="ob-col-label">직무</div>';
+    jobs.forEach(function(j){
+      html+='<div class="ob-col-item" onclick="catJobSelectJob(this,\''+j+'\')">'+j+'<span class="ob-dot-indicator"></span></div>';
+    });
+    document.getElementById('catJobJobCol').innerHTML=html;
+  }
+  function catJobSelectJob(el,job){
+    catJobSelectedJob=job;
+    document.querySelectorAll('#catJobJobCol .ob-col-item').forEach(function(x){x.classList.remove('selected');});
+    el.classList.add('selected');
+    document.getElementById('catJobApplyBtn').disabled=false;
+  }
+  function applyCatJob(){
+    closeCatJob();
+    // 저장해서 onboarding에서도 사용 가능하게
+    obSelectedCat=catJobSelectedCat;
+    obSelectedJob=catJobSelectedJob;
+    // 맞춤 공고 적용
+    setCatCustom();
+  }
+
+  /* 로그인 세션 유지 (sessionStorage) */
+  if(sessionStorage.getItem('jp_logged_in')==='true'){
+    document.getElementById('gnb-guest').style.display='none';
+    document.getElementById('gnb-user').style.display='flex';
+  }
+  var _origDoLogin=doLogin;
+  doLogin=function(){
+    _origDoLogin();
+    sessionStorage.setItem('jp_logged_in','true');
+  };
+  var _origDoLogout=doLogout;
+  doLogout=function(){
+    _origDoLogout();
+    sessionStorage.removeItem('jp_logged_in');
+  };
 
   /* 잡코리아 팝업 */
   var jkTimer=null;
