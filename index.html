@@ -115,6 +115,25 @@
     .comm-hot-meta{display:flex;align-items:center;gap:12px;font-size:11px;color:var(--tx4);}
     .comm-hot-meta span{display:flex;align-items:center;gap:3px;}
 
+    /* 잡코리아 이동 팝업 */
+    .jk-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(20,24,40,0.5);align-items:center;justify-content:center;}
+    .jk-overlay.open{display:flex;}
+    .jk-popup{position:relative;width:480px;background:#fff;border-radius:20px;padding:24px 40px 44px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:jkSlideUp .35s cubic-bezier(.4,0,.2,1);}
+    @keyframes jkSlideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+    .jk-popup.fadeout{animation:jkFadeOut .4s ease forwards;}
+    @keyframes jkFadeOut{to{opacity:0;transform:translateY(-10px);}}
+    .jk-close{position:absolute;top:20px;right:24px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;background:none;transition:opacity .15s;}
+    .jk-close:hover{opacity:.6;}
+    .jk-img{width:180px;height:180px;margin:0 auto 20px;object-fit:contain;}
+    .jk-title{font-size:22px;font-weight:800;color:var(--tx);margin-bottom:8px;letter-spacing:-.3px;}
+    .jk-dots{display:inline;}
+    .jk-dot{opacity:0;animation:jkDot 1.2s infinite;}
+    .jk-dot:nth-child(1){animation-delay:0s;}
+    .jk-dot:nth-child(2){animation-delay:.2s;}
+    .jk-dot:nth-child(3){animation-delay:.4s;}
+    @keyframes jkDot{0%,80%,100%{opacity:0;}40%{opacity:1;}}
+    .jk-desc{font-size:14px;color:var(--tx4);line-height:1.5;}
+
     /* 검색 오버레이 */
     .s-ov{display:none;position:fixed;inset:0;z-index:200;background:rgba(20,24,40,0.45);align-items:flex-start;justify-content:center;padding-top:72px;}
     .s-ov.open{display:flex;}
@@ -698,21 +717,21 @@
             <!-- 기업 리스트 -->
             <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
               <div id="fi-0" onclick="setCompany(0)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
-                <div class="fit-logo"><img src="naver.png" alt=""></div>
+                <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/naver.png" alt=""></div>
                 <span class="fit-name">네이버</span>
                 <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.1</span>
                 <span class="fit-pct" style="color:#EF4444;background:#FEF2F2;border:none;">적합 88%</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
               <div id="fi-1" onclick="setCompany(1)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
-                <div class="fit-logo"><img src="toss.png" alt=""></div>
+                <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/toss.png" alt=""></div>
                 <span class="fit-name">토스</span>
                 <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 3.6</span>
                 <span class="fit-pct" style="color:#EF4444;background:#FEF2F2;border:none;">적합 85%</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
               <div id="fi-2" onclick="setCompany(2)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
-                <div class="fit-logo"><img src="kakao.png" alt=""></div>
+                <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/kakao.png" alt=""></div>
                 <span class="fit-name">카카오</span>
                 <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 3.2</span>
                 <span class="fit-pct" style="color:#EF4444;background:#FEF2F2;border:none;">적합 82%</span>
@@ -829,7 +848,7 @@
         <!-- 리뷰 1 -->
         <div class="rv-card">
           <div class="rv-top">
-            <div class="rv-logo"><img src="toss.png" alt=""></div>
+            <div class="rv-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/toss.png" alt=""></div>
             <span class="rv-co" style="font-weight:700;">비바리퍼블리카</span>
             <span class="rv-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.1</span>
           </div>
@@ -853,7 +872,7 @@
         <!-- 리뷰 2 -->
         <div class="rv-card">
           <div class="rv-top">
-            <div class="rv-logo"><img src="당근.png" alt=""></div>
+            <div class="rv-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/당근.png" alt=""></div>
             <span class="rv-co" style="font-weight:700;">(주)당근마켓</span>
             <span class="rv-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.0</span>
           </div>
@@ -895,7 +914,7 @@
       <!-- 공고 리스트 -->
       <div class="job-list" id="rjob-list">
         <div class="job-item" style="padding:18px 20px;">
-          <div class="job-logo"><img src="naver.png" alt=""></div>
+          <div class="job-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/naver.png" alt=""></div>
           <div class="job-info" style="flex:1;">
             <div class="job-title" style="font-size:15px;margin-bottom:4px;">Frontend Engineer (React)</div>
             <div class="job-co" style="margin-bottom:8px;">네이버</div>
@@ -909,7 +928,7 @@
           <div class="job-dday urgent" style="flex-shrink:0;">D-3</div>
         </div>
         <div class="job-item" style="padding:18px 20px;">
-          <div class="job-logo"><img src="toss.png" alt=""></div>
+          <div class="job-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/toss.png" alt=""></div>
           <div class="job-info" style="flex:1;">
             <div class="job-title" style="font-size:15px;margin-bottom:4px;">Frontend Engineer (10년차 리더급)</div>
             <div class="job-co" style="margin-bottom:8px;">비바리퍼블리카</div>
@@ -923,7 +942,7 @@
           <div class="job-dday urgent" style="flex-shrink:0;">D-3</div>
         </div>
         <div class="job-item" style="padding:18px 20px;">
-          <div class="job-logo"><img src="kakao.png" alt=""></div>
+          <div class="job-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/kakao.png" alt=""></div>
           <div class="job-info" style="flex:1;">
             <div class="job-title" style="font-size:15px;margin-bottom:4px;">Frontend Engineer (2년차 이상)</div>
             <div class="job-co" style="margin-bottom:8px;">카카오</div>
@@ -1049,7 +1068,7 @@
           </div>
           <div class="rc-list">
             <div class="rc-item has-update">
-              <div class="rc-logo"><img src="kakao.png" alt=""></div>
+              <div class="rc-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/kakao.png" alt=""></div>
               <div class="rc-info">
                 <div class="rc-name">카카오</div>
                 <div class="rc-sub update">리뷰 4건 새로 올라왔어요</div>
@@ -1057,7 +1076,7 @@
               <svg class="rc-chevron" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
             <div class="rc-item has-update">
-              <div class="rc-logo"><img src="toss.png" alt=""></div>
+              <div class="rc-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/toss.png" alt=""></div>
               <div class="rc-info">
                 <div class="rc-name">토스</div>
                 <div class="rc-sub update">채용 공고 2건 신규 등록</div>
@@ -1065,7 +1084,7 @@
               <svg class="rc-chevron" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
             <div class="rc-item">
-              <div class="rc-logo"><img src="naver.png" alt=""></div>
+              <div class="rc-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/naver.png" alt=""></div>
               <div class="rc-info">
                 <div class="rc-name">네이버</div>
                 <div class="rc-sub">새로운 정보 없음</div>
@@ -2496,7 +2515,7 @@
           <!-- 키워드 투표 카드 -->
           <div class="mine-keyword-card">
             <div class="mine-keyword-card__illust">
-              <img src="keyword-illust.png" alt="궁금하다 일러스트">
+              <img src="https://jelin-cc.github.io/jobplanet-ut/keyword-illust.png" alt="궁금하다 일러스트">
             </div>
             <div class="mine-keyword-card__question">경미님이 다녔던 {기업명}을<br>한 단어로 표현한다면?</div>
             <div class="mine-keyword-grid">
@@ -2799,7 +2818,7 @@
             </div>
             <div class="mine-quiz-card__question">이 회사 리뷰를 보고<br>나라면 다닐 수 있을까요?</div>
             <div class="mine-quiz-card__preview">
-              <img src="review-preview.png" alt="리뷰 미리보기">
+              <img src="https://jelin-cc.github.io/jobplanet-ut/review-preview.png" alt="리뷰 미리보기">
             </div>
             <div class="mine-quiz-card__fade"></div>
             <div class="mine-quiz-card__btns">
@@ -5285,22 +5304,22 @@ filterInterest('all');
       };
 
       var logoMap = {
-        'T': 'toss.png',
-        'N': 'naver.png',
-        'K': 'kakao.png',
-        '당': '당근.png'
+        'T': 'https://jelin-cc.github.io/jobplanet-ut/toss.png',
+        'N': 'https://jelin-cc.github.io/jobplanet-ut/naver.png',
+        'K': 'https://jelin-cc.github.io/jobplanet-ut/kakao.png',
+        '당': 'https://jelin-cc.github.io/jobplanet-ut/당근.png'
       };
 
       var companyImgByName = {
-        '넥스트엔터프라이즈': 'next-enterprise.png',
-        '인사이트코리아': 'next-enterprise.png'
+        '넥스트엔터프라이즈': 'https://jelin-cc.github.io/jobplanet-ut/next-enterprise.png',
+        '인사이트코리아': 'https://jelin-cc.github.io/jobplanet-ut/next-enterprise.png'
       };
       var companyImgMap = {
-        'T': 'toss.png', 'N': 'naver.png', 'K': 'kakao.png', '당': '당근.png',
-        'W': 'weverse.webp', 'E': 'baemin.webp', 'C': 'channeltalk.webp',
-        'L': 'kurly.webp', 'P': 'wrtn.webp', 'J': 'tada.webp',
-        'I': 'larasweet.webp', 'A': 'bat.webp', 'B': 'weverse.webp',
-        'Q': 'wrtn.webp', 'F': 'channeltalk.webp', 'O': 'tada.webp'
+        'T': 'https://jelin-cc.github.io/jobplanet-ut/toss.png', 'N': 'https://jelin-cc.github.io/jobplanet-ut/naver.png', 'K': 'https://jelin-cc.github.io/jobplanet-ut/kakao.png', '당': 'https://jelin-cc.github.io/jobplanet-ut/당근.png',
+        'W': 'https://jelin-cc.github.io/jobplanet-ut/weverse.webp', 'E': 'https://jelin-cc.github.io/jobplanet-ut/baemin.webp', 'C': 'https://jelin-cc.github.io/jobplanet-ut/channeltalk.webp',
+        'L': 'https://jelin-cc.github.io/jobplanet-ut/kurly.webp', 'P': 'https://jelin-cc.github.io/jobplanet-ut/wrtn.webp', 'J': 'https://jelin-cc.github.io/jobplanet-ut/tada.webp',
+        'I': 'https://jelin-cc.github.io/jobplanet-ut/larasweet.webp', 'A': 'https://jelin-cc.github.io/jobplanet-ut/bat.webp', 'B': 'https://jelin-cc.github.io/jobplanet-ut/weverse.webp',
+        'Q': 'https://jelin-cc.github.io/jobplanet-ut/wrtn.webp', 'F': 'https://jelin-cc.github.io/jobplanet-ut/channeltalk.webp', 'O': 'https://jelin-cc.github.io/jobplanet-ut/tada.webp'
       };
 
       function renderCards(caseKey) {
@@ -5333,7 +5352,8 @@ filterInterest('all');
           var tagsHtml = c.tags.map(function(t){ return '<span class="ic-tag">' + t + '</span>'; }).join('');
           var extTagHtml = isExt ? '<span class="ext-badge" style="margin-top:2px;">잡코리아 ' + extSvg + '</span>' : '';
           var ddayStyle = c.urgent ? 'color:#EF4444;font-weight:700;' : 'color:var(--tx4);font-weight:600;';
-          return '<div class="img-card">'
+          var clickAttr = isExt ? ' onclick="openJK()"' : '';
+          return '<div class="img-card"' + clickAttr + '>'
             + thumb
             + '<div class="ic-body">'
             + '<div class="ic-title">' + c.title + '</div>'
@@ -5355,7 +5375,8 @@ filterInterest('all');
           var lcLogoInner = lcImgFile
             ? '<img src="' + lcImgFile + '" alt="">'
             : '<span style="font-size:13px;font-weight:800;color:var(--brand);">' + c.logo + '</span>';
-          return '<div class="logo-card">'
+          var lcClickAttr = isExt ? ' onclick="openJK()"' : '';
+          return '<div class="logo-card"' + lcClickAttr + '>'
             + '<div class="lc-logo">' + lcLogoInner + '</div>'
             + '<div class="lc-info">'
             + '<div class="lc-co">' + c.co + extBadgeHtml + '</div>'
@@ -6020,6 +6041,18 @@ filterInterest('all');
   </div>
 </div>
 
+<!-- 잡코리아 이동 팝업 -->
+<div class="jk-overlay" id="jkOverlay" onclick="if(event.target===this)closeJK()">
+  <div class="jk-popup" id="jkPopup">
+    <button class="jk-close" onclick="closeJK()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--tx)" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <img class="jk-img" src="https://jelin-cc.github.io/jobplanet-ut/JOBKO.png" alt="">
+    <div class="jk-title">잡코리아로 이동중<span class="jk-dots"><span class="jk-dot">.</span><span class="jk-dot">.</span><span class="jk-dot">.</span></span></div>
+    <div class="jk-desc">이 공고는 잡코리아에서 상세 정보를 확인하고 지원할 수 있어요.</div>
+  </div>
+</div>
+
 <!-- 토스트 -->
 <div class="toast" id="toast">
   <div class="toast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -6033,6 +6066,27 @@ filterInterest('all');
 </div>
 
 <script>
+  /* 잡코리아 팝업 */
+  var jkTimer=null;
+  function openJK(){
+    var ov=document.getElementById('jkOverlay');
+    var popup=document.getElementById('jkPopup');
+    popup.classList.remove('fadeout');
+    ov.classList.add('open');
+    clearTimeout(jkTimer);
+    jkTimer=setTimeout(function(){
+      popup.classList.add('fadeout');
+      setTimeout(function(){ ov.classList.remove('open'); popup.classList.remove('fadeout'); },400);
+    },3000);
+  }
+  function closeJK(){
+    clearTimeout(jkTimer);
+    var ov=document.getElementById('jkOverlay');
+    var popup=document.getElementById('jkPopup');
+    popup.classList.add('fadeout');
+    setTimeout(function(){ ov.classList.remove('open'); popup.classList.remove('fadeout'); },400);
+  }
+
   /* 토스트 */
   var toastTimer=null;
   function showToast(msg){
