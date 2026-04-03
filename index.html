@@ -917,7 +917,7 @@
           </div>
           <div style="border-top:1px solid var(--ln2);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;">
             <span id="sal-caption" style="font-size:12px;color:var(--tx4);">개발자 리뷰 기준 · 현직자 데이터</span>
-            <button id="sal-more-btn" onclick="toggleSalaryMore()" style="font-size:13px;font-weight:700;color:var(--brand);background:none;border:none;cursor:pointer;font-family:var(--font);padding:0;">더보기 ></button>
+            <button id="sal-more-btn" onclick="toggleSalaryMore()" style="font-size:13px;font-weight:700;color:var(--brand);background:none;border:none;cursor:pointer;font-family:var(--font);padding:0;display:flex;align-items:center;gap:4px;">더보기 <svg id="sal-more-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s;"><polyline points="6 9 12 15 18 9"/></svg></button>
           </div>
         </div>
       </div>
@@ -5729,7 +5729,9 @@ filterInterest('all');
         var wrap = document.getElementById('sal-more-wrap');
         var btn = document.getElementById('sal-more-btn');
         if (wrap) wrap.style.display = salExpanded ? 'block' : 'none';
-        if (btn) btn.textContent = salExpanded ? '접기 ↑' : '더보기 →';
+        if (btn) btn.innerHTML = salExpanded
+          ? '접기 <svg id="sal-more-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(180deg);"><polyline points="6 9 12 15 18 9"/></svg>'
+          : '더보기 <svg id="sal-more-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
         // TOP3 마지막 border 처리
         var top3 = document.getElementById('sal-top3-list');
         if (top3 && top3.lastElementChild) {
