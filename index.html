@@ -520,8 +520,15 @@
             </div>
           </div>
         </div>
-        <div class="gnb-icon-btn" title="리뷰 작성">
+        <div class="gnb-icon-btn" title="리뷰 작성" onclick="toggleWriteDD()" id="writeBtn" style="position:relative;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9EA3B0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+          <div class="gnb-dropdown" id="writeDD" style="right:-40px;width:200px;">
+            <button class="gnb-dd-item" onclick="showToast('지금은 지원하지 않는 서비스입니다.')">프리미엄 리뷰 작성</button>
+            <button class="gnb-dd-item" onclick="showToast('지금은 지원하지 않는 서비스입니다.')">기업리뷰 작성</button>
+            <button class="gnb-dd-item" onclick="showToast('지금은 지원하지 않는 서비스입니다.')">연봉정보 작성</button>
+            <button class="gnb-dd-item" onclick="showToast('지금은 지원하지 않는 서비스입니다.')">면접후기 작성</button>
+            <button class="gnb-dd-item" onclick="showToast('지금은 지원하지 않는 서비스입니다.')" style="display:flex;align-items:center;gap:6px;">복지리뷰 작성 <span style="font-size:12px;font-weight:800;color:var(--brand);">N</span></button>
+          </div>
         </div>
         <div class="gnb-profile-wrap" id="profileWrap">
           <div class="gnb-profile-btn" onclick="toggleProfileDD()">
@@ -6053,15 +6060,29 @@ filterInterest('all');
   function toggleProfileDD(){
     var dd=document.getElementById('profileDD');
     var noti=document.getElementById('notiPopup');
+    var wdd=document.getElementById('writeDD');
     if(noti)noti.classList.remove('open');
+    if(wdd)wdd.classList.remove('open');
     dd.classList.toggle('open');
+  }
+
+  /* 작성 드롭다운 */
+  function toggleWriteDD(){
+    var wdd=document.getElementById('writeDD');
+    var dd=document.getElementById('profileDD');
+    var noti=document.getElementById('notiPopup');
+    if(dd)dd.classList.remove('open');
+    if(noti)noti.classList.remove('open');
+    wdd.classList.toggle('open');
   }
 
   /* 알림 팝업 */
   function toggleNotiPopup(){
     var noti=document.getElementById('notiPopup');
     var dd=document.getElementById('profileDD');
+    var wdd=document.getElementById('writeDD');
     if(dd)dd.classList.remove('open');
+    if(wdd)wdd.classList.remove('open');
     noti.classList.toggle('open');
   }
 
@@ -6076,11 +6097,15 @@ filterInterest('all');
   document.addEventListener('click',function(e){
     var profileWrap=document.getElementById('profileWrap');
     var notiBtn=document.getElementById('notiBtn');
+    var writeBtn=document.getElementById('writeBtn');
     if(profileWrap&&!profileWrap.contains(e.target)){
       document.getElementById('profileDD').classList.remove('open');
     }
     if(notiBtn&&!notiBtn.contains(e.target)){
       document.getElementById('notiPopup').classList.remove('open');
+    }
+    if(writeBtn&&!writeBtn.contains(e.target)){
+      document.getElementById('writeDD').classList.remove('open');
     }
   });
 
