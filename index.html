@@ -41,10 +41,10 @@
     .btn-outline:hover{border-color:var(--tx3);color:var(--tx);}
 
     /* 토스트 */
-    .toast{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-80px);z-index:999;display:flex;align-items:center;gap:12px;padding:14px 28px;background:#3D4553;border-radius:var(--rfull);box-shadow:0 8px 32px rgba(0,0,0,.18);opacity:0;transition:all .35s cubic-bezier(.4,0,.2,1);pointer-events:none;}
+    .toast{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-80px);z-index:999;display:flex;align-items:center;gap:8px;padding:10px 20px;background:#3D4553;border-radius:var(--rfull);box-shadow:0 4px 16px rgba(0,0,0,.15);opacity:0;transition:all .35s cubic-bezier(.4,0,.2,1);pointer-events:none;}
     .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
-    .toast-icon{width:24px;height:24px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .toast-text{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;}
+    .toast-icon{width:20px;height:20px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .toast-text{font-size:13px;font-weight:500;color:#fff;white-space:nowrap;}
 
     /* 로그인 후 GNB 아이콘 */
     .gnb-icon-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;cursor:pointer;transition:background .15s;position:relative;}
@@ -122,7 +122,7 @@
     .ob-step-dots{display:flex;gap:6px;margin-bottom:20px;}
     .ob-dot{width:24px;height:6px;border-radius:3px;background:var(--ln);}
     .ob-dot.active{background:var(--brand);}
-    .ob-popup h2{font-size:24px;font-weight:800;color:var(--tx);line-height:1.35;margin-bottom:6px;letter-spacing:-.5px;}
+    .ob-popup h2{font-size:24px;font-weight:700;color:var(--tx);line-height:1.35;margin-bottom:6px;letter-spacing:-.5px;}
     .ob-popup .ob-sub{font-size:14px;color:var(--tx3);margin-bottom:24px;}
     .ob-cols{display:flex;gap:0;border:1px solid var(--ln);border-radius:var(--r);overflow:hidden;height:280px;margin-bottom:20px;}
     .ob-col{flex:1;overflow-y:auto;padding:0;}
@@ -142,7 +142,7 @@
     .ob-next.ghost:hover{background:var(--bg);}
     .ob-cond-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
     .ob-cond-header span{font-size:14px;font-weight:600;color:var(--tx);}
-    .ob-cond-count{font-size:13px;font-weight:700;color:var(--brand);border:1.5px solid rgba(0,194,116,.3);padding:3px 12px;border-radius:var(--rfull);}
+    .ob-cond-header .ob-cond-count{font-size:13px;font-weight:700;color:var(--brand);background:var(--brand-lt);padding:5px 16px;border-radius:var(--rfull);}
     .ob-cond-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
     .ob-cond-card{display:flex;align-items:center;gap:14px;padding:16px 18px;border:1.5px solid var(--ln);border-radius:var(--r);cursor:pointer;transition:all .2s;background:var(--surface);}
     .ob-cond-card:hover{border-color:var(--tx4);}
@@ -156,7 +156,7 @@
     .ob-cond-hint{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--bg);border-radius:var(--r);margin-bottom:20px;}
     .ob-cond-hint-icon{width:32px;height:32px;border-radius:50%;background:var(--ln2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
     .ob-cond-hint-text{font-size:13px;color:var(--tx3);line-height:1.4;}
-    .ob-cond-hint-text strong{color:var(--tx);font-weight:700;}
+    .ob-cond-hint-text strong{color:var(--tx3);font-weight:600;}
     /* 로딩 모션 */
     .ob-loading{text-align:center;padding:32px 0;}
     .ob-loading-radar{position:relative;width:180px;height:180px;margin:0 auto 24px;}
@@ -165,7 +165,7 @@
     .ob-loading span{font-size:13px;color:var(--tx4);display:block;margin-top:4px;}
     /* 로그인 유도 팝업 */
     .login-popup{width:420px;background:#fff;border-radius:20px;padding:28px 32px 32px;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:jkSlideUp .35s cubic-bezier(.4,0,.2,1);}
-    .login-popup h2{font-size:20px;font-weight:800;color:var(--tx);margin-bottom:4px;}
+    .login-popup h2{font-size:20px;font-weight:700;color:var(--tx);margin-bottom:4px;}
     .login-popup .login-sub{font-size:13px;color:var(--tx3);margin-bottom:24px;}
     .login-social{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
     .login-social-btn{width:100%;padding:14px 0;border-radius:var(--r);font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s;}
@@ -197,7 +197,7 @@
     .jk-close{position:absolute;top:20px;right:24px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;background:none;transition:opacity .15s;}
     .jk-close:hover{opacity:.6;}
     .jk-img{width:180px;height:180px;margin:0 auto 20px;object-fit:contain;}
-    .jk-title{font-size:22px;font-weight:800;color:var(--tx);margin-bottom:8px;letter-spacing:-.3px;}
+    .jk-title{font-size:22px;font-weight:700;color:var(--tx);margin-bottom:8px;letter-spacing:-.3px;}
     .jk-dots{display:inline;}
     .jk-dot{opacity:0;animation:jkDot 1.2s infinite;}
     .jk-dot:nth-child(1){animation-delay:0s;}
@@ -230,7 +230,7 @@
     .sr-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px;}
     .sr-card{background:var(--surface);border:1px solid var(--ln);border-radius:var(--r);padding:24px;cursor:pointer;transition:all .2s;}
     .sr-card:hover{box-shadow:var(--sh-hover);border-color:transparent;}
-    .sr-card-logo{width:44px;height:44px;border-radius:10px;overflow:hidden;margin-bottom:14px;background:var(--ln2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--tx3);}
+    .sr-card-logo{width:44px;height:44px;border-radius:10px;overflow:hidden;margin-bottom:14px;background:var(--ln2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--tx3);}
     .sr-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;}
     .sr-card-name{font-size:17px;font-weight:700;color:var(--tx);}
     .sr-card-rating{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
@@ -255,8 +255,8 @@
     .cd-hero-content{position:relative;z-index:2;width:1060px;margin:0 auto;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:28px;}
     .cd-hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);padding:5px 12px;border-radius:var(--rfull);font-size:11px;font-weight:600;color:#fff;margin-bottom:14px;width:fit-content;}
     .cd-hero-info{display:flex;align-items:center;gap:14px;}
-    .cd-hero-logo{width:52px;height:52px;border-radius:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:var(--brand);box-shadow:0 2px 8px rgba(0,0,0,0.2);flex-shrink:0;}
-    .cd-hero-name{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.3px;}
+    .cd-hero-logo{width:52px;height:52px;border-radius:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--brand);box-shadow:0 2px 8px rgba(0,0,0,0.2);flex-shrink:0;}
+    .cd-hero-name{font-size:22px;font-weight:700;color:#fff;letter-spacing:-.3px;}
     .cd-hero-rating{display:flex;align-items:center;gap:6px;margin-top:4px;}
     .cd-hero-star{color:#F59E0B;font-size:15px;}
     .cd-hero-score{font-size:16px;font-weight:700;color:#fff;}
@@ -283,7 +283,7 @@
     .cd-main{flex:1;min-width:0;padding-left:40px;}
     .cd-section{margin-bottom:48px;}
     .cd-section-label{font-size:12px;font-weight:700;color:var(--brand);letter-spacing:.5px;margin-bottom:8px;}
-    .cd-section-title{font-size:20px;font-weight:800;color:var(--tx);margin-bottom:12px;letter-spacing:-.3px;}
+    .cd-section-title{font-size:20px;font-weight:700;color:var(--tx);margin-bottom:12px;letter-spacing:-.3px;}
     .cd-section-desc{font-size:14px;line-height:1.75;color:var(--tx2);}
     .cd-section-more{font-size:13px;color:var(--tx4);cursor:pointer;margin-top:8px;display:inline-block;}
     .cd-section-more:hover{color:var(--brand);}
@@ -324,7 +324,7 @@
     .news-hero-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s;}
     .news-hero-card:hover .news-hero-thumb img{transform:scale(1.03);}
     .news-hero-body{flex:1;padding:28px 28px 28px 0;display:flex;flex-direction:column;justify-content:center;}
-    .news-hero-title{font-size:22px;font-weight:800;color:var(--tx);line-height:1.4;margin-bottom:12px;letter-spacing:-.3px;}
+    .news-hero-title{font-size:22px;font-weight:700;color:var(--tx);line-height:1.4;margin-bottom:12px;letter-spacing:-.3px;}
     .news-hero-desc{font-size:14px;color:var(--tx3);line-height:1.65;margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
     .news-hero-source{font-size:13px;color:var(--tx4);}
 
@@ -439,7 +439,7 @@
     /* 연봉+리뷰 카드 — 컴팩트 */
     .sal-card{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--ln2);cursor:pointer;}
     .sal-card:last-child{border-bottom:none;}
-    .sal-rank{width:18px;flex-shrink:0;font-size:12px;font-weight:800;color:var(--tx4);text-align:center;}
+    .sal-rank{width:18px;flex-shrink:0;font-size:12px;font-weight:700;color:var(--tx4);text-align:center;}
     .sal-rank.top{color:var(--brand);}
     .sal-logo{width:34px;height:34px;border-radius:8px;flex-shrink:0;overflow:hidden;background:none;border:none;}
     .sal-logo img{width:100%;height:100%;object-fit:cover;border-radius:7px;}
@@ -447,7 +447,7 @@
     .sal-co{font-size:13px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;}
     .sal-meta{font-size:11px;color:var(--tx4);margin-top:1px;}
     .sal-right{flex-shrink:0;text-align:right;}
-    .sal-amt{font-size:14px;font-weight:800;color:var(--tx);letter-spacing:-.3px;}
+    .sal-amt{font-size:14px;font-weight:700;color:var(--tx);letter-spacing:-.3px;}
     .sal-stars{font-size:11px;color:var(--tx4);margin-top:1px;}
     .rv-top{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
     .rv-logo{width:30px;height:30px;border-radius:8px;flex-shrink:0;overflow:hidden;background:none;border:none;}
@@ -618,7 +618,7 @@
             <button class="gnb-dd-item" onclick="showToast('지금은 지원하지 않는 서비스입니다.')">기업리뷰 작성</button>
             <button class="gnb-dd-item" onclick="showToast('지금은 지원하지 않는 서비스입니다.')">연봉정보 작성</button>
             <button class="gnb-dd-item" onclick="showToast('지금은 지원하지 않는 서비스입니다.')">면접후기 작성</button>
-            <button class="gnb-dd-item" onclick="showToast('지금은 지원하지 않는 서비스입니다.')" style="display:flex;align-items:center;gap:6px;">복지리뷰 작성 <span style="font-size:12px;font-weight:800;color:var(--brand);">N</span></button>
+            <button class="gnb-dd-item" onclick="showToast('지금은 지원하지 않는 서비스입니다.')" style="display:flex;align-items:center;gap:6px;">복지리뷰 작성 <span style="font-size:12px;font-weight:700;color:var(--brand);">N</span></button>
           </div>
         </div>
         <div class="gnb-profile-wrap" id="profileWrap">
@@ -792,21 +792,21 @@
                 <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/naver.png" alt=""></div>
                 <span class="fit-name">네이버</span>
                 <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.1</span>
-                <span class="fit-pct" style="color:#EF4444;background:#FEF2F2;border:none;">적합 88%</span>
+                <span class="fit-pct" style="color:var(--brand);background:var(--brand-lt);border:none;">적합 88%</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
               <div id="fi-1" onclick="setCompany(1)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
                 <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/toss.png" alt=""></div>
                 <span class="fit-name">토스</span>
                 <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 3.6</span>
-                <span class="fit-pct" style="color:#EF4444;background:#FEF2F2;border:none;">적합 85%</span>
+                <span class="fit-pct" style="color:var(--brand);background:var(--brand-lt);border:none;">적합 85%</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
               <div id="fi-2" onclick="setCompany(2)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
                 <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/kakao.png" alt=""></div>
                 <span class="fit-name">카카오</span>
                 <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 3.2</span>
-                <span class="fit-pct" style="color:#EF4444;background:#FEF2F2;border:none;">적합 82%</span>
+                <span class="fit-pct" style="color:var(--brand);background:var(--brand-lt);border:none;">적합 82%</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
             </div>
@@ -866,7 +866,7 @@
           <!-- 평균 연봉 + 바 + CTA -->
           <div style="padding:28px 28px 24px;">
             <p id="sal-anchor-label" style="font-size:13px;color:var(--tx3);margin-bottom:4px;">직무 평균 연봉</p>
-            <p id="sal-anchor-val" style="font-size:28px;font-weight:800;color:var(--tx);letter-spacing:-.5px;margin-bottom:8px;">7,540만원</p>
+            <p id="sal-anchor-val" style="font-size:28px;font-weight:700;color:var(--tx);letter-spacing:-.5px;margin-bottom:8px;">7,540만원</p>
             <span id="sal-anchor-sub" style="display:inline-block;font-size:12px;font-weight:600;color:var(--brand);background:var(--brand-lt);padding:3px 12px;border-radius:var(--rfull);margin-bottom:20px;">연봉 데이터 2,015,619건 기준</span>
 
             <!-- 분포 바 -->
@@ -885,7 +885,7 @@
             <div id="sal-cta-btn" onclick="showSalInput()" style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--surface);border-radius:10px;border:1.5px solid rgba(0,194,116,.3);cursor:pointer;transition:border-color .15s;" onmouseover="this.style.borderColor='var(--brand)'" onmouseout="this.style.borderColor='rgba(0,194,116,.3)'">
               <div style="display:flex;align-items:center;gap:10px;">
                 <div style="width:18px;height:18px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                  <span style="font-size:9px;font-weight:800;color:#fff;">W</span>
+                  <span style="font-size:9px;font-weight:700;color:#fff;">W</span>
                 </div>
                 <span style="font-size:14px;font-weight:600;color:var(--tx2);">내 연봉을 입력하면 평균과 비교해볼 수 있어요!</span>
               </div>
@@ -5461,7 +5461,7 @@ filterInterest('all');
           var lcImgFile = logoMap[c.logo];
           var lcLogoInner = lcImgFile
             ? '<img src="' + lcImgFile + '" alt="">'
-            : '<span style="font-size:13px;font-weight:800;color:var(--brand);">' + c.logo + '</span>';
+            : '<span style="font-size:13px;font-weight:700;color:var(--brand);">' + c.logo + '</span>';
           var lcClickAttr = isExt ? ' onclick="openJK()"' : '';
           return '<div class="logo-card"' + lcClickAttr + '>'
             + '<div class="lc-logo">' + lcLogoInner + '</div>'
@@ -5683,10 +5683,10 @@ filterInterest('all');
           var gap = item.amtN - myVal;
           var gapStr = (gap >= 0 ? '+' : '') + gap.toLocaleString() + '만';
           var gapColor = gap >= 0 ? 'color:var(--brand)' : 'color:var(--tx4)';
-          rightHtml = '<div style="font-size:14px;font-weight:800;color:var(--tx);letter-spacing:-.3px;">' + item.amt + '</div>'
+          rightHtml = '<div style="font-size:14px;font-weight:700;color:var(--tx);letter-spacing:-.3px;">' + item.amt + '</div>'
             + '<div style="font-size:11px;' + gapColor + ';margin-top:1px;">' + gapStr + '</div>';
         } else {
-          rightHtml = '<div style="font-size:14px;font-weight:800;color:var(--tx);letter-spacing:-.3px;">' + item.amt + '</div>'
+          rightHtml = '<div style="font-size:14px;font-weight:700;color:var(--tx);letter-spacing:-.3px;">' + item.amt + '</div>'
             + '<div style="font-size:11px;color:var(--brand);margin-top:1px;">' + item.stars + ' · ' + item.cnt + '</div>';
         }
         var rankColor = i < 3 ? 'color:var(--brand)' : 'color:var(--tx4)';
@@ -6168,7 +6168,7 @@ filterInterest('all');
     <div class="ob-cond-list" id="obCondList"></div>
     <div class="ob-cond-hint">
       <div class="ob-cond-hint-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="1.5"><polygon points="12 2 22.5 9.5 18.5 22 5.5 22 1.5 9.5"/></svg></div>
-      <div class="ob-cond-hint-text"><strong>조건을 선택하면 그래프가 그려져요</strong><br>최대 3개 선택 가능</div>
+      <div class="ob-cond-hint-text"><strong>조건을 선택하면 그래프에 적용돼요</strong></div>
     </div>
     <div class="ob-btn-row">
       <button class="ob-next ghost" onclick="document.getElementById('obStep2').style.display='none';document.getElementById('obStep1').style.display='';">이전으로</button>
@@ -6426,7 +6426,7 @@ filterInterest('all');
         var c=obCondData[idx];
         var borderBot=i<obSelectedConds.length-1?'border-bottom:1px solid var(--ln2);':'';
         tagsHtml+='<div style="display:flex;align-items:center;gap:10px;padding:7px 0;'+borderBot+'">'
-          +'<span style="width:20px;height:20px;border-radius:6px;background:var(--brand);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+(i+1)+'</span>'
+          +'<span style="width:20px;height:20px;border-radius:6px;background:var(--brand);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+(i+1)+'</span>'
           +'<span style="font-size:13px;font-weight:600;color:var(--tx);flex:1;">'+c.name+'</span>'
           +'<span style="flex-shrink:0;">'+c.icon+'</span>'
           +'</div>';
