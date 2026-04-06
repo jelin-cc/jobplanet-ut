@@ -7489,6 +7489,20 @@ filterInterest('all');
   /* 잡코리아 외부 배지 */
   .ext-badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;color:#2563EB;background:#EFF6FF;border:1px solid #BFDBFE;padding:2px 7px;border-radius:var(--rfull);white-space:nowrap;vertical-align:middle;line-height:1.4;}
   .ext-badge svg{width:10px;height:10px;flex-shrink:0;}
+
+  /* 북마크 활성 상태 */
+  .bk-btn.active svg,.bm.active svg,.lc-bk.active svg{fill:var(--brand);stroke:var(--brand);}
+  .bk-btn{cursor:pointer;z-index:2;position:relative;}
+  .lc-bk{cursor:pointer;z-index:2;position:relative;}
+  .bm{cursor:pointer;z-index:2;position:relative;}
+
+  /* 저장 토스트 */
+  #saveToast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none;display:flex;align-items:center;gap:12px;background:rgba(55,65,81,0.92);backdrop-filter:blur(8px);color:#fff;padding:14px 24px;border-radius:999px;font-size:15px;font-weight:500;white-space:nowrap;opacity:0;transform:translateX(-50%) translateY(20px);transition:opacity .3s,transform .3s;}
+  #saveToast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
+  #saveToast .st-icon{width:28px;height:28px;background:var(--brand);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  #saveToast .st-icon svg{width:16px;height:16px;color:#fff;}
+  #saveToast .st-link{color:rgba(255,255,255,0.7);font-size:14px;margin-left:16px;cursor:pointer;pointer-events:auto;text-decoration:none;}
+  #saveToast .st-link:hover{color:#fff;}
 </style>
 
 <div style="max-width:1060px;margin:0 auto;padding:0 20px;">
@@ -8803,16 +8817,16 @@ filterInterest('all');
         <div class="detail-img-carousel">
           <div class="detail-img-track" id="carouselTrack">
             <div class="detail-img-slide">
-              <img src="https://jelin-cc.github.io/jobplanet-ut/images/company1.jpg" alt="회사 이미지 1" draggable="false">
+              <img src="" alt="회사 이미지 1" draggable="false">
             </div>
             <div class="detail-img-slide">
-              <img src="https://jelin-cc.github.io/jobplanet-ut/images/company2.jpg" alt="회사 이미지 2" draggable="false">
+              <img src="" alt="회사 이미지 2" draggable="false">
             </div>
             <div class="detail-img-slide">
-              <img src="https://jelin-cc.github.io/jobplanet-ut/images/company3.jpg" alt="회사 이미지 3" draggable="false">
+              <img src="" alt="회사 이미지 3" draggable="false">
             </div>
             <div class="detail-img-slide">
-              <img src="https://jelin-cc.github.io/jobplanet-ut/images/company4.jpg" alt="회사 이미지 4" draggable="false">
+              <img src="" alt="회사 이미지 4" draggable="false">
             </div>
           </div>
           <button class="detail-carousel-btn prev" id="carouselPrev">
@@ -11436,6 +11450,7 @@ filterInterest('all');
       el.classList.add('active');
       currentJobId = jobId;
       renderJobDetail(jobId);
+      if(typeof shuffleDetailImages==='function') shuffleDetailImages();
       updateApplyBtnState();
       // removed history.replaceState;
       window.scrollTo(0, 0);
@@ -11837,6 +11852,92 @@ filterInterest('all');
         else if (diff < -threshold) goTo(current - 1);
         else goTo(current);
       });
+    })();
+
+    // ===== 기업 상세 캐러셀 이미지 랜덤 =====
+    var companyImages = [
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_1tW2cFJ25032514173967.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_2loOfzo25052915140814.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_4UvepA225031914015500.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_5DoT1nZ24111411320084.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_abbb51t25102816595906.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_ABi9lTY25101711202489.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_C3oJp7q25102817553882.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_DiMdvUg24111216474465.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_E0mPEv625102715305380.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_FA8757M24122415321709.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_gBJ6Ui725082910083325.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_GcTm5G225072215243389.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_gRZK5oC25072810592603.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_HbrORCN25103117185664.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_HNPO3bT24072313252617.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_iVPMD6p25092209323563.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_jkoaT8i25101510050474.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_Jp5fx7g25012110512020.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_kAifOHK25082013255486.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_kMaNyYZ25110310042647.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_mcoXCR225103017092404.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_OP2jQmz25052715204502.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_PuQjGUE25011715315914.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_Q48VLkS24121310465549.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_RVLkZ2025102911373557.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_skH5zUn24111917362523.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_sPBc4me25102718060629.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_sSXmGtH25081909563386.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_T8556bz25102811291014.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_TN3Dxv625021014354271.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_U8pB0dI25082714383635.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_upPwf1v24101713584007.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_w9S9qXw25072517145286.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_WMSIPbK25061014032956.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_xq7MI9Q25100217535222.jpg',
+      'https://jelin-cc.github.io/jobplanet-ut/img/Banner_YsW92UA24103114330047.jpg'
+    ];
+    function shuffleDetailImages(){
+      var arr = companyImages.slice();
+      for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}
+      document.querySelectorAll('.detail-img-slide img').forEach(function(img,idx){
+        if(arr[idx]) img.src = arr[idx];
+      });
+    }
+    var _origGo = go;
+    go = function(id){
+      _origGo(id);
+      if(id==='job-detail') shuffleDetailImages();
+    };
+    shuffleDetailImages();
+
+    // ===== 즐겨찾기 토스트 =====
+    (function(){
+      var toast = document.createElement('div');
+      toast.id = 'saveToast';
+      toast.innerHTML = '<span class="st-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span>공고가 저장되었습니다</span><a class="st-link" id="saveToastLink">바로가기</a>';
+      document.body.appendChild(toast);
+
+      var saveToastTimer;
+      function showSaveToast(){
+        toast.classList.add('show');
+        clearTimeout(saveToastTimer);
+        saveToastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 3000);
+      }
+
+      document.getElementById('saveToastLink').addEventListener('click', function(e){
+        e.preventDefault();
+        toast.classList.remove('show');
+        go('my');
+        setTimeout(function(){ myShowSection('bookmarks'); }, 50);
+      });
+
+      document.addEventListener('click', function(e){
+        var btn = e.target.closest('.bk-btn') || e.target.closest('.bm') || e.target.closest('.lc-bk');
+        if(!btn) return;
+        e.stopPropagation();
+        e.preventDefault();
+        var isActive = btn.classList.toggle('active');
+        if(isActive){
+          showSaveToast();
+        }
+      }, true);
     })();
 
 </script>
