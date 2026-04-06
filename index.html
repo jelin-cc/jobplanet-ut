@@ -3545,7 +3545,7 @@
             </div>
           </div>
           <!-- 하단 CTA (풀폭) -->
-          <div onclick="showSalInput()" style="display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:rgba(0,194,116,.06);border-top:1px solid rgba(0,194,116,.12);cursor:pointer;transition:background .15s;margin-top:8px;" onmouseover="this.style.background='rgba(0,194,116,.1)'" onmouseout="this.style.background='rgba(0,194,116,.06)'">
+          <div id="sal-compact-cta" onclick="showSalInputCompact()" style="display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:rgba(0,194,116,.06);border-top:1px solid rgba(0,194,116,.12);cursor:pointer;transition:background .15s;margin-top:8px;" onmouseover="this.style.background='rgba(0,194,116,.1)'" onmouseout="this.style.background='rgba(0,194,116,.06)'">
             <div style="display:flex;align-items:center;gap:10px;">
               <div style="width:16px;height:16px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                 <span style="font-size:8px;font-weight:700;color:#fff;">W</span>
@@ -3554,6 +3554,7 @@
             </div>
             <span style="font-size:14px;font-weight:700;color:var(--brand);white-space:nowrap;display:flex;align-items:center;gap:3px;">입력하기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
           </div>
+          <div id="sal-compact-inp-wrap" style="display:none;"></div>
         </div>
       </div>
 
@@ -14736,12 +14737,116 @@ function closeRatePopup() {
       var salMyVal = null;
 
       function showSalInput() {
+        // 비로그인 → 로그인 팝업
+        var isLoggedIn = document.getElementById('gnb-user').style.display !== 'none';
+        if(!isLoggedIn){ openOB(); return; }
+        // 로그인 → 연봉 비교 UI
         var cta = document.getElementById('sal-cta-btn');
         var wrap = document.getElementById('sal-inp-wrap');
-        if (cta) cta.style.display = 'none';
-        if (wrap) { wrap.style.display = 'flex'; }
-        var inp = document.getElementById('sal-inp');
-        if (inp) { inp.focus(); }
+        if(cta) cta.style.display = 'none';
+        if(wrap){
+          wrap.style.display = 'block';
+          wrap.innerHTML = ''
+            + '<div style="padding:20px;background:var(--bg);border-radius:14px;">'
+            + '<div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:4px;">내 연봉 비교</div>'
+            + '<div style="font-size:13px;color:var(--tx4);margin-bottom:16px;">연봉을 입력하면 직무 평균 대비 위치를 알려드려요</div>'
+            + '<div style="display:flex;gap:8px;align-items:center;">'
+            + '<div style="flex:1;position:relative;">'
+            + '<input id="sal-compare-inp" type="text" inputmode="numeric" placeholder="예: 5000" style="width:100%;padding:12px 50px 12px 16px;border:1.5px solid var(--ln);border-radius:10px;font-size:16px;font-weight:600;color:var(--tx);font-family:var(--font);outline:none;transition:border-color .15s;" onfocus="this.style.borderColor=\'var(--brand)\'" onblur="this.style.borderColor=\'var(--ln)\'">'
+            + '<span style="position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:14px;font-weight:600;color:var(--tx4);">만원</span>'
+            + '</div>'
+            + '<button onclick="compareSalary()" style="padding:12px 20px;border-radius:10px;border:none;background:var(--brand);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);white-space:nowrap;transition:opacity .15s;" onmouseover="this.style.opacity=\'.85\'" onmouseout="this.style.opacity=\'1\'">비교하기</button>'
+            + '</div>'
+            + '<div id="sal-compare-result" style="margin-top:16px;display:none;"></div>'
+            + '</div>';
+          setTimeout(function(){ document.getElementById('sal-compare-inp').focus(); }, 100);
+        }
+      }
+
+      function compareSalary(){
+        var inp = document.getElementById('sal-compare-inp');
+        if(!inp) return;
+        var val = parseInt(inp.value.replace(/,/g,''));
+        if(!val || val < 1000){ showToast('연봉을 입력해주세요 (만원 단위)'); return; }
+        var d = salDB[salTabIdx];
+        var pct = Math.round(((val - d.lo) / (d.hi - d.lo)) * 100);
+        pct = Math.max(1, Math.min(99, pct));
+        var topPct = 100 - pct;
+        var emoji = topPct <= 20 ? '🎉' : topPct <= 50 ? '💪' : '📈';
+        var msg = topPct <= 20 ? '상위권이에요! 훌륭합니다' : topPct <= 50 ? '평균 이상이에요! 좋아요' : '아직 성장 여지가 있어요';
+        var result = document.getElementById('sal-compare-result');
+        if(result){
+          result.style.display = 'block';
+          result.innerHTML = ''
+            + '<div style="background:var(--brand-lt);border-radius:12px;padding:20px;text-align:center;">'
+            + '<div style="font-size:14px;color:var(--tx3);margin-bottom:8px;">'+d.name+' 직무 기준</div>'
+            + '<div style="font-size:32px;font-weight:800;color:var(--brand);margin-bottom:4px;">상위 '+topPct+'%</div>'
+            + '<div style="font-size:14px;color:var(--tx2);margin-bottom:16px;">'+emoji+' '+msg+'</div>'
+            + '<div style="height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden;margin-bottom:8px;position:relative;">'
+            + '<div style="width:'+pct+'%;height:100%;background:linear-gradient(90deg,#A8E8C8,var(--brand));border-radius:4px;transition:width .6s;"></div>'
+            + '<div style="position:absolute;left:'+pct+'%;top:-4px;width:16px;height:16px;background:var(--brand);border:3px solid #fff;border-radius:50%;transform:translateX(-50%);box-shadow:0 1px 4px rgba(0,0,0,.2);transition:left .6s;"></div>'
+            + '</div>'
+            + '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx4);"><span>하위</span><span>'+d.avg+'원 (평균)</span><span>상위</span></div>'
+            + '</div>';
+        }
+        // 메인 분포 바에도 마커 표시
+        salMyVal = val;
+        updateSalMarker();
+      }
+
+      function showSalInputCompact() {
+        var isLoggedIn = document.getElementById('gnb-user').style.display !== 'none';
+        if(!isLoggedIn){ openOB(); return; }
+        var cta = document.getElementById('sal-compact-cta');
+        var wrap = document.getElementById('sal-compact-inp-wrap');
+        if(cta) cta.style.display = 'none';
+        if(wrap){
+          wrap.style.display = 'block';
+          wrap.innerHTML = ''
+            + '<div style="padding:20px 28px;background:var(--bg);border-top:1px solid var(--ln2);">'
+            + '<div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:4px;">내 연봉 비교</div>'
+            + '<div style="font-size:13px;color:var(--tx4);margin-bottom:16px;">연봉을 입력하면 직무 평균 대비 위치를 알려드려요</div>'
+            + '<div style="display:flex;gap:8px;align-items:center;">'
+            + '<div style="flex:1;position:relative;">'
+            + '<input id="sal-compare-inp-c" type="text" inputmode="numeric" placeholder="예: 5000" style="width:100%;padding:12px 50px 12px 16px;border:1.5px solid var(--ln);border-radius:10px;font-size:16px;font-weight:600;color:var(--tx);font-family:var(--font);outline:none;transition:border-color .15s;" onfocus="this.style.borderColor=\'var(--brand)\'" onblur="this.style.borderColor=\'var(--ln)\'">'
+            + '<span style="position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:14px;font-weight:600;color:var(--tx4);">만원</span>'
+            + '</div>'
+            + '<button onclick="compareSalaryCompact()" style="padding:12px 20px;border-radius:10px;border:none;background:var(--brand);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);white-space:nowrap;">비교하기</button>'
+            + '</div>'
+            + '<div id="sal-compare-result-c" style="margin-top:16px;display:none;"></div>'
+            + '</div>';
+          setTimeout(function(){ document.getElementById('sal-compare-inp-c').focus(); }, 100);
+        }
+      }
+
+      function compareSalaryCompact(){
+        var inp = document.getElementById('sal-compare-inp-c');
+        if(!inp) return;
+        var val = parseInt(inp.value.replace(/,/g,''));
+        if(!val || val < 1000){ showToast('연봉을 입력해주세요 (만원 단위)'); return; }
+        var d = salDB[salTabIdx];
+        var pct = Math.round(((val - d.lo) / (d.hi - d.lo)) * 100);
+        pct = Math.max(1, Math.min(99, pct));
+        var topPct = 100 - pct;
+        var emoji = topPct <= 20 ? '🎉' : topPct <= 50 ? '💪' : '📈';
+        var msg = topPct <= 20 ? '상위권이에요! 훌륭합니다' : topPct <= 50 ? '평균 이상이에요! 좋아요' : '아직 성장 여지가 있어요';
+        var result = document.getElementById('sal-compare-result-c');
+        if(result){
+          result.style.display = 'block';
+          result.innerHTML = ''
+            + '<div style="background:var(--brand-lt);border-radius:12px;padding:20px;text-align:center;">'
+            + '<div style="font-size:14px;color:var(--tx3);margin-bottom:8px;">'+d.name+' 직무 기준</div>'
+            + '<div style="font-size:32px;font-weight:800;color:var(--brand);margin-bottom:4px;">상위 '+topPct+'%</div>'
+            + '<div style="font-size:14px;color:var(--tx2);margin-bottom:16px;">'+emoji+' '+msg+'</div>'
+            + '<div style="height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden;margin-bottom:8px;position:relative;">'
+            + '<div style="width:'+pct+'%;height:100%;background:linear-gradient(90deg,#A8E8C8,var(--brand));border-radius:4px;"></div>'
+            + '<div style="position:absolute;left:'+pct+'%;top:-4px;width:16px;height:16px;background:var(--brand);border:3px solid #fff;border-radius:50%;transform:translateX(-50%);box-shadow:0 1px 4px rgba(0,0,0,.2);"></div>'
+            + '</div>'
+            + '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx4);"><span>하위</span><span>'+d.avg+'원 (평균)</span><span>상위</span></div>'
+            + '</div>';
+        }
+        salMyVal = val;
+        updateSalMarker();
       }
 
       function toggleSalaryTabs() {
