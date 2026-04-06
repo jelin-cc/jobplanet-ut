@@ -3607,7 +3607,7 @@
               /* 상단: 로고 + 회사명 + 별점 */
               +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">'
               +'<div style="width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><img src="'+c.logo+'" alt="" style="width:26px;height:26px;object-fit:contain;"></div>'
-              +'<span style="font-size:14px;font-weight:700;color:var(--tx);flex:1;cursor:pointer;" onclick="event.stopPropagation();openCompany({name:\''+c.co.replace(/'/g,"\\'")+"\\',score:"+c.score+",industry:\\'기타\\',loc:\\'서울\\',year:2010,size:100,jobs:3,pct:65,initial:\\'"+c.co.charAt(0).replace(/'/g,"\\'")+"\\',keywords:[]});\">'+c.co+'</span>'
+              +'<span style="font-size:14px;font-weight:700;color:var(--tx);flex:1;cursor:pointer;" onclick="event.stopPropagation();goToCompany(this.dataset.co,this.dataset.score)" data-co="'+c.co+'" data-score="'+c.score+'">'+c.co+'</span>'
               +'<span style="display:flex;align-items:center;gap:3px;font-size:13px;font-weight:700;color:var(--brand);">'+starSvg+' '+c.score+'</span>'
               +'</div>'
               /* 직무 정보 */
@@ -3620,10 +3620,22 @@
               +'<div style="display:flex;align-items:flex-start;gap:6px;"><span style="font-size:12px;font-weight:700;color:#EF4444;flex-shrink:0;">단점</span><span style="font-size:13px;color:var(--tx2);line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+c.con+'</span></div>'
               +'</div>'
               /* 하단: fill 그레이 버튼 */
-              +'<button onclick="openCompany({name:\''+c.co.replace(/'/g,"\\'")+"\\',score:"+c.score+",industry:\\'기타\\',loc:\\'서울\\',year:2010,size:100,jobs:3,pct:65,initial:\\'"+c.co.charAt(0).replace(/'/g,"\\'")+"\\',keywords:[]});setTimeout(function(){var t=document.querySelector(&quot;#page-company [data-tab=review]&quot;);if(t)t.click();},200);\"" style="width:100%;padding:11px 0;border-radius:var(--rsm);font-size:13px;font-weight:600;color:var(--tx3);background:var(--bg);border:none;cursor:pointer;font-family:var(--font);transition:background .15s;display:flex;align-items:center;justify-content:center;gap:4px;" onmouseover="this.style.background=\'var(--ln2)\'" onmouseout="this.style.background=\'var(--bg)\'">리뷰 자세히 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>'
+              +'<button onclick="goToCompanyReview(this.dataset.co,this.dataset.score)" data-co="'+c.co+'" data-score="'+c.score+'" style="width:100%;padding:11px 0;border-radius:var(--rsm);font-size:13px;font-weight:600;color:var(--tx3);background:var(--bg);border:none;cursor:pointer;font-family:var(--font);transition:background .15s;display:flex;align-items:center;justify-content:center;gap:4px;" onmouseover="this.style.background=\'var(--ln2)\'" onmouseout="this.style.background=\'var(--bg)\'">리뷰 자세히 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>'
               +'</div></div></div>';
           }).join('');
         }
+        // 헬퍼: 회사명 클릭 → 기업 상세
+        window.goToCompany = function(name, score){
+          openCompany({name:name, score:parseFloat(score)||3.5, industry:'기타', loc:'서울', year:2010, size:100, jobs:3, pct:65, initial:name.charAt(0), keywords:[]});
+        };
+        // 헬퍼: 리뷰 자세히 보기 → 기업 상세 리뷰 탭
+        window.goToCompanyReview = function(name, score){
+          openCompany({name:name, score:parseFloat(score)||3.5, industry:'기타', loc:'서울', year:2010, size:100, jobs:3, pct:65, initial:name.charAt(0), keywords:[]});
+          setTimeout(function(){
+            var t = document.querySelector('#page-company [data-tab="review"]');
+            if(t) t.click();
+          }, 200);
+        };
         // 페이지 로드 완료 후 렌더링
         document.addEventListener('DOMContentLoaded', function(){ renderReviewCards(); });
         // 즉시 실행도 시도 (DOMContentLoaded 이미 지난 경우)
