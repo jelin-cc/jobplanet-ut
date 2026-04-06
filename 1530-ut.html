@@ -13532,6 +13532,17 @@ function closeRatePopup() {
   /* 12컬럼 그리드 기준: 1060px / 12col / 거터 20px / 컬럼 70px
      이미지형 카드: 3컬럼 span × 4 = repeat(4, 1fr) gap 20px → 카드 250px */
   .img-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:48px 16px;margin-top:24px;}
+  /* 스켈레톤 & 페이드인 */
+  @keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+  .skeleton-card .thumb{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:800px 100%;animation:shimmer 1.5s infinite;border-radius:12px;aspect-ratio:3/2;}
+  .skeleton-card .sk-line{height:14px;border-radius:4px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:800px 100%;animation:shimmer 1.5s infinite;margin-bottom:8px;}
+  .skeleton-card .sk-line.w60{width:60%;}
+  .skeleton-card .sk-line.w40{width:40%;}
+  .skeleton-card .sk-line.w80{width:80%;}
+  .img-card{opacity:0;transform:translateY(12px);transition:opacity .4s,transform .4s;}
+  .img-card.visible{opacity:1;transform:translateY(0);}
+  .list-card{opacity:0;transform:translateY(12px);transition:opacity .4s,transform .4s;}
+  .list-card.visible{opacity:1;transform:translateY(0);}
   .list-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px;}
   .list-card{padding:20px;background:#fff;box-shadow:0 1px 12px rgba(0,0,0,0.08);border-radius:16px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;}
   .list-card .lc-body{flex:1;display:flex;flex-direction:column;gap:8px;}
@@ -13840,17 +13851,16 @@ function closeRatePopup() {
         '당': 'https://jelin-cc.github.io/jobplanet-ut/당근.png'
       };
 
-      var companyImgByName = {
-        '넥스트엔터프라이즈': 'https://jelin-cc.github.io/jobplanet-ut/next-enterprise.png',
-        '인사이트코리아': 'https://jelin-cc.github.io/jobplanet-ut/next-enterprise.png'
-      };
-      var companyImgMap = {
-        'T': 'https://jelin-cc.github.io/jobplanet-ut/toss.png', 'N': 'https://jelin-cc.github.io/jobplanet-ut/naver.png', 'K': 'https://jelin-cc.github.io/jobplanet-ut/kakao.png', '당': 'https://jelin-cc.github.io/jobplanet-ut/당근.png',
-        'W': 'https://jelin-cc.github.io/jobplanet-ut/weverse.webp', 'E': 'https://jelin-cc.github.io/jobplanet-ut/baemin.webp', 'C': 'https://jelin-cc.github.io/jobplanet-ut/channeltalk.webp',
-        'L': 'https://jelin-cc.github.io/jobplanet-ut/kurly.webp', 'P': 'https://jelin-cc.github.io/jobplanet-ut/wrtn.webp', 'J': 'https://jelin-cc.github.io/jobplanet-ut/tada.webp',
-        'I': 'https://jelin-cc.github.io/jobplanet-ut/larasweet.webp', 'A': 'https://jelin-cc.github.io/jobplanet-ut/bat.webp', 'B': 'https://jelin-cc.github.io/jobplanet-ut/weverse.webp',
-        'Q': 'https://jelin-cc.github.io/jobplanet-ut/wrtn.webp', 'F': 'https://jelin-cc.github.io/jobplanet-ut/channeltalk.webp', 'O': 'https://jelin-cc.github.io/jobplanet-ut/tada.webp'
-      };
+      // 썸네일 이미지 풀 (셔플해서 카드마다 다른 이미지)
+      var cardThumbPool = [
+        'img/Banner_1tW2cFJ25032514173967.jpg','img/Banner_2loOfzo25052915140814.jpg','img/Banner_4UvepA225031914015500.jpg','img/Banner_5DoT1nZ24111411320084.jpg','img/Banner_abbb51t25102816595906.jpg','img/Banner_ABi9lTY25101711202489.jpg','img/Banner_C3oJp7q25102817553882.jpg','img/Banner_DiMdvUg24111216474465.jpg','img/Banner_E0mPEv625102715305380.jpg','img/Banner_FA8757M24122415321709.jpg','img/Banner_gBJ6Ui725082910083325.jpg','img/Banner_GcTm5G225072215243389.jpg','img/Banner_gRZK5oC25072810592603.jpg','img/Banner_HbrORCN25103117185664.jpg','img/Banner_HNPO3bT24072313252617.jpg','img/Banner_iVPMD6p25092209323563.jpg','img/Banner_jkoaT8i25101510050474.jpg','img/Banner_Jp5fx7g25012110512020.jpg','img/Banner_kAifOHK25082013255486.jpg','img/Banner_kMaNyYZ25110310042647.jpg','img/Banner_mcoXCR225103017092404.jpg','img/Banner_OP2jQmz25052715204502.jpg','img/Banner_PuQjGUE25011715315914.jpg','img/Banner_Q48VLkS24121310465549.jpg','img/Banner_RVLkZ2025102911373557.jpg','img/Banner_skH5zUn24111917362523.jpg','img/Banner_sPBc4me25102718060629.jpg','img/Banner_sSXmGtH25081909563386.jpg','img/Banner_T8556bz25102811291014.jpg','img/Banner_TN3Dxv625021014354271.jpg','img/Banner_U8pB0dI25082714383635.jpg','img/Banner_upPwf1v24101713584007.jpg','img/Banner_w9S9qXw25072517145286.jpg','img/Banner_WMSIPbK25061014032956.jpg','img/Banner_xq7MI9Q25100217535222.jpg','img/Banner_YsW92UA24103114330047.jpg',
+        'img/1000001_001.png','img/1000002_004.png','img/1000003_0013.png','img/1000003_006.png','img/1000004_0010.png','img/1000004_0017.png','img/1000004_006.png','img/1000004_007.png','img/1000005_009.png','img/1000005_010.png','img/1000007_004.png','img/1000008_004.png','img/1000009_001.png','img/1000009_002.png','img/1000011_002.png','img/1000011_003.png','img/1000011_004.png','img/1000012_001.png','img/1000013_002.png','img/1000014_003.png','img/1000014_004.png','img/1000016_001.png','img/1000016_003.png','img/1000017_001.png','img/1000018_003.png','img/1000019_002.png','img/1000021_005.png','img/1000022_006.png','img/1000023_001.png','img/1000024_003.png','img/1000026_001.png','img/1000027_002.png','img/1000028_002.png','img/1000030_002.png','img/1000030_003.png','img/1000032_003.png','img/1000036_003.png',
+        'img/baemin.webp','img/bat.webp','img/channeltalk.webp','img/kurly.webp','img/larasweet.webp','img/tada.webp','img/weverse.webp','img/wrtn.webp','img/0.webp','img/2.webp','img/next-enterprise.png'
+      ].map(function(p){return 'https://jelin-cc.github.io/jobplanet-ut/'+p;});
+      // 셔플
+      var _thumbShuffled = cardThumbPool.slice();
+      for(var si=_thumbShuffled.length-1;si>0;si--){var sj=Math.floor(Math.random()*(si+1));var st=_thumbShuffled[si];_thumbShuffled[si]=_thumbShuffled[sj];_thumbShuffled[sj]=st;}
+      function getCardThumb(idx){return _thumbShuffled[idx % _thumbShuffled.length];}
 
       function renderCards(caseKey) {
         var cfg = caseConfig[caseKey];
@@ -13867,15 +13877,12 @@ function closeRatePopup() {
         var extSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
 
         // 이미지형 그리드
-        var imgHtml = cards.map(function(c) {
+        var imgHtml = cards.map(function(c, ci) {
           var isExt = c.external === 'jobkorea';
           var bonusBadge = c.bonus ? '<div class="bonus-badge">' + c.bonus + '</div>' : '';
-          var compImg = companyImgByName[c.co] || companyImgMap[c.logo];
-          var thumbBg = compImg
-            ? '<img src="' + compImg + '" alt="">'
-            : '';
-          var thumb = '<div class="thumb ' + (compImg ? '' : c.color) + '">'
-            + thumbBg
+          var thumbSrc = getCardThumb(ci);
+          var thumb = '<div class="thumb">'
+            + '<img src="' + thumbSrc + '" alt="">'
             + bonusBadge
             + '<div class="bk-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>'
             + '</div>';
@@ -13930,7 +13937,61 @@ function closeRatePopup() {
             + '</div>';
         }).join('');
 
-        document.getElementById('view-img').innerHTML = imgHtml;
+        // 스켈레톤 + 점진적 로딩 (16개씩)
+        var skeletonHtml = '';
+        for(var sk=0;sk<16;sk++) skeletonHtml += '<div class="skeleton-card"><div class="thumb"></div><div class="sk-line w80"></div><div class="sk-line w60"></div><div class="sk-line w40"></div></div>';
+
+        var imgContainer = document.getElementById('view-img');
+        var allImgCards = imgHtml;
+        // 파싱해서 카드 배열로
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = allImgCards;
+        var cardEls = Array.prototype.slice.call(tempDiv.children);
+
+        // 처음 16개 + 스켈레톤
+        var firstBatch = cardEls.slice(0,16).map(function(el){return el.outerHTML;}).join('');
+        var remaining = cardEls.slice(16);
+        imgContainer.innerHTML = firstBatch + (remaining.length ? skeletonHtml : '');
+
+        // 첫 배치 페이드인
+        setTimeout(function(){
+          imgContainer.querySelectorAll('.img-card').forEach(function(el){el.classList.add('visible');});
+        }, 50);
+
+        // 나머지 배치 로딩
+        var batchIdx = 1;
+        function loadNextBatch(){
+          var start = batchIdx * 16;
+          var batch = cardEls.slice(start, start+16);
+          if(!batch.length) return;
+          // 스켈레톤 제거
+          imgContainer.querySelectorAll('.skeleton-card').forEach(function(s){s.remove();});
+          var batchHtml = batch.map(function(el){return el.outerHTML;}).join('');
+          var nextSkeleton = (start+16 < cardEls.length) ? skeletonHtml : '';
+          imgContainer.insertAdjacentHTML('beforeend', batchHtml + nextSkeleton);
+          // 새 카드 페이드인
+          setTimeout(function(){
+            imgContainer.querySelectorAll('.img-card:not(.visible)').forEach(function(el){el.classList.add('visible');});
+          }, 50);
+          batchIdx++;
+        }
+
+        // 스크롤 감지로 다음 배치 로딩
+        var loadingMore = false;
+        window.addEventListener('scroll', function(){
+          if(loadingMore) return;
+          var skels = imgContainer.querySelectorAll('.skeleton-card');
+          if(!skels.length) return;
+          var rect = skels[0].getBoundingClientRect();
+          if(rect.top < window.innerHeight + 200){
+            loadingMore = true;
+            setTimeout(function(){
+              loadNextBatch();
+              loadingMore = false;
+            }, 400);
+          }
+        });
+
         document.getElementById('view-logo').innerHTML = logoHtml;
 
         // List view (no image)
@@ -13971,7 +14032,32 @@ function closeRatePopup() {
             + '</div>';
         }).join('');
 
-        document.getElementById('view-list').innerHTML = listHtml;
+        // 리스트 뷰도 점진적 로딩
+        var listContainer = document.getElementById('view-list');
+        var listSkeletonHtml = '';
+        for(var lsk=0;lsk<9;lsk++) listSkeletonHtml += '<div class="skeleton-card" style="padding:20px;background:#fff;border-radius:16px;box-shadow:0 1px 12px rgba(0,0,0,0.08);"><div class="sk-line w80"></div><div class="sk-line w60"></div><div class="sk-line w40"></div></div>';
+        var tmpList = document.createElement('div');
+        tmpList.innerHTML = listHtml;
+        var listEls = Array.prototype.slice.call(tmpList.children);
+        var firstListBatch = listEls.slice(0,9).map(function(el){return el.outerHTML;}).join('');
+        listContainer.innerHTML = firstListBatch + (listEls.length>9?listSkeletonHtml:'');
+        setTimeout(function(){listContainer.querySelectorAll('.list-card').forEach(function(el){el.classList.add('visible');});},50);
+
+        var listBatchIdx = 1;
+        window.addEventListener('scroll', function(){
+          var lskels = listContainer.querySelectorAll('.skeleton-card');
+          if(!lskels.length) return;
+          var lrect = lskels[0].getBoundingClientRect();
+          if(lrect.top < window.innerHeight + 200){
+            lskels.forEach(function(s){s.remove();});
+            var ls = listBatchIdx*9;
+            var lb = listEls.slice(ls, ls+9);
+            if(!lb.length) return;
+            listContainer.insertAdjacentHTML('beforeend', lb.map(function(el){return el.outerHTML;}).join('') + (ls+9<listEls.length?listSkeletonHtml:''));
+            setTimeout(function(){listContainer.querySelectorAll('.list-card:not(.visible)').forEach(function(el){el.classList.add('visible');});},50);
+            listBatchIdx++;
+          }
+        });
       }
 
       function cycleCardView() {
