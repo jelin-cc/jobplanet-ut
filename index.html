@@ -3261,22 +3261,25 @@
         var sampleTitles=['프론트엔드 개발자','백엔드 개발자','프로덕트 디자이너','서비스 기획자','데이터 분석가','UX 리서처','콘텐츠 마케터','그로스 해커','DevOps 엔지니어','iOS 개발자'];
         var arrowSvg='<svg width="10" height="10" viewBox="0 0 24 24" fill="var(--brand)" style="vertical-align:middle;"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg>';
         var extSvgSm='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+        // 태그 우선순위: 취업축하금(1) > 잡코리아(2) > 리뷰태그(3) > 비중태그(4)
+        var moneyIcon='<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 13.125C10.3827 13.125 13.125 10.3827 13.125 7C13.125 3.61726 10.3827 0.875 7 0.875C3.61726 0.875 0.875 3.61726 0.875 7C0.875 10.3827 3.61726 13.125 7 13.125Z" fill="#FFB701"/><path d="M7.75087 9.44648L7.00002 6.89361L6.26028 9.40874C6.21799 9.60061 6.07523 9.7642 5.87342 9.82356C5.82084 9.83902 5.7678 9.84637 5.71564 9.84633C5.66349 9.84637 5.61045 9.83902 5.55787 9.82356C5.35605 9.7642 5.21329 9.60061 5.17101 9.40874L4.40521 6.80502H3.65911C3.35159 6.80502 3.10229 6.55572 3.10229 6.2482C3.10229 5.94067 3.35159 5.69138 3.65911 5.69138H4.07767L3.89722 5.07785C3.81044 4.78282 3.97927 4.47331 4.27429 4.38654C4.56932 4.29977 4.87883 4.46859 4.9656 4.76362L5.71564 7.31376L6.46568 4.76362C6.53707 4.5209 6.75921 4.3636 7.00002 4.36377C7.24083 4.3636 7.46297 4.5209 7.53436 4.76362L8.28549 7.31746L9.03662 4.76362C9.12339 4.46859 9.4329 4.29977 9.72793 4.38654C10.023 4.47331 10.1918 4.78282 10.105 5.07785L9.92455 5.69138H10.3427C10.6503 5.69138 10.8996 5.94067 10.8996 6.2482C10.8996 6.55572 10.6503 6.80502 10.3427 6.80502H9.59701L8.82011 9.44648C8.74869 9.68929 8.5264 9.84662 8.28549 9.84633C8.04457 9.84662 7.82228 9.68929 7.75087 9.44648Z" fill="white"/></svg>';
         var tagPool=[
-          {html:'<span style="font-size:12px;font-weight:700;color:#D97706;background:#FFFBEB;padding:3px 8px;border-radius:var(--rfull);display:inline-flex;align-items:center;gap:3px;"><span style="width:14px;height:14px;border-radius:50%;background:#D97706;display:inline-flex;align-items:center;justify-content:center;"><span style="font-size:7px;font-weight:700;color:#fff;">W</span></span> 취업축하금 100만원</span>'},
-          {html:'<span style="font-size:12px;font-weight:700;color:#D97706;background:#FFFBEB;padding:3px 8px;border-radius:var(--rfull);display:inline-flex;align-items:center;gap:3px;"><span style="width:14px;height:14px;border-radius:50%;background:#D97706;display:inline-flex;align-items:center;justify-content:center;"><span style="font-size:7px;font-weight:700;color:#fff;">W</span></span> 취업축하금 200만원</span>'},
-          {html:'<span style="font-size:12px;font-weight:600;color:var(--brand);background:var(--brand-lt);padding:3px 8px;border-radius:var(--rfull);display:inline-flex;align-items:center;gap:3px;">잡코리아 '+extSvgSm+'</span>'},
-          {html:'<span style="font-size:12px;font-weight:700;color:var(--brand);background:var(--brand-lt);padding:3px 8px;border-radius:var(--rfull);">승진 언급 '+arrowSvg+'{n}건</span>',dynamic:true},
-          {html:'<span style="font-size:12px;font-weight:700;color:var(--brand);background:var(--brand-lt);padding:3px 8px;border-radius:var(--rfull);">연봉 언급 '+arrowSvg+'{n}건</span>',dynamic:true},
-          {html:'<span style="font-size:12px;font-weight:700;color:var(--brand);background:var(--brand-lt);padding:3px 8px;border-radius:var(--rfull);">워라밸 언급 '+arrowSvg+'{n}건</span>',dynamic:true},
-          {html:'<span style="font-size:12px;font-weight:600;color:var(--tx4);background:var(--ln2);padding:3px 8px;border-radius:var(--rfull);">현직자 비중 {p}%</span>',dynamic:true},
-          {html:'<span style="font-size:12px;font-weight:600;color:var(--tx4);background:var(--ln2);padding:3px 8px;border-radius:var(--rfull);">최근 {m}개월 기준</span>',dynamic:true},
+          {priority:1, html:'<span style="font-size:11px;font-weight:600;color:#F59E0B;background:#FFF8E1;padding:4px 8px;border-radius:6px;display:inline-flex;align-items:center;gap:3px;">'+moneyIcon+' 취업축하금 100만원</span>'},
+          {priority:1, html:'<span style="font-size:11px;font-weight:600;color:#F59E0B;background:#FFF8E1;padding:4px 8px;border-radius:6px;display:inline-flex;align-items:center;gap:3px;">'+moneyIcon+' 취업축하금 200만원</span>'},
+          {priority:2, html:'<span style="font-size:11px;font-weight:600;color:#2563EB;background:#EFF6FF;padding:4px 8px;border-radius:6px;display:inline-flex;align-items:center;gap:3px;">잡코리아 '+extSvgSm+'</span>'},
+          {priority:3, html:'<span style="font-size:11px;font-weight:600;color:#00C274;background:#F3FCF9;padding:4px 8px;border-radius:6px;">승진 언급 '+arrowSvg+'{n}건</span>',dynamic:true},
+          {priority:3, html:'<span style="font-size:11px;font-weight:600;color:#00C274;background:#F3FCF9;padding:4px 8px;border-radius:6px;">연봉 언급 '+arrowSvg+'{n}건</span>',dynamic:true},
+          {priority:3, html:'<span style="font-size:11px;font-weight:600;color:#00C274;background:#F3FCF9;padding:4px 8px;border-radius:6px;">워라밸 언급 '+arrowSvg+'{n}건</span>',dynamic:true},
+          {priority:4, html:'<span style="font-size:11px;font-weight:600;color:#F59E0B;background:#FFF8E1;padding:4px 8px;border-radius:6px;">현직자 비중 {p}%</span>',dynamic:true},
+          {priority:4, html:'<span style="font-size:11px;font-weight:600;color:#F59E0B;background:#FFF8E1;padding:4px 8px;border-radius:6px;">최근 {m}개월 기준</span>',dynamic:true},
         ];
         function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
         function shuffle(arr){return arr.slice().sort(function(){return Math.random()-0.5;});}
         function genTags(){
+          // 셔플 후 우선순위 순으로 정렬, 최대 2개
           var pool=shuffle(tagPool);
-          var count=Math.floor(Math.random()*2)+2; // 2~3 tags
-          var selected=pool.slice(0,count);
+          pool.sort(function(a,b){return a.priority - b.priority;});
+          var selected=pool.slice(0,2);
           return selected.map(function(t){
             var h=t.html;
             if(t.dynamic){
@@ -13446,7 +13449,7 @@ function closeRatePopup() {
 </div>
 
 <!-- 채용 탭 -->
-<div id="page-job" class="page">
+<div id="page-job" class="page" style="background:#fff;">
 <style>
   /* 채용 탭 전용 스타일 */
   .jb-wrap{display:flex;gap:0;min-height:calc(100vh - 56px);}
