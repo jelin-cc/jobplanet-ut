@@ -18011,6 +18011,27 @@ function closeRatePopup() {
         if(typeof shuffleInsightCos==='function') shuffleInsightCos();
         if(typeof renderReviewCards==='function') renderReviewCards();
       }
+    } else {
+      // 비로그인: 기본 기업 복원
+      var defaults = [
+        {name:'네이버', logo:'https://jelin-cc.github.io/jobplanet-ut/naver.png', score:'4.1', pct:'적합 88%'},
+        {name:'토스', logo:'https://jelin-cc.github.io/jobplanet-ut/toss.png', score:'3.6', pct:'적합 85%'},
+        {name:'카카오', logo:'https://jelin-cc.github.io/jobplanet-ut/kakao.png', score:'3.2', pct:'적합 82%'}
+      ];
+      defaults.forEach(function(d, i){
+        var el = document.getElementById('fi-'+i);
+        if(!el) return;
+        var logoWrap = el.querySelector('.fit-logo');
+        if(logoWrap) logoWrap.classList.remove('boxed');
+        var logoImg = el.querySelector('.fit-logo img');
+        if(logoImg) logoImg.src = d.logo;
+        var nameEl = el.querySelector('.fit-name');
+        if(nameEl) nameEl.textContent = d.name;
+        var scoreEl = el.querySelector('.fit-score');
+        if(scoreEl) scoreEl.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> '+d.score;
+        var pctEl = el.querySelector('.fit-pct');
+        if(pctEl) pctEl.textContent = d.pct;
+      });
     }
   })();
 
