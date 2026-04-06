@@ -13887,7 +13887,7 @@ function closeRatePopup() {
             var bonusAmt = bonusMatch ? bonusMatch[1] : '';
             bonusBadge = '<div class="bonus-badge">'
               + '<svg class="bonus-icon" viewBox="0 0 14 14" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 13.125C10.3827 13.125 13.125 10.3827 13.125 7C13.125 3.61726 10.3827 0.875 7 0.875C3.61726 0.875 0.875 3.61726 0.875 7C0.875 10.3827 3.61726 13.125 7 13.125Z" fill="#FFB701"/><path d="M7.75087 9.44648L7.00002 6.89361L6.26028 9.40874C6.21799 9.60061 6.07523 9.7642 5.87342 9.82356C5.82084 9.83902 5.7678 9.84637 5.71564 9.84633C5.66349 9.84637 5.61045 9.83902 5.55787 9.82356C5.35605 9.7642 5.21329 9.60061 5.17101 9.40874L4.40521 6.80502H3.65911C3.35159 6.80502 3.10229 6.55572 3.10229 6.2482C3.10229 5.94067 3.35159 5.69138 3.65911 5.69138H4.07767L3.89722 5.07785C3.81044 4.78282 3.97927 4.47331 4.27429 4.38654C4.56932 4.29977 4.87883 4.46859 4.9656 4.76362L5.71564 7.31376L6.46568 4.76362C6.53707 4.5209 6.75921 4.3636 7.00002 4.36377C7.24083 4.3636 7.46297 4.5209 7.53436 4.76362L8.28549 7.31746L9.03662 4.76362C9.12339 4.46859 9.4329 4.29977 9.72793 4.38654C10.023 4.47331 10.1918 4.78282 10.105 5.07785L9.92455 5.69138H10.3427C10.6503 5.69138 10.8996 5.94067 10.8996 6.2482C10.8996 6.55572 10.6503 6.80502 10.3427 6.80502H9.59701L8.82011 9.44648C8.74869 9.68929 8.5264 9.84662 8.28549 9.84633C8.04457 9.84662 7.82228 9.68929 7.75087 9.44648Z" fill="white"/></svg>'
-              + '취업축하금 <span class="bonus-amount">' + bonusAmt + '</span>만원'
+              + '취업축하금&nbsp;<span class="bonus-amount">' + bonusAmt + '</span>만원'
               + '</div>';
           }
           var thumbSrc = getCardThumb(ci);
@@ -13902,8 +13902,11 @@ function closeRatePopup() {
             cardTags.push({text:'잡코리아 ↗', cls:'ext-tag'});
           }
           c.tags.forEach(function(t){ cardTags.push({text:t, cls:''}); });
-          if(Math.random() > 0.5 && cardTags.length < 2) {
-            var ratioTags = ['현직자 비중 '+Math.floor(50+Math.random()*30)+'%', '승진 언급 ▲'+Math.floor(5+Math.random()*20)+'건', '연봉 언급 +'+Math.floor(3+Math.random()*15)+'건', '워라밸 언급 +'+Math.floor(3+Math.random()*10)+'건'];
+          var ratioTags = ['현직자 비중 '+Math.floor(50+Math.random()*30)+'%', '승진 언급 ▲'+Math.floor(5+Math.random()*20)+'건', '연봉 언급 +'+Math.floor(3+Math.random()*15)+'건', '워라밸 언급 +'+Math.floor(3+Math.random()*10)+'건'];
+          if(cardTags.length < 2) {
+            cardTags.push({text:ratioTags[Math.floor(Math.random()*ratioTags.length)], cls:'ratio-tag'});
+          }
+          if(cardTags.length === 0) {
             cardTags.push({text:ratioTags[Math.floor(Math.random()*ratioTags.length)], cls:'ratio-tag'});
           }
           cardTags = cardTags.slice(0, 2);
@@ -14017,8 +14020,11 @@ function closeRatePopup() {
           var cardTags2 = [];
           if(isExt) cardTags2.push({text:'잡코리아 ↗', cls:'ext-tag'});
           c.tags.forEach(function(t){ cardTags2.push({text:t, cls:''}); });
-          if(cardTags2.length < 2 && Math.random() > 0.3) {
-            var rt2 = ['현직자 비중 '+Math.floor(50+Math.random()*30)+'%','승진 언급 ▲'+Math.floor(5+Math.random()*20)+'건','연봉 언급 +'+Math.floor(3+Math.random()*15)+'건','워라밸 언급 +'+Math.floor(3+Math.random()*10)+'건'];
+          var rt2 = ['현직자 비중 '+Math.floor(50+Math.random()*30)+'%','승진 언급 ▲'+Math.floor(5+Math.random()*20)+'건','연봉 언급 +'+Math.floor(3+Math.random()*15)+'건','워라밸 언급 +'+Math.floor(3+Math.random()*10)+'건'];
+          if(cardTags2.length < 2) {
+            cardTags2.push({text:rt2[Math.floor(Math.random()*rt2.length)], cls:'ratio-tag'});
+          }
+          if(cardTags2.length === 0) {
             cardTags2.push({text:rt2[Math.floor(Math.random()*rt2.length)], cls:'ratio-tag'});
           }
           cardTags2 = cardTags2.slice(0,2);
