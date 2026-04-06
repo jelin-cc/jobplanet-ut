@@ -14623,31 +14623,38 @@ function closeRatePopup() {
           listContainer.querySelectorAll('.list-card').forEach(function(el){el.classList.add('visible');});
         }, 50);
 
-        var listBatch = 1;
-        var listLoading = false;
-        window.addEventListener('scroll', function(){
-          if(listLoading) return;
-          var lsk = listContainer.querySelectorAll('.skeleton-card');
-          if(!lsk.length) return;
-          if(listContainer.offsetParent === null) return; // hidden
-          var r = lsk[0].getBoundingClientRect();
-          if(r.top < window.innerHeight + 300){
-            listLoading = true;
-            setTimeout(function(){
-              lsk.forEach(function(s){s.remove();});
-              var s = listBatch * 18;
-              var batch = allListEls.slice(s, s+18);
-              if(!batch.length){ listLoading = false; return; }
-              var batchHtml = batch.map(function(el){return el.outerHTML;}).join('');
-              listContainer.insertAdjacentHTML('beforeend', batchHtml + (s+18 < allListEls.length ? listSkelHtml : ''));
+        // 리스트 스크롤 로딩 (전역 변수로 중복 방지)
+        window._listAllEls = allListEls;
+        window._listBatch = 1;
+        window._listLoading = false;
+        window._listSkelHtml = listSkelHtml;
+        if(!window._listScrollBound){
+          window._listScrollBound = true;
+          window.addEventListener('scroll', function(){
+            if(window._listLoading) return;
+            var lc = document.getElementById('view-list');
+            if(!lc || lc.offsetParent === null) return;
+            var lsk = lc.querySelectorAll('.skeleton-card');
+            if(!lsk.length) return;
+            var r = lsk[0].getBoundingClientRect();
+            if(r.top < window.innerHeight + 300){
+              window._listLoading = true;
               setTimeout(function(){
-                listContainer.querySelectorAll('.list-card:not(.visible)').forEach(function(el){el.classList.add('visible');});
-              }, 50);
-              listBatch++;
-              listLoading = false;
-            }, 400);
-          }
-        });
+                lsk.forEach(function(s){s.remove();});
+                var s = window._listBatch * 18;
+                var batch = window._listAllEls.slice(s, s+18);
+                if(!batch.length){ window._listLoading = false; return; }
+                var batchHtml = batch.map(function(el){return el.outerHTML;}).join('');
+                lc.insertAdjacentHTML('beforeend', batchHtml + (s+18 < window._listAllEls.length ? window._listSkelHtml : ''));
+                setTimeout(function(){
+                  lc.querySelectorAll('.list-card:not(.visible)').forEach(function(el){el.classList.add('visible');});
+                }, 50);
+                window._listBatch++;
+                window._listLoading = false;
+              }, 400);
+            }
+          });
+        }
       }
 
       function cycleCardView() {
