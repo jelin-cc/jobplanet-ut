@@ -607,8 +607,10 @@
     .fit-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
     .fit-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:var(--rsm);cursor:pointer;transition:box-shadow .15s;}
     .fit-item:hover{box-shadow:var(--sh);}
-    .fit-logo{width:40px;height:40px;border-radius:10px;flex-shrink:0;overflow:hidden;background:none;border:none;}
-    .fit-logo img{width:100%;height:100%;object-fit:cover;display:block;}
+    .fit-logo{width:40px;height:40px;border-radius:8px;flex-shrink:0;overflow:hidden;background:none;border:none;display:flex;align-items:center;justify-content:center;padding:0;}
+    .fit-logo img{width:40px;height:40px;object-fit:contain;display:block;}
+    .fit-logo.boxed{background:#fff;border:1px solid #E6E8EA;padding:6px;}
+    .fit-logo.boxed img{width:28px;height:28px;}
     .fit-name{font-size:13px;font-weight:700;flex:1;color:var(--tx);}
     .fit-score{font-size:12px;font-weight:700;color:var(--brand);}
     .fit-pct{font-size:11px;font-weight:600;color:var(--brand);background:var(--brand-lt);padding:2px 8px;border-radius:var(--rfull);}
@@ -3330,6 +3332,41 @@
               var cx=130, cy=118, R=100;
               var angles = [-90, -90+72, -90+144, -90+216, -90+288]; // 상단부터 시계방향
 
+              var BASE='https://jelin-cc.github.io/jobplanet-ut/';
+              var insightCoPool = [];
+              var coNames = ['네이버','토스','카카오','당근마켓','쿠팡','배달의민족','라인플러스','야놀자','무신사','하이브','크래프톤','두나무','리디','센드버드','채널톡','올리브영','위메프','소카','컬리','스마일게이트','넥슨코리아','버킷플레이스','비바리퍼블리카','카카오뱅크','토스증권','삼성전자','LG전자','현대자동차','SK텔레콤','넥스트엔터프라이즈','마이리얼트립','인사이트코리아'];
+              for(var _ci=0;_ci<32;_ci++){
+                insightCoPool.push({
+                  name:coNames[_ci%coNames.length],
+                  logo:BASE+'D-sample_logo_'+(_ci%36+1)+'.svg',
+                  score:(3+Math.random()*1.5).toFixed(1)
+                });
+              }
+              function shuffleInsightCos(){
+                var pool = insightCoPool.slice();
+                for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t;}
+                var picked = pool.slice(0,3);
+                picked.forEach(function(co, idx){
+                  var el = document.getElementById('fi-'+idx);
+                  if(!el) return;
+                  var logoWrap = el.querySelector('.fit-logo');
+                  if(logoWrap) logoWrap.classList.add('boxed');
+                  var logoEl = el.querySelector('.fit-logo img');
+                  if(logoEl) logoEl.src = co.logo;
+                  var nameEl = el.querySelector('.fit-name');
+                  if(nameEl) nameEl.textContent = co.name;
+                  var scoreEl = el.querySelector('.fit-score');
+                  if(scoreEl) scoreEl.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> '+co.score;
+                  var pctEl = el.querySelector('.fit-pct');
+                  if(pctEl) pctEl.textContent = '적합 '+(90-idx*3-Math.floor(Math.random()*5))+'%';
+                });
+                // companies 데이터도 갱신
+                picked.forEach(function(co, idx){
+                  companies[idx].name = co.name;
+                  companies[idx].data = [0.5+Math.random()*0.4, 0.4+Math.random()*0.4, 0.3+Math.random()*0.5, 0.5+Math.random()*0.4, 0.4+Math.random()*0.5];
+                });
+                setCompany(0);
+              }
               var companies = [
                 { name:'네이버', data:[0.65, 0.78, 0.50, 0.70, 0.60] },
                 { name:'토스',   data:[0.90, 0.62, 0.55, 0.82, 0.70] },
@@ -3346,6 +3383,14 @@
               }
 
               var current = 0;
+              function goToInsightCompany(idx) {
+                setCompany(idx);
+                var el = document.getElementById('fi-'+idx);
+                var name = el ? el.querySelector('.fit-name').textContent.trim() : '';
+                var scoreEl = el ? el.querySelector('.fit-score') : null;
+                var score = scoreEl ? parseFloat(scoreEl.textContent.replace(/[^0-9.]/g,'')) : 3.5;
+                openCompany({name:name, score:score, industry:'기타', loc:'서울', year:2010, size:100, jobs:3, pct:65, initial:name.charAt(0), keywords:[]});
+              }
               function setCompany(idx) {
                 current = idx;
                 var co = companies[idx];
@@ -3385,21 +3430,21 @@
           <div class="ins-right">
             <!-- 기업 리스트 -->
             <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
-              <div id="fi-0" onclick="setCompany(0)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
+              <div id="fi-0" onclick="goToInsightCompany(0)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
                 <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/naver.png" alt=""></div>
                 <span class="fit-name">네이버</span>
                 <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.1</span>
                 <span class="fit-pct" style="color:var(--brand);background:var(--brand-lt);border:none;">적합 88%</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
-              <div id="fi-1" onclick="setCompany(1)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
+              <div id="fi-1" onclick="goToInsightCompany(1)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
                 <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/toss.png" alt=""></div>
                 <span class="fit-name">토스</span>
                 <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 3.6</span>
                 <span class="fit-pct" style="color:var(--brand);background:var(--brand-lt);border:none;">적합 85%</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
-              <div id="fi-2" onclick="setCompany(2)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
+              <div id="fi-2" onclick="goToInsightCompany(2)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
                 <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/kakao.png" alt=""></div>
                 <span class="fit-name">카카오</span>
                 <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 3.2</span>
@@ -17673,7 +17718,14 @@ function closeRatePopup() {
     renderObCats();
     document.getElementById('obOverlay').classList.add('open');
   }
-  function closeOB(){document.getElementById('obOverlay').classList.remove('open');}
+  function closeOB(){
+    document.getElementById('obOverlay').classList.remove('open');
+    // 시작하기 완료 시(직무 입력 후)에만 기업 셔플 + 저장
+    if(obSelectedJob && obSelectedJob.length > 0){
+      localStorage.setItem('jp_ob_job', obSelectedJob);
+      if(typeof shuffleInsightCos==='function') shuffleInsightCos();
+    }
+  }
 
   function renderObCats(){
     var wrap=document.getElementById('obCatList');
@@ -17933,15 +17985,34 @@ function closeRatePopup() {
     showAuthLoader(function(){
       document.getElementById('gnb-guest').style.display='none';
       document.getElementById('gnb-user').style.display='flex';
+      localStorage.setItem('jp_logged_in','true');
     });
   }
   function doLogout(){
     showAuthLoader(function(){
       document.getElementById('gnb-user').style.display='none';
       document.getElementById('gnb-guest').style.display='flex';
+      localStorage.removeItem('jp_logged_in');
+      localStorage.removeItem('jp_ob_job');
+      localStorage.removeItem('jp_ob_conds');
+      obSelectedJob='';obSelectedConds=[];
       closeAllPopups();
     });
   }
+
+  // 페이지 로드 시 로그인 상태 복원
+  (function(){
+    if(localStorage.getItem('jp_logged_in')==='true'){
+      document.getElementById('gnb-guest').style.display='none';
+      document.getElementById('gnb-user').style.display='flex';
+      var savedJob = localStorage.getItem('jp_ob_job');
+      if(savedJob){
+        obSelectedJob = savedJob;
+        if(typeof shuffleInsightCos==='function') shuffleInsightCos();
+        if(typeof renderReviewCards==='function') renderReviewCards();
+      }
+    }
+  })();
 
   /* 프로필 드롭다운 */
   function toggleProfileDD(){
