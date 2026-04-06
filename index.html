@@ -13477,6 +13477,58 @@ function closeRatePopup() {
   .jb-fc.active{border-color:var(--brand);color:var(--brand);background:var(--brand-lt);}
   .jb-fc svg{width:12px;height:12px;}
   .jb-fc svg[viewBox="0 0 22 22"]{width:16px;height:16px;}
+
+  /* Filter Popup */
+  .filter-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:200;display:none;align-items:center;justify-content:center;}
+  .filter-overlay.open{display:flex;}
+  .filter-popup{background:var(--surface);border-radius:16px;width:560px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.15);}
+  .filter-popup-header{display:flex;align-items:center;justify-content:space-between;padding:24px 28px 0;flex-shrink:0;}
+  .filter-popup-header h3{font-size:18px;font-weight:700;color:var(--tx);}
+  .filter-popup-close{width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;background:none;color:var(--tx3);font-size:20px;}
+  .filter-popup-close:hover{color:var(--tx);}
+  .filter-tabs{display:flex;gap:0;padding:0 28px;border-bottom:2px solid var(--ln);flex-shrink:0;overflow-x:auto;margin-top:12px;}
+  .filter-tabs::-webkit-scrollbar{display:none;}
+  .filter-tab{padding:12px 16px;font-size:14px;font-weight:600;color:var(--tx4);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .15s;flex-shrink:0;}
+  .filter-tab.active{color:var(--tx);border-bottom-color:var(--tx);}
+  .filter-tab:hover{color:var(--tx3);}
+  .filter-body{flex:1;overflow-y:auto;padding:24px 28px;scroll-behavior:smooth;}
+  .filter-section{margin-bottom:32px;}
+  .filter-section:last-child{margin-bottom:0;}
+  .filter-section-title{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:16px;}
+  .filter-check-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;}
+  .filter-check-item{display:flex;align-items:center;gap:10px;padding:10px 4px;cursor:pointer;font-size:14px;color:var(--tx2);}
+  .filter-check-item input[type="checkbox"]{-webkit-appearance:none;appearance:none;width:18px;height:18px;border:2px solid var(--ln);border-radius:4px;cursor:pointer;flex-shrink:0;position:relative;background:#fff;transition:all .15s;}
+  .filter-check-item input[type="checkbox"]:checked{background:var(--brand);border-color:var(--brand);}
+  .filter-check-item input[type="checkbox"]:checked::after{content:'';position:absolute;left:0;top:0;width:100%;height:100%;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/75% no-repeat;}
+  .filter-check-item:hover{color:var(--tx);}
+  .filter-check-list{display:flex;flex-direction:column;gap:0;}
+  .filter-check-list .filter-check-item{padding:12px 4px;}
+  .filter-job-cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+  .filter-job-cat{padding:8px 16px;border-radius:var(--rfull);border:1.5px solid var(--ln);font-size:13px;font-weight:500;color:var(--tx3);cursor:pointer;background:var(--surface);transition:all .15s;}
+  .filter-job-cat.active{border-color:var(--brand);color:var(--brand);background:var(--brand-lt);}
+  .filter-job-list{display:flex;flex-wrap:wrap;gap:8px;}
+  .filter-job-item{padding:7px 14px;border-radius:var(--rfull);border:1.5px solid var(--ln);font-size:13px;color:var(--tx3);cursor:pointer;background:var(--surface);transition:all .15s;}
+  .filter-job-item.active{border-color:var(--brand);color:var(--brand);background:var(--brand-lt);}
+  .filter-range-wrap{padding:12px 0 8px;}
+  .filter-range-value{text-align:center;font-size:16px;font-weight:700;color:var(--tx);margin-bottom:20px;}
+  .filter-range{padding:0 12px;}
+  .filter-range input[type="range"]{width:100%;height:4px;-webkit-appearance:none;background:var(--ln);border-radius:2px;outline:none;margin:0;}
+  .filter-range input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--brand);cursor:pointer;border:4px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,0.18);margin-top:0;}
+  .filter-range-labels{display:flex;justify-content:space-between;padding:0 12px;margin-top:12px;}
+  .filter-range-labels span{font-size:12px;font-weight:600;}
+  .filter-range-labels .range-left{color:var(--brand);}
+  .filter-range-labels .range-right{color:var(--brand);}
+  .filter-employ-grid{display:flex;gap:10px;}
+  .filter-employ-item{flex:1;padding:14px;border-radius:var(--r);border:1.5px solid var(--ln);text-align:center;font-size:14px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all .15s;}
+  .filter-employ-item.active{border-color:var(--brand);color:var(--brand);background:var(--brand-lt);}
+  .filter-footer{display:flex;gap:10px;padding:16px 28px;border-top:1px solid var(--ln);flex-shrink:0;}
+  .filter-reset-btn{padding:12px 24px;border-radius:var(--r);border:1.5px solid var(--ln);background:var(--surface);font-size:14px;font-weight:600;color:var(--tx3);cursor:pointer;font-family:var(--font);}
+  .filter-reset-btn:hover{border-color:var(--tx4);}
+  .filter-apply-btn{flex:1;padding:12px;border-radius:var(--r);border:none;background:var(--brand);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background .15s;}
+  .filter-apply-btn:hover{background:var(--brand-dk);}
+  .jb-fc.filtered{border-color:var(--brand);color:var(--brand);background:var(--brand-lt);font-weight:600;}
+  .fc-badge{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--brand);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1;}
+  .jb-fc.filtered svg{stroke:var(--brand);}
   /* 12컬럼 그리드 기준: 1060px / 12col / 거터 20px / 컬럼 70px
      이미지형 카드: 3컬럼 span × 4 = repeat(4, 1fr) gap 20px → 카드 250px */
   .img-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
@@ -13544,16 +13596,16 @@ function closeRatePopup() {
 
     <!-- 필터 드롭다운 행 -->
     <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
-      <button class="jb-fc" style="border-color:var(--tx3);color:var(--tx);font-weight:600;gap:6px;">
+      <button class="jb-fc" id="fc-all" style="border-color:var(--tx3);color:var(--tx);font-weight:600;gap:6px;position:relative;" onclick="openFilter(0)">
         <svg width="16" height="16" viewBox="0 0 22 22" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.42358 11.2542C9.5986 11.2543 10.5899 12.0409 10.8997 13.1162C10.9324 13.1117 10.9659 13.109 10.9999 13.109H17.4927C17.891 13.1091 18.2141 13.4322 18.2142 13.8306C18.2142 14.229 17.8911 14.5521 17.4927 14.5521H10.9999C10.9659 14.5521 10.9324 14.5495 10.8997 14.5449C10.5899 15.6203 9.59858 16.4068 8.42358 16.4069C7.24851 16.4069 6.25728 15.6203 5.94751 14.5449C5.91465 14.5495 5.88047 14.5521 5.84635 14.5521H4.50716C4.10872 14.5521 3.78564 14.229 3.78564 13.8306C3.78577 13.4322 4.1088 13.109 4.50716 13.109H5.84635C5.88046 13.109 5.91467 13.1116 5.94751 13.1162C6.25729 12.0408 7.24853 11.2542 8.42358 11.2542ZM8.42358 12.6973C7.79752 12.6973 7.28948 13.2045 7.28939 13.8306C7.28939 14.4567 7.79747 14.9648 8.42358 14.9648C9.04963 14.9647 9.55688 14.4566 9.55688 13.8306C9.5568 13.2046 9.04957 12.6974 8.42358 12.6973Z" fill="#292C32"/><path fill-rule="evenodd" clip-rule="evenodd" d="M13.5763 5.07031C14.7512 5.07031 15.7425 5.85703 16.0523 6.93229C16.085 6.92776 16.1187 6.92604 16.1526 6.92603H17.4927C17.891 6.92603 18.214 7.24838 18.2142 7.64665C18.2142 8.04509 17.8911 8.36816 17.4927 8.36816H16.1526C16.1187 8.36815 16.085 8.36643 16.0523 8.3619C15.7424 9.43706 14.7512 10.2239 13.5763 10.2239C12.4014 10.2238 11.41 9.43705 11.1002 8.3619C11.0674 8.36645 11.0339 8.36816 10.9999 8.36816H4.50716C4.10872 8.36816 3.78564 8.04509 3.78564 7.64665C3.78585 7.24838 4.10885 6.92603 4.50716 6.92603H10.9999C11.0339 6.92603 11.0674 6.92773 11.1002 6.93229C11.4099 5.85704 12.4013 5.07044 13.5763 5.07031ZM13.5763 6.51335C12.9504 6.5135 12.4431 7.02078 12.443 7.64665C12.443 8.27267 12.9503 8.78069 13.5763 8.78084C14.2024 8.78084 14.7104 8.27276 14.7104 7.64665C14.7103 7.02069 14.2023 6.51335 13.5763 6.51335Z" fill="#292C32"/></svg>
         태그 전체
       </button>
-      <button class="jb-fc">지역 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
-      <button class="jb-fc">직무 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
-      <button class="jb-fc">경력 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
-      <button class="jb-fc">고용 형태 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
-      <button class="jb-fc">학력 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
-      <span onclick="setHotTag(null)" style="font-size:12px;font-weight:500;color:var(--tx4);cursor:pointer;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:3px;margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="vertical-align:middle;"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>초기화</span>
+      <button class="jb-fc" id="fc-region" onclick="openFilter(0)">지역 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <button class="jb-fc" id="fc-job" onclick="openFilter(1)">직무 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <button class="jb-fc" id="fc-career" onclick="openFilter(2)">경력 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <button class="jb-fc" id="fc-employ" onclick="openFilter(3)">고용 형태 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <button class="jb-fc" id="fc-edu" onclick="openFilter(4)">학력 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <span onclick="setHotTag(null);resetFilter();" style="font-size:12px;font-weight:500;color:var(--tx4);cursor:pointer;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:3px;margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="vertical-align:middle;"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>초기화</span>
     </div>
 
     <!-- 핫한 조건 + 최신순 -->
@@ -13592,8 +13644,8 @@ function closeRatePopup() {
       var currentHotTag = null;
 
       var hotTagMeta = {
-        'initpay5000': { label:'초봉 5천↑', badge:'<img src="https://jelin-cc.github.io/jobplanet-ut/emoji-fire.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 초봉 5천↑' },
-        'salary5000': { label:'평균연봉 5천↑', badge:'<img src="https://jelin-cc.github.io/jobplanet-ut/emoji-fire.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 평균연봉 5천↑' },
+        'initpay5000': { label:'초봉 5천↑', badge:'<svg width="14" height="14" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;margin-right:2px;"><path d="M7.60269 6.02173C6.69348 5.98898 6.49358 6.55036 6.26654 7.1531C2.8263 16.2861 3.00549 17.3458 3.0055 20C3.49696 29.5116 11.8734 31.2857 16.0002 30.9838C25.8174 30.8609 29.0119 25.1682 29.0119 20C29.0119 14.5199 26.4829 10.3167 25.157 8.66332C24.3912 7.84422 23.6332 8.32203 23.3499 8.66332C22.8789 9.26536 22.5461 10.1155 22.4386 10.4653C20.6202 6.5828 18.1042 2.93645 17.0735 1.59859C16.1398 0.517363 15.2647 1.14808 14.9439 1.59859C13.2074 3.53985 10.6368 8.30496 9.56854 10.4449C9.14874 8.76571 9.01563 7.83396 8.67264 6.84082C8.37571 6.08313 7.90303 6.03198 7.60269 6.02173Z" fill="#00C274"/><path d="M10.8074 15.5057C10.3723 15.5057 10.0804 16.1311 9.90644 16.4476C8.98496 18.1239 8.71581 20.334 8.71582 21.8225C8.99144 27.1569 13.6858 28.7572 16.0002 28.5879C21.506 28.519 23.3009 24.721 23.3009 21.8225C23.3009 18.7602 21.9836 17.1177 21.2386 16.1886L21.2305 16.1785C20.801 15.7192 20.3759 15.9871 20.217 16.1785C19.9529 16.5162 19.7662 16.993 19.7059 17.1891C18.6861 15.0117 17.1836 12.2528 16.6055 11.5025C16.0819 10.8962 15.5911 11.2499 15.4112 11.5025C14.4373 12.5912 12.8728 15.799 12.2737 16.9991C11.8723 16.4067 11.816 16.3504 11.5856 15.9999C11.2733 15.5722 10.9759 15.5114 10.8074 15.5057Z" fill="#E8FBF4"/></svg> 초봉 5천↑' },
+        'salary5000': { label:'연봉 5천↑', badge:'<svg width="14" height="14" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;margin-right:2px;"><path d="M7.60269 6.02173C6.69348 5.98898 6.49358 6.55036 6.26654 7.1531C2.8263 16.2861 3.00549 17.3458 3.0055 20C3.49696 29.5116 11.8734 31.2857 16.0002 30.9838C25.8174 30.8609 29.0119 25.1682 29.0119 20C29.0119 14.5199 26.4829 10.3167 25.157 8.66332C24.3912 7.84422 23.6332 8.32203 23.3499 8.66332C22.8789 9.26536 22.5461 10.1155 22.4386 10.4653C20.6202 6.5828 18.1042 2.93645 17.0735 1.59859C16.1398 0.517363 15.2647 1.14808 14.9439 1.59859C13.2074 3.53985 10.6368 8.30496 9.56854 10.4449C9.14874 8.76571 9.01563 7.83396 8.67264 6.84082C8.37571 6.08313 7.90303 6.03198 7.60269 6.02173Z" fill="#00C274"/><path d="M10.8074 15.5057C10.3723 15.5057 10.0804 16.1311 9.90644 16.4476C8.98496 18.1239 8.71581 20.334 8.71582 21.8225C8.99144 27.1569 13.6858 28.7572 16.0002 28.5879C21.506 28.519 23.3009 24.721 23.3009 21.8225C23.3009 18.7602 21.9836 17.1177 21.2386 16.1886L21.2305 16.1785C20.801 15.7192 20.3759 15.9871 20.217 16.1785C19.9529 16.5162 19.7662 16.993 19.7059 17.1891C18.6861 15.0117 17.1836 12.2528 16.6055 11.5025C16.0819 10.8962 15.5911 11.2499 15.4112 11.5025C14.4373 12.5912 12.8728 15.799 12.2737 16.9991C11.8723 16.4067 11.816 16.3504 11.5856 15.9999C11.2733 15.5722 10.9759 15.5114 10.8074 15.5057Z" fill="#E8FBF4"/></svg> 연봉 5천↑' },
         'conglomerate': { label:'대기업·계열사', badge:'<svg width="14" height="14" viewBox="0 0 24 24" fill="#6B7280" style="vertical-align:middle;margin-right:2px;"><path d="M4 21V3h16v18H4zm2-2h3v-3H6v3zm0-5h3v-3H6v3zm0-5h3V6H6v3zm5 10h3v-3h-3v3zm0-5h3v-3h-3v3zm0-5h3V6h-3v3zm5 10h3v-3h-3v3zm0-5h3v-3h-3v3zm0-5h3V6h-3v3z"/></svg> 대기업·계열사' },
         'foreign':    { label:'외국계',        badge:'<svg width="14" height="14" viewBox="0 0 24 24" fill="#3B82F6" style="vertical-align:middle;margin-right:2px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg> 외국계' },
         'public':     { label:'공기업',        badge:'<svg width="14" height="14" viewBox="0 0 24 24" fill="#6B7280" style="vertical-align:middle;margin-right:2px;"><path d="M12 2L2 7v1h20V7L12 2zM4 10v7h3v-7H4zm5 0v7h3v-7H9zm5 0v7h3v-7h-3zm-12 8v2h20v-2H2z"/></svg> 공기업' },
@@ -13621,9 +13673,9 @@ function closeRatePopup() {
         var activeId = tag ? 'hot-' + tag : null;
         var activeEl = document.getElementById(activeId);
         if (activeEl) {
-          activeEl.style.background = '#FFF7ED';
-          activeEl.style.borderColor = '#F59E0B';
-          activeEl.style.color = '#92400E';
+          activeEl.style.background = 'var(--brand-lt)';
+          activeEl.style.borderColor = 'var(--brand)';
+          activeEl.style.color = '#065F46';
         }
         renderCards(currentCase);
       }
@@ -17883,6 +17935,236 @@ function closeRatePopup() {
         else goTo(current);
       });
     })();
+
+    // ===== 필터 팝업 =====
+    (function(){
+      // 팝업 HTML 생성
+      var filterHtml = ''
+        + '<div class="filter-overlay" id="filterOverlay" onclick="if(event.target===this)closeFilter()">'
+        + '<div class="filter-popup">'
+        + '<div class="filter-popup-header"><h3>태그 전체</h3><button class="filter-popup-close" onclick="closeFilter()">✕</button></div>'
+        + '<div class="filter-tabs" id="filterTabs">'
+        + '<div class="filter-tab active" data-section="filterSecRegion">지역</div>'
+        + '<div class="filter-tab" data-section="filterSecJob">직무</div>'
+        + '<div class="filter-tab" data-section="filterSecCareer">경력</div>'
+        + '<div class="filter-tab" data-section="filterSecEmploy">고용형태</div>'
+        + '<div class="filter-tab" data-section="filterSecEdu">학력</div>'
+        + '</div>'
+        + '<div class="filter-body" id="filterBody">'
+
+        // 지역
+        + '<div class="filter-section" id="filterSecRegion">'
+        + '<div class="filter-section-title">지역</div>'
+        + '<div class="filter-check-grid">'
+        + ['서울','경기','인천','부산','대구','대전','광주','울산','세종','강원','경남','경북','전남','전북','충남','충북','제주','해외'].map(function(r){return '<label class="filter-check-item"><input type="checkbox"> '+r+'</label>';}).join('')
+        + '</div></div>'
+
+        // 직무
+        + '<div class="filter-section" id="filterSecJob">'
+        + '<div class="filter-section-title">직무</div>'
+        + '<div class="filter-job-cats" id="filterJobCats"></div>'
+        + '<div class="filter-job-list" id="filterJobList"></div>'
+        + '</div>'
+
+        // 경력
+        + '<div class="filter-section" id="filterSecCareer">'
+        + '<div class="filter-section-title">경력</div>'
+        + '<div class="filter-range-wrap">'
+        + '<div class="filter-range-value" id="filterCareerValue">전체</div>'
+        + '<div class="filter-range"><input type="range" min="0" max="11" value="0" id="filterCareerRange"></div>'
+        + '<div class="filter-range-labels"><span class="range-left">신입</span><span class="range-right">10년 +</span></div>'
+        + '</div></div>'
+
+        // 고용형태
+        + '<div class="filter-section" id="filterSecEmploy">'
+        + '<div class="filter-section-title">고용형태</div>'
+        + '<div class="filter-employ-grid">'
+        + '<div class="filter-employ-item" onclick="this.classList.toggle(\'active\')">정규직</div>'
+        + '<div class="filter-employ-item" onclick="this.classList.toggle(\'active\')">계약직</div>'
+        + '</div></div>'
+
+        // 학력
+        + '<div class="filter-section" id="filterSecEdu">'
+        + '<div class="filter-section-title">학력</div>'
+        + '<div class="filter-check-list">'
+        + ['고등학교 졸업','대학졸업 (2,3년)','대학교졸업 (4년)','대학원졸업','석사','박사','학력무관'].map(function(e){return '<label class="filter-check-item"><input type="checkbox"> '+e+'</label>';}).join('')
+        + '</div></div>'
+
+        + '</div>' // filter-body
+        + '<div class="filter-footer">'
+        + '<button class="filter-reset-btn" onclick="resetFilter()">초기화</button>'
+        + '<button class="filter-apply-btn" onclick="closeFilter()">적용</button>'
+        + '</div>'
+        + '</div></div>';
+
+      document.body.insertAdjacentHTML('beforeend', filterHtml);
+
+      // 직무 카테고리 렌더
+      var filterJobCat = '';
+      var catKeys = Object.keys(obJobData);
+      catKeys.forEach(function(cat, i){
+        filterJobCat += '<div class="filter-job-cat'+(i===0?' active':'')+'" onclick="selectFilterJobCat(this,\''+cat+'\')">'+cat+'</div>';
+      });
+      document.getElementById('filterJobCats').innerHTML = filterJobCat;
+      renderFilterJobs(catKeys[0]);
+
+      // 탭 클릭 → 스크롤
+      document.querySelectorAll('.filter-tab').forEach(function(tab){
+        tab.addEventListener('click', function(){
+          document.querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});
+          tab.classList.add('active');
+          var target = document.getElementById(tab.dataset.section);
+          if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+        });
+      });
+
+      // 스크롤 시 탭 활성화
+      document.getElementById('filterBody').addEventListener('scroll', function(){
+        var body = this;
+        var sections = body.querySelectorAll('.filter-section');
+        var tabs = document.querySelectorAll('.filter-tab');
+        var scrollTop = body.scrollTop;
+        var activeIdx = 0;
+        sections.forEach(function(sec, i){
+          if(sec.offsetTop - body.offsetTop <= scrollTop + 60) activeIdx = i;
+        });
+        tabs.forEach(function(t,i){t.classList.toggle('active', i===activeIdx);});
+      });
+
+      // 경력 슬라이더
+      var careerLabels = ['전체','신입','1년','2년','3년','4년','5년','6년','7년','8년','9년','10년 +'];
+      function updateRangeTrack(el){
+        var pct = (el.value / el.max) * 100;
+        el.style.background = 'linear-gradient(to right, var(--brand) 0%, var(--brand) '+pct+'%, var(--ln) '+pct+'%, var(--ln) 100%)';
+      }
+      var rangeEl = document.getElementById('filterCareerRange');
+      rangeEl.addEventListener('input', function(){
+        document.getElementById('filterCareerValue').textContent = careerLabels[this.value] || '전체';
+        updateRangeTrack(this);
+      });
+      updateRangeTrack(rangeEl);
+    })();
+
+    window.selectFilterJobCat = function(el, cat){
+      document.querySelectorAll('.filter-job-cat').forEach(function(c){c.classList.remove('active');});
+      el.classList.add('active');
+      renderFilterJobs(cat);
+    };
+
+    function renderFilterJobs(cat){
+      var jobs = obJobData[cat] || [];
+      document.getElementById('filterJobList').innerHTML = jobs.map(function(j){
+        return '<div class="filter-job-item" onclick="this.classList.toggle(\'active\')">'+j+'</div>';
+      }).join('');
+    }
+
+    function openFilter(tabIdx){
+      document.getElementById('filterOverlay').classList.add('open');
+      var tabs = document.querySelectorAll('.filter-tab');
+      tabs.forEach(function(t){t.classList.remove('active');});
+      var idx = tabIdx || 0;
+      if(tabs[idx]) tabs[idx].classList.add('active');
+      var target = document.getElementById(tabs[idx].dataset.section);
+      if(target){
+        var body = document.getElementById('filterBody');
+        body.scrollTop = target.offsetTop - body.offsetTop;
+      }
+    }
+
+    function closeFilter(){
+      document.getElementById('filterOverlay').classList.remove('open');
+      updateFilterChips();
+    }
+
+    function resetFilter(){
+      document.querySelectorAll('#filterOverlay input[type="checkbox"]').forEach(function(cb){cb.checked=false;});
+      document.querySelectorAll('#filterOverlay .filter-employ-item').forEach(function(e){e.classList.remove('active');});
+      document.querySelectorAll('#filterOverlay .filter-job-item').forEach(function(e){e.classList.remove('active');});
+      var rng = document.getElementById('filterCareerRange');
+      rng.value=0;
+      document.getElementById('filterCareerValue').textContent='전체';
+      if(typeof updateRangeTrack==='function') updateRangeTrack(rng);
+      updateFilterChips();
+    }
+
+    function truncLabel(s, max){
+      max = max || 8;
+      return s.length > max ? s.substring(0, max) + '…' : s;
+    }
+
+    function chipLabel(items, defaultLabel){
+      if(!items.length) return defaultLabel;
+      var first = truncLabel(items[0]);
+      if(items.length === 1) return first;
+      return first + ' 외 ' + (items.length - 1);
+    }
+
+    var chevronSvg = ' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>';
+
+    function updateFilterChips(){
+      // 지역
+      var regions = [];
+      document.querySelectorAll('#filterSecRegion input[type="checkbox"]:checked').forEach(function(cb){
+        regions.push(cb.parentElement.textContent.trim());
+      });
+      var regionBtn = document.getElementById('fc-region');
+      regionBtn.innerHTML = chipLabel(regions, '지역') + chevronSvg;
+      regionBtn.classList.toggle('filtered', regions.length > 0);
+
+      // 직무
+      var jobs = [];
+      document.querySelectorAll('#filterSecJob .filter-job-item.active').forEach(function(el){
+        jobs.push(el.textContent.trim());
+      });
+      var jobBtn = document.getElementById('fc-job');
+      jobBtn.innerHTML = chipLabel(jobs, '직무') + chevronSvg;
+      jobBtn.classList.toggle('filtered', jobs.length > 0);
+
+      // 경력
+      var careerVal = parseInt(document.getElementById('filterCareerRange').value);
+      var careerBtn = document.getElementById('fc-career');
+      if(careerVal > 0){
+        var careerLabels = ['전체','신입','1년','2년','3년','4년','5년','6년','7년','8년','9년','10년+'];
+        careerBtn.innerHTML = careerLabels[careerVal] + chevronSvg;
+        careerBtn.classList.add('filtered');
+      } else {
+        careerBtn.innerHTML = '경력' + chevronSvg;
+        careerBtn.classList.remove('filtered');
+      }
+
+      // 고용형태
+      var employs = [];
+      document.querySelectorAll('#filterSecEmploy .filter-employ-item.active').forEach(function(el){
+        employs.push(el.textContent.trim());
+      });
+      var employBtn = document.getElementById('fc-employ');
+      employBtn.innerHTML = chipLabel(employs, '고용 형태') + chevronSvg;
+      employBtn.classList.toggle('filtered', employs.length > 0);
+
+      // 학력
+      var edus = [];
+      document.querySelectorAll('#filterSecEdu input[type="checkbox"]:checked').forEach(function(cb){
+        edus.push(cb.parentElement.textContent.trim());
+      });
+      var eduBtn = document.getElementById('fc-edu');
+      eduBtn.innerHTML = chipLabel(edus, '학력') + chevronSvg;
+      eduBtn.classList.toggle('filtered', edus.length > 0);
+
+      // 태그 전체 뱃지
+      var total = regions.length + jobs.length + (careerVal > 0 ? 1 : 0) + employs.length + edus.length;
+      var allBtn = document.getElementById('fc-all');
+      var badge = allBtn.querySelector('.fc-badge');
+      if(total > 0){
+        if(!badge){
+          badge = document.createElement('span');
+          badge.className = 'fc-badge';
+          allBtn.appendChild(badge);
+        }
+        badge.textContent = total;
+      } else if(badge){
+        badge.remove();
+      }
+    }
 
     // ===== 기업 상세 캐러셀 이미지 랜덤 =====
     var companyImages = [
