@@ -235,7 +235,7 @@
     @keyframes jkFadeOut{to{opacity:0;transform:translateY(-10px);}}
     .jk-close{position:absolute;top:20px;right:24px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;background:none;transition:opacity .15s;}
     .jk-close:hover{opacity:.6;}
-    .jk-img{width:180px;height:180px;margin:0 auto 20px;object-fit:contain;}
+    .jk-img{width:180px;height:180px;margin:0 auto 8px;object-fit:contain;}
     .jk-title{font-size:22px;font-weight:700;color:var(--tx);margin-bottom:8px;letter-spacing:-.3px;}
     .jk-dots{display:inline;}
     .jk-dot{opacity:0;animation:jkDot 1.2s infinite;}
@@ -13557,6 +13557,7 @@ function closeRatePopup() {
   .list-card .lc-dday.normal{background:#F4F5F7;color:#768091;}
   .list-card .lc-tag{padding:4px 8px;background:#F3FCF9;border-radius:6px;font-size:11px;font-weight:600;color:#00C274;}
   .list-card .lc-tag.ext-tag{background:#EFF6FF;color:#2563EB;}
+  .list-card .lc-tag.bonus-tag{background:#FFF8E1;color:#F59E0B;}
   .list-card .lc-tag.ratio-tag{background:#FFF8E1;color:#F59E0B;}
   .list-card .lc-bk{flex-shrink:0;color:#AFB5BE;}
   .list-card .lc-bk svg{width:20px;height:20px;}
@@ -13578,6 +13579,7 @@ function closeRatePopup() {
   .img-card .ic-tags{display:flex;gap:4px;flex-wrap:wrap;}
   .img-card .ic-tag{padding:4px 8px;background:#F3FCF9;border-radius:6px;font-size:11px;font-weight:600;color:#00C274;white-space:nowrap;}
   .img-card .ic-tag.ext-tag{background:#EFF6FF;color:#2563EB;}
+  .img-card .ic-tag.bonus-tag{background:#FFF8E1;color:#F59E0B;}
   .img-card .ic-tag.ratio-tag{background:#FFF8E1;color:#F59E0B;}
   .ic-dday{padding:2px 6px;background:#FFF0F0;border-radius:4px;font-size:11px;font-weight:700;color:#FA5252;}
   .ic-dday.normal{background:#F4F5F7;color:#768091;}
@@ -13912,12 +13914,14 @@ function closeRatePopup() {
             + bonusBadge
             + '<div class="bk-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>'
             + '</div>';
-          // Tag priority: 잡코리아 > 리뷰태그 > 비중태그 (max 2)
+          // Tag priority: 취업축하금 > 잡코리아 > 리뷰태그 > 비중태그 (max 2)
           var cardTags = [];
-          if(isExt) {
-            cardTags.push({text:'잡코리아 ↗', cls:'ext-tag'});
+          if(c.bonus) {
+            var bMatch = c.bonus.match(/(\d+)/);
+            cardTags.push({text:'취업축하금 '+(bMatch?bMatch[1]:'100')+'만원', cls:'bonus-tag'});
           }
-          c.tags.forEach(function(t){ cardTags.push({text:t, cls:''}); });
+          if(isExt) cardTags.push({text:'잡코리아 ↗', cls:'ext-tag'});
+          c.tags.forEach(function(t){ if(cardTags.length<2) cardTags.push({text:t, cls:''}); });
           var ratioTags = ['현직자 비중 '+Math.floor(50+Math.random()*30)+'%', '승진 언급 ▲'+Math.floor(5+Math.random()*20)+'건', '연봉 언급 +'+Math.floor(3+Math.random()*15)+'건', '워라밸 언급 +'+Math.floor(3+Math.random()*10)+'건'];
           if(cardTags.length < 2) {
             cardTags.push({text:ratioTags[Math.floor(Math.random()*ratioTags.length)], cls:'ratio-tag'});
@@ -13928,7 +13932,10 @@ function closeRatePopup() {
           cardTags = cardTags.slice(0, 2);
           var tagsHtml = cardTags.map(function(t){ return '<span class="ic-tag '+t.cls+'">'+t.text+'</span>'; }).join('');
           var ddayCls = c.urgent ? 'ic-dday' : 'ic-dday normal';
-          var clickAttr = isExt ? ' onclick="openJK()"' : ' onclick="go(\'job-detail\')"';
+          var safeTitle = c.title.replace(/'/g,'\\&#39;');
+          var safeCo = c.co.replace(/'/g,'\\&#39;');
+          var safeMeta = c.meta.replace(/'/g,'\\&#39;');
+          var clickAttr = isExt ? ' onclick="openJK()"' : ' onclick="goJobDetail(\''+safeTitle+'\',\''+safeCo+'\',\''+safeMeta+'\',\''+thumbSrc+'\')"';
           return '<div class="img-card"' + clickAttr + '>'
             + thumb
             + '<div class="ic-body">'
@@ -14029,13 +14036,21 @@ function closeRatePopup() {
 
         var listHtml = cards.map(function(c, ci) {
           var isExt = c.external === 'jobkorea';
-          var clickAttr = isExt ? ' onclick="openJK()"' : ' onclick="go(\'job-detail\')"';
+          var listThumb = getCardThumb(ci);
+          var sTitle2 = c.title.replace(/'/g,'\\&#39;');
+          var sCo2 = c.co.replace(/'/g,'\\&#39;');
+          var sMeta2 = c.meta.replace(/'/g,'\\&#39;');
+          var clickAttr = isExt ? ' onclick="openJK()"' : ' onclick="goJobDetail(\''+sTitle2+'\',\''+sCo2+'\',\''+sMeta2+'\',\''+listThumb+'\')"';
           var ddayCls = c.urgent ? 'lc-dday' : 'lc-dday normal';
 
-          // Tag priority: jobkorea > review tags > ratio tags (max 2)
+          // Tag priority: 취업축하금 > 잡코리아 > 리뷰태그 > 비중태그 (max 2)
           var cardTags2 = [];
+          if(c.bonus) {
+            var bMatch2 = c.bonus.match(/(\d+)/);
+            cardTags2.push({text:'취업축하금 '+(bMatch2?bMatch2[1]:'100')+'만원', cls:'bonus-tag'});
+          }
           if(isExt) cardTags2.push({text:'잡코리아 ↗', cls:'ext-tag'});
-          c.tags.forEach(function(t){ cardTags2.push({text:t, cls:''}); });
+          c.tags.forEach(function(t){ if(cardTags2.length<2) cardTags2.push({text:t, cls:''}); });
           var rt2 = ['현직자 비중 '+Math.floor(50+Math.random()*30)+'%','승진 언급 ▲'+Math.floor(5+Math.random()*20)+'건','연봉 언급 +'+Math.floor(3+Math.random()*15)+'건','워라밸 언급 +'+Math.floor(3+Math.random()*10)+'건'];
           if(cardTags2.length < 2) {
             cardTags2.push({text:rt2[Math.floor(Math.random()*rt2.length)], cls:'ratio-tag'});
@@ -17224,19 +17239,34 @@ function closeRatePopup() {
       }
     };
 
+    // 클릭한 카드 정보 저장
+    var clickedCardInfo = null;
+    function goJobDetail(title, co, meta, thumbSrc) {
+      clickedCardInfo = {title:title, co:co, meta:meta, thumb:thumbSrc};
+      go('job-detail');
+    }
+
     function renderJobDetail(jobId) {
       var job = jobData[jobId];
       if (!job) return;
+      // 클릭한 카드 정보로 타이틀/메타 오버라이드
+      var displayTitle = (clickedCardInfo && clickedCardInfo.title) ? clickedCardInfo.title : job.title;
+      var displayMeta = (clickedCardInfo && clickedCardInfo.meta) ? (clickedCardInfo.co + ' &nbsp;·&nbsp; ' + clickedCardInfo.meta) : job.meta;
+      // 캐러셀 이미지도 클릭한 카드 이미지로 첫 번째 설정
+      if(clickedCardInfo && clickedCardInfo.thumb) {
+        var slides = document.querySelectorAll('.detail-img-slide img');
+        if(slides.length > 0) slides[0].src = clickedCardInfo.thumb;
+      }
       var sectionsHtml = job.sections.map(function(s) {
         return '<div class="detail-section"><h3>' + s.title + '</h3>' + s.html + '</div>';
       }).join('');
       var c = job.company;
       document.getElementById('detail-main-content').innerHTML =
         '<div class="detail-job-header">' +
-          '<h1 class="detail-job-title">' + job.title + '</h1>' +
+          '<h1 class="detail-job-title">' + displayTitle + '</h1>' +
           '<button class="detail-job-bm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>' +
         '</div>' +
-        '<div class="detail-job-meta">' + job.meta + '</div>' +
+        '<div class="detail-job-meta">' + displayMeta + '</div>' +
         sectionsHtml +
         '<div class="detail-company-card">' +
           '<div class="detail-company-top">' +
