@@ -17722,7 +17722,7 @@ function closeRatePopup() {
     document.getElementById('obOverlay').classList.remove('open');
     // 시작하기 완료 시(직무 입력 후)에만 기업 셔플 + 저장
     if(obSelectedJob && obSelectedJob.length > 0){
-      localStorage.setItem('jp_ob_job', obSelectedJob);
+      sessionStorage.setItem('jp_ob_job', obSelectedJob);
       if(typeof shuffleInsightCos==='function') shuffleInsightCos();
     }
   }
@@ -17985,16 +17985,16 @@ function closeRatePopup() {
     showAuthLoader(function(){
       document.getElementById('gnb-guest').style.display='none';
       document.getElementById('gnb-user').style.display='flex';
-      localStorage.setItem('jp_logged_in','true');
+      sessionStorage.setItem('jp_logged_in','true');
     });
   }
   function doLogout(){
     showAuthLoader(function(){
       document.getElementById('gnb-user').style.display='none';
       document.getElementById('gnb-guest').style.display='flex';
-      localStorage.removeItem('jp_logged_in');
-      localStorage.removeItem('jp_ob_job');
-      localStorage.removeItem('jp_ob_conds');
+      sessionStorage.removeItem('jp_logged_in');
+      sessionStorage.removeItem('jp_ob_job');
+      sessionStorage.removeItem('jp_ob_conds');
       obSelectedJob='';obSelectedConds=[];
       closeAllPopups();
     });
@@ -18002,10 +18002,10 @@ function closeRatePopup() {
 
   // 페이지 로드 시 로그인 상태 복원
   (function(){
-    if(localStorage.getItem('jp_logged_in')==='true'){
+    if(sessionStorage.getItem('jp_logged_in')==='true'){
       document.getElementById('gnb-guest').style.display='none';
       document.getElementById('gnb-user').style.display='flex';
-      var savedJob = localStorage.getItem('jp_ob_job');
+      var savedJob = sessionStorage.getItem('jp_ob_job');
       if(savedJob){
         obSelectedJob = savedJob;
         if(typeof shuffleInsightCos==='function') shuffleInsightCos();
