@@ -3072,7 +3072,7 @@
             <button class="gnb-dd-item" onclick="go('my')">MY</button>
             <button class="gnb-dd-item" onclick="showToast('지금은 지원하지 않는 서비스입니다.')">계정</button>
             <button class="gnb-dd-item" onclick="showToast('지금은 지원하지 않는 서비스입니다.')">리뷰</button>
-            <button class="gnb-dd-item" onclick="go('resume')">이력서</button>
+            <button class="gnb-dd-item" onclick="go('my');myShowSection('resume')">이력서</button>
             <button class="gnb-dd-item" onclick="showToast('지금은 지원하지 않는 서비스입니다.')">멤버십/결제</button>
             <hr class="gnb-dd-divider">
             <button class="gnb-dd-item logout" onclick="doLogout()">로그아웃</button>
@@ -15894,7 +15894,7 @@ function closeRatePopup() {
     <!-- 상단 바 -->
     <div class="re-topbar">
       <div class="re-topbar-left">
-        <button class="re-back-btn" onclick="if(isNewResume){var t=document.querySelector('.re-title-input').value||'새 이력서';addResumeToList(t);isNewResume=false;}go('resume')">
+        <button class="re-back-btn" onclick="if(isNewResume){var t=document.querySelector('.re-title-input').value||'새 이력서';addResumeToList(t);isNewResume=false;}go('my');myShowSection('resume')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
         <input class="re-title-input" type="text" value="새 이력서" placeholder="이력서 제목">
@@ -15908,7 +15908,7 @@ function closeRatePopup() {
           AI 이력서 채우기
         </button>
         <button class="re-btn-outline">미리보기</button>
-        <button class="re-btn-primary" onclick="saveResumeToModal();showToast('이력서가 저장되었습니다.');if(isNewResume){var t=document.querySelector('.re-title-input').value||'새 이력서';addResumeToList(t);isNewResume=false;}setTimeout(function(){go('resume');if(cameFromApplyModal){cameFromApplyModal=false;setTimeout(function(){document.getElementById('continueApplyOverlay').style.display='flex';},300);}},800)">저장하기</button>
+        <button class="re-btn-primary" onclick="saveResumeToModal();showToast('이력서가 저장되었습니다.');if(isNewResume){var t=document.querySelector('.re-title-input').value||'새 이력서';addResumeToList(t);isNewResume=false;}setTimeout(function(){go('my');myShowSection('resume');if(cameFromApplyModal){cameFromApplyModal=false;setTimeout(function(){document.getElementById('continueApplyOverlay').style.display='flex';},300);}},800)">저장하기</button>
       </div>
     </div>
 
@@ -16280,7 +16280,7 @@ function closeRatePopup() {
       <!-- 잡플래닛 이력서 -->
       <div class="resume-mgmt-section">
         <h3 class="resume-mgmt-section-title">잡플래닛 이력서</h3>
-        <div class="resume-unified-list" id="resumeUnifiedList"></div>
+        <div class="resume-unified-list"></div>
         <button class="resume-mgmt-action-row" onclick="openResumeEditor()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           새 이력서 작성
@@ -16433,7 +16433,7 @@ function closeRatePopup() {
           <div class="my-card">
             <div class="my-card-header">
               <div class="my-card-title">이력서</div>
-              <button class="my-card-more" onclick="go('resume')">이력서 관리 &rsaquo;</button>
+              <button class="my-card-more" onclick="go('my');myShowSection('resume')">이력서 관리 &rsaquo;</button>
             </div>
             <div class="my-resume-row">
               <div class="my-resume-row-left">
@@ -16595,10 +16595,49 @@ function closeRatePopup() {
 
         <!-- 이력서 섹션 -->
         <div id="my-section-resume" class="my-section" style="display:none">
-          <h2 class="my-section-title">이력서</h2>
-          <div class="my-card">
-            <p class="my-section-desc">이력서 관리 페이지로 이동합니다.</p>
-            <button class="my-goto-btn" onclick="go('resume')">이력서 관리 바로가기 &rsaquo;</button>
+          <div class="resume-mgmt-wrap">
+            <h2 class="resume-mgmt-title">이력서</h2>
+            <!-- 잡플래닛 이력서 -->
+            <div class="resume-mgmt-section">
+              <h3 class="resume-mgmt-section-title">잡플래닛 이력서</h3>
+              <div class="resume-unified-list" id="resumeUnifiedList"></div>
+              <button class="resume-mgmt-action-row" onclick="openResumeEditor()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                새 이력서 작성
+              </button>
+              <button class="resume-mgmt-action-row resume-mgmt-action-row--brand" onclick="openAiSelectModal('page')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                AI로 이력서 채우기
+              </button>
+            </div>
+            <!-- 첨부파일 -->
+            <div class="resume-mgmt-section">
+              <h3 class="resume-mgmt-section-title">첨부파일</h3>
+              <button class="resume-mgmt-action-row" onclick="document.getElementById('resumeFileInput').click()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                이력서 첨부
+              </button>
+              <p class="resume-mgmt-hint">PDF, Word(.docx), 한글(.hwp) · 최대 10MB</p>
+            </div>
+            <!-- 포트폴리오·기타문서 -->
+            <div class="resume-mgmt-section">
+              <h3 class="resume-mgmt-section-title">포트폴리오·기타문서</h3>
+              <div class="resume-mgmt-sub">
+                <div class="resume-mgmt-sub-title">첨부파일</div>
+                <button class="resume-mgmt-action-row" onclick="showToast('포트폴리오 첨부 기능은 준비 중이에요.')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  포트폴리오 첨부
+                </button>
+                <p class="resume-mgmt-hint">개인정보 보호를 위해, 연락처와 신상정보는 삭제 후 첨부해 주세요.<br>파일은 1개, 최대 50MB까지 첨부할 수 있습니다.</p>
+              </div>
+              <div class="resume-mgmt-sub">
+                <div class="resume-mgmt-sub-title">링크·URL</div>
+                <button class="resume-mgmt-action-row" onclick="showToast('링크 추가 기능은 준비 중이에요.')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  링크 추가
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -17806,7 +17845,8 @@ function closeRatePopup() {
 
     function goToResumePage() {
       document.getElementById('applyModal').classList.remove('show');
-      go('resume');
+      go('my');
+      myShowSection('resume');
     }
 
     // AI 이력서 채우기 시뮬레이션
