@@ -14949,6 +14949,8 @@ function closeRatePopup() {
         if (inpWrap) inpWrap.style.display = 'none';
         updateSalMarker();
         renderSalTop3();
+        // 컴팩트 뷰도 갱신
+        if (salViewCompact) renderCompactTop3();
         // 더보기 초기화
         var wrap = g('sal-more-wrap');
         var btn = g('sal-more-btn');
