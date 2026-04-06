@@ -16657,14 +16657,37 @@ function closeRatePopup() {
   }
 
   /* 로그인/로그아웃 */
+  function showAuthLoader(cb){
+    var ov=document.getElementById('authLoader');
+    if(!ov){
+      ov=document.createElement('div');
+      ov.id='authLoader';
+      ov.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;';
+      ov.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;gap:12px;"><div style="width:36px;height:36px;border:4px solid var(--ln);border-top-color:var(--brand);border-radius:50%;animation:authSpin .6s linear infinite;"></div><span style="font-size:14px;font-weight:600;color:var(--tx3);">잠시만요...</span></div>';
+      var st=document.createElement('style');
+      st.textContent='@keyframes authSpin{to{transform:rotate(360deg)}}';
+      document.head.appendChild(st);
+      document.body.appendChild(ov);
+    }
+    ov.style.display='flex';
+    setTimeout(function(){
+      cb();
+      if(typeof renderReviewCards==='function') renderReviewCards();
+      setTimeout(function(){ ov.style.display='none'; },300);
+    },600);
+  }
   function doLogin(){
-    document.getElementById('gnb-guest').style.display='none';
-    document.getElementById('gnb-user').style.display='flex';
+    showAuthLoader(function(){
+      document.getElementById('gnb-guest').style.display='none';
+      document.getElementById('gnb-user').style.display='flex';
+    });
   }
   function doLogout(){
-    document.getElementById('gnb-user').style.display='none';
-    document.getElementById('gnb-guest').style.display='flex';
-    closeAllPopups();
+    showAuthLoader(function(){
+      document.getElementById('gnb-user').style.display='none';
+      document.getElementById('gnb-guest').style.display='flex';
+      closeAllPopups();
+    });
   }
 
   /* 프로필 드롭다운 */
