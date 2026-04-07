@@ -19006,6 +19006,243 @@ document.querySelectorAll('#page-review .rv-side-company').forEach(function(el){
     };
     shuffleDetailImages();
 
+    // ===== 공고 카드 → 상세 동적 연동 =====
+    (function(){
+      // 1. 회사 로고 매핑 (실제 이미지 보유 회사만)
+      var JD_REAL_LOGOS = [
+        { keys:['토스뱅크','토스','비바리퍼블리카'], img:'https://jelin-cc.github.io/jobplanet-ut/toss.png' },
+        { keys:['네이버','NAVER','네이버클라우드'], img:'https://jelin-cc.github.io/jobplanet-ut/naver.png' },
+        { keys:['카카오'], img:'https://jelin-cc.github.io/jobplanet-ut/kakao.png' },
+        { keys:['당근마켓','당근'], img:'https://jelin-cc.github.io/jobplanet-ut/당근.png' },
+      ];
+
+      // 샘플 로고 풀 (36개, 회사명 해시로 일관되게 배정)
+      var SAMPLE_LOGO_POOL = (function() {
+        var base = 'https://jelin-cc.github.io/jobplanet-ut/D-sample_logo_';
+        var arr = [];
+        for (var n=1; n<=36; n++) arr.push(base + n + '.svg');
+        return arr;
+      })();
+
+      function getCompanyLogo(coName) {
+        for (var i=0; i<JD_REAL_LOGOS.length; i++) {
+          var e = JD_REAL_LOGOS[i];
+          for (var j=0; j<e.keys.length; j++) {
+            if (coName.indexOf(e.keys[j]) !== -1) return { img: e.img };
+          }
+        }
+        var hash = 0;
+        for (var k=0; k<coName.length; k++) hash += coName.charCodeAt(k);
+        return { img: SAMPLE_LOGO_POOL[Math.abs(hash) % SAMPLE_LOGO_POOL.length] };
+      }
+
+      // 2. 회사 상세 정보 맵
+      var CO_INFO = {
+        '토스': { ceo:'이승건', revenue:'약 1조 2,000억원', addr:'서울특별시 강남구 테헤란로 142', web:'https://toss.im', hist:'2013년 비바리퍼블리카 설립<br>2015년 토스 서비스 출시', rating:'4.1', emp:'2,800명' },
+        '네이버': { ceo:'최수연', revenue:'약 9조 6,000억원', addr:'경기도 성남시 분당구 불정로 6', web:'https://navercorp.com', hist:'1999년 네이버컴 설립<br>2002년 포털 1위 달성', rating:'3.6', emp:'6,500명' },
+        '카카오': { ceo:'정신아', revenue:'약 7조 1,000억원', addr:'경기도 성남시 분당구 판교역로 166', web:'https://kakaocorp.com', hist:'2010년 카카오톡 출시<br>2014년 다음과 합병', rating:'3.8', emp:'4,200명' },
+        '쿠팡': { ceo:'강한승', revenue:'약 31조원', addr:'서울특별시 송파구 송파대로 570', web:'https://www.coupang.com', hist:'2010년 소셜커머스 출발<br>2014년 로켓배송 시작', rating:'2.9', emp:'15,000명↑' },
+        '배달의민족': { ceo:'류긍선', revenue:'약 3조원', addr:'서울특별시 강남구 논현로 417', web:'https://www.baemin.com', hist:'2010년 우아한형제들 설립<br>2011년 배달의민족 앱 출시', rating:'3.9', emp:'3,200명' },
+        '우아한형제들': { ceo:'류긍선', revenue:'약 3조원', addr:'서울특별시 강남구 논현로 417', web:'https://www.baemin.com', hist:'2010년 우아한형제들 설립<br>2011년 배달의민족 앱 출시', rating:'3.9', emp:'3,200명' },
+        '야놀자': { ceo:'이수진', revenue:'약 7,000억원', addr:'서울특별시 마포구 백범로 35', web:'https://yanolja.com', hist:'2007년 야놀자 설립<br>2021년 유니콘 등극', rating:'3.4', emp:'2,100명' },
+        '무신사': { ceo:'한문일', revenue:'약 7,000억원', addr:'서울특별시 성동구 왕십리로 115', web:'https://musinsa.com', hist:'2001년 무진장 스니커즈 포럼 출발<br>2019년 유니콘 달성', rating:'3.3', emp:'800명' },
+        '당근': { ceo:'김재현', revenue:'약 500억원', addr:'서울특별시 강남구 테헤란로 131', web:'https://about.daangn.com', hist:'2015년 당근마켓 출시<br>2019년 유니콘 달성', rating:'4.0', emp:'370명' },
+        '하이브': { ceo:'방시혁', revenue:'약 2조 2,000억원', addr:'서울특별시 용산구 한강대로 42길 52', web:'https://ibighit.com', hist:'2005년 빅히트엔터테인먼트 설립<br>2021년 하이브로 사명 변경', rating:'3.1', emp:'1,900명' },
+        '크래프톤': { ceo:'장병규', revenue:'약 2조원', addr:'경기도 성남시 분당구 판교역로 235', web:'https://krafton.com', hist:'2007년 블루홀 설립<br>2021년 코스피 상장', rating:'3.7', emp:'1,100명' },
+        '넥슨': { ceo:'이정헌', revenue:'약 3조 8,000억원', addr:'경기도 성남시 분당구 판교역로 220', web:'https://nexon.com', hist:'1994년 넥슨 설립<br>2011년 도쿄증권거래소 상장', rating:'3.5', emp:'4,000명' },
+        '삼성': { ceo:'이재용', revenue:'약 302조원', addr:'경기도 수원시 영통구 삼성로 129', web:'https://samsung.com/sec', hist:'1969년 삼성전자 설립<br>1992년 메모리반도체 세계 1위', rating:'3.9', emp:'110,000명↑' },
+      };
+
+      function getCompanyInfo(coName) {
+        for (var key in CO_INFO) {
+          if (coName.indexOf(key) !== -1) return CO_INFO[key];
+        }
+        var seed = 0;
+        for (var i=0;i<coName.length;i++) seed += coName.charCodeAt(i);
+        return { ceo:'-', revenue:'-', addr:'서울특별시', web:'-', hist:'빠르게 성장 중인 기업', rating:(3.0+((seed%15)/10)).toFixed(1), emp:(50+(seed%2000))+'명' };
+      }
+
+      // 3. 직군별 공고 내용 템플릿
+      var TMPL = {
+        dev: {
+          intro:'수백만 사용자가 사용하는 서비스를 함께 만들어 나갈 개발자를 찾습니다. 기술적 도전을 즐기며, 팀과 함께 빠르게 성장하고 싶은 분을 모십니다.',
+          tasks:'<ul><li>서비스 핵심 기능 설계 및 개발</li><li>코드 품질 개선 및 기술 부채 해소</li><li>개발팀·PO·디자인팀과 긴밀한 협업</li><li>장애 대응 및 서비스 성능 최적화</li><li>코드 리뷰 및 기술 공유</li></ul>',
+          qual:'<ul><li>관련 분야 경력 3년 이상</li><li>주요 기술 스택에 대한 깊은 이해</li><li>문제 해결 능력과 자기주도적 업무 태도</li><li>원활한 협업 및 커뮤니케이션 능력</li></ul>',
+          pref:'<ul><li>대규모 트래픽 서비스 개발 경험</li><li>오픈소스 기여 경험</li><li>테크 블로그 운영 또는 발표 경험</li></ul>',
+        },
+        design: {
+          intro:'사용자가 더 나은 결정을 내릴 수 있도록 직관적인 경험을 만드는 디자이너를 찾습니다. 데이터와 리서치를 기반으로 문제를 발견하고 솔루션을 설계하는 분을 모십니다.',
+          tasks:'<ul><li>제품 내 UI/UX 설계 및 Figma 프로토타입 제작</li><li>사용자 리서치 및 데이터 분석을 통한 개선 방향 도출</li><li>디자인 시스템 구축 및 운영</li><li>PM·개발자와 협업하여 기능 완성도 높이기</li><li>사용성 테스트 설계 및 진행</li></ul>',
+          qual:'<ul><li>웹·모바일 UX/UI 디자인 경험 3년 이상</li><li>Figma 능숙 사용자, 포트폴리오 제출 필수</li><li>사용자 중심 사고와 데이터 기반 의사결정 능력</li></ul>',
+          pref:'<ul><li>디자인 시스템 구축 경험</li><li>A/B 테스트 설계 및 분석 경험</li><li>스타트업 또는 프로덕트 중심 조직 경험</li></ul>',
+        },
+        marketing: {
+          intro:'더 많은 고객에게 가치를 전달하는 마케팅을 함께할 분을 찾습니다. 데이터 기반으로 캠페인을 기획하고, 결과를 분석하고, 빠르게 개선하는 그로스 지향적 마케터를 모십니다.',
+          tasks:'<ul><li>디지털 채널 마케팅 캠페인 기획 및 운영</li><li>퍼포먼스 데이터 분석 및 인사이트 도출</li><li>콘텐츠 전략 수립 및 제작 감수</li><li>고객 세그먼트 분석 및 타겟팅 전략 수립</li><li>외부 파트너사 협업 관리</li></ul>',
+          qual:'<ul><li>마케팅 관련 경력 2년 이상</li><li>GA, Meta Ads 등 디지털 툴 활용 경험</li><li>데이터 분석 및 보고서 작성 능력</li><li>창의적인 아이디어와 실행력</li></ul>',
+          pref:'<ul><li>스타트업 마케팅 경험</li><li>SQL 또는 BI 툴 활용 능력</li><li>그로스 해킹 또는 CRM 경험</li></ul>',
+        },
+        planner: {
+          intro:'사용자 니즈와 비즈니스 목표를 연결하는 서비스를 만듭니다. 데이터와 사용자 인터뷰를 바탕으로 기능을 정의하고, 개발·디자인팀과 함께 제품을 완성해 나가는 기획자를 찾습니다.',
+          tasks:'<ul><li>서비스 기능 기획 및 스펙 문서 작성</li><li>사용자 리서치 및 시장 분석</li><li>개발·디자인 팀과의 긴밀한 협업</li><li>지표 설정 및 데이터 기반 성과 분석</li><li>로드맵 관리 및 우선순위 결정</li></ul>',
+          qual:'<ul><li>서비스 기획 경력 2년 이상</li><li>논리적 사고와 커뮤니케이션 능력</li><li>데이터 분석 기초 능력</li><li>사용자 중심적 사고방식</li></ul>',
+          pref:'<ul><li>B2C 플랫폼 서비스 경험</li><li>A/B 테스트 기획 경험</li><li>SQL 기초 활용 능력</li></ul>',
+        },
+        data: {
+          intro:'데이터로 의사결정을 바꾸는 팀입니다. 수백만 사용자의 행동 데이터를 분석하고, 제품·비즈니스 팀이 더 나은 결정을 내릴 수 있도록 인사이트를 제공하는 분을 찾습니다.',
+          tasks:'<ul><li>사용자 행동 데이터 분석 및 인사이트 도출</li><li>대시보드 및 리포트 설계·개발</li><li>A/B 테스트 설계 및 통계 분석</li><li>데이터 파이프라인 구축 협업</li><li>비즈니스 팀 데이터 컨설팅</li></ul>',
+          qual:'<ul><li>데이터 분석 경력 2년 이상</li><li>SQL 고급 활용 능력</li><li>Python 또는 R 기초 이상</li><li>BI 툴(Tableau, Looker 등) 사용 경험</li></ul>',
+          pref:'<ul><li>머신러닝 모델 활용 경험</li><li>통계학 관련 학위 또는 자격증</li><li>데이터 엔지니어링 기초 이해</li></ul>',
+        },
+        general: {
+          intro:'빠르게 성장하는 팀에서 함께 일할 인재를 찾고 있습니다. 주도적으로 업무를 이끌고 팀원들과 협력하여 최고의 결과를 만들어내는 분을 모십니다.',
+          tasks:'<ul><li>담당 분야 핵심 업무 수행</li><li>팀 내외 부서와의 긴밀한 협업</li><li>업무 프로세스 개선 및 효율화</li><li>데이터 기반 의사결정 참여</li></ul>',
+          qual:'<ul><li>관련 분야 경력 2년 이상</li><li>뛰어난 문제 해결 능력</li><li>원활한 커뮤니케이션 능력</li><li>주도적이고 책임감 있는 업무 태도</li></ul>',
+          pref:'<ul><li>스타트업 또는 빠른 성장 환경 경험</li><li>관련 자격증 또는 전문 교육 이수</li></ul>',
+        },
+      };
+
+      function getJobCat(title) {
+        if (/개발|엔지니어|DevOps|SRE|QA|iOS|Android|풀스택|백엔드|프론트/.test(title)) return 'dev';
+        if (/디자이너|디자인|UX|UI|BX|모션|3D/.test(title)) return 'design';
+        if (/마케터|마케팅|CRM|퍼포먼스|브랜드|콘텐츠/.test(title)) return 'marketing';
+        if (/기획|PM|PO|전략|사업/.test(title)) return 'planner';
+        if (/분석|데이터/.test(title)) return 'data';
+        return 'general';
+      }
+
+      // 4. 공고 상세 콘텐츠 렌더링
+      function buildDetailFromCard(cardInfo) {
+        var title = cardInfo.title || '';
+        var co = cardInfo.co || '';
+        var meta = cardInfo.meta || '서울 · 경력 무관';
+        var parts = meta.split(/\s*[·]\s*/);
+        var loc = parts[0] || '서울';
+        var career = parts[1] || '경력 무관';
+        var tmpl = TMPL[getJobCat(title)] || TMPL.general;
+        var compInfo = getCompanyInfo(co);
+        var logoInfo = getCompanyLogo(co);
+
+        var logoElemStyle = 'width:56px;height:56px;border-radius:12px;flex-shrink:0;background:#fff;border:1.5px solid #E5E7EB;overflow:hidden;';
+        var logoElemInner = '<img src="'+logoInfo.img+'" style="width:100%;height:100%;object-fit:contain;display:block;" alt="">';
+
+        var mainEl = document.getElementById('detail-main-content');
+        if (!mainEl) return;
+        mainEl.innerHTML =
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+            '<div>' +
+              '<div class="jd-company-name" style="margin-bottom:8px;">'+co+'</div>' +
+              '<div class="detail-job-header"><h1 class="detail-job-title">'+title+'</h1></div>' +
+              '<div class="detail-job-meta">'+loc+' &nbsp;&middot;&nbsp; '+career+' &nbsp;&middot;&nbsp; 정규직</div>' +
+            '</div>' +
+            '<button class="detail-job-bm" onclick="showToast(\'링크가 복사되었어요.\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>' +
+          '</div>' +
+          '<div style="display:none;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>' +
+          '<div class="detail-section"><h3>기업 소개</h3><p>'+tmpl.intro+'</p></div>' +
+          '<div class="detail-section"><h3>주요 업무</h3>'+tmpl.tasks+'</div>' +
+          '<div class="detail-section"><h3>자격 요건</h3>'+tmpl.qual+'</div>' +
+          '<div class="detail-section"><h3>우대사항</h3>'+tmpl.pref+'</div>' +
+          '<div class="detail-section"><h3>복지 및 혜택</h3><ul><li>성과에 따른 인센티브 지급</li><li>유연 근무제 운영</li><li>최신 장비 지원</li><li>도서·교육비 지원</li><li>식대 지원</li></ul></div>' +
+          '<div class="detail-section"><h3>채용 절차</h3><p>서류 심사 → 1차 실무 면접 → 2차 임원 면접 → 최종합격 및 처우협의</p></div>' +
+          '<div class="detail-company-card">' +
+            '<div class="detail-company-top">' +
+              '<div class="detail-company-info">' +
+                '<div class="detail-company-logo" style="'+logoElemStyle+'">'+logoElemInner+'</div>' +
+                '<div><div class="detail-company-name">'+co+'</div><div class="detail-company-rating">★ '+compInfo.rating+'</div></div>' +
+              '</div>' +
+              '<button class="detail-follow-btn">♡ 팔로우</button>' +
+            '</div>' +
+            '<dl class="detail-company-row">' +
+              '<dt>대표</dt><dd>'+compInfo.ceo+'</dd>' +
+              '<dt>매출</dt><dd>'+compInfo.revenue+'</dd>' +
+              '<dt>임직원 수</dt><dd>'+compInfo.emp+'</dd>' +
+              '<dt>주소</dt><dd>'+compInfo.addr+'</dd>' +
+              '<dt>연혁</dt><dd>'+compInfo.hist+'</dd>' +
+            '</dl>' +
+            '<div class="detail-company-links">' +
+              '<button class="detail-company-link-btn" onclick="go(\'company\')">기업 소개 &gt;</button>' +
+              '<button class="detail-company-link-btn" onclick="goCompanyTab(4)">면접 후기 &gt;</button>' +
+              '<button class="detail-company-link-btn" onclick="goCompanyTab(2)">기업 리뷰 &gt;</button>' +
+              '<button class="detail-company-link-btn" onclick="goCompanyTab(6)">전체 공고 &gt;</button>' +
+            '</div>' +
+          '</div>';
+      }
+
+      // 5. 사이드바 동적 생성
+      var RATING_KEYS = ['업무와 삶의 균형','복지 및 급여','사내문화','성장 가능성','경영진'];
+      function buildJobDetailSidebar(clickedCard) {
+        var pool = (typeof caseConfig !== 'undefined') ? caseConfig.a.cards : [];
+        var candidates = pool.filter(function(c){ return !(c.co===clickedCard.co && c.title===clickedCard.title); });
+        var shuffled = candidates.slice();
+        for (var i=shuffled.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=shuffled[i];shuffled[i]=shuffled[j];shuffled[j]=t;}
+        var others = shuffled.slice(0,19);
+        var items = [{co:clickedCard.co, title:clickedCard.title, active:true}]
+          .concat(others.map(function(c){return {co:c.co, title:c.title, active:false};}));
+
+        var html = items.map(function(item, idx) {
+          var info = getCompanyLogo(item.co);
+          var ts = 'width:56px;height:56px;border-radius:12px;flex-shrink:0;border:1.5px solid #E5E7EB;background:#fff;overflow:hidden;';
+          var ti = '<img src="'+info.img+'" style="width:100%;height:100%;object-fit:contain;display:block;" alt="">';
+          var rk = RATING_KEYS[idx % RATING_KEYS.length];
+          var rv = (3.0 + ((idx*17+7) % 15) / 10).toFixed(1);
+          var safeCo = item.co.replace(/"/g,'&quot;');
+          var safeTitle = item.title.replace(/"/g,'&quot;');
+          return '<div class="sidebar-job-item'+(item.active?' active':'')+'" data-jd-co="'+safeCo+'" data-jd-title="'+safeTitle+'" onclick="selectJobFromCard(this)">' +
+            '<div style="'+ts+'">'+ti+'</div>' +
+            '<div class="sidebar-job-info">' +
+              '<div class="sidebar-job-title">'+item.title+'</div>' +
+              '<div class="sidebar-job-company">'+item.co+'</div>' +
+              '<div class="sidebar-job-rating">'+rk+' : '+rv+'</div>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+
+        var sidebar = document.querySelector('#page-job-detail .detail-sidebar');
+        if (!sidebar) return;
+        sidebar.innerHTML =
+          '<div class="sidebar-count"><span class="sidebar-count-num">총 533건</span><span class="sidebar-count-sort">정확도순 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;vertical-align:middle;"><polyline points="6 9 12 15 18 9"/></svg></span></div>' +
+          html;
+      }
+
+      // 6. 사이드바 아이템 클릭 핸들러
+      window.selectJobFromCard = function(el) {
+        document.querySelectorAll('#page-job-detail .sidebar-job-item').forEach(function(i){ i.classList.remove('active'); });
+        el.classList.add('active');
+        var co = el.getAttribute('data-jd-co');
+        var title = el.getAttribute('data-jd-title');
+        var metaEl = el.querySelector('.sidebar-job-rating');
+        buildDetailFromCard({ title:title, co:co, meta:'서울 · 경력 3년↑' });
+        if (typeof shuffleDetailImages === 'function') shuffleDetailImages();
+        window.scrollTo(0,0);
+      };
+
+      // 7. goJobDetail 오버라이드
+      window.goJobDetail = function(title, co, meta, thumbSrc) {
+        clickedCardInfo = { title:title, co:co, meta:meta, thumb:thumbSrc };
+        go('job-detail');
+        setTimeout(function() {
+          var slides = document.querySelectorAll('.detail-img-slide img');
+          if (slides.length > 0 && thumbSrc) slides[0].src = thumbSrc;
+          buildJobDetailSidebar({ title:title, co:co, meta:meta });
+          buildDetailFromCard({ title:title, co:co, meta:meta });
+        }, 20);
+      };
+
+      // 8. 초기 사이드바 기존 항목에 로고 적용
+      (function initSidebarLogos() {
+        document.querySelectorAll('#page-job-detail .sidebar-job-item').forEach(function(item) {
+          var coEl = item.querySelector('.sidebar-job-company');
+          var thumbEl = item.querySelector('.sidebar-job-thumb');
+          if (!coEl || !thumbEl) return;
+          var coName = coEl.textContent.trim();
+          var info = getCompanyLogo(coName);
+          thumbEl.style.cssText = 'background:#fff;border:1.5px solid #E5E7EB;border-radius:12px;overflow:hidden;width:56px;height:56px;flex-shrink:0;';
+          thumbEl.innerHTML = '<img src="'+info.img+'" style="width:100%;height:100%;object-fit:contain;display:block;" alt="">';
+        });
+      })();
+
+    })();
+
     // ===== 즐겨찾기 토스트 =====
     (function(){
       var toast = document.createElement('div');
