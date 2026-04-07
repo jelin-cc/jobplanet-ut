@@ -13645,7 +13645,7 @@ document.querySelectorAll('#page-review .rv-side-company').forEach(function(el){
             cardTags2.push({text:rt2[Math.floor(Math.random()*rt2.length)], cls:'ratio-tag'});
           }
           cardTags2 = cardTags2.slice(0,2);
-          var tags2Html = '<span class="'+ddayCls+'">'+c.dday+'</span>' + cardTags2.map(function(t){return '<span class="lc-tag '+t.cls+'">'+t.text+'</span>';}).join('');
+          var tags2Html = cardTags2.map(function(t){return '<span class="lc-tag '+t.cls+'">'+t.text+'</span>';}).join('');
 
           // Logo for logo view
           var logoImg = logoFiles[ci % logoFiles.length];
@@ -13656,10 +13656,10 @@ document.querySelectorAll('#page-review .rv-side-company').forEach(function(el){
             + logoHtml2
             + '<div style="display:flex;flex-direction:column;gap:4px;">'
             + '<div class="lc-title">'+c.title+'</div>'
-            + '<div class="lc-company">'+c.co+'</div>'
+            + '<div class="lc-company">'+c.co+' <span class="'+ddayCls+'">'+c.dday+'</span></div>'
             + '</div>'
             + '<div class="lc-meta">'+c.meta+'</div>'
-            + '<div class="lc-tags">'+tags2Html+'</div>'
+            + (tags2Html ? '<div class="lc-tags">'+tags2Html+'</div>' : '')
             + '</div>'
             + '<div class="lc-bk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>'
             + '</div>';
