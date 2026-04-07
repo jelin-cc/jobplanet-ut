@@ -18405,10 +18405,20 @@ function closeRatePopup() {
     setCatCustom();
   }
 
+  // jp_reviewed=pending이면 작성 완료 후 리다이렉트 → true로 변경
+  if (localStorage.getItem('jp_reviewed') === 'pending') {
+    localStorage.setItem('jp_reviewed', 'true');
+    sessionStorage.setItem('jp_logged_in', 'true');
+    sessionStorage.setItem('jp_current_page', 'review');
+    if (!sessionStorage.getItem('jp_current_review_tab')) sessionStorage.setItem('jp_current_review_tab', 'theme');
+    location.reload();
+  }
   /* 로그인 세션 유지 (sessionStorage) */
   if(sessionStorage.getItem('jp_logged_in')==='true'){
     document.getElementById('gnb-guest').style.display='none';
     document.getElementById('gnb-user').style.display='flex';
+    // 기업 리뷰 페이지도 로그인 상태 적용
+    window._skipLoginLoader = true; if (typeof completeLogin === "function") completeLogin();
   }
   var _origDoLogin=doLogin;
   doLogin=function(){
@@ -18500,6 +18510,8 @@ function closeRatePopup() {
       document.getElementById('gnb-guest').style.display='none';
       document.getElementById('gnb-user').style.display='flex';
       sessionStorage.setItem('jp_logged_in','true');
+      // 기업 리뷰 페이지 로그인 상태 적용
+      if (typeof completeLogin === 'function') completeLogin();
     });
   }
   function doLogout(){
@@ -18507,6 +18519,7 @@ function closeRatePopup() {
       document.getElementById('gnb-user').style.display='none';
       document.getElementById('gnb-guest').style.display='flex';
       sessionStorage.removeItem('jp_logged_in');
+      sessionStorage.removeItem('jp_jobreview_job');
       sessionStorage.removeItem('jp_ob_job');
       sessionStorage.removeItem('jp_ob_conds');
       obSelectedJob='';obSelectedConds=[];
@@ -18533,6 +18546,12 @@ function closeRatePopup() {
       if(sb) sb.style.display = '';
       if(rb) rb.style.display = 'none';
       if(typeof renderReviewCards==='function') renderReviewCards();
+      // 기업 리뷰 비로그인 상태로 복원
+      localStorage.removeItem('jp_reviewed');
+      localStorage.removeItem('jp_iv_reviewed');
+      localStorage.removeItem('jp_current_page');
+      localStorage.removeItem('jp_current_review_tab');
+      setTimeout(function() { location.reload(); }, 300);
     });
   }
 
@@ -18626,6 +18645,7 @@ function closeRatePopup() {
 
   var _skipPush = false;
   function go(id){
+    sessionStorage.setItem("jp_current_page", id);
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     var pageEl = document.getElementById('page-'+id);
     if(!pageEl){ console.warn('page not found: page-'+id); return; }
@@ -19020,7 +19040,17 @@ function closeRatePopup() {
     openCompany({name,score:parseFloat(score),industry,loc,year,size,jobs,pct,initial,keywords});
   });
 
-  go('home');
+  // 저장된 페이지가 있으면 그 페이지로, 없으면 홈으로 이동
+  var _savedPage = sessionStorage.getItem('jp_current_page');
+  if (_savedPage && _savedPage !== 'home') {
+    go(_savedPage);
+    if (_savedPage === 'review') {
+      var _savedTab = sessionStorage.getItem('jp_current_review_tab');
+      if (_savedTab && typeof switchReviewTab === 'function') switchReviewTab(_savedTab);
+    }
+  } else {
+    go('home');
+  }
   if(typeof renderReviewCards==='function') renderReviewCards();
 
   /* ==================== 채용상세/이력서/마이페이지 JS (merged from UT prototype) ==================== */
