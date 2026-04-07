@@ -19333,10 +19333,10 @@ function closeRatePopup() {
             '<dt>연혁</dt><dd>' + c.history + '</dd>' +
           '</dl>' +
           '<div class="detail-company-links">' +
-            '<button class="detail-company-link-btn">기업 소개 &gt;</button>' +
-            '<button class="detail-company-link-btn">면접 후기 &gt;</button>' +
-            '<button class="detail-company-link-btn">기업 리뷰 &gt;</button>' +
-            '<button class="detail-company-link-btn">전체 공고 &gt;</button>' +
+            '<button class="detail-company-link-btn" onclick="go(\'company\')">기업 소개 &gt;</button>' +
+            '<button class="detail-company-link-btn" onclick="goCompanyTab(4)">면접 후기 &gt;</button>' +
+            '<button class="detail-company-link-btn" onclick="goCompanyTab(2)">기업 리뷰 &gt;</button>' +
+            '<button class="detail-company-link-btn" onclick="goCompanyTab(6)">전체 공고 &gt;</button>' +
           '</div>' +
         '</div>';
     }
@@ -21547,22 +21547,24 @@ function closeRatePopup() {
     })();
 
     /* ── 링크 복사 ── */
-    function copyJobLink(btn){
-      var card = btn.closest('.job-card');
-      var title = card ? card.querySelector('.job-card-title').textContent.trim() : 'Job';
-      var link = location.origin + location.pathname + '#job-' + encodeURIComponent(title);
-      if(navigator.clipboard){
-        navigator.clipboard.writeText(link);
-      } else {
-        var ta = document.createElement('textarea');
-        ta.value = link; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+    var _copyToastTimer=null;
+    function copyJobLink(){
+      try{navigator.clipboard.writeText(location.href);}catch(e){}
+      var el=document.getElementById('copyLinkToast');
+      if(!el){
+        el=document.createElement('div');
+        el.id='copyLinkToast';
+        el.style.cssText='position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);z-index:9999;pointer-events:none;display:flex;align-items:center;gap:12px;background:rgba(55,65,81,0.92);backdrop-filter:blur(8px);color:#fff;padding:14px 24px;border-radius:999px;font-size:15px;font-weight:500;white-space:nowrap;opacity:0;transition:opacity .3s,transform .3s;font-family:var(--font);';
+        el.innerHTML='<span style="width:28px;height:28px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span>링크가 복사되었습니다</span>';
+        document.body.appendChild(el);
       }
-      var toast = document.createElement('div');
-      toast.className = 'copy-toast';
-      toast.textContent = '링크가 복사되었습니다';
-      document.body.appendChild(toast);
-      setTimeout(function(){ toast.classList.add('show'); }, 10);
-      setTimeout(function(){ toast.classList.remove('show'); setTimeout(function(){ toast.remove(); }, 300); }, 2000);
+      el.style.opacity='0';el.style.transform='translateX(-50%) translateY(20px)';
+      void el.offsetWidth;
+      el.style.opacity='1';el.style.transform='translateX(-50%) translateY(0)';
+      clearTimeout(_copyToastTimer);
+      _copyToastTimer=setTimeout(function(){
+        el.style.opacity='0';el.style.transform='translateX(-50%) translateY(20px)';
+      },2500);
     }
 </script>
 </body>
