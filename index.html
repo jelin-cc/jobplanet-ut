@@ -2608,9 +2608,15 @@
     .post-apply-mascot { font-size: 36px; line-height: 1; }
     .post-apply-title { font-size: 18px; font-weight: 700; color: var(--brand-primary); }
     .post-apply-sub { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+    .post-apply-header-close {
+      background: none; border: none; cursor: pointer; padding: 4px;
+      color: var(--text-tertiary); flex-shrink: 0; display: flex; align-items: center;
+    }
+    .post-apply-header-close:hover { color: var(--text-secondary); }
     .post-apply-page-body {
       display: flex; flex: 1; overflow: hidden;
       max-width: 1200px; width: 100%; margin: 0 auto;
+      padding-bottom: 68px;
     }
     .post-apply-left {
       width: 440px; flex-shrink: 0; background: #fff;
@@ -2644,10 +2650,12 @@
     .post-apply-item-title { font-size: 14px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .post-apply-item-company { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
     .post-apply-item-exp { font-size: 12px; color: var(--text-secondary); }
-    .post-apply-item-ai {
-      display: inline-block; background: #ede9fe; color: #7c3aed;
-      font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-top: 5px;
+    .post-apply-item-tag {
+      display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-top: 5px;
     }
+    .post-apply-item-tag--saved { background: #FFF7ED; color: #EA580C; }
+    .post-apply-item-tag--recent { background: #ECFDF5; color: #059669; }
+    .post-apply-item-tag--following { background: #EFF6FF; color: #2563EB; }
     .post-apply-item-arrow { color: var(--text-tertiary); flex-shrink: 0; }
     .post-apply-right {
       flex: 1; overflow-y: auto; background: #fff; padding: 0;
@@ -2676,7 +2684,24 @@
       padding: 16px 40px;
       border-top: 1px solid var(--line-primary);
       background: #fff;
-      display: flex; align-items: center; justify-content: center; gap: 12px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .post-apply-hide-today {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; color: var(--text-tertiary); cursor: pointer; user-select: none;
+    }
+    .post-apply-hide-today input[type="checkbox"] {
+      width: 20px; height: 20px; border-radius: 4px; flex-shrink: 0;
+      border: 1.5px solid var(--line-primary); cursor: pointer;
+      appearance: none; -webkit-appearance: none; background: #fff; position: relative;
+    }
+    .post-apply-hide-today input[type="checkbox"]:checked {
+      background: var(--brand-primary); border-color: var(--brand-primary);
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 6l3 3 5-5' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-size: contain; background-repeat: no-repeat; background-position: center;
+    }
+    .post-apply-footer-right {
+      display: flex; align-items: center; gap: 12px;
     }
     .post-apply-back-btn {
       padding: 14px 32px; background: #fff; color: var(--text-secondary);
@@ -18125,10 +18150,13 @@ function closeRatePopup() {
   <div class="post-apply-overlay" id="postApplyPopup">
     <div class="post-apply-page-header">
       <div class="post-apply-mascot">🎉</div>
-      <div>
+      <div style="flex:1">
         <div class="post-apply-title">지원이 완료되었습니다!</div>
         <div class="post-apply-sub">방금 지원한 이력서로 다른 포지션에 간단하게 추가 지원해보세요.</div>
       </div>
+      <button class="post-apply-header-close" onclick="document.getElementById('postApplyPopup').classList.remove('show')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
     <div class="post-apply-page-body">
       <div class="post-apply-left">
@@ -18140,9 +18168,13 @@ function closeRatePopup() {
         </div>
       </div>
     </div>
-    <div class="post-apply-footer">
-      <button class="post-apply-back-btn" id="postApplyClose">지원한 포지션으로 돌아가기</button>
-      <button class="post-apply-submit" id="postApplySubmit" disabled>
+    <div class="post-apply-footer" style="justify-content:flex-end;">
+      <label class="post-apply-hide-today" id="postApplyHideToday" style="margin-right:24px;">
+        <input type="checkbox" id="postApplyHideTodayCheck">
+        <span>오늘 하루 보지 않기</span>
+      </label>
+      <button class="post-apply-back-btn" id="postApplyClose">닫기</button>
+      <button class="post-apply-submit" id="postApplySubmit" disabled style="margin-left:12px;">
         <span id="postApplyCount">0</span>건 · 동시 지원하기
       </button>
     </div>
@@ -18510,6 +18542,7 @@ function closeRatePopup() {
       sessionStorage.setItem('jp_logged_in','true');
       // 새 로그인 시 지원 정보 초기화 (UT용)
       sessionStorage.removeItem('applyInfo');
+      sessionStorage.removeItem('hidePostApplyToday');
       if (typeof resetApplyModal === 'function') resetApplyModal(true);
       if (typeof appliedJobs !== 'undefined') appliedJobs.clear();
       if (typeof updateApplyBtnState === 'function') updateApplyBtnState();
@@ -20355,14 +20388,25 @@ function closeRatePopup() {
     var postApplySubmit = document.getElementById('postApplySubmit');
     var postApplyCount = document.getElementById('postApplyCount');
 
-    var recommendedJobs = [
-      { title: 'UI/UX 디자이너 (Product Design)', company: '디플래닛', location: '서울 강남구', exp: '경력 3-8년', ai: 61, bg: '#e0f2fe', jobId: 'babitalk' },
-      { title: 'Product Designer', company: '유모스원', location: '서울 강남구', exp: '경력 5-11년', ai: 56, bg: '#1a1a2e', jobId: 'nexon' },
-      { title: '글로벌 커머스 앱 디자이너', company: '엠피에이지(MPAG)', location: '서울 중구', exp: '경력 3년 이상', ai: 57, bg: '#1d4ed8', jobId: 'smilegate' },
-      { title: 'UX UI 디자이너', company: '아스타라', location: '서울 강서구', exp: '경력 3-8년', ai: 74, bg: '#d1fae5', jobId: 'ak' },
-      { title: 'ux/ui디자이너', company: '이온랩', location: '충북 청주시', exp: '경력 3년 이상', ai: 67, bg: '#f3f4f6', jobId: 'xyz' },
-      { title: 'UI/UX 디자이너', company: '클라우드나인', location: '서울 마포구', exp: '신입/경력', ai: 58, bg: '#fef3c7', jobId: 'com2us' }
-    ];
+    var _rcTitles = ['UI/UX 디자이너 (Product Design)','Product Designer','글로벌 커머스 앱 디자이너','UX UI 디자이너','ux/ui디자이너','UI/UX 디자이너','프로덕트 디자이너 (시니어)','서비스 기획자','BX 디자이너','인터랙션 디자이너','UX 리서처','비주얼 디자이너','프로덕트 디자이너 (주니어)','그래픽 디자이너','모바일 앱 디자이너','웹 퍼블리셔','디자인 시스템 리드','콘텐츠 디자이너','UI 개발자','크리에이티브 디렉터','UX 라이터','디자인 매니저','일러스트레이터','영상 디자이너','3D 디자이너','브랜드 디자이너','커머스 디자이너','핀테크 디자이너','헬스케어 UX 디자이너','에듀테크 디자이너'];
+    var _rcCompanies = ['디플래닛','유모스원','엠피에이지(MPAG)','아스타라','이온랩','클라우드나인','카카오페이','토스','네이버','쿠팡','배달의민족','라인플러스','당근마켓','야놀자','무신사','올리브영','하이브','두나무','삼성전자','LG전자','SK텔레콤','현대자동차','넥슨코리아','스마일게이트','크래프톤','뱅크샐러드','리디','왓챠','센드버드','채널톡'];
+    var _rcLocations = ['서울 강남구','서울 성수동','서울 중구','서울 강서구','충북 청주시','서울 마포구','경기 성남시','경기 판교','서울 서초구','서울 용산구'];
+    var _rcExps = ['경력 3-8년','경력 5-11년','경력 3년 이상','신입/경력','경력 1-3년','경력 7년 이상','신입','경력 2-5년'];
+    var _rcTags = ['saved','following','recent'];
+    var _rcJobIds = ['babitalk','nexon','smilegate','ak','xyz','com2us','kakaopay','lineplus','woowa','tossbank','navercloud','hybe','coupang','oliveyoung','samsung','dunamu','yanolja','musinsa','megazone'];
+    var recommendedJobs = [];
+    for (var i = 0; i < 30; i++) {
+      recommendedJobs.push({
+        title: _rcTitles[i % _rcTitles.length],
+        company: _rcCompanies[i % _rcCompanies.length],
+        location: _rcLocations[i % _rcLocations.length],
+        exp: _rcExps[i % _rcExps.length],
+        tag: _rcTags[i % _rcTags.length],
+        bg: '#' + ['e0f2fe','1a1a2e','1d4ed8','d1fae5','f3f4f6','fef3c7','dbeafe','fce7f3','e0e7ff','f5f3ff'][i % 10],
+        jobId: _rcJobIds[i % _rcJobIds.length]
+      });
+    }
+    var tagLabels = { saved: '저장한 공고', recent: '최근 본 공고', following: '팔로잉 기업' };
 
     var postApplyDetailData = {
       babitalk: { title: 'UI/UX 디자이너 (Product Design)', company: '디플래닛', meta: '서울 강남구 · 경력 3-8년', desc: '디플래닛은 글로벌 여행 플랫폼으로, 사용자 중심의 프로덕트 디자인을 이끌 시니어 디자이너를 찾고 있습니다.', tasks: ['사용자 리서치 기반 UI/UX 개선', '디자인 시스템 구축 및 유지보수', '프로토타이핑 및 사용성 테스트', '크로스펑셔널 팀과 협업'], qual: ['UX/UI 디자인 경력 3년 이상', 'Figma 등 디자인 툴 능숙', '포트폴리오 필수 제출'] },
@@ -20370,61 +20414,181 @@ function closeRatePopup() {
       smilegate: { title: '글로벌 커머스 앱 디자이너', company: '엠피에이지(MPAG)', meta: '서울 중구 · 경력 3년 이상', desc: '엠피에이지는 글로벌 커머스 앱을 운영하며, 해외 사용자를 위한 쇼핑 경험을 디자인할 디자이너를 찾습니다.', tasks: ['글로벌 커머스 앱 UI/UX 설계', '다국어 인터페이스 디자인', 'A/B 테스트 기반 개선'], qual: ['모바일 앱 디자인 경력 3년 이상', '이커머스 경험 우대'] },
       ak: { title: 'UX UI 디자이너', company: '아스타라', meta: '서울 강서구 · 경력 3-8년', desc: '아스타라는 헬스케어 플랫폼을 만드는 기업으로, 사용자 친화적인 의료 서비스 UX를 설계할 디자이너를 찾습니다.', tasks: ['헬스케어 앱 UX/UI 디자인', '환자·의료진 양면 서비스 설계', '접근성 높은 인터페이스 구현'], qual: ['UX/UI 디자인 경력 3년 이상', '헬스케어/의료 도메인 경험 우대'] },
       xyz: { title: 'ux/ui디자이너', company: '이온랩', meta: '충북 청주시 · 경력 3년 이상', desc: '이온랩은 IoT 스마트팜 솔루션을 개발하는 스타트업으로, 대시보드 및 모바일 앱의 UX를 담당할 디자이너를 모집합니다.', tasks: ['스마트팜 대시보드 UX 설계', 'IoT 디바이스 연동 인터페이스', '모바일 앱 UI 디자인'], qual: ['UI/UX 디자인 경력 3년 이상', '대시보드 디자인 경험 우대'] },
-      com2us: { title: 'UI/UX 디자이너', company: '클라우드나인', meta: '서울 마포구 · 신입/경력', desc: '클라우드나인은 클라우드 기반 협업 툴을 만드는 기업으로, 직관적인 SaaS 제품의 UX를 함께 만들어갈 디자이너를 찾습니다.', tasks: ['SaaS 제품 UI/UX 설계', '디자인 시스템 컴포넌트 제작', '사용자 인터뷰 및 리서치'], qual: ['관련 전공 또는 부트캠프 수료', 'Figma 활용 가능자', '포트폴리오 필수'] }
+      com2us: { title: 'UI/UX 디자이너', company: '클라우드나인', meta: '서울 마포구 · 신입/경력', desc: '클라우드나인은 클라우드 기반 협업 툴을 만드는 기업으로, 직관적인 SaaS 제품의 UX를 함께 만들어갈 디자이너를 찾습니다.', tasks: ['SaaS 제품 UI/UX 설계', '디자인 시스템 컴포넌트 제작', '사용자 인터뷰 및 리서치'], qual: ['관련 전공 또는 부트캠프 수료', 'Figma 활용 가능자', '포트폴리오 필수'] },
+      kakaopay: { title: '프로덕트 디자이너 (시니어)', company: '카카오페이', meta: '경기 판교 · 경력 5-11년', desc: '카카오페이는 대한민국 대표 핀테크 기업으로, 금융 서비스의 사용자 경험을 혁신할 시니어 프로덕트 디자이너를 찾습니다.', tasks: ['금융 서비스 UX/UI 설계', '결제·송금·보험 플로우 개선', '데이터 기반 디자인 의사결정', '디자인 시스템 고도화'], qual: ['프로덕트 디자인 경력 5년 이상', '핀테크/금융 도메인 경험 우대', 'Figma 능숙'] },
+      lineplus: { title: '서비스 기획자', company: '라인플러스', meta: '경기 판교 · 경력 3-8년', desc: '라인플러스는 글로벌 메신저 LINE의 한국 개발 거점으로, 전 세계 사용자에게 새로운 경험을 제공할 서비스 기획자를 모집합니다.', tasks: ['글로벌 서비스 기획 및 요구사항 정의', '사용자 데이터 분석', '일본·태국·대만 현지화 기획'], qual: ['서비스 기획 경력 3년 이상', '글로벌 서비스 경험 우대', '데이터 분석 역량'] },
+      woowa: { title: 'BX 디자이너', company: '배달의민족', meta: '서울 송파구 · 경력 3년 이상', desc: '배달의민족은 대한민국 대표 푸드테크 기업으로, 브랜드 아이덴티티를 강화할 BX 디자이너를 찾습니다.', tasks: ['브랜드 가이드라인 운영', '캠페인 비주얼 디자인', '오프라인 브랜드 경험 설계'], qual: ['BX/그래픽 디자인 경력 3년 이상', '브랜딩 프로젝트 경험', 'Adobe 툴 능숙'] },
+      tossbank: { title: '인터랙션 디자이너', company: '토스뱅크', meta: '서울 강남구 · 경력 3-8년', desc: '토스뱅크는 혁신적인 인터넷전문은행으로, 금융 서비스에 생동감을 불어넣을 인터랙션 디자이너를 모집합니다.', tasks: ['마이크로 인터랙션 설계', '모션 디자인 및 프로토타이핑', 'Lottie 애니메이션 제작'], qual: ['인터랙션/모션 디자인 경력 3년 이상', 'After Effects, Principle 능숙', '프로토타이핑 경험'] },
+      navercloud: { title: 'UX 리서처', company: '네이버클라우드', meta: '경기 성남시 · 경력 5-11년', desc: '네이버클라우드는 AI 및 클라우드 솔루션 기업으로, 엔터프라이즈 제품의 사용자 경험을 연구할 UX 리서처를 찾습니다.', tasks: ['사용성 테스트 설계 및 진행', '정성/정량 리서치 수행', '인사이트 도출 및 제품팀 공유'], qual: ['UX 리서치 경력 5년 이상', 'B2B/엔터프라이즈 경험 우대', '통계 분석 역량'] },
+      hybe: { title: '비주얼 디자이너', company: '하이브', meta: '서울 용산구 · 경력 3년 이상', desc: '하이브는 글로벌 엔터테인먼트 기업으로, 아티스트 IP와 팬 플랫폼의 비주얼을 담당할 디자이너를 찾습니다.', tasks: ['위버스 플랫폼 비주얼 디자인', '아티스트 IP 기반 그래픽 제작', '마케팅 크리에이티브 지원'], qual: ['비주얼/그래픽 디자인 경력 3년 이상', '엔터테인먼트 업계 관심', '포트폴리오 필수'] },
+      coupang: { title: '프로덕트 디자이너 (주니어)', company: '쿠팡', meta: '서울 송파구 · 경력 1-3년', desc: '쿠팡은 대한민국 1위 이커머스 플랫폼으로, 수백만 사용자의 쇼핑 경험을 개선할 주니어 프로덕트 디자이너를 모집합니다.', tasks: ['이커머스 UI/UX 설계', '로켓배송 주문 플로우 개선', 'A/B 테스트 디자인'], qual: ['프로덕트 디자인 경력 1년 이상', '이커머스 관심', 'Figma 활용 가능'] },
+      oliveyoung: { title: '그래픽 디자이너', company: '올리브영', meta: '서울 중구 · 경력 3-8년', desc: '올리브영은 국내 1위 H&B 플랫폼으로, 뷰티 콘텐츠와 프로모션 비주얼을 담당할 그래픽 디자이너를 찾습니다.', tasks: ['프로모션 배너 및 비주얼 제작', '앱/웹 그래픽 디자인', '브랜드 콜라보레이션 디자인'], qual: ['그래픽 디자인 경력 3년 이상', 'Adobe 툴 능숙', '뷰티/패션 관심 우대'] },
+      samsung: { title: '모바일 앱 디자이너', company: '삼성전자', meta: '경기 수원시 · 경력 5-11년', desc: '삼성전자는 세계적인 전자기업으로, Galaxy 생태계의 모바일 앱 UX를 설계할 시니어 디자이너를 모집합니다.', tasks: ['Galaxy 앱 UX/UI 설계', '크로스 디바이스 경험 디자인', '글로벌 사용자 대상 리서치'], qual: ['모바일 앱 디자인 경력 5년 이상', '대규모 서비스 경험', '영어 커뮤니케이션 가능'] },
+      dunamu: { title: '디자인 시스템 리드', company: '두나무', meta: '서울 서초구 · 경력 7년 이상', desc: '두나무는 업비트를 운영하는 블록체인 기업으로, 전사 디자인 시스템을 설계하고 운영할 디자인 시스템 리드를 찾습니다.', tasks: ['디자인 시스템 아키텍처 설계', '컴포넌트 라이브러리 구축', '디자인 토큰 관리', '개발팀 협업 및 문서화'], qual: ['디자인 시스템 경력 5년 이상', '컴포넌트 기반 설계 경험', 'Figma Variables 활용'] },
+      yanolja: { title: '콘텐츠 디자이너', company: '야놀자', meta: '서울 강남구 · 경력 3년 이상', desc: '야놀자는 국내 1위 여가 플랫폼으로, 여행·숙박 콘텐츠의 비주얼을 담당할 콘텐츠 디자이너를 모집합니다.', tasks: ['숙박/레저 콘텐츠 비주얼 제작', '앱 내 배너 및 카드 디자인', '소셜미디어 크리에이티브'], qual: ['콘텐츠/그래픽 디자인 경력 3년 이상', '여행 업계 관심', 'Figma & Adobe 능숙'] },
+      musinsa: { title: 'UI 개발자', company: '무신사', meta: '서울 성수동 · 경력 3-8년', desc: '무신사는 국내 최대 패션 플랫폼으로, 프론트엔드와 디자인의 간극을 줄일 UI 개발자를 찾습니다.', tasks: ['디자인 시스템 컴포넌트 개발', '반응형 웹 UI 구현', '인터랙션 및 애니메이션 구현'], qual: ['프론트엔드 개발 경력 3년 이상', 'React/TypeScript 능숙', 'CSS/디자인 시스템 이해'] },
+      megazone: { title: '크리에이티브 디렉터', company: '메가존클라우드', meta: '서울 강남구 · 경력 7년 이상', desc: '메가존클라우드는 국내 최대 클라우드 MSP로, B2B 마케팅 및 브랜드 크리에이티브를 총괄할 디렉터를 모집합니다.', tasks: ['B2B 브랜드 크리에이티브 총괄', '마케팅 캠페인 비주얼 디렉팅', '외부 에이전시 협업 관리'], qual: ['크리에이티브 디렉팅 경력 7년 이상', 'B2B 마케팅 경험', '팀 리딩 경험'] }
     };
 
-    function renderPostApplyDetail(jobId) {
+    function renderPostApplyDetail(jobId, idx) {
       var detail = document.getElementById('postApplyDetail');
       var data = postApplyDetailData[jobId];
       if (!data) return;
+      var imgKey = jobId + '_' + (idx !== undefined ? idx : 0);
       // active 표시
       document.querySelectorAll('.post-apply-item').forEach(function(el){ el.classList.remove('active'); });
-      var activeEl = document.querySelector('.post-apply-item[data-job-id="' + jobId + '"]');
+      var activeEl = idx !== undefined
+        ? document.querySelector('.post-apply-item[data-job-idx="' + idx + '"]')
+        : document.querySelector('.post-apply-item[data-job-id="' + jobId + '"]');
       if (activeEl) activeEl.classList.add('active');
 
-      var thumbIdx = Math.floor(Math.random()*4)+1;
+      // 리스트와 동일한 이미지 세트 사용
+      var imgs = getJobImages(imgKey);
+      var cId = 'paCarousel_' + jobId;
+      var carouselHtml =
+        '<div style="position:relative;margin-bottom:24px;border-radius:12px;overflow:hidden;">' +
+          '<div id="'+cId+'" style="display:flex;gap:8px;transition:transform .3s ease;user-select:none;">';
+      for(var ci=0;ci<6;ci++) carouselHtml += '<img src="'+imgs[ci]+'" draggable="false" style="width:calc(50% - 4px);height:200px;object-fit:cover;border-radius:8px;flex-shrink:0;pointer-events:none;">';
+      carouselHtml +=
+          '</div>' +
+          '<button onclick="paCarouselMove(\''+cId+'\',-1)" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.9);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.12);">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" width="16" height="16"><polyline points="15 18 9 12 15 6"/></svg>' +
+          '</button>' +
+          '<button onclick="paCarouselMove(\''+cId+'\',1)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.9);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.12);">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>' +
+          '</button>' +
+        '</div>';
+
+      // 임의 우대사항/복지
+      var prefList = ['관련 분야 석사 학위 보유자','스타트업 근무 경험','영어 커뮤니케이션 가능자','디자인 시스템 구축 경험','데이터 분석 역량 보유자'];
+      var welfareList = ['유연 근무제 운영','점심 식대 지원','최신 장비 지급 (맥북 프로 등)','도서·교육비 지원','리프레시 휴가 제공'];
+      var rating = (3.0 + Math.random()*1.5).toFixed(1);
+      var empCount = (50 + Math.floor(Math.random()*950)) + '명';
+      var logoIdx = Math.floor(Math.random()*36)+1;
+
       detail.innerHTML =
-        '<div class="post-apply-detail-images">' +
-          '<img src="https://jelin-cc.github.io/jobplanet-ut/D-sample_thumb_' + thumbIdx + '.jpg" onerror="this.style.background=\'#f3f4f6\';this.alt=\'\'">' +
-          '<img src="https://jelin-cc.github.io/jobplanet-ut/D-sample_thumb_' + (thumbIdx+1) + '.jpg" onerror="this.style.background=\'#eee\';this.alt=\'\'">' +
+        carouselHtml +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">' +
+          '<div>' +
+            '<div style="font-size:13px;color:var(--text-tertiary);margin-bottom:4px;">' + data.company + '</div>' +
+            '<div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-bottom:6px;">' + data.title + '</div>' +
+            '<div style="font-size:13px;color:var(--text-tertiary);">' + data.meta + ' · 정규직</div>' +
+          '</div>' +
+          '<div style="display:flex;gap:8px;flex-shrink:0;margin-top:4px;">' +
+            '<button onclick="showSaveToast(\'링크가 복사되었습니다.\',true)" style="width:40px;height:40px;border-radius:10px;border:1px solid #F3F4F6;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#768091;">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>' +
+            '</button>' +
+            '<button onclick="this.classList.toggle(\'saved\');var s=this.querySelector(\'svg\');if(this.classList.contains(\'saved\')){s.setAttribute(\'fill\',\'var(--brand-primary)\');s.setAttribute(\'stroke\',\'var(--brand-primary)\');this.style.borderColor=\'var(--brand-primary)\';this.style.color=\'var(--brand-primary)\';}else{s.setAttribute(\'fill\',\'none\');s.setAttribute(\'stroke\',\'currentColor\');this.style.borderColor=\'#F3F4F6\';this.style.color=\'#768091\';}showSaveToast(this.classList.contains(\'saved\')?\'공고가 저장되었습니다.\':\'저장이 취소되었습니다.\',true)" style="width:40px;height:40px;border-radius:10px;border:1px solid #F3F4F6;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#768091;">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>' +
+            '</button>' +
+          '</div>' +
         '</div>' +
-        '<div class="post-apply-detail-title">' + data.title + '</div>' +
-        '<div class="post-apply-detail-company">' + data.company + '</div>' +
-        '<div class="post-apply-detail-meta">' + data.meta + '</div>' +
-        '<div class="post-apply-detail-section"><h4>포지션 상세</h4><p>' + data.desc + '</p></div>' +
-        '<div class="post-apply-detail-section"><h4>주요업무</h4><ul>' + data.tasks.map(function(t){ return '<li>' + t + '</li>'; }).join('') + '</ul></div>' +
-        '<div class="post-apply-detail-section"><h4>자격 요건</h4><ul>' + data.qual.map(function(q){ return '<li>' + q + '</li>'; }).join('') + '</ul></div>';
+
+        '<div class="post-apply-detail-section"><h4>기업 소개</h4><p>' + data.desc + '</p></div>' +
+
+        '<div class="post-apply-detail-section"><h4>주요 업무</h4><ul>' +
+          data.tasks.map(function(t){ return '<li>' + t + '</li>'; }).join('') +
+        '</ul></div>' +
+
+        '<div class="post-apply-detail-section"><h4>자격 요건</h4><ul>' +
+          data.qual.map(function(q){ return '<li>' + q + '</li>'; }).join('') +
+        '</ul></div>' +
+
+        '<div class="post-apply-detail-section"><h4>우대사항</h4><ul>' +
+          prefList.slice(0, 2 + Math.floor(Math.random()*3)).map(function(p){ return '<li>' + p + '</li>'; }).join('') +
+        '</ul></div>' +
+
+        '<div class="post-apply-detail-section"><h4>채용 절차</h4>' +
+          '<p>서류 심사 → 1차 실무 면접 → 2차 임원 면접 → 최종합격 및 처우협의</p>' +
+        '</div>' +
+
+        '<div class="post-apply-detail-section"><h4>복지 및 혜택</h4><ul>' +
+          welfareList.map(function(w){ return '<li>' + w + '</li>'; }).join('') +
+        '</ul></div>' +
+
+        '<div style="border:1px solid var(--line-primary);border-radius:12px;padding:20px;margin-top:8px;">' +
+          '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">' +
+            '<div style="width:48px;height:48px;border-radius:12px;border:1px solid var(--line-primary);overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;">' +
+              '<img src="https://jelin-cc.github.io/jobplanet-ut/D-sample_logo_'+logoIdx+'.svg" style="width:100%;height:100%;object-fit:contain;">' +
+            '</div>' +
+            '<div><div style="font-size:15px;font-weight:700;color:var(--text-primary);">' + data.company + '</div>' +
+            '<div style="font-size:13px;color:var(--text-tertiary);">★ ' + rating + '</div></div>' +
+          '</div>' +
+          '<dl style="display:grid;grid-template-columns:60px 1fr;gap:6px 12px;font-size:13px;color:var(--text-secondary);">' +
+            '<dt style="color:var(--text-tertiary);">업종</dt><dd>IT/소프트웨어</dd>' +
+            '<dt style="color:var(--text-tertiary);">임직원</dt><dd>' + empCount + '</dd>' +
+            '<dt style="color:var(--text-tertiary);">위치</dt><dd>' + data.meta.split('·')[0].trim() + '</dd>' +
+          '</dl>' +
+        '</div>';
+
+      // 드래그로 캐러셀 넘기기
+      setTimeout(function(){
+        var track = document.getElementById(cId);
+        if(!track) return;
+        var startX=0, dragging=false;
+        track.addEventListener('mousedown', function(e){ dragging=true; startX=e.clientX; e.preventDefault(); });
+        track.addEventListener('touchstart', function(e){ dragging=true; startX=e.touches[0].clientX; }, {passive:true});
+        document.addEventListener('mouseup', function(e){ if(!dragging) return; dragging=false; var diff=e.clientX-startX; if(Math.abs(diff)>40) paCarouselMove(cId, diff<0?1:-1); });
+        document.addEventListener('touchend', function(e){ if(!dragging) return; dragging=false; var diff=e.changedTouches[0].clientX-startX; if(Math.abs(diff)>40) paCarouselMove(cId, diff<0?1:-1); });
+      }, 50);
+    }
+
+    // 캐러셀 이동 (step별로 50%+4px씩)
+    var _paCarouselSteps = {};
+    window.paCarouselMove = function(id, dir) {
+      var track = document.getElementById(id);
+      if(!track) return;
+      var maxStep = track.children.length - 2;
+      if(!_paCarouselSteps[id]) _paCarouselSteps[id] = 0;
+      _paCarouselSteps[id] = Math.max(0, Math.min(maxStep, _paCarouselSteps[id] + dir));
+      track.style.transform = 'translateX(calc(-' + _paCarouselSteps[id] + ' * (50% + 4px)))';
+    };
+
+    // 각 공고별 이미지 세트를 미리 생성 (리스트 썸네일 = 상세 첫 이미지)
+    var _jobImageSets = {};
+    function getJobImages(jobId) {
+      if (!_jobImageSets[jobId]) {
+        var arr = companyImages.slice();
+        for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}
+        _jobImageSets[jobId] = arr.slice(0, 6);
+      }
+      return _jobImageSets[jobId];
     }
 
     function renderPostApplyList() {
       var list = document.getElementById('postApplyList');
       list.innerHTML = '';
+      _jobImageSets = {}; // 새로 렌더링할 때 리셋
       recommendedJobs.forEach(function(job, idx) {
+        var jobImgs = getJobImages(job.jobId + '_' + idx);
         var item = document.createElement('div');
         item.className = 'post-apply-item';
         item.setAttribute('data-job-id', job.jobId);
+        item.setAttribute('data-job-idx', idx);
         item.innerHTML =
           '<input type="checkbox" class="post-apply-item-check" id="paj' + idx + '">' +
-          '<div class="post-apply-item-thumb" style="background:' + job.bg + '"></div>' +
+          '<div class="post-apply-item-thumb"><img src="' + jobImgs[0] + '" onerror="this.parentElement.style.background=\'' + job.bg + '\';this.remove()"></div>' +
           '<div class="post-apply-item-info">' +
             '<div class="post-apply-item-title">' + job.title + '</div>' +
             '<div class="post-apply-item-company">' + job.company + ' · ' + job.location + '</div>' +
             '<div class="post-apply-item-exp">' + job.exp + '</div>' +
-            '<span class="post-apply-item-ai">AI 예측 ' + job.ai + '점</span>' +
+            (idx < 7 ? '<span class="post-apply-item-tag post-apply-item-tag--' + job.tag + '">' + tagLabels[job.tag] + '</span>' : '') +
           '</div>' +
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0;color:var(--text-tertiary)"><polyline points="9 18 15 12 9 6"/></svg>';
         // 체크박스 클릭
         item.querySelector('input').addEventListener('change', updatePostApplyCount);
         // 항목 클릭 → 오른쪽 상세 표시
+        (function(jId, jIdx) {
         item.addEventListener('click', function(e) {
           if (e.target.type === 'checkbox') return;
-          renderPostApplyDetail(job.jobId);
+          renderPostApplyDetail(jId, jIdx);
         });
+        })(job.jobId, idx);
         list.appendChild(item);
       });
       // 첫 번째 항목 자동 선택
       if (recommendedJobs.length > 0) {
-        renderPostApplyDetail(recommendedJobs[0].jobId);
+        renderPostApplyDetail(recommendedJobs[0].jobId, 0);
       }
     }
 
@@ -20440,6 +20604,15 @@ function closeRatePopup() {
       postApplyPopup.classList.add('show');
     }
 
+    // 오늘 하루 보지 않기 체크박스
+    document.getElementById('postApplyHideTodayCheck').addEventListener('change', function() {
+      if (this.checked) {
+        sessionStorage.setItem('hidePostApplyToday', 'true');
+      } else {
+        sessionStorage.removeItem('hidePostApplyToday');
+      }
+    });
+
     document.getElementById('postApplyClose').addEventListener('click', function() {
       postApplyPopup.classList.remove('show');
     });
@@ -20451,7 +20624,7 @@ function closeRatePopup() {
     postApplySubmit.addEventListener('click', function() {
       var count = document.querySelectorAll('#postApplyList .post-apply-item-check:checked').length;
       postApplyPopup.classList.remove('show');
-      showToast(count + '개 공고에 지원이 완료되었습니다.');
+      showSaveToast(count + '개 공고에 지원이 완료되었습니다.', true);
     });
 
     // 이력서 배너: "가지고 있는 이력서로 바로 지원"
@@ -20499,11 +20672,10 @@ function closeRatePopup() {
       applyModal.classList.remove('show');
       appliedJobs.add(currentJobId);
       updateApplyBtnState();
-      if (!hasAppliedToday) {
-        hasAppliedToday = true;
+      showSaveToast('지원이 완료되었습니다.', true);
+      var hideToday = sessionStorage.getItem('hidePostApplyToday') === 'true';
+      if (!hideToday) {
         showPostApplyPopup();
-      } else {
-        showSaveToast('지원이 완료되었습니다.', true);
       }
     });
 
