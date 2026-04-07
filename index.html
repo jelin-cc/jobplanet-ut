@@ -21047,8 +21047,9 @@ function closeRatePopup() {
       '.rv-blind-cta-wrap { width:100%; position:relative; z-index:20; margin-bottom:-480px; margin-top:20px; }' +
       '.rv-blind-cta { text-align:center; font-family:Pretendard,sans-serif; padding:20px 0; position:relative; z-index:21; }' +
       '.rv-blind-cta button { position:relative; z-index:22; }' +
-      '.rv-blind-cta-inner { background:#fff; border-radius:16px; padding:32px 28px; max-width:580px; margin:0 auto; box-shadow:0 4px 24px rgba(0,0,0,0.08); position:relative; border:1px solid transparent; background-clip:padding-box; }' +
-      '.rv-blind-cta-inner::before { content:""; position:absolute; inset:-1px; border-radius:17px; padding:1px; background:conic-gradient(from var(--a,0deg),#00c362,#00a5e0,#7c3aed,#00c362); -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0); -webkit-mask-composite:xor; mask-composite:exclude; animation:spin 3s linear infinite; }' +
+      '.rv-blind-cta-inner { background:transparent; border-radius:16px; padding:32px 28px; max-width:580px; margin:0 auto; box-shadow:0 4px 24px rgba(0,0,0,0.08); position:relative; overflow:hidden; z-index:0; }' +
+      '.rv-blind-cta-inner::before { content:""; position:absolute; inset:-2px; border-radius:18px; z-index:-1; background:conic-gradient(from var(--a,0deg),#00c362,#00a5e0,#7c3aed,#00c362); animation:spin 3s linear infinite; }' +
+      '.rv-blind-cta-inner::after { content:""; position:absolute; inset:0; border-radius:16px; background:#fff; z-index:-1; }' +
       '@property --a { syntax:"<angle>"; initial-value:0deg; inherits:false; }' +
       '@keyframes spin { to { --a:360deg; } }';
     document.head.appendChild(blindStyle);
