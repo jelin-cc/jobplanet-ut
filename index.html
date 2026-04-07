@@ -80,7 +80,7 @@
     .btn-outline:hover{border-color:var(--tx3);color:var(--tx);}
 
     /* 토스트 */
-    .toast{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-80px);z-index:999;display:flex;align-items:center;gap:8px;padding:10px 20px;background:#3D4553;border-radius:var(--rfull);box-shadow:0 4px 16px rgba(0,0,0,.15);opacity:0;transition:all .35s cubic-bezier(.4,0,.2,1);pointer-events:none;}
+    .toast{position:fixed;top:24px;left:50%;transform:translateX(-50%) translateY(-80px);z-index:99999;display:flex;align-items:center;gap:8px;padding:10px 20px;background:#3D4553;border-radius:var(--rfull);box-shadow:0 4px 16px rgba(0,0,0,.15);opacity:0;transition:all .35s cubic-bezier(.4,0,.2,1);pointer-events:none;}
     .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
     .toast-icon{width:20px;height:20px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
     .toast-text{font-size:13px;font-weight:500;color:#fff;white-space:nowrap;}
@@ -15508,7 +15508,7 @@ document.querySelectorAll('#page-review .rv-side-company').forEach(function(el){
             </div>
             <div class="detail-job-meta" id="jd-meta">서울 &nbsp;·&nbsp; 4년 이상 &nbsp;·&nbsp; 정규직</div>
           </div>
-          <button class="detail-job-bm" onclick="showToast('링크가 복사되었어요.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          <button class="detail-job-bm" onclick="copyJobLink()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
         </div>
         <div id="jd-tags" style="display:none;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
 
@@ -16967,6 +16967,27 @@ document.querySelectorAll('#page-review .rv-side-company').forEach(function(el){
     toastTimer=setTimeout(function(){t.classList.remove('show');},2500);
     // 다른 팝업 닫기
     closeAllPopups();
+  }
+
+  /* 공고 링크 복사 토스트 */
+  var _copyToastTimer=null;
+  function copyJobLink(){
+    try{navigator.clipboard.writeText(location.href);}catch(e){}
+    var el=document.getElementById('copyLinkToast');
+    if(!el){
+      el=document.createElement('div');
+      el.id='copyLinkToast';
+      el.style.cssText='position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);z-index:9999;pointer-events:none;display:flex;align-items:center;gap:12px;background:rgba(55,65,81,0.92);backdrop-filter:blur(8px);color:#fff;padding:14px 24px;border-radius:999px;font-size:15px;font-weight:500;white-space:nowrap;opacity:0;transition:opacity .3s,transform .3s;font-family:var(--font);';
+      el.innerHTML='<span style="width:28px;height:28px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span>링크가 복사되었습니다</span>';
+      document.body.appendChild(el);
+    }
+    el.style.opacity='0';el.style.transform='translateX(-50%) translateY(20px)';
+    void el.offsetWidth;
+    el.style.opacity='1';el.style.transform='translateX(-50%) translateY(0)';
+    clearTimeout(_copyToastTimer);
+    _copyToastTimer=setTimeout(function(){
+      el.style.opacity='0';el.style.transform='translateX(-50%) translateY(20px)';
+    },2500);
   }
 
   /* 로그인/로그아웃 */
@@ -18866,8 +18887,7 @@ document.querySelectorAll('#page-review .rv-side-company').forEach(function(el){
     document.getElementById('page-job-detail').addEventListener('click', function(e) {
       var btn = e.target.closest('.detail-job-bm');
       if (!btn) return;
-      navigator.clipboard.writeText(window.location.href).catch(function() {});
-      showToast();
+      copyJobLink();
     });
 
     document.getElementById('page-job-detail').addEventListener('click', function(e) {
@@ -19366,7 +19386,7 @@ document.querySelectorAll('#page-review .rv-side-company').forEach(function(el){
               '<div class="detail-job-header"><h1 class="detail-job-title">'+title+'</h1></div>' +
               '<div class="detail-job-meta">'+loc+' &nbsp;&middot;&nbsp; '+career+' &nbsp;&middot;&nbsp; 정규직</div>' +
             '</div>' +
-            '<button class="detail-job-bm" onclick="showToast(\'링크가 복사되었어요.\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>' +
+            '<button class="detail-job-bm" onclick="copyJobLink()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>' +
           '</div>' +
           '<div style="display:none;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>' +
           '<div class="detail-section"><h3>기업 소개</h3><p>'+tmpl.intro+'</p></div>' +
