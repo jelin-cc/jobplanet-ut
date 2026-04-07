@@ -5352,7 +5352,10 @@
       font-weight: 700;
       color: #323438;
       line-height: 30px;
+      cursor: pointer;
     }
+    .rv-card-company:hover { text-decoration: underline; }
+    .rv-card-logo { cursor: pointer; }
     .rv-card-tag {
       font-size: 12px;
       font-weight: 400;
@@ -11306,12 +11309,12 @@
             <button onclick="showRisingPopup()" style="font-size:11px;font-weight:600;color:#00c362;background:none;border:none;cursor:pointer;font-family:'Pretendard',sans-serif;">더보기 ›</button>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;">
-            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#ecf9ef;border-radius:8px;cursor:pointer;" onclick="openCompanyPage('naver')">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#ecf9ef;border-radius:8px;cursor:pointer;" onclick="openCompanyPage('danggun')">
               <span style="font-size:12px;font-weight:700;color:#242628;flex:1;">당근마켓</span>
               <span style="font-size:11px;font-weight:700;color:#ffc107;">★ 4.5</span>
               <span style="font-size:10px;font-weight:700;color:#00c362;background:#fff;padding:1px 5px;border-radius:3px;">▲0.3</span>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f7f8f9;border-radius:8px;cursor:pointer;" onclick="openCompanyPage('naver')">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f7f8f9;border-radius:8px;cursor:pointer;" onclick="openCompanyPage('line')">
               <span style="font-size:12px;font-weight:700;color:#242628;flex:1;">라인플러스</span>
               <span style="font-size:11px;font-weight:700;color:#ffc107;">★ 4.0</span>
               <span style="font-size:10px;font-weight:700;color:#00c362;background:#fff;padding:1px 5px;border-radius:3px;">▲0.2</span>
@@ -20835,6 +20838,53 @@ function closeRatePopup() {
       window.selectJobFromCard=function(el){document.querySelectorAll('#page-job-detail .sidebar-job-item').forEach(function(i){i.classList.remove('active');});el.classList.add('active');var co=el.getAttribute('data-jd-co');var title=el.getAttribute('data-jd-title');buildDetailFromCard({title:title,co:co,meta:'서울 · 경력 3년↑'});if(typeof shuffleDetailImages==='function') shuffleDetailImages();window.scrollTo(0,0);};
       window.goJobDetail=function(title,co,meta,thumbSrc){clickedCardInfo={title:title,co:co,meta:meta,thumb:thumbSrc};go('job-detail');setTimeout(function(){var slides=document.querySelectorAll('.detail-img-slide img');if(slides.length>0&&thumbSrc) slides[0].src=thumbSrc;buildJobDetailSidebar({title:title,co:co,meta:meta});buildDetailFromCard({title:title,co:co,meta:meta});},20);};
       (function initSidebarLogos(){document.querySelectorAll('#page-job-detail .sidebar-job-item').forEach(function(item){var coEl=item.querySelector('.sidebar-job-company');var thumbEl=item.querySelector('.sidebar-job-thumb');if(!coEl||!thumbEl) return;var coName=coEl.textContent.trim();var info=getCompanyLogo(coName);thumbEl.style.cssText='background:#fff;border:1.5px solid #E5E7EB;border-radius:12px;overflow:hidden;width:56px;height:56px;flex-shrink:0;';thumbEl.innerHTML='<img src="'+info.img+'" style="width:100%;height:100%;object-fit:contain;display:block;" alt="">';});})();
+    })();
+
+    // ===== 리뷰 카드 기업명 클릭 → 기업 상세 이동 =====
+    (function(){
+      var nameToKey = {
+        '네이버':'naver','(주)네이버':'naver','네이버(주)':'naver',
+        '카카오':'kakao','(주)카카오':'kakao',
+        '토스':'toss','비바리퍼블리카':'toss','(주)비바리퍼블리카':'toss',
+        '당근마켓':'danggun','(주)당근마켓':'danggun','당근':'danggun',
+        '라인플러스':'line','(주)라인플러스':'line',
+        '버킷플레이스':'bucket','(주)버킷플레이스':'bucket',
+        '쿠팡':'coupang','(주)쿠팡':'coupang',
+        '카카오뱅크':'kakaobank','(주)카카오뱅크':'kakaobank',
+        '여기어때컴퍼니':'goodchoice','(주)여기어때컴퍼니':'goodchoice'
+      };
+      function findKey(name) {
+        name = name.replace(/\s/g,'');
+        if (nameToKey[name]) return nameToKey[name];
+        for (var k in nameToKey) { if (name.indexOf(k) !== -1 || k.indexOf(name) !== -1) return nameToKey[k]; }
+        return null;
+      }
+      document.getElementById('page-review').addEventListener('click', function(e) {
+        var el = e.target.closest('.rv-card-company') || e.target.closest('.rv-card-logo');
+        if (!el) return;
+        var name = el.textContent.trim();
+        if (!name && el.querySelector('img')) name = el.querySelector('img').alt || '';
+        var key = findKey(name);
+        if (key && typeof openCompanyPage === 'function') {
+          e.preventDefault(); e.stopPropagation();
+          openCompanyPage(key);
+        }
+      });
+      // 사이드바 기업명 클릭도 동일 처리
+      document.querySelectorAll('#page-review .rv-side-cta').forEach(function(cta) {
+        cta.addEventListener('click', function(e) {
+          var item = e.target.closest('[style*="cursor:pointer"]');
+          if (!item || item.querySelector('button')) return;
+          var span = item.querySelector('span');
+          if (!span) return;
+          var name = span.textContent.trim();
+          var key = findKey(name);
+          if (key && typeof openCompanyPage === 'function') {
+            e.preventDefault(); e.stopPropagation();
+            openCompanyPage(key);
+          }
+        });
+      });
     })();
 
     // ===== 즐겨찾기 토스트 =====
