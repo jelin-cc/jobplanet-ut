@@ -13065,6 +13065,12 @@ function openInterviewReviewWrite() {
   win.document.close();
 }
 function unlockInterviewTab() {
+  // 면접 후기 전용 블라인드 스타일 제거
+  var ivBlind = document.getElementById('iv-blind-style');
+  if (ivBlind) ivBlind.remove();
+  // 면접 후기 CTA 제거
+  var ivCta = document.querySelector('[data-tab-content="interview"] .rv-blind-cta-wrap');
+  if (ivCta) ivCta.remove();
   // blindStyle의 interview 관련 CSS를 오버라이드하는 스타일 삽입
   var oldUnlock = document.getElementById('iv-unlock-style');
   if (oldUnlock) oldUnlock.remove();
@@ -13075,8 +13081,8 @@ function unlockInterviewTab() {
     '[data-tab-content="interview"] .rv-card-list .rv-card,' +
     '[data-tab-content="interview"] .rv-card-list .rv-card:nth-child(1),' +
     '[data-tab-content="interview"] .rv-card-list .rv-card:nth-child(2),' +
-    '[data-tab-content="interview"] .rv-card-list .rv-card:nth-child(n+3),' +
-    '[data-tab-content="interview"] .rv-card-list .rv-card:nth-child(n+6) { filter:none !important; pointer-events:auto !important; user-select:auto !important; display:block !important; }' +
+    '[data-tab-content="interview"] .rv-card-list .rv-card:nth-child(n+3) { filter:none !important; pointer-events:auto !important; user-select:auto !important; }' +
+    '[data-tab-content="interview"] .rv-card-list .rv-card:nth-child(n+6) { display:revert !important; filter:none !important; pointer-events:auto !important; user-select:auto !important; }' +
     '[data-tab-content="interview"] .rv-card-list .rv-card .rv-card-company,' +
     '[data-tab-content="interview"] .rv-card-list .rv-card:nth-child(n+3) .rv-card-company { filter:none !important; user-select:auto !important; }' +
     '[data-tab-content="interview"] .rv-card-list .rv-card .rv-card-logo,' +
@@ -13878,7 +13884,7 @@ function initTabInfiniteScroll(tab) {
   sentinel.className = 'rv-skeleton-wrap';
   sentinel.style.cssText = 'padding:20px 0;';
   sentinel.innerHTML = createSkeletonCards(3);
-  cardList.after(sentinel);
+  cardList.appendChild(sentinel);
 
   var loading = false;
   var destroyed = false;
@@ -20553,6 +20559,65 @@ function closeRatePopup() {
   var hasIvAccess = localStorage.getItem('jp_iv_reviewed') === 'true';
 
   if (hasReviewAccess) {
+    // 일반 리뷰 권한은 있지만 면접 후기 권한이 없으면 면접 후기만 블라인드
+    if (!hasIvAccess) {
+      var ivBlindStyle = document.createElement('style');
+      ivBlindStyle.id = 'iv-blind-style';
+      ivBlindStyle.textContent = '' +
+        '[data-tab-content="interview"] .rv-card-list .rv-card .rv-card-company { filter:blur(6px); user-select:none; }' +
+        '[data-tab-content="interview"] .rv-card-list .rv-card .rv-card-logo { filter:blur(6px); user-select:none; }' +
+        '[data-tab-content="interview"] .rv-card-list .rv-card:nth-child(1), [data-tab-content="interview"] .rv-card-list .rv-card:nth-child(2) { filter:none !important; pointer-events:auto !important; user-select:auto !important; }' +
+        '[data-tab-content="interview"] .rv-card-list .rv-card:nth-child(n+3) { filter:blur(5px); pointer-events:none; user-select:none; }' +
+        '[data-tab-content="interview"] .rv-card-list .rv-card:nth-child(n+6) { display:none !important; }' +
+        '[data-tab-content="interview"] > div:first-of-type { display:none !important; }' +
+        '[data-tab-content="interview"] .rv-card-action-btn:nth-child(2) { display:none !important; }' +
+        '[data-tab-content="interview"] .rv-card-report { display:none !important; }' +
+        '[data-tab-content="interview"] .rv-card-actions { border-top:none !important; padding-top:0 !important; margin-top:4px !important; }' +
+        '[data-tab-content="interview"] .rv-card-action-btn:first-child { border:none !important; background:transparent !important; padding:0 !important; font-size:13px !important; font-weight:600 !important; color:#686a6d !important; cursor:default !important; pointer-events:none !important; }';
+      document.head.appendChild(ivBlindStyle);
+
+      // 면접 후기 카드에 도움이 돼요 텍스트 변경
+      setTimeout(function() {
+        document.querySelectorAll('[data-tab-content="interview"] .rv-card-action-btn').forEach(function(btn) {
+          var m = btn.textContent.match(/도움이 돼요.*?(\d+)/);
+          if (m) btn.innerHTML = m[1] + '명에게 도움이 됐어요 👍';
+        });
+      }, 200);
+
+      // 면접 후기 CTA 삽입
+      setTimeout(function() {
+        var ivCardList = document.querySelector('[data-tab-content="interview"] .rv-card-list');
+        if (ivCardList && !ivCardList.querySelector('.rv-blind-cta-wrap')) {
+          var ivCards = ivCardList.querySelectorAll('.rv-card');
+          if (ivCards.length >= 3) {
+            var ctaWrap = document.createElement('div');
+            ctaWrap.className = 'rv-blind-cta-wrap';
+            ctaWrap.style.cssText = 'width:100%;position:relative;z-index:20;margin-bottom:-480px;margin-top:20px;';
+            ctaWrap.innerHTML = '<div class="rv-blind-cta" style="text-align:center;font-family:Pretendard,sans-serif;padding:20px 0;position:relative;z-index:21;"><div class="rv-blind-cta-inner" style="background:#fff;border-radius:16px;padding:32px 28px;max-width:580px;margin:0 auto;box-shadow:0 4px 24px rgba(0,0,0,0.08);position:relative;border:1px solid transparent;background-clip:padding-box;">' +
+              '<div style="font-size:28px;margin-bottom:10px;">🔒</div>' +
+              '<div style="font-size:17px;font-weight:800;color:#242628;line-height:26px;margin-bottom:20px;">면접 후기를 확인하려면<br>면접 후기를 먼저 작성해주세요</div>' +
+              '<div style="display:flex;gap:12px;">' +
+                '<div style="flex:1;border-radius:12px;padding:20px 16px;text-align:center;background:#f7f8f9;display:flex;flex-direction:column;">' +
+                  '<div style="font-size:20px;margin-bottom:8px;">✍️</div>' +
+                  '<div style="font-size:14px;font-weight:700;color:#242628;margin-bottom:4px;">면접 후기 작성</div>' +
+                  '<div style="font-size:18px;font-weight:800;color:#00c362;margin-bottom:10px;">무료</div>' +
+                  '<div style="font-size:11px;color:#686a6d;line-height:17px;flex:1;">면접 후기 1건 작성 시<br><strong style="color:#00c362;">면접 후기 열람</strong></div>' +
+                  '<button onclick="openInterviewReviewWrite()" style="width:100%;padding:11px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:Pretendard,sans-serif;margin-top:14px;">면접 후기 작성하기</button>' +
+                '</div>' +
+                '<div style="flex:1;border-radius:12px;padding:20px 16px;text-align:center;background:#f7f8f9;display:flex;flex-direction:column;">' +
+                  '<div style="font-size:20px;margin-bottom:8px;">👑</div>' +
+                  '<div style="font-size:14px;font-weight:700;color:#242628;margin-bottom:4px;">멤버십</div>' +
+                  '<div style="font-size:18px;font-weight:800;color:#242628;margin-bottom:10px;">월 7,833원~</div>' +
+                  '<div style="font-size:11px;color:#686a6d;line-height:17px;flex:1;">리뷰 작성 없이 전체 열람</div>' +
+                  '<button onclick="openMembershipPage()" style="width:100%;padding:11px;background:#fff;color:#242628;font-size:13px;font-weight:700;border:1px solid #e5e6e9;border-radius:8px;cursor:pointer;font-family:Pretendard,sans-serif;margin-top:14px;">멤버십 구매</button>' +
+                '</div>' +
+              '</div>' +
+            '</div></div>';
+            ivCards[2].before(ctaWrap);
+          }
+        }
+      }, 300);
+    }
   }
 
   // 면접 후기 권한만 있을 때 (일반 리뷰 권한 없음): 면접 후기 탭만 블라인드 해제
