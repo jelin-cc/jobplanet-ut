@@ -14185,9 +14185,8 @@ function openCompanyPage(key) {
     '</div>' +
     rvHTML +
     '</div></div></body></html>';
-  var win = window.open('','_blank');
-  win.document.write(page);
-  win.document.close();
+  // 같은 페이지 내 #company로 이동
+  openCompany({name:c.name, score:c.rating, industry:c.industry, loc:'서울', year:2010, size:100, jobs:3, pct:c.recommend||65, initial:c.initial, keywords:c.keywords||[]});
 }
 function votePollInterest(btn, pct, name) {
   document.querySelectorAll('#nudge-poll-interest .rv-nudge-poll-btn').forEach(function(b) {
