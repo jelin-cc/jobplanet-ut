@@ -3653,7 +3653,7 @@
                 <span class="fit-name">네이버</span>
                 <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.1</span>
                 <span class="fit-pct" style="color:var(--brand);background:var(--brand-lt);border:none;">적합 88%</span>
-                <span class="fit-hiring" style="font-size:11px;font-weight:600;color:#3B82F6;background:#EFF6FF;padding:3px 8px;border-radius:99px;white-space:nowrap;">채용중</span>
+                <span class="fit-hiring" style="font-size:11px;font-weight:600;color:#EF4444;background:#FEF2F2;padding:3px 8px;border-radius:99px;white-space:nowrap;display:inline-flex;align-items:center;gap:3px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="#EF4444" style="flex-shrink:0;"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M2 13h20" stroke="#FEF2F2" stroke-width="1.5"/><rect x="9" y="11" width="6" height="4" rx="1" fill="#FEF2F2"/><path d="M16 7V5a4 4 0 0 0-8 0v2" stroke="#EF4444" stroke-width="2.5" fill="none"/></svg>채용중</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
               <div id="fi-1" onclick="goToInsightCompany(1)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
@@ -3661,7 +3661,7 @@
                 <span class="fit-name">토스</span>
                 <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 3.6</span>
                 <span class="fit-pct" style="color:var(--brand);background:var(--brand-lt);border:none;">적합 85%</span>
-                <span class="fit-hiring" style="font-size:11px;font-weight:600;color:#3B82F6;background:#EFF6FF;padding:3px 8px;border-radius:99px;white-space:nowrap;">채용중</span>
+                <span class="fit-hiring" style="font-size:11px;font-weight:600;color:#EF4444;background:#FEF2F2;padding:3px 8px;border-radius:99px;white-space:nowrap;display:inline-flex;align-items:center;gap:3px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="#EF4444" style="flex-shrink:0;"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M2 13h20" stroke="#FEF2F2" stroke-width="1.5"/><rect x="9" y="11" width="6" height="4" rx="1" fill="#FEF2F2"/><path d="M16 7V5a4 4 0 0 0-8 0v2" stroke="#EF4444" stroke-width="2.5" fill="none"/></svg>채용중</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
               <div id="fi-2" onclick="goToInsightCompany(2)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
@@ -3717,62 +3717,28 @@
       <!-- ② 원하는 리뷰 모아보기 -->
       <div style="margin-bottom:48px;">
         <!-- 헤더 -->
-        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:8px;">
-          <div>
-            <p style="font-size:13px;font-weight:600;color:var(--brand);margin-bottom:4px;">직무별 리뷰</p>
-            <h2 style="font-size:22px;font-weight:700;letter-spacing:-.4px;">원하는 리뷰 모아보기</h2>
-          </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+          <h2 style="font-size:22px;font-weight:700;letter-spacing:-.3px;">지금 주목받는 리뷰</h2>
           <button onclick="go('review')" style="display:flex;align-items:center;gap:4px;padding:9px 16px;border-radius:999px;border:1.5px solid var(--ln);background:#fff;cursor:pointer;font-family:var(--font);font-size:13px;font-weight:600;color:var(--tx2);transition:all .15s;" onmouseover="this.style.borderColor='var(--brand)';this.style.color='var(--brand)'" onmouseout="this.style.borderColor='var(--ln)';this.style.color='var(--tx2)'">전체보기<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></button>
         </div>
 
-        <!-- 직군 드롭다운 -->
-        <div style="position:relative;display:inline-flex;align-items:center;margin-bottom:20px;">
-          <span id="rv-job-label" style="font-size:18px;font-weight:700;cursor:pointer;letter-spacing:-.3px;" onclick="toggleRvJobDropdown()">전체 직무</span>
-          <button onclick="toggleRvJobDropdown()" style="display:flex;align-items:center;justify-content:center;width:24px;height:24px;border:1.5px solid var(--ln);border-radius:6px;background:var(--surface);cursor:pointer;padding:0;margin-left:6px;">
-            <svg id="rv-job-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.5" style="transition:transform .2s;"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div id="rv-job-dropdown" style="display:none;position:absolute;z-index:50;top:calc(100% + 8px);left:0;background:var(--surface);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.12);border:1px solid var(--ln);padding:8px 0;min-width:200px;max-height:320px;overflow-y:auto;">
-          </div>
+        <!-- 카테고리 칩 -->
+        <div style="display:flex;gap:8px;margin-bottom:20px;">
+          <button class="rv-cat active" onclick="setRvCat('popular',this)">🔥 인기 리뷰</button>
+          <button class="rv-cat" onclick="setRvCat('myjob',this)">💼 내 직무</button>
+          <button class="rv-cat" onclick="setRvCat('follow',this)">⭐ 팔로우 기업</button>
         </div>
+        <style>
+          .rv-cat{padding:9px 18px;border-radius:999px;border:1.5px solid var(--ln);background:#fff;color:var(--tx3);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s;white-space:nowrap;}
+          .rv-cat:hover{border-color:var(--tx3);color:var(--tx2);}
+          .rv-cat.active{background:var(--tx);border-color:var(--tx);color:#fff;}
+        </style>
         <script>
-        (function(){
-          var rvJobItems = ['전체 직무','개발','기획/경영','디자인','마케팅','영업/제휴','서비스','데이터','연구개발','인사/총무','금융/재무','엔지니어링','생산·제조','미디어/홍보','교육','법률/법무','의약','유통/무역'];
-          var rvJobOpen = false;
-          var rvCurrentJob = '전체 직무';
-          var dd = document.getElementById('rv-job-dropdown');
-          dd.innerHTML = rvJobItems.map(function(item,i){
-            var isActive = i===0;
-            return '<button data-rv-job="'+item+'" style="display:'+(isActive?'flex':'block')+';align-items:center;justify-content:space-between;width:100%;padding:11px 18px;text-align:left;font-size:14px;font-weight:'+(isActive?'700':'500')+';color:'+(isActive?'var(--brand)':'var(--tx2)')+';background:'+(isActive?'var(--brand-lt)':'none')+';border:none;cursor:pointer;font-family:var(--font);transition:background .12s;" onmouseover="if(!this.dataset.active)this.style.background=\'var(--bg)\'" onmouseout="if(!this.dataset.active)this.style.background=\'none\'" onclick="selectRvJob(\''+item+'\')">'+item+(isActive?' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'')+'</button>';
-          }).join('');
-          window.toggleRvJobDropdown = function(){
-            rvJobOpen = !rvJobOpen;
-            dd.style.display = rvJobOpen ? 'block' : 'none';
-            document.getElementById('rv-job-arrow').style.transform = rvJobOpen ? 'rotate(180deg)' : 'rotate(0deg)';
-          };
-          window.selectRvJob = function(job){
-            rvCurrentJob = job;
-            document.getElementById('rv-job-label').textContent = job;
-            var checkSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
-            dd.querySelectorAll('button').forEach(function(btn){
-              var isActive = btn.dataset.rvJob === job;
-              btn.style.fontWeight = isActive ? '700' : '500';
-              btn.style.color = isActive ? 'var(--brand)' : 'var(--tx2)';
-              btn.style.background = isActive ? 'var(--brand-lt)' : 'none';
-              btn.style.display = isActive ? 'flex' : 'block';
-              btn.dataset.active = isActive ? '1' : '';
-              btn.innerHTML = btn.dataset.rvJob + (isActive ? ' '+checkSvg : '');
-            });
-            rvJobOpen = false;
-            dd.style.display = 'none';
-            document.getElementById('rv-job-arrow').style.transform = 'rotate(0deg)';
-            renderReviewCards();
-          };
-          document.addEventListener('click',function(e){
-            if(!rvJobOpen) return;
-            var wrap = document.getElementById('rv-job-dropdown').parentElement;
-            if(!wrap.contains(e.target)){rvJobOpen=false;dd.style.display='none';document.getElementById('rv-job-arrow').style.transform='rotate(0deg)';}
-          });
-        })();
+        function setRvCat(cat, btn){
+          document.querySelectorAll('.rv-cat').forEach(function(c){c.classList.remove('active');});
+          btn.classList.add('active');
+          renderReviewCards();
+        }
         </script>
 
         <!-- 카드 스크롤 -->
@@ -3807,7 +3773,7 @@
           <p style="font-size:13px;font-weight:700;color:var(--brand);letter-spacing:.2px;margin-bottom:6px;">직무별 연봉 정보</p>
           <div id="sal-hd-with" style="display:flex;align-items:center;gap:8px;">
             <div style="position:relative;display:inline-flex;align-items:center;">
-              <h2 id="sal-title" style="font-size:20px;font-weight:700;letter-spacing:-.3px;cursor:pointer;" onclick="toggleSalaryTabs()">프론트엔드 개발자</h2>
+              <h2 id="sal-title" style="font-size:22px;font-weight:700;letter-spacing:-.3px;cursor:pointer;" onclick="toggleSalaryTabs()">프론트엔드 개발자</h2>
               <button onclick="toggleSalaryTabs()" style="display:flex;align-items:center;justify-content:center;width:24px;height:24px;border:1.5px solid var(--ln);border-radius:6px;background:var(--surface);cursor:pointer;padding:0;margin-left:6px;">
                 <svg id="sal-arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.5" style="transition:transform .2s;"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
@@ -3827,7 +3793,7 @@
                 <button id="st-11" onclick="setSalaryTab(11)" style="display:block;width:100%;padding:12px 18px;text-align:left;font-size:14px;font-weight:500;color:var(--tx2);background:none;border:none;cursor:pointer;font-family:var(--font);transition:background .12s;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='none'">생산·제조</button>
               </div>
             </div>
-            <span style="font-size:20px;font-weight:700;color:var(--tx);letter-spacing:-.3px;">기준 연봉</span>
+            <span style="font-size:22px;font-weight:700;color:var(--tx);letter-spacing:-.3px;">기준 연봉</span>
           </div>
         </div>
 
