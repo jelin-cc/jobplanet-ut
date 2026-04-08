@@ -3698,18 +3698,19 @@
 
       <!-- ② 원하는 리뷰 모아보기 (위치 이동) -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-        <h2 onclick="go('review')" style="font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;">원하는 리뷰 모아보기 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></h2>
+        <h2 style="font-size:20px;font-weight:700;">원하는 리뷰 모아보기</h2>
+        <button onclick="go('review')" style="font-size:13px;font-weight:600;color:var(--tx4);background:none;border:none;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:3px;flex-shrink:0;" onmouseover="this.style.color='var(--tx2)'" onmouseout="this.style.color='var(--tx4)'">리뷰 모아보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
       <div style="position:relative;margin-bottom:48px;">
-        <div id="rv-grid" style="display:flex;gap:14px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;padding:0 40px 4px;">
+        <div id="rv-grid" style="display:flex;gap:14px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:4px;">
           <style>#rv-grid::-webkit-scrollbar{display:none;}</style>
         </div>
-        <!-- 좌측 버튼 -->
-        <button onclick="scrollReviewCards(-1)" style="position:absolute;left:-16px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1.5px solid var(--ln);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:2;transition:all .15s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.08)'">
+        <!-- 좌측 버튼 (초기 숨김) -->
+        <button id="rv-scroll-left" onclick="scrollReviewCards(-1)" style="display:none;position:absolute;left:-16px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1.5px solid var(--ln);background:var(--surface);cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:2;transition:all .15s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.08)'">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
         <!-- 우측 버튼 -->
-        <button onclick="scrollReviewCards(1)" style="position:absolute;right:-16px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1.5px solid var(--ln);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:2;transition:all .15s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.08)'">
+        <button id="rv-scroll-right" onclick="scrollReviewCards(1)" style="position:absolute;right:-16px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1.5px solid var(--ln);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:2;transition:all .15s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.08)'">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
         </button>
       </div>
@@ -3912,7 +3913,23 @@
         function scrollReviewCards(dir){
           var el = document.getElementById('rv-grid');
           el.scrollBy({left: dir * 340, behavior:'smooth'});
+          setTimeout(updateRvScrollBtns, 350);
         }
+        function updateRvScrollBtns(){
+          var el = document.getElementById('rv-grid');
+          var left = document.getElementById('rv-scroll-left');
+          var right = document.getElementById('rv-scroll-right');
+          if(!el||!left||!right) return;
+          var atStart = el.scrollLeft <= 10;
+          var atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 10;
+          left.style.display = atStart ? 'none' : 'flex';
+          right.style.display = atEnd ? 'none' : 'flex';
+        }
+        // 스크롤 이벤트로도 업데이트
+        document.addEventListener('DOMContentLoaded', function(){
+          var el = document.getElementById('rv-grid');
+          if(el) el.addEventListener('scroll', updateRvScrollBtns);
+        });
         // 헬퍼: 회사명 클릭 → 기업 상세
         window.goToCompany = function(name, score){
           openCompany({name:name, score:parseFloat(score)||3.5, industry:'기타', loc:'서울', year:2010, size:100, jobs:3, pct:65, initial:name.charAt(0), keywords:[]});
