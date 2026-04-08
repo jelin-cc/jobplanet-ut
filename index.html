@@ -19036,11 +19036,11 @@ function closeRatePopup() {
       document.getElementById('gnb-user').style.display='flex';
       var savedJob = sessionStorage.getItem('jp_ob_job');
       var savedConds = sessionStorage.getItem('jp_ob_conds');
-      if(savedJob){
+      var parsedConds = [];
+      if(savedConds){ try { parsedConds = JSON.parse(savedConds); } catch(e){ parsedConds=[]; } }
+      if(savedJob && parsedConds.length > 0){
         obSelectedJob = savedJob;
-        if(savedConds){
-          try { obSelectedConds = JSON.parse(savedConds); } catch(e){ obSelectedConds=[]; }
-        }
+        obSelectedConds = parsedConds;
         // UI 복원: 시작하기 박스 → 결과 박스
         var startBox=document.getElementById('obStartBox');
         var resultBox=document.getElementById('obResultBox');
