@@ -11189,8 +11189,8 @@
 
       <!-- 넛지: 인기리뷰2 - 연봉 만족도 -->
       <div id="nudge-hot-2" class="rv-nudge-inline rv-nudge-hot" style="width:100%;padding:24px 28px;background:#f7f8f9;border-radius:16px;font-family:'Pretendard',var(--font),sans-serif;box-sizing:border-box;">
-        <div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:6px;">💰 인기 리뷰 기업 중 연봉 만족도 1위는 어디일까요?</div>
-        <div style="font-size:13px;color:#949ba8;margin-bottom:12px;">리뷰 많다고 연봉까지 좋을까?</div>
+        <div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:6px;">💰 인기 리뷰 기업 중 복지/급여 만족도 1위는 어디일까요?</div>
+        <div style="font-size:13px;color:#949ba8;margin-bottom:12px;">리뷰 많다고 복지까지 좋을까?</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button onclick="onHotSalary(this,'토스')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">토스</button>
           <button onclick="onHotSalary(this,'카카오')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">카카오</button>
@@ -11208,7 +11208,7 @@
               <span style="font-size:12px;font-weight:600;color:#686a6d;">🔒 리뷰 작성 후 순위 공개</span>
             </div>
           </div>
-          <button onclick="onThemeNudgeCta('nudge-hot-2')" style="margin-top:12px;width:100%;padding:10px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:'Pretendard',sans-serif;">리뷰 쓰고 연봉 순위 확인하기</button>
+          <button onclick="onThemeNudgeCta('nudge-hot-2')" style="margin-top:12px;width:100%;padding:10px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:'Pretendard',sans-serif;">리뷰 쓰고 복지/급여 순위 확인하기</button>
         </div>
       </div>
 
@@ -14501,7 +14501,7 @@ function unlockThemeNudge(nudge) {
     blurWrap.style.userSelect = 'auto';
     // 연봉 넛지: 실제 기업명+바 교체
     if (nudgeId === 'nudge-hot-2') {
-      var salaryData = [['당근마켓','72%','#00c362'],['토스','65%','#ffc107'],['네이버','58%','#e5e6e9']];
+      var salaryData = [['당근마켓','★ 4.5','#00c362'],['토스','★ 4.2','#ffc107'],['네이버','★ 4.0','#e5e6e9']];
       blurWrap.innerHTML = '';
       salaryData.forEach(function(d, i) {
         var row = document.createElement('div');
