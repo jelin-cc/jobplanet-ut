@@ -3793,8 +3793,9 @@
             </div>
           </div>
           <style>
-            #rv-card-area:hover .rv-scroll-btn{opacity:1;pointer-events:auto;}
-            #rv-card-area:hover #rv-scroll-left-wrap{opacity:0;pointer-events:none;} /* 기본은 숨김, JS로 제어 */
+            .rv-scroll-btn{opacity:0 !important;pointer-events:none !important;transition:opacity .2s;}
+            #rv-card-area:hover #rv-scroll-right-wrap{opacity:1 !important;pointer-events:auto !important;}
+            #rv-card-area:hover #rv-scroll-left-wrap.show{opacity:1 !important;pointer-events:auto !important;}
           </style>
         </div>
       </div>
@@ -4476,11 +4477,8 @@
           var rightBtn = document.getElementById('rv-scroll-right-wrap');
           if(!el || !leftBtn || !rightBtn) return;
           var atStart = el.scrollLeft < 10;
-          var atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 10;
-          leftBtn.style.opacity = atStart ? '0' : '1';
-          leftBtn.style.pointerEvents = atStart ? 'none' : 'auto';
-          rightBtn.style.opacity = atEnd ? '0' : '1';
-          rightBtn.style.pointerEvents = atEnd ? 'none' : 'auto';
+          if(atStart) leftBtn.classList.remove('show');
+          else leftBtn.classList.add('show');
         }
         (function(){
           var el = document.getElementById('rv-grid');
