@@ -20322,6 +20322,12 @@ function closeRatePopup() {
     document.querySelectorAll('.gnb-nav a').forEach(a=>{a.classList.remove('active');if(a.dataset.page===id)a.classList.add('active');});
     window.scrollTo(0,0);
     document.body.style.background = (id==='community' || id==='resume-editor') ? '#fff' : 'var(--bg)';
+    // 스낵바: 홈에서만 표시
+    var _snk = document.getElementById('floating-snackbar');
+    if(_snk){
+      if(id==='home'){_snk.classList.remove('hide');_snk.style.display='';_snk.classList.add('show');}
+      else{_snk.classList.add('hide');setTimeout(function(){_snk.style.display='none';},400);}
+    }
     if(id==='news' && typeof renderNews==='function') renderNews();
     if(id==='community' && typeof renderComm==='function') renderComm();
     if(id==='job-detail'){
