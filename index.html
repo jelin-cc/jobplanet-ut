@@ -3726,16 +3726,17 @@
       <!-- ② 원하는 리뷰 모아보기 -->
       <div style="margin-bottom:48px;">
         <!-- 헤더 -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <div style="margin-bottom:16px;">
           <h2 style="font-size:22px;font-weight:700;letter-spacing:-.3px;">지금 뜨는 기업 리뷰</h2>
-          <button onclick="go('review')" style="display:flex;align-items:center;gap:4px;padding:9px 16px;border-radius:999px;border:1.5px solid var(--ln);background:#fff;cursor:pointer;font-family:var(--font);font-size:13px;font-weight:600;color:var(--tx2);transition:all .15s;" onmouseover="this.style.borderColor='var(--brand)';this.style.color='var(--brand)'" onmouseout="this.style.borderColor='var(--ln)';this.style.color='var(--tx2)'">전체보기<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></button>
         </div>
 
-        <!-- 카테고리 칩 -->
-        <div style="display:flex;gap:8px;margin-bottom:20px;">
+        <!-- 카테고리 칩 + 전체보기 -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
           <button class="rv-cat active" onclick="setRvCat('popular',this)"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-fire.svg" width="16" height="16" style="vertical-align:-2px;"> 인기 리뷰</button>
           <button class="rv-cat" onclick="setRvCat('myjob',this)"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-briefcase.svg" width="16" height="16" style="vertical-align:-2px;"> 내 직무</button>
           <button class="rv-cat rv-cat-follow" onclick="setRvCat('follow',this)" style="display:none;"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-star.svg" width="16" height="16" style="vertical-align:-2px;"> 팔로우 기업</button>
+          <span style="flex:1;"></span>
+          <button onclick="go('review')" style="display:flex;align-items:center;gap:4px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--ln);background:#fff;cursor:pointer;font-family:var(--font);font-size:12px;font-weight:600;color:var(--tx3);transition:all .15s;" onmouseover="this.style.borderColor='var(--brand)';this.style.color='var(--brand)'" onmouseout="this.style.borderColor='var(--ln)';this.style.color='var(--tx3)'">전체보기<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></button>
         </div>
         <style>
           .rv-cat{padding:9px 18px;border-radius:999px;border:1.5px solid var(--ln);background:#fff;color:var(--tx3);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s;white-space:nowrap;}
