@@ -15035,7 +15035,8 @@ function closeRatePopup() {
       <span onclick="setHotTag(null);resetFilter();" style="font-size:12px;font-weight:500;color:var(--tx4);cursor:pointer;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:3px;margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="vertical-align:middle;"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>초기화</span>
     </div>
 
-    <!-- 핫한 조건 + 최신순 -->
+    <!-- 건수 + 핫한 조건 + 최신순 -->
+    <div style="margin-bottom:10px;"><span class="jb-total-count" style="font-size:14px;font-weight:700;color:var(--tx);">총 1,000건</span></div>
     <div style="display:flex;align-items:center;margin-bottom:20px;gap:6px;">
       <span style="font-size:12px;color:var(--tx4);white-space:nowrap;flex-shrink:0;">핫한 조건</span>
       <div style="display:flex;align-items:center;gap:6px;overflow-x:auto;flex:1;">
@@ -15070,7 +15071,7 @@ function closeRatePopup() {
       var currentCardView = 0; // 0=image, 1=list, 2=list+logo
       var currentListShowLogo = false;
       var currentView = 'img';
-      var currentHotTag = null;
+      var currentHotTags = [];
 
       var hotTagMeta = {
         'initpay5000': { label:'초봉 5천↑', badge:'<svg width="14" height="14" viewBox="0 0 32 32" fill="none" style="vertical-align:middle;margin-right:2px;"><path d="M7.60269 6.02173C6.69348 5.98898 6.49358 6.55036 6.26654 7.1531C2.8263 16.2861 3.00549 17.3458 3.0055 20C3.49696 29.5116 11.8734 31.2857 16.0002 30.9838C25.8174 30.8609 29.0119 25.1682 29.0119 20C29.0119 14.5199 26.4829 10.3167 25.157 8.66332C24.3912 7.84422 23.6332 8.32203 23.3499 8.66332C22.8789 9.26536 22.5461 10.1155 22.4386 10.4653C20.6202 6.5828 18.1042 2.93645 17.0735 1.59859C16.1398 0.517363 15.2647 1.14808 14.9439 1.59859C13.2074 3.53985 10.6368 8.30496 9.56854 10.4449C9.14874 8.76571 9.01563 7.83396 8.67264 6.84082C8.37571 6.08313 7.90303 6.03198 7.60269 6.02173Z" fill="#00C274"/><path d="M10.8074 15.5057C10.3723 15.5057 10.0804 16.1311 9.90644 16.4476C8.98496 18.1239 8.71581 20.334 8.71582 21.8225C8.99144 27.1569 13.6858 28.7572 16.0002 28.5879C21.506 28.519 23.3009 24.721 23.3009 21.8225C23.3009 18.7602 21.9836 17.1177 21.2386 16.1886L21.2305 16.1785C20.801 15.7192 20.3759 15.9871 20.217 16.1785C19.9529 16.5162 19.7662 16.993 19.7059 17.1891C18.6861 15.0117 17.1836 12.2528 16.6055 11.5025C16.0819 10.8962 15.5911 11.2499 15.4112 11.5025C14.4373 12.5912 12.8728 15.799 12.2737 16.9991C11.8723 16.4067 11.816 16.3504 11.5856 15.9999C11.2733 15.5722 10.9759 15.5114 10.8074 15.5057Z" fill="#E8FBF4"/></svg> 초봉 5천↑' },
@@ -15087,25 +15088,26 @@ function closeRatePopup() {
       }
 
       function setHotTag(tag) {
-        if (currentHotTag === tag) { tag = null; }
-        currentHotTag = tag;
+        var idx = currentHotTags.indexOf(tag);
+        if (idx > -1) { currentHotTags.splice(idx, 1); }
+        else { currentHotTags.push(tag); }
         // 버튼 스타일
         var allIds = ['hot-initpay5000','hot-salary5000','hot-conglomerate','hot-foreign','hot-public','hot-wlb'];
         allIds.forEach(function(id) {
           var el = document.getElementById(id);
           if (!el) return;
-          el.style.background = 'var(--surface)';
-          el.style.borderColor = 'var(--ln)';
-          el.style.color = 'var(--tx2)';
-          el.style.fontWeight = '600';
+          var key = id.replace('hot-','');
+          if (currentHotTags.indexOf(key) > -1) {
+            el.style.background = 'var(--brand-lt)';
+            el.style.borderColor = 'var(--brand)';
+            el.style.color = '#065F46';
+          } else {
+            el.style.background = 'var(--surface)';
+            el.style.borderColor = 'var(--ln)';
+            el.style.color = 'var(--tx2)';
+            el.style.fontWeight = '600';
+          }
         });
-        var activeId = tag ? 'hot-' + tag : null;
-        var activeEl = document.getElementById(activeId);
-        if (activeEl) {
-          activeEl.style.background = 'var(--brand-lt)';
-          activeEl.style.borderColor = 'var(--brand)';
-          activeEl.style.color = '#065F46';
-        }
         renderCards(currentCase);
       }
 
@@ -15232,14 +15234,18 @@ function closeRatePopup() {
         var colors = ['ic1','ic2','ic3','ic4','ic5','ic6','ic7','ic8'];
         var hotTagSets = [['salary5000','wlb'],['salary5000','conglomerate'],['wlb','foreign'],['salary5000','foreign'],['initpay5000','wlb'],['conglomerate','wlb'],['initpay5000','salary5000'],['public','wlb'],['initpay5000','conglomerate'],['public','salary5000'],['wlb','public'],['foreign','initpay5000']];
         var base = caseConfig.a.cards;
-        var needed = 200 - base.length;
+        var needed = 1000 - base.length;
         for(var i=0;i<needed;i++){
           var dNum = Math.floor(Math.random()*28)+1;
           var urg = dNum <= 5;
+          var employType = Math.random() > 0.2 ? '정규직' : '계약직';
+          var eduLevel = ['학력무관','고등학교 졸업','대학졸업 (2,3년)','대학교졸업 (4년)','석사'][Math.floor(Math.random()*5)];
           base.push({
             co: cos[i%cos.length],
             title: titles[i%titles.length]+' ('+(['신입','1년 이상','2년 이상','3년 이상','5년 이상','7년 이상','10년 이상'])[Math.floor(Math.random()*7)]+')',
-            meta: metas[i%metas.length],
+            meta: metas[i%metas.length]+' · '+employType,
+            employ: employType,
+            edu: eduLevel,
             dday: 'D-'+dNum, ddayNum: dNum, urgent: urg,
             stars: +(3+Math.random()*1.5).toFixed(1),
             popular: Math.floor(200+Math.random()*2000),
@@ -15283,9 +15289,9 @@ function closeRatePopup() {
         _thumbOffset = Math.floor(Math.random() * _thumbShuffled.length);
         var cfg = caseConfig[caseKey];
         var allCards = cfg.cards;
-        // hotTag 필터
-        var filtered = currentHotTag
-          ? allCards.filter(function(c){ return c.hotTags && c.hotTags.indexOf(currentHotTag) !== -1; })
+        // hotTag 필터 (복수 선택)
+        var filtered = currentHotTags.length > 0
+          ? allCards.filter(function(c){ return c.hotTags && currentHotTags.every(function(t){ return c.hotTags.indexOf(t) !== -1; }); })
           : allCards;
 
         // 상단 필터 (지역/직무/경력/고용형태/학력) 적용
@@ -15311,6 +15317,12 @@ function closeRatePopup() {
             return true;
           });
         }
+        if(fEmploy.length) filtered = filtered.filter(function(c){ return c.employ && fEmploy.indexOf(c.employ) !== -1; });
+        if(fEdu.length) filtered = filtered.filter(function(c){ return c.edu && fEdu.some(function(e){ return e === '학력무관' || c.edu === e; }); });
+
+        // 결과 건수 업데이트
+        var countEl = document.querySelector('.jb-total-count');
+        if(countEl) countEl.textContent = '총 ' + filtered.length.toLocaleString() + '건';
 
         // 필터 변경 시 셔플 (같은 필터여도 다른 순서)
         var shuffled = filtered.slice();
@@ -21406,6 +21418,10 @@ function closeRatePopup() {
     function closeFilter(){
       document.getElementById('filterOverlay').classList.remove('open');
       updateFilterChips();
+      // 채용 공고 목록 갱신
+      if(typeof renderCards === 'function' && typeof currentCase !== 'undefined'){
+        renderCards(currentCase);
+      }
       // 공고 상세 사이드바도 갱신
       if(document.getElementById('page-job-detail') && document.getElementById('page-job-detail').classList.contains('active')){
         refreshDetailSidebar();
