@@ -14754,13 +14754,13 @@ function closeRatePopup() {
   .filter-job-item.active{border-color:var(--brand);color:var(--brand);background:var(--brand-lt);}
   .filter-range-wrap{padding:12px 0 8px;}
   .filter-range-value{text-align:center;font-size:16px;font-weight:700;color:var(--tx);margin-bottom:20px;}
-  .filter-range{padding:0 12px;}
-  .filter-range input[type="range"]{width:100%;height:4px;-webkit-appearance:none;background:var(--ln);border-radius:2px;outline:none;margin:0;}
+  .filter-range{padding:0 12px;position:relative;}
+  .filter-range input[type="range"]{width:100%;height:4px;-webkit-appearance:none;background:var(--ln);border-radius:2px;outline:none;margin:0;position:relative;z-index:2;}
   .filter-range input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--brand);cursor:pointer;border:4px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,0.18);margin-top:0;}
-  .filter-range-labels{display:flex;justify-content:space-between;padding:0 12px;margin-top:12px;}
-  .filter-range-labels span{font-size:12px;font-weight:600;}
-  .filter-range-labels .range-left{color:var(--brand);}
-  .filter-range-labels .range-right{color:var(--brand);}
+  .filter-range-ticks{display:flex;justify-content:space-between;padding:0;margin-top:8px;}
+  .filter-range-tick{display:flex;flex-direction:column;align-items:center;width:0;position:relative;}
+  .filter-range-tick::before{content:'';width:1px;height:6px;background:var(--ln);margin-bottom:4px;}
+  .filter-range-tick span{font-size:10px;color:var(--tx4);white-space:nowrap;}
   .filter-employ-grid{display:flex;gap:10px;}
   .filter-employ-item{flex:1;padding:14px;border-radius:var(--r);border:1.5px solid var(--ln);text-align:center;font-size:14px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all .15s;}
   .filter-employ-item.active{border-color:var(--brand);color:var(--brand);background:var(--brand-lt);}
@@ -21065,7 +21065,9 @@ function closeRatePopup() {
         + '<div class="filter-range-wrap">'
         + '<div class="filter-range-value" id="filterCareerValue">전체</div>'
         + '<div class="filter-range"><input type="range" min="0" max="11" value="0" id="filterCareerRange"></div>'
-        + '<div class="filter-range-labels"><span class="range-left">신입</span><span class="range-right">10년 +</span></div>'
+        + '<div class="filter-range-ticks">'
+        + ['전체','신입','1년','2년','3년','4년','5년','6년','7년','8년','9년','10년+'].map(function(l){return '<div class="filter-range-tick"><span>'+l+'</span></div>';}).join('')
+        + '</div>'
         + '</div></div>'
 
         // 고용형태
