@@ -259,7 +259,7 @@
     .jk-desc{font-size:14px;color:var(--tx4);line-height:1.5;}
 
     /* 잡코리아 코치마크 툴팁 (토스 스타일) */
-    .jk-coach{position:fixed;z-index:200;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .35s cubic-bezier(.4,0,.2,1);}
+    .jk-coach{position:absolute;left:0;bottom:-48px;z-index:100;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .35s cubic-bezier(.4,0,.2,1);}
     .jk-coach.show{opacity:1;transform:translateY(0);pointer-events:auto;}
     .jk-coach-bubble{position:relative;background:#1B1D1F;color:#fff;font-size:13px;font-weight:600;line-height:1.5;padding:12px 40px 12px 16px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.2);white-space:nowrap;}
     .jk-coach-bubble::after{content:'';position:absolute;top:-6px;left:24px;width:12px;height:12px;background:#1B1D1F;transform:rotate(45deg);border-radius:2px;}
@@ -16581,9 +16581,23 @@ function closeRatePopup() {
         var countEl = document.querySelector('.jb-total-count');
         if(countEl) countEl.textContent = '총 1,481건';
 
-        // 필터 변경 시 셔플 (같은 필터여도 다른 순서)
-        var shuffled = filtered.slice();
-        for(var si=shuffled.length-1;si>0;si--){var sj=Math.floor(Math.random()*(si+1));var st=shuffled[si];shuffled[si]=shuffled[sj];shuffled[sj]=st;}
+        // 코치마크가 아직 안 닫혔으면 잡코리아 공고를 상위에 보장
+        if(!localStorage.getItem('jp_jk_coach_seen')){
+          var jkCards = filtered.filter(function(c){return c.external==='jobkorea';});
+          var nonJk = filtered.filter(function(c){return c.external!=='jobkorea';});
+          if(jkCards.length > 0){
+            // 잡코리아 1건을 맨 앞에, 나머지 셔플
+            for(var _si=nonJk.length-1;_si>0;_si--){var _sj=Math.floor(Math.random()*(_si+1));var _st=nonJk[_si];nonJk[_si]=nonJk[_sj];nonJk[_sj]=_st;}
+            for(var _ji=jkCards.length-1;_ji>0;_ji--){var _jj=Math.floor(Math.random()*(_ji+1));var _jt=jkCards[_ji];jkCards[_ji]=jkCards[_jj];jkCards[_jj]=_jt;}
+            // 잡코리아 1건을 2번째 위치에 삽입 (너무 맨 앞이면 부자연스러움)
+            filtered = nonJk.slice(0,1).concat(jkCards.slice(0,1)).concat(nonJk.slice(1));
+          }
+        }
+        // 필터 변경 시 셔플 (같은 필터여도 다른 순서) — 잡코리아 보장 시에는 이미 셔플됨
+        var shuffled = localStorage.getItem('jp_jk_coach_seen') ? filtered.slice() : filtered;
+        if(localStorage.getItem('jp_jk_coach_seen')){
+          for(var si=shuffled.length-1;si>0;si--){var sj=Math.floor(Math.random()*(si+1));var st=shuffled[si];shuffled[si]=shuffled[sj];shuffled[sj]=st;}
+        }
         // 정렬 적용
         var cards = sortCards(shuffled);
         var showImg = true;
@@ -16827,11 +16841,9 @@ function closeRatePopup() {
       }
 
       // 잡코리아 코치마크 (1회성, localStorage 기반)
-      var _jkCoachActive = false;
       function _dismissJkCoach(){
         var c = document.getElementById('jkCoachEl');
         if(!c) return;
-        _jkCoachActive = false;
         c.classList.add('fadeout');
         localStorage.setItem('jp_jk_coach_seen','1');
         var hl = document.querySelector('.jk-coach-highlight');
@@ -16839,44 +16851,39 @@ function closeRatePopup() {
         setTimeout(function(){if(c.parentNode) c.remove();},350);
       }
       function showJkCoachMark(){
-        // 이미 본 적 있으면 절대 다시 안 뜸
         if(localStorage.getItem('jp_jk_coach_seen')) return;
-        // 이미 떠 있으면 중복 생성 안 함
-        if(_jkCoachActive || document.getElementById('jkCoachEl')) return;
-        // 채용 공고 페이지가 활성화된 상태에서만
+        if(document.getElementById('jkCoachEl')) return;
         var jobPage = document.getElementById('page-job');
         if(!jobPage || !jobPage.classList.contains('active')) return;
-        // 즉시 localStorage 세팅해서 중복 호출 차단
-        localStorage.setItem('jp_jk_coach_seen','1');
-        _jkCoachActive = true;
         setTimeout(function(){
+          if(document.getElementById('jkCoachEl')) return;
           var jp2 = document.getElementById('page-job');
-          if(!jp2 || !jp2.classList.contains('active')){ _jkCoachActive=false; return; }
-          var extTag = document.querySelector('#view-img .img-card.visible .ic-tag.ext-tag');
-          if(!extTag){ _jkCoachActive=false; return; }
+          if(!jp2 || !jp2.classList.contains('active')) return;
+          var extTag = document.querySelector('#view-img .img-card .ic-tag.ext-tag');
+          if(!extTag) return;
+          // 태그에 펄스 효과
           extTag.classList.add('jk-coach-highlight');
+          // 태그의 부모 ic-tags div에 position:relative 설정 후 코치마크 삽입
+          var tagsWrap = extTag.closest('.ic-tags');
+          if(!tagsWrap) return;
+          tagsWrap.style.position = 'relative';
+          tagsWrap.style.overflow = 'visible';
+          // 카드에도 overflow:visible
+          var card = extTag.closest('.img-card');
+          if(card) card.style.overflow = 'visible';
+          var icBody = extTag.closest('.ic-body');
+          if(icBody) icBody.style.overflow = 'visible';
           var coach = document.createElement('div');
           coach.id = 'jkCoachEl';
           coach.className = 'jk-coach';
           coach.innerHTML = '<div class="jk-coach-bubble">'
             + '<span style="color:#60A5FA;font-weight:700;">잡코리아</span> 공고를 누르면 바로 지원할 수 있어요!'
-            + '<span class="jk-coach-close" onclick="_dismissJkCoach()">'
+            + '<span class="jk-coach-close" onclick="event.stopPropagation();_dismissJkCoach()">'
             + '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
             + '</span></div>';
-          document.body.appendChild(coach);
-          function positionCoach(){
-            var r = extTag.getBoundingClientRect();
-            coach.style.left = r.left + 'px';
-            coach.style.top = (r.bottom + 10) + 'px';
-          }
-          positionCoach();
-          function trackPos(){
-            positionCoach();
-            if(coach.parentNode && !coach.classList.contains('fadeout')) requestAnimationFrame(trackPos);
-          }
-          requestAnimationFrame(trackPos);
+          tagsWrap.appendChild(coach);
           requestAnimationFrame(function(){ requestAnimationFrame(function(){ coach.classList.add('show'); }); });
-        }, 800);
+        }, 600);
       }
 
       function cycleCardView() {
@@ -20571,8 +20578,6 @@ function closeRatePopup() {
       if(id==='home'){_snk.classList.remove('hide');_snk.style.display='';_snk.classList.add('show');}
       else{_snk.classList.add('hide');setTimeout(function(){_snk.style.display='none';},400);}
     }
-    // 채용 공고 이외 페이지로 이동 시 코치마크 제거
-    if(id!=='job'){var _jkc=document.getElementById('jkCoachEl');if(_jkc)_jkc.remove();var _jkhl=document.querySelector('.jk-coach-highlight');if(_jkhl)_jkhl.classList.remove('jk-coach-highlight');}
     if(id==='news' && typeof renderNews==='function') renderNews();
     if(id==='community' && typeof renderComm==='function') renderComm();
     if(id==='job-detail'){
