@@ -15805,14 +15805,14 @@ function closeRatePopup() {
               + '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx4);">'
               + '<span>하위</span><span style="font-weight:600;color:var(--tx3);">평균 '+d.avg+'원</span><span>상위</span>'
               + '</div>'
-              + (isHigh ? '' : '<div onclick="go(\'job\')" style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding:12px 14px;background:#fff;border-radius:10px;border:1.5px solid var(--ln);cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor=\'var(--brand)\';this.style.background=\'rgba(0,194,116,.03)\'" onmouseout="this.style.borderColor=\'var(--ln)\';this.style.background=\'#fff\'">'
+              + '<div onclick="go(\'job\')" style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding:12px 14px;background:#fff;border-radius:10px;border:1.5px solid var(--ln);cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor=\'var(--brand)\';this.style.background=\'rgba(0,194,116,.03)\'" onmouseout="this.style.borderColor=\'var(--ln)\';this.style.background=\'#fff\'">'
               + '<div style="display:flex;align-items:center;gap:8px;">'
-              + '<span style="font-size:16px;">🚀</span>'
-              + '<div><div style="font-size:13px;font-weight:700;color:var(--tx);">지금보다 '+higherPct+'% 높은 기업 보기</div>'
-              + '<div style="font-size:11px;color:var(--tx4);margin-top:1px;">내 연봉 대비 더 높은 기업들을 추천해드릴게요</div></div>'
+              + '<span style="font-size:16px;">'+(isHigh ? '👑' : '🚀')+'</span>'
+              + '<div><div style="font-size:13px;font-weight:700;color:var(--tx);">'+(isHigh ? '지금보다 연봉이 더 높은 기업 보기' : '지금보다 '+higherPct+'% 높은 기업 보기')+'</div>'
+              + '<div style="font-size:11px;color:var(--tx4);margin-top:1px;">'+(isHigh ? '더 좋은 조건의 기업들이 기다리고 있어요' : '내 연봉 대비 더 높은 기업들을 추천해드릴게요')+'</div></div>'
               + '</div>'
               + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>'
-              + '</div>')
+              + '</div>'
               + '</div>';
           }, 900);
         }
