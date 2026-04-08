@@ -3700,11 +3700,18 @@
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
         <h2 onclick="go('review')" style="font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;">원하는 리뷰 모아보기 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></h2>
       </div>
-      <div style="position:relative;">
-        <div id="rv-grid" style="display:flex;gap:14px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:4px;margin-bottom:48px;">
+      <div style="position:relative;margin-bottom:48px;">
+        <div id="rv-grid" style="display:flex;gap:14px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;padding:0 40px 4px;">
           <style>#rv-grid::-webkit-scrollbar{display:none;}</style>
         </div>
-        <div style="position:absolute;top:0;right:0;bottom:4px;width:48px;background:linear-gradient(90deg,transparent,rgba(248,249,250,0.95));pointer-events:none;"></div>
+        <!-- 좌측 버튼 -->
+        <button onclick="scrollReviewCards(-1)" style="position:absolute;left:-16px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1.5px solid var(--ln);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:2;transition:all .15s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.08)'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <!-- 우측 버튼 -->
+        <button onclick="scrollReviewCards(1)" style="position:absolute;right:-16px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1.5px solid var(--ln);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:2;transition:all .15s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.08)'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
       </div>
 
       <!-- ③ 연봉 데이터 섹션 -->
