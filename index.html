@@ -16441,25 +16441,63 @@ function closeRatePopup() {
         '당': 'https://jelin-cc.github.io/jobplanet-ut/당근.png'
       };
 
-      // 썸네일 이미지 풀 (셔플해서 카드마다 다른 이미지)
-      var cardThumbPool = [
-        'img/Banner_1tW2cFJ25032514173967.jpg','img/Banner_2loOfzo25052915140814.jpg','img/Banner_4UvepA225031914015500.jpg','img/Banner_5DoT1nZ24111411320084.jpg','img/Banner_abbb51t25102816595906.jpg','img/Banner_ABi9lTY25101711202489.jpg','img/Banner_C3oJp7q25102817553882.jpg','img/Banner_DiMdvUg24111216474465.jpg','img/Banner_E0mPEv625102715305380.jpg','img/Banner_FA8757M24122415321709.jpg','img/Banner_gBJ6Ui725082910083325.jpg','img/Banner_GcTm5G225072215243389.jpg','img/Banner_gRZK5oC25072810592603.jpg','img/Banner_HbrORCN25103117185664.jpg','img/Banner_HNPO3bT24072313252617.jpg','img/Banner_iVPMD6p25092209323563.jpg','img/Banner_jkoaT8i25101510050474.jpg','img/Banner_Jp5fx7g25012110512020.jpg','img/Banner_kAifOHK25082013255486.jpg','img/Banner_kMaNyYZ25110310042647.jpg','img/Banner_mcoXCR225103017092404.jpg','img/Banner_OP2jQmz25052715204502.jpg','img/Banner_PuQjGUE25011715315914.jpg','img/Banner_Q48VLkS24121310465549.jpg','img/Banner_RVLkZ2025102911373557.jpg','img/Banner_skH5zUn24111917362523.jpg','img/Banner_sPBc4me25102718060629.jpg','img/Banner_sSXmGtH25081909563386.jpg','img/Banner_T8556bz25102811291014.jpg','img/Banner_TN3Dxv625021014354271.jpg','img/Banner_U8pB0dI25082714383635.jpg','img/Banner_upPwf1v24101713584007.jpg','img/Banner_w9S9qXw25072517145286.jpg','img/Banner_WMSIPbK25061014032956.jpg','img/Banner_xq7MI9Q25100217535222.jpg','img/Banner_YsW92UA24103114330047.jpg',
-        'img/1000001_001.png','img/1000002_004.png','img/1000003_0013.png','img/1000003_006.png','img/1000004_0010.png','img/1000004_0017.png','img/1000004_006.png','img/1000004_007.png','img/1000005_009.png','img/1000005_010.png','img/1000007_004.png','img/1000008_004.png','img/1000009_001.png','img/1000009_002.png','img/1000011_002.png','img/1000011_003.png','img/1000011_004.png','img/1000012_001.png','img/1000013_002.png','img/1000014_003.png','img/1000014_004.png','img/1000016_001.png','img/1000016_003.png','img/1000017_001.png','img/1000018_003.png','img/1000019_002.png','img/1000021_005.png','img/1000022_006.png','img/1000023_001.png','img/1000024_003.png','img/1000026_001.png','img/1000027_002.png','img/1000028_002.png','img/1000030_002.png','img/1000030_003.png','img/1000032_003.png','img/1000036_003.png',
-        'img/baemin.webp','img/bat.webp','img/channeltalk.webp','img/kurly.webp','img/larasweet.webp','img/tada.webp','img/weverse.webp','img/wrtn.webp','img/0.webp','img/2.webp','img/next-enterprise.png'
-      ].map(function(p){return 'https://jelin-cc.github.io/jobplanet-ut/'+p;});
-      // 셔플
-      var _thumbShuffled = cardThumbPool.slice();
-      function reshuffleThumbs(){
-        _thumbShuffled = cardThumbPool.slice();
-        for(var si=_thumbShuffled.length-1;si>0;si--){var sj=Math.floor(Math.random()*(si+1));var st=_thumbShuffled[si];_thumbShuffled[si]=_thumbShuffled[sj];_thumbShuffled[sj]=st;}
+      // 기업/오피스 분위기 Unsplash 이미지 풀 (30장)
+      var corpImagePool = [
+        'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80',
+        'https://images.unsplash.com/photo-1497215842964-222b430dc094?w=600&q=80',
+        'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&q=80',
+        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&q=80',
+        'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=600&q=80',
+        'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80',
+        'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&q=80',
+        'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=600&q=80',
+        'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&q=80',
+        'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&q=80',
+        'https://images.unsplash.com/photo-1556740758-90de374c12ad?w=600&q=80',
+        'https://images.unsplash.com/photo-1577412647305-991150c7d163?w=600&q=80',
+        'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&q=80',
+        'https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&q=80',
+        'https://images.unsplash.com/photo-1606857521015-7f9fcf423740?w=600&q=80',
+        'https://images.unsplash.com/photo-1562664377-709f2c337eb2?w=600&q=80',
+        'https://images.unsplash.com/photo-1556761175-4b46a572b786?w=600&q=80',
+        'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80',
+        'https://images.unsplash.com/photo-1604328698692-f76ea9498e76?w=600&q=80',
+        'https://images.unsplash.com/photo-1568992688065-536aad8a12f6?w=600&q=80',
+        'https://images.unsplash.com/photo-1517502884422-41eaead166d4?w=600&q=80',
+        'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&q=80',
+        'https://images.unsplash.com/photo-1531973576160-7125cd663d86?w=600&q=80',
+        'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80',
+        'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80',
+        'https://images.unsplash.com/photo-1553484771-047a44eee27b?w=600&q=80',
+        'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=600&q=80',
+        'https://images.unsplash.com/photo-1600494603989-9650cf6ddd3d?w=600&q=80',
+        'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600&q=80',
+        'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&q=80'
+      ];
+      // 기업명 → 고정 이미지 매핑 (같은 기업은 항상 같은 이미지, 충돌 해소)
+      var _companyThumbCache = {};
+      var _usedThumbIdx = {};
+      function _hashCompany(name){
+        var h=0;
+        for(var i=0;i<name.length;i++){h=((h<<5)-h)+name.charCodeAt(i);h|=0;}
+        return Math.abs(h);
       }
-      reshuffleThumbs();
-      var _thumbOffset = 0;
-      function getCardThumb(idx){return _thumbShuffled[(idx + _thumbOffset) % _thumbShuffled.length];}
+      function getCardThumb(coName){
+        if(!coName) return corpImagePool[0];
+        if(_companyThumbCache[coName]) return _companyThumbCache[coName];
+        var idx = _hashCompany(coName) % corpImagePool.length;
+        // 충돌 시 빈 슬롯 찾기
+        var tries = 0;
+        while(_usedThumbIdx[idx] && tries < corpImagePool.length){
+          idx = (idx + 1) % corpImagePool.length;
+          tries++;
+        }
+        _usedThumbIdx[idx] = true;
+        _companyThumbCache[coName] = corpImagePool[idx];
+        return corpImagePool[idx];
+      }
 
       function renderCards(caseKey) {
-        reshuffleThumbs();
-        _thumbOffset = Math.floor(Math.random() * _thumbShuffled.length);
         var cfg = caseConfig[caseKey];
         var allCards = cfg.cards;
         // hotTag 필터 (복수 선택)
@@ -16528,7 +16566,7 @@ function closeRatePopup() {
               + '<span class="bonus-text">취업축하금 <span class="bonus-amount">' + bonusAmt + '</span>만원</span>'
               + '</div>';
           }
-          var thumbSrc = getCardThumb(ci);
+          var thumbSrc = getCardThumb(c.co);
           var thumb = '<div class="thumb">'
             + '<img src="' + thumbSrc + '" alt="">'
             + bonusBadge
@@ -16657,7 +16695,7 @@ function closeRatePopup() {
 
         var listHtml = cards.map(function(c, ci) {
           var isExt = c.external === 'jobkorea';
-          var listThumb = getCardThumb(ci);
+          var listThumb = getCardThumb(c.co);
           var sTitle2 = c.title.replace(/'/g,'\\&#39;');
           var sCo2 = c.co.replace(/'/g,'\\&#39;');
           var sMeta2 = c.meta.replace(/'/g,'\\&#39;');
