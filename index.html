@@ -22916,9 +22916,16 @@ function closeRatePopup() {
       'https://jelin-cc.github.io/jobplanet-ut/img/Banner_xq7MI9Q25100217535222.jpg',
       'https://jelin-cc.github.io/jobplanet-ut/img/Banner_YsW92UA24103114330047.jpg'
     ];
-    function shuffleDetailImages(){
-      var arr = companyImages.slice();
+    function shuffleDetailImages(coName){
+      var pool = (typeof corpImagePool !== 'undefined') ? corpImagePool : companyImages;
+      var arr = pool.slice();
       for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}
+      // 기업명이 있으면 해당 기업의 고정 이미지를 첫 번째로
+      if(coName && typeof getCardThumb === 'function'){
+        var mainImg = getCardThumb(coName);
+        arr = arr.filter(function(u){return u !== mainImg;});
+        arr.unshift(mainImg);
+      }
       document.querySelectorAll('.detail-img-slide img').forEach(function(img,idx){
         if(arr[idx]) img.src = arr[idx];
       });
@@ -22926,7 +22933,7 @@ function closeRatePopup() {
     var _origGo = go;
     go = function(id){
       _origGo(id);
-      if(id==='job-detail') shuffleDetailImages();
+      if(id==='job-detail' && !(clickedCardInfo && clickedCardInfo.co)) shuffleDetailImages();
     };
     shuffleDetailImages();
 
@@ -22944,16 +22951,9 @@ function closeRatePopup() {
         for (var n=1; n<=36; n++) arr.push(base + n + '.svg');
         return arr;
       })();
+      var _GENERIC_CO_ICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' fill='none'%3E%3Crect width='48' height='48' rx='10' fill='%23F3F4F6'/%3E%3Cpath d='M14 38V14l10-4 10 4v24' stroke='%239CA3AF' stroke-width='2' fill='none'/%3E%3Crect x='18' y='16' width='4' height='4' rx='0.5' fill='%239CA3AF'/%3E%3Crect x='26' y='16' width='4' height='4' rx='0.5' fill='%239CA3AF'/%3E%3Crect x='18' y='23' width='4' height='4' rx='0.5' fill='%239CA3AF'/%3E%3Crect x='26' y='23' width='4' height='4' rx='0.5' fill='%239CA3AF'/%3E%3Crect x='21' y='31' width='6' height='7' rx='0.5' fill='%239CA3AF'/%3E%3C/svg%3E";
       function getCompanyLogo(coName) {
-        for (var i=0; i<JD_REAL_LOGOS.length; i++) {
-          var e = JD_REAL_LOGOS[i];
-          for (var j=0; j<e.keys.length; j++) {
-            if (coName.indexOf(e.keys[j]) !== -1) return { img: e.img };
-          }
-        }
-        var hash = 0;
-        for (var k=0; k<coName.length; k++) hash += coName.charCodeAt(k);
-        return { img: SAMPLE_LOGO_POOL[Math.abs(hash) % SAMPLE_LOGO_POOL.length] };
+        return { img: _GENERIC_CO_ICON };
       }
       var CO_INFO = {
         '토스': { ceo:'이승건', revenue:'약 1조 2,000억원', addr:'서울특별시 강남구 테헤란로 142', web:'https://toss.im', hist:'2013년 비바리퍼블리카 설립<br>2015년 토스 서비스 출시', rating:'4.1', emp:'2,800명' },
@@ -23011,8 +23011,8 @@ function closeRatePopup() {
         var sidebar=document.querySelector('#page-job-detail .detail-sidebar');if(!sidebar) return;
         sidebar.innerHTML='<div class="sidebar-count"><span class="sidebar-count-num">총 533건</span><div style="position:relative;display:inline-block;"><span class="sidebar-count-sort" onclick="var dd=this.nextElementSibling;dd.style.display=dd.style.display===\'block\'?\'none\':\'block\';" style="cursor:pointer;">정확도순 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;vertical-align:middle;"><polyline points="6 9 12 15 18 9"/></svg></span><div class="sidebar-sort-dd" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid var(--line-primary);border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.1);min-width:130px;z-index:50;overflow:hidden;"><button onclick="this.closest(\'.sidebar-sort-dd\').previousElementSibling.childNodes[0].textContent=\'최신순 \';this.closest(\'.sidebar-sort-dd\').style.display=\'none\';refreshDetailSidebar();" style="display:block;width:100%;padding:11px 16px;text-align:left;font-size:13px;font-weight:700;color:var(--brand);background:var(--brand-lt);border:none;cursor:pointer;font-family:var(--font);">최신순</button><button onclick="this.closest(\'.sidebar-sort-dd\').previousElementSibling.childNodes[0].textContent=\'인기순 \';this.closest(\'.sidebar-sort-dd\').style.display=\'none\';refreshDetailSidebar();" style="display:block;width:100%;padding:11px 16px;text-align:left;font-size:13px;border:none;cursor:pointer;font-family:var(--font);color:var(--tx2);">인기순</button><button onclick="this.closest(\'.sidebar-sort-dd\').previousElementSibling.childNodes[0].textContent=\'마감임박순 \';this.closest(\'.sidebar-sort-dd\').style.display=\'none\';refreshDetailSidebar();" style="display:block;width:100%;padding:11px 16px;text-align:left;font-size:13px;border:none;cursor:pointer;font-family:var(--font);color:var(--tx2);">마감임박순</button></div></div></div>'+html;
       }
-      window.selectJobFromCard=function(el){document.querySelectorAll('#page-job-detail .sidebar-job-item').forEach(function(i){i.classList.remove('active');});el.classList.add('active');var co=el.getAttribute('data-jd-co');var title=el.getAttribute('data-jd-title');currentJobId='card_'+title+'_'+co;updateApplyBtnState();buildDetailFromCard({title:title,co:co,meta:'서울 · 경력 3년↑'});if(typeof shuffleDetailImages==='function') shuffleDetailImages();window.scrollTo(0,0);};
-      window.goJobDetail=function(title,co,meta,thumbSrc){clickedCardInfo={title:title,co:co,meta:meta,thumb:thumbSrc};currentJobId='card_'+title+'_'+co;go('job-detail');setTimeout(function(){var slides=document.querySelectorAll('.detail-img-slide img');if(slides.length>0&&thumbSrc) slides[0].src=thumbSrc;buildJobDetailSidebar({title:title,co:co,meta:meta});buildDetailFromCard({title:title,co:co,meta:meta});updateApplyBtnState();},20);};
+      window.selectJobFromCard=function(el){document.querySelectorAll('#page-job-detail .sidebar-job-item').forEach(function(i){i.classList.remove('active');});el.classList.add('active');var co=el.getAttribute('data-jd-co');var title=el.getAttribute('data-jd-title');currentJobId='card_'+title+'_'+co;updateApplyBtnState();buildDetailFromCard({title:title,co:co,meta:'서울 · 경력 3년↑'});if(typeof shuffleDetailImages==='function') shuffleDetailImages(co);window.scrollTo(0,0);};
+      window.goJobDetail=function(title,co,meta,thumbSrc){clickedCardInfo={title:title,co:co,meta:meta,thumb:thumbSrc};currentJobId='card_'+title+'_'+co;go('job-detail');setTimeout(function(){if(typeof shuffleDetailImages==='function') shuffleDetailImages(co);buildJobDetailSidebar({title:title,co:co,meta:meta});buildDetailFromCard({title:title,co:co,meta:meta});updateApplyBtnState();},20);};
       (function initSidebarLogos(){document.querySelectorAll('#page-job-detail .sidebar-job-item').forEach(function(item){var coEl=item.querySelector('.sidebar-job-company');var thumbEl=item.querySelector('.sidebar-job-thumb');if(!coEl||!thumbEl) return;var coName=coEl.textContent.trim();var info=getCompanyLogo(coName);thumbEl.style.cssText='background:#fff;border:1.5px solid #E5E7EB;border-radius:12px;overflow:hidden;width:56px;height:56px;flex-shrink:0;';thumbEl.innerHTML='<img src="'+info.img+'" style="width:100%;height:100%;object-fit:contain;display:block;" alt="">';});})();
       window.buildJobDetailSidebar = buildJobDetailSidebar;
       window.buildDetailFromCard = buildDetailFromCard;
