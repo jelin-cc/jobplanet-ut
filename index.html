@@ -21054,6 +21054,37 @@ function closeRatePopup() {
     go('company');
   }
 
+  // 리뷰 작성 완료 후 현재 페이지에서 블라인드 해제 (리로드 없이)
+  window.onReviewWriteComplete = function(){
+    localStorage.setItem('jp_reviewed','true');
+    // 기업 상세 블라인드 해제
+    var blindWraps = document.querySelectorAll('#page-company .cd-blind-wrap');
+    blindWraps.forEach(function(wrap){
+      var overlay = wrap.querySelector('.cd-blind-overlay');
+      if(overlay) overlay.style.display = 'none';
+      wrap.style.minHeight = 'auto';
+      wrap.style.overflow = 'visible';
+      var content = wrap.querySelector('.cd-blind-content');
+      if(!content) return;
+      var depts=['개발','디자인','마케팅','기획','데이터','영업','HR','서비스','엔지니어링'];
+      var statuses=['현직원','전직원'];
+      var locs=['서울','경기','판교','성남','인천'];
+      var years=['2026.04','2026.03','2026.02','2026.01','2025.12','2025.11','2025.10','2025.09'];
+      var scores=['★★★★★ 5.0','★★★★☆ 4.0','★★★★☆ 4.5','★★★☆☆ 3.0','★★★★☆ 3.5'];
+      var texts=['수평적 문화가 실제로 작동해요. 자유로운 분위기에서 일할 수 있습니다.','연봉은 만족하지만 워라밸은 팀바팀이에요.','성장할 수 있는 환경이지만 자기 주도적이어야 해요.','복지가 정말 좋아요. 사내 카페, 식사 지원 등 다양합니다.','경영진의 비전이 명확하고 소통도 원활한 편입니다.','업무 강도가 높지만 그만큼 빠르게 성장할 수 있어요.','동료들의 역량이 뛰어나서 자극을 많이 받습니다.','재택근무가 가능하고 자율 출퇴근제가 잘 지켜집니다.','팀 분위기가 좋고 서로 도와주는 문화가 있어요.'];
+      var cats=['복지','워라밸','문화','승진','경영진'];
+      var html='';
+      for(var ri=0;ri<100;ri++){
+        var dept=depts[Math.floor(Math.random()*depts.length)],st=statuses[Math.floor(Math.random()*statuses.length)],loc=locs[Math.floor(Math.random()*locs.length)],yr=years[Math.floor(Math.random()*years.length)],sc=scores[Math.floor(Math.random()*scores.length)],tx=texts[Math.floor(Math.random()*texts.length)];
+        var bars='';cats.forEach(function(c){bars+='<div class="cd-rv-item-bar"><span class="cd-rv-item-bar-label">'+c+'</span><div class="cd-rv-item-bar-track"><div class="cd-rv-item-bar-fill" style="width:'+(30+Math.floor(Math.random()*60))+'%;"></div></div></div>';});
+        html+='<div class="cd-rv-item"><div class="cd-rv-item-header"><span class="cd-rv-item-meta">'+st+' · '+dept+' · '+loc+' · '+yr+'</span><span class="cd-rv-item-score">'+sc+'</span></div><div class="cd-rv-item-bars">'+bars+'</div><div class="cd-rv-item-text">'+tx+'</div></div>';
+      }
+      content.innerHTML=html;
+    });
+    // 리뷰 피드 블라인드도 해제 (나중에 이동할 때를 위해)
+    if(typeof renderReviewCards==='function') renderReviewCards();
+  };
+
   // 검색 결과 카드 클릭 이벤트 위임
   document.getElementById('srCompanyGrid').addEventListener('click',function(e){
     const card = e.target.closest('.sr-card');
@@ -23906,7 +23937,7 @@ function closeRatePopup() {
             '<p style="font-size:12px;color:#949ba8;margin:12px 0 0;">ⓘ 리뷰가 승인되면 보안코드가 이메일로도 발송돼요.</p>' +
           '</div>' +
           '<div style="display:flex;justify-content:center;margin-bottom:40px;">' +
-            '<button onclick="if(window.opener){window.opener.localStorage.setItem(\'jp_reviewed\',\'pending\');var _origin=window.opener.sessionStorage.getItem(\'jp_review_origin\')||\'review\';window.opener.sessionStorage.setItem(\'jp_current_page\',_origin);if(_origin===\'review\'){var _at=window.opener.document.querySelector(\'.review-tab.active\');if(_at)window.opener.sessionStorage.setItem(\'jp_current_review_tab\',_at.dataset.tab);}window.opener.location.reload();}window.close();" style="padding:16px 48px;border:none;border-radius:10px;background:#00c362;font-size:16px;font-weight:700;color:#fff;cursor:pointer;font-family:Pretendard,sans-serif;">리뷰 둘러보기</button>' +
+            '<button onclick="if(window.opener&&typeof window.opener.onReviewWriteComplete===\'function\'){window.opener.onReviewWriteComplete();}window.close();" style="padding:16px 48px;border:none;border-radius:10px;background:#00c362;font-size:16px;font-weight:700;color:#fff;cursor:pointer;font-family:Pretendard,sans-serif;">리뷰 둘러보기</button>' +
           '</div>' +
           '<div style="border-top:1px solid #e5e6e9;padding-top:20px;font-size:11px;color:#949ba8;line-height:18px;text-align:left;">모든 개인정보는 암호화되며, 어디에도 노출되지 않습니다. 게시물을 작성하시면, 같은 종류의 게시물을 6개월간 무료로 열람하실 수 있습니다.<br>회원님의 경험을 공유하고, 200만 건의 진솔한 후기를 확인해보세요! 잡플래닛은 회원님에서 가장 만족스러운 직장을 찾을 수 있도록 도와줍니다. 몇 분만 투자하세요!<br><br>본 내용에 대한 저작권 및 사용권은 잡플래닛에 있습니다.</div>' +
           '<div style="margin-top:20px;font-size:12px;color:#949ba8;">Copyright ©JOBPLANET. All rights reserved.</div>' +
