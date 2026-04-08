@@ -3698,40 +3698,42 @@
       </div>
 
 
-      <!-- ② 원하는 리뷰 모아보기 (위치 이동) -->
-      <div style="background:var(--brand-lt);border-radius:16px;padding:28px 28px 24px;margin-bottom:48px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <!-- ② 원하는 리뷰 모아보기 -->
+      <div style="margin-bottom:48px;">
+        <!-- 헤더 -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
           <h2 style="font-size:20px;font-weight:700;">원하는 리뷰 모아보기</h2>
-          <button onclick="go('review')" style="font-size:13px;font-weight:600;color:var(--tx4);background:none;border:none;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:3px;flex-shrink:0;" onmouseover="this.style.color='var(--tx2)'" onmouseout="this.style.color='var(--tx4)'">리뷰 모아보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+          <button onclick="go('review')" style="display:flex;align-items:center;gap:4px;padding:8px 14px;border-radius:8px;border:none;background:var(--ln2);cursor:pointer;font-family:var(--font);font-size:13px;font-weight:600;color:var(--tx2);transition:background .12s;" onmouseover="this.style.background='var(--ln)'" onmouseout="this.style.background='var(--ln2)'">리뷰 모아보기<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></button>
         </div>
 
-        <!-- 직군 필터 칩 -->
-        <div id="rv-filter-chips" style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
-          <button class="theme-chip active" onclick="filterReviewByJob('all',this)">전체</button>
-          <button class="theme-chip" onclick="filterReviewByJob('개발',this)">개발</button>
-          <button class="theme-chip" onclick="filterReviewByJob('디자인',this)">디자인</button>
-          <button class="theme-chip" onclick="filterReviewByJob('마케팅',this)">마케팅</button>
-          <button class="theme-chip" onclick="filterReviewByJob('PM/기획',this)">PM/기획</button>
-          <button class="theme-chip" onclick="filterReviewByJob('데이터',this)">데이터</button>
+        <!-- 직군 탭 필터 -->
+        <div id="rv-filter-chips" style="display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--ln);">
+          <button class="rv-tab active" onclick="filterReviewByJob('all',this)">전체</button>
+          <button class="rv-tab" onclick="filterReviewByJob('개발',this)">개발</button>
+          <button class="rv-tab" onclick="filterReviewByJob('디자인',this)">디자인</button>
+          <button class="rv-tab" onclick="filterReviewByJob('마케팅',this)">마케팅</button>
+          <button class="rv-tab" onclick="filterReviewByJob('PM/기획',this)">PM/기획</button>
+          <button class="rv-tab" onclick="filterReviewByJob('데이터',this)">데이터</button>
         </div>
         <style>
-          .theme-chip{padding:8px 16px;border-radius:999px;border:1.5px solid var(--ln);background:#fff;color:var(--tx3);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s;white-space:nowrap;}
-          .theme-chip:hover{border-color:var(--brand);color:var(--brand);}
-          .theme-chip.active{background:var(--brand);border-color:var(--brand);color:#fff;}
+          .rv-tab{padding:10px 16px;font-size:14px;font-weight:500;color:var(--tx4);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:var(--font);transition:all .15s;margin-bottom:-1px;}
+          .rv-tab:hover{color:var(--tx2);}
+          .rv-tab.active{color:var(--tx);font-weight:700;border-bottom-color:var(--tx);}
         </style>
 
+        <!-- 카드 스크롤 -->
         <div style="position:relative;">
           <div id="rv-grid" style="display:flex;gap:14px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:4px;">
             <style>#rv-grid::-webkit-scrollbar{display:none;}</style>
           </div>
           <!-- 우측 그라데이션 + 화살표 -->
-          <div id="rv-scroll-right-wrap" onclick="scrollReviewCards(1)" style="position:absolute;top:0;right:0;bottom:4px;width:72px;background:linear-gradient(90deg,transparent,rgba(232,251,244,0.95));cursor:pointer;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;transition:opacity .2s;">
+          <div id="rv-scroll-right-wrap" onclick="scrollReviewCards(1)" style="position:absolute;top:0;right:0;bottom:4px;width:72px;background:linear-gradient(90deg,transparent,rgba(248,249,250,0.95));cursor:pointer;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;transition:opacity .2s;">
             <div style="width:36px;height:36px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tx2)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
             </div>
           </div>
           <!-- 좌측 그라데이션 + 화살표 (처음엔 숨김) -->
-          <div id="rv-scroll-left-wrap" onclick="scrollReviewCards(-1)" style="position:absolute;top:0;left:0;bottom:4px;width:72px;background:linear-gradient(270deg,transparent,rgba(232,251,244,0.95));cursor:pointer;display:flex;align-items:center;justify-content:flex-start;padding-left:8px;transition:opacity .2s;opacity:0;pointer-events:none;">
+          <div id="rv-scroll-left-wrap" onclick="scrollReviewCards(-1)" style="position:absolute;top:0;left:0;bottom:4px;width:72px;background:linear-gradient(270deg,transparent,rgba(248,249,250,0.95));cursor:pointer;display:flex;align-items:center;justify-content:flex-start;padding-left:8px;transition:opacity .2s;opacity:0;pointer-events:none;">
             <div style="width:36px;height:36px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tx2)" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
             </div>
@@ -4028,7 +4030,7 @@
           <div style="padding:14px 20px;border-bottom:1px solid var(--ln2);display:flex;align-items:center;justify-content:space-between;">
             <span id="theme-detail-count" style="font-size:13px;font-weight:600;color:var(--tx3);">총 100건</span>
             <button id="theme-tag-filter-btn" onclick="openThemeTagFilter()" style="display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;border:1.5px solid var(--ln);background:#fff;cursor:pointer;font-family:var(--font);font-size:13px;font-weight:600;color:var(--tx2);transition:all .15s;" onmouseover="this.style.borderColor='var(--tx3)'" onmouseout="this.style.borderColor='var(--ln)'">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 21v-7"/><path d="M4 10V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-5"/><path d="M20 12V3"/><circle cx="4" cy="14" r="2"/><circle cx="12" cy="8" r="2"/><circle cx="20" cy="16" r="2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 22 22" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.42358 11.2542C9.5986 11.2543 10.5899 12.0409 10.8997 13.1162C10.9324 13.1117 10.9659 13.109 10.9999 13.109H17.4927C17.891 13.1091 18.2141 13.4322 18.2142 13.8306C18.2142 14.229 17.8911 14.5521 17.4927 14.5521H10.9999C10.9659 14.5521 10.9324 14.5495 10.8997 14.5449C10.5899 15.6203 9.59858 16.4068 8.42358 16.4069C7.24851 16.4069 6.25728 15.6203 5.94751 14.5449C5.91465 14.5495 5.88047 14.5521 5.84635 14.5521H4.50716C4.10872 14.5521 3.78564 14.229 3.78564 13.8306C3.78577 13.4322 4.1088 13.109 4.50716 13.109H5.84635C5.88046 13.109 5.91467 13.1116 5.94751 13.1162C6.25729 12.0408 7.24853 11.2542 8.42358 11.2542ZM8.42358 12.6973C7.79752 12.6973 7.28948 13.2045 7.28939 13.8306C7.28939 14.4567 7.79747 14.9648 8.42358 14.9648C9.04963 14.9647 9.55688 14.4566 9.55688 13.8306C9.5568 13.2046 9.04957 12.6974 8.42358 12.6973Z" fill="#292C32"/><path fill-rule="evenodd" clip-rule="evenodd" d="M13.5763 5.07031C14.7512 5.07031 15.7425 5.85703 16.0523 6.93229C16.085 6.92776 16.1187 6.92604 16.1526 6.92603H17.4927C17.891 6.92603 18.214 7.24838 18.2142 7.64665C18.2142 8.04509 17.8911 8.36816 17.4927 8.36816H16.1526C16.1187 8.36815 16.085 8.36643 16.0523 8.3619C15.7424 9.43706 14.7512 10.2239 13.5763 10.2239C12.4014 10.2238 11.41 9.43705 11.1002 8.3619C11.0674 8.36645 11.0339 8.36816 10.9999 8.36816H4.50716C4.10872 8.36816 3.78564 8.04509 3.78564 7.64665C3.78585 7.24838 4.10885 6.92603 4.50716 6.92603H10.9999C11.0339 6.92603 11.0674 6.92773 11.1002 6.93229C11.4099 5.85704 12.4013 5.07044 13.5763 5.07031ZM13.5763 6.51335C12.9504 6.5135 12.4431 7.02078 12.443 7.64665C12.443 8.27267 12.9503 8.78069 13.5763 8.78084C14.2024 8.78084 14.7104 8.27276 14.7104 7.64665C14.7103 7.02069 14.2023 6.51335 13.5763 6.51335Z" fill="#292C32"/></svg>
               <span>태그 전체</span>
               <span id="theme-tag-badge" style="display:none;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--brand);color:#fff;font-size:11px;font-weight:700;line-height:18px;text-align:center;"></span>
             </button>
@@ -4038,114 +4040,6 @@
           </div>
         </div>
 
-        <!-- 태그 필터 팝업 -->
-        <div id="theme-tag-overlay" style="display:none;position:fixed;inset:0;z-index:700;background:rgba(20,24,40,0.5);align-items:center;justify-content:center;" onclick="if(event.target===this)closeThemeTagFilter()">
-          <div style="background:#fff;border-radius:16px;width:520px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 16px 48px rgba(0,0,0,.15);">
-            <!-- 헤더 -->
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;">
-              <h3 style="font-size:18px;font-weight:700;margin:0;">태그 전체</h3>
-              <button onclick="closeThemeTagFilter()" style="width:32px;height:32px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:background .12s;" onmouseover="this.style.background='var(--ln2)'" onmouseout="this.style.background='none'">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--tx2)" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
-              </button>
-            </div>
-            <!-- 탭 -->
-            <div id="theme-tag-tabs" style="display:flex;gap:0;padding:0 24px;border-bottom:1px solid var(--ln);">
-              <button class="ttab active" data-tab="region" onclick="switchTagTab('region',this)" style="padding:10px 16px;font-size:14px;font-weight:600;border:none;background:none;cursor:pointer;font-family:var(--font);color:var(--tx);border-bottom:2px solid var(--brand);margin-bottom:-1px;">지역</button>
-              <button class="ttab" data-tab="job" onclick="switchTagTab('job',this)" style="padding:10px 16px;font-size:14px;font-weight:600;border:none;background:none;cursor:pointer;font-family:var(--font);color:var(--tx4);border-bottom:2px solid transparent;margin-bottom:-1px;">직무</button>
-              <button class="ttab" data-tab="exp" onclick="switchTagTab('exp',this)" style="padding:10px 16px;font-size:14px;font-weight:600;border:none;background:none;cursor:pointer;font-family:var(--font);color:var(--tx4);border-bottom:2px solid transparent;margin-bottom:-1px;">경력</button>
-              <button class="ttab" data-tab="type" onclick="switchTagTab('type',this)" style="padding:10px 16px;font-size:14px;font-weight:600;border:none;background:none;cursor:pointer;font-family:var(--font);color:var(--tx4);border-bottom:2px solid transparent;margin-bottom:-1px;">고용형태</button>
-              <button class="ttab" data-tab="edu" onclick="switchTagTab('edu',this)" style="padding:10px 16px;font-size:14px;font-weight:600;border:none;background:none;cursor:pointer;font-family:var(--font);color:var(--tx4);border-bottom:2px solid transparent;margin-bottom:-1px;">학력</button>
-            </div>
-            <!-- 탭 콘텐츠 -->
-            <div style="padding:24px;overflow-y:auto;flex:1;">
-              <!-- 지역 -->
-              <div id="ttab-region" class="ttab-content">
-                <h4 style="font-size:15px;font-weight:700;margin:0 0 16px;">지역</h4>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="서울"><span>서울</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="경기"><span>경기</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="인천"><span>인천</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="부산"><span>부산</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="대구"><span>대구</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="대전"><span>대전</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="광주"><span>광주</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="울산"><span>울산</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="세종"><span>세종</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="강원"><span>강원</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="경남"><span>경남</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="경북"><span>경북</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="전남"><span>전남</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="전북"><span>전북</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="충남"><span>충남</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="충북"><span>충북</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="제주"><span>제주</span></label>
-                  <label class="tag-check"><input type="checkbox" name="tf-region" value="해외"><span>해외</span></label>
-                </div>
-              </div>
-              <!-- 직무 -->
-              <div id="ttab-job" class="ttab-content" style="display:none;">
-                <h4 style="font-size:15px;font-weight:700;margin:0 0 16px;">직무</h4>
-                <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                  <button class="tag-chip" data-name="tf-job" data-value="개발" onclick="toggleTagChip(this)">개발</button>
-                  <button class="tag-chip" data-name="tf-job" data-value="디자인" onclick="toggleTagChip(this)">디자인</button>
-                  <button class="tag-chip" data-name="tf-job" data-value="기획/PM" onclick="toggleTagChip(this)">기획/PM</button>
-                  <button class="tag-chip" data-name="tf-job" data-value="마케팅" onclick="toggleTagChip(this)">마케팅</button>
-                  <button class="tag-chip" data-name="tf-job" data-value="영업" onclick="toggleTagChip(this)">영업</button>
-                  <button class="tag-chip" data-name="tf-job" data-value="경영/인사" onclick="toggleTagChip(this)">경영/인사</button>
-                  <button class="tag-chip" data-name="tf-job" data-value="고객/운영" onclick="toggleTagChip(this)">고객/운영</button>
-                </div>
-              </div>
-              <!-- 경력 -->
-              <div id="ttab-exp" class="ttab-content" style="display:none;">
-                <h4 style="font-size:15px;font-weight:700;margin:0 0 16px;">경력</h4>
-                <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                  <button class="tag-chip" data-name="tf-exp" data-value="신입" onclick="toggleTagChip(this)">신입</button>
-                  <button class="tag-chip" data-name="tf-exp" data-value="1~3년" onclick="toggleTagChip(this)">1~3년</button>
-                  <button class="tag-chip" data-name="tf-exp" data-value="3~5년" onclick="toggleTagChip(this)">3~5년</button>
-                  <button class="tag-chip" data-name="tf-exp" data-value="5~10년" onclick="toggleTagChip(this)">5~10년</button>
-                  <button class="tag-chip" data-name="tf-exp" data-value="10년 이상" onclick="toggleTagChip(this)">10년 이상</button>
-                </div>
-              </div>
-              <!-- 고용형태 -->
-              <div id="ttab-type" class="ttab-content" style="display:none;">
-                <h4 style="font-size:15px;font-weight:700;margin:0 0 16px;">고용형태</h4>
-                <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                  <button class="tag-chip" data-name="tf-type" data-value="정규직" onclick="toggleTagChip(this)">정규직</button>
-                  <button class="tag-chip" data-name="tf-type" data-value="계약직" onclick="toggleTagChip(this)">계약직</button>
-                  <button class="tag-chip" data-name="tf-type" data-value="인턴" onclick="toggleTagChip(this)">인턴</button>
-                  <button class="tag-chip" data-name="tf-type" data-value="프리랜서" onclick="toggleTagChip(this)">프리랜서</button>
-                </div>
-              </div>
-              <!-- 학력 -->
-              <div id="ttab-edu" class="ttab-content" style="display:none;">
-                <h4 style="font-size:15px;font-weight:700;margin:0 0 16px;">학력</h4>
-                <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                  <button class="tag-chip" data-name="tf-edu" data-value="학력무관" onclick="toggleTagChip(this)">학력무관</button>
-                  <button class="tag-chip" data-name="tf-edu" data-value="고졸" onclick="toggleTagChip(this)">고졸</button>
-                  <button class="tag-chip" data-name="tf-edu" data-value="대졸(2·3년)" onclick="toggleTagChip(this)">대졸(2·3년)</button>
-                  <button class="tag-chip" data-name="tf-edu" data-value="대졸(4년)" onclick="toggleTagChip(this)">대졸(4년)</button>
-                  <button class="tag-chip" data-name="tf-edu" data-value="석사" onclick="toggleTagChip(this)">석사</button>
-                  <button class="tag-chip" data-name="tf-edu" data-value="박사" onclick="toggleTagChip(this)">박사</button>
-                </div>
-              </div>
-            </div>
-            <!-- 하단 버튼 -->
-            <div style="padding:16px 24px;border-top:1px solid var(--ln);display:flex;gap:12px;">
-              <button onclick="resetThemeTagFilter()" style="flex:0 0 auto;padding:12px 24px;border-radius:10px;border:1.5px solid var(--ln);background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);color:var(--tx2);transition:background .12s;" onmouseover="this.style.background='var(--ln2)'" onmouseout="this.style.background='#fff'">초기화</button>
-              <button onclick="applyThemeTagFilter()" style="flex:1;padding:12px 24px;border-radius:10px;border:none;background:var(--brand);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);color:#fff;transition:background .12s;" onmouseover="this.style.background='var(--brand-dk)'" onmouseout="this.style.background='var(--brand)'">적용</button>
-            </div>
-          </div>
-        </div>
-
-        <style>
-          .tag-check{display:flex;align-items:center;gap:10px;padding:12px 4px;cursor:pointer;font-size:14px;color:var(--tx2);}
-          .tag-check input[type="checkbox"]{width:20px;height:20px;border-radius:4px;border:1.5px solid var(--ln);appearance:none;-webkit-appearance:none;cursor:pointer;margin:0;position:relative;background:#fff;transition:all .12s;}
-          .tag-check input[type="checkbox"]:checked{background:var(--brand);border-color:var(--brand);}
-          .tag-check input[type="checkbox"]:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:13px;font-weight:700;}
-          .tag-chip{padding:10px 18px;border-radius:999px;border:1.5px solid var(--ln);background:#fff;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--font);color:var(--tx2);transition:all .12s;}
-          .tag-chip:hover{border-color:var(--tx3);}
-          .tag-chip.active{background:var(--brand-lt);border-color:var(--brand);color:var(--brand);font-weight:600;}
-        </style>
       </div>
 
       <script>
@@ -4322,9 +4216,9 @@
                 '<div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,0.35) 100%);"></div>' +
                 '<span style="position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:20px;background:rgba(0,0,0,.4);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#fff;font-size:11px;font-weight:600;">'+t.badge+'</span>' +
               '</div>' +
-              '<div style="padding:12px 14px;">' +
-                '<div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:3px;">'+t.title+'</div>' +
-                '<div style="font-size:12px;color:var(--tx4);line-height:1.4;">'+t.desc+'</div>' +
+              '<div style="padding:16px 16px 18px;">' +
+                '<div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:5px;">'+t.title+'</div>' +
+                '<div style="font-size:12px;color:var(--tx4);line-height:1.5;">'+t.desc+'</div>' +
               '</div>' +
             '</div>';
           }).join('');
@@ -4492,7 +4386,7 @@
 
         // --- 리뷰 모아보기 직군 필터 ---
         function filterReviewByJob(job, btn){
-          document.querySelectorAll('#rv-filter-chips .theme-chip').forEach(function(c){ c.classList.remove('active'); });
+          document.querySelectorAll('#rv-filter-chips .rv-tab').forEach(function(c){ c.classList.remove('active'); });
           btn.classList.add('active');
           // 리뷰 카드 필터링은 프로토타입이므로 스크롤만 리셋
           var rvGrid = document.getElementById('rv-grid');
@@ -23759,5 +23653,104 @@ function closeRatePopup() {
   });
 })();
 </script>
+
+<!-- 태그 필터 팝업 (최상위 레벨) -->
+<div id="theme-tag-overlay" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(20,24,40,0.5);align-items:center;justify-content:center;" onclick="if(event.target===this)closeThemeTagFilter()">
+  <div style="background:#fff;border-radius:16px;width:520px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 16px 48px rgba(0,0,0,.15);">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;">
+      <h3 style="font-size:18px;font-weight:700;margin:0;">태그 전체</h3>
+      <button onclick="closeThemeTagFilter()" style="width:32px;height:32px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:background .12s;" onmouseover="this.style.background='var(--ln2)'" onmouseout="this.style.background='none'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--tx2)" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="theme-tag-tabs" style="display:flex;gap:0;padding:0 24px;border-bottom:1px solid var(--ln);">
+      <button class="ttab active" data-tab="region" onclick="switchTagTab('region',this)" style="padding:10px 16px;font-size:14px;font-weight:600;border:none;background:none;cursor:pointer;font-family:var(--font);color:var(--tx);border-bottom:2px solid var(--brand);margin-bottom:-1px;">지역</button>
+      <button class="ttab" data-tab="job" onclick="switchTagTab('job',this)" style="padding:10px 16px;font-size:14px;font-weight:600;border:none;background:none;cursor:pointer;font-family:var(--font);color:var(--tx4);border-bottom:2px solid transparent;margin-bottom:-1px;">직무</button>
+      <button class="ttab" data-tab="exp" onclick="switchTagTab('exp',this)" style="padding:10px 16px;font-size:14px;font-weight:600;border:none;background:none;cursor:pointer;font-family:var(--font);color:var(--tx4);border-bottom:2px solid transparent;margin-bottom:-1px;">경력</button>
+      <button class="ttab" data-tab="type" onclick="switchTagTab('type',this)" style="padding:10px 16px;font-size:14px;font-weight:600;border:none;background:none;cursor:pointer;font-family:var(--font);color:var(--tx4);border-bottom:2px solid transparent;margin-bottom:-1px;">고용형태</button>
+      <button class="ttab" data-tab="edu" onclick="switchTagTab('edu',this)" style="padding:10px 16px;font-size:14px;font-weight:600;border:none;background:none;cursor:pointer;font-family:var(--font);color:var(--tx4);border-bottom:2px solid transparent;margin-bottom:-1px;">학력</button>
+    </div>
+    <div style="padding:24px;overflow-y:auto;flex:1;">
+      <div id="ttab-region" class="ttab-content">
+        <h4 style="font-size:15px;font-weight:700;margin:0 0 16px;">지역</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="서울"><span>서울</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="경기"><span>경기</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="인천"><span>인천</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="부산"><span>부산</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="대구"><span>대구</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="대전"><span>대전</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="광주"><span>광주</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="울산"><span>울산</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="세종"><span>세종</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="강원"><span>강원</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="경남"><span>경남</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="경북"><span>경북</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="전남"><span>전남</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="전북"><span>전북</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="충남"><span>충남</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="충북"><span>충북</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="제주"><span>제주</span></label>
+          <label class="tag-check"><input type="checkbox" name="tf-region" value="해외"><span>해외</span></label>
+        </div>
+      </div>
+      <div id="ttab-job" class="ttab-content" style="display:none;">
+        <h4 style="font-size:15px;font-weight:700;margin:0 0 16px;">직무</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <button class="tag-chip" data-name="tf-job" data-value="개발" onclick="toggleTagChip(this)">개발</button>
+          <button class="tag-chip" data-name="tf-job" data-value="디자인" onclick="toggleTagChip(this)">디자인</button>
+          <button class="tag-chip" data-name="tf-job" data-value="기획/PM" onclick="toggleTagChip(this)">기획/PM</button>
+          <button class="tag-chip" data-name="tf-job" data-value="마케팅" onclick="toggleTagChip(this)">마케팅</button>
+          <button class="tag-chip" data-name="tf-job" data-value="영업" onclick="toggleTagChip(this)">영업</button>
+          <button class="tag-chip" data-name="tf-job" data-value="경영/인사" onclick="toggleTagChip(this)">경영/인사</button>
+          <button class="tag-chip" data-name="tf-job" data-value="고객/운영" onclick="toggleTagChip(this)">고객/운영</button>
+        </div>
+      </div>
+      <div id="ttab-exp" class="ttab-content" style="display:none;">
+        <h4 style="font-size:15px;font-weight:700;margin:0 0 16px;">경력</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <button class="tag-chip" data-name="tf-exp" data-value="신입" onclick="toggleTagChip(this)">신입</button>
+          <button class="tag-chip" data-name="tf-exp" data-value="1~3년" onclick="toggleTagChip(this)">1~3년</button>
+          <button class="tag-chip" data-name="tf-exp" data-value="3~5년" onclick="toggleTagChip(this)">3~5년</button>
+          <button class="tag-chip" data-name="tf-exp" data-value="5~10년" onclick="toggleTagChip(this)">5~10년</button>
+          <button class="tag-chip" data-name="tf-exp" data-value="10년 이상" onclick="toggleTagChip(this)">10년 이상</button>
+        </div>
+      </div>
+      <div id="ttab-type" class="ttab-content" style="display:none;">
+        <h4 style="font-size:15px;font-weight:700;margin:0 0 16px;">고용형태</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <button class="tag-chip" data-name="tf-type" data-value="정규직" onclick="toggleTagChip(this)">정규직</button>
+          <button class="tag-chip" data-name="tf-type" data-value="계약직" onclick="toggleTagChip(this)">계약직</button>
+          <button class="tag-chip" data-name="tf-type" data-value="인턴" onclick="toggleTagChip(this)">인턴</button>
+          <button class="tag-chip" data-name="tf-type" data-value="프리랜서" onclick="toggleTagChip(this)">프리랜서</button>
+        </div>
+      </div>
+      <div id="ttab-edu" class="ttab-content" style="display:none;">
+        <h4 style="font-size:15px;font-weight:700;margin:0 0 16px;">학력</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <button class="tag-chip" data-name="tf-edu" data-value="학력무관" onclick="toggleTagChip(this)">학력무관</button>
+          <button class="tag-chip" data-name="tf-edu" data-value="고졸" onclick="toggleTagChip(this)">고졸</button>
+          <button class="tag-chip" data-name="tf-edu" data-value="대졸(2·3년)" onclick="toggleTagChip(this)">대졸(2·3년)</button>
+          <button class="tag-chip" data-name="tf-edu" data-value="대졸(4년)" onclick="toggleTagChip(this)">대졸(4년)</button>
+          <button class="tag-chip" data-name="tf-edu" data-value="석사" onclick="toggleTagChip(this)">석사</button>
+          <button class="tag-chip" data-name="tf-edu" data-value="박사" onclick="toggleTagChip(this)">박사</button>
+        </div>
+      </div>
+    </div>
+    <div style="padding:16px 24px;border-top:1px solid var(--ln);display:flex;gap:12px;">
+      <button onclick="resetThemeTagFilter()" style="flex:0 0 auto;padding:12px 24px;border-radius:10px;border:1.5px solid var(--ln);background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);color:var(--tx2);transition:background .12s;" onmouseover="this.style.background='var(--ln2)'" onmouseout="this.style.background='#fff'">초기화</button>
+      <button onclick="applyThemeTagFilter()" style="flex:1;padding:12px 24px;border-radius:10px;border:none;background:var(--brand);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);color:#fff;transition:background .12s;" onmouseover="this.style.background='var(--brand-dk)'" onmouseout="this.style.background='var(--brand)'">적용</button>
+    </div>
+  </div>
+</div>
+<style>
+  .tag-check{display:flex;align-items:center;gap:10px;padding:12px 4px;cursor:pointer;font-size:14px;color:var(--tx2);}
+  .tag-check input[type="checkbox"]{width:20px;height:20px;border-radius:4px;border:1.5px solid var(--ln);appearance:none;-webkit-appearance:none;cursor:pointer;margin:0;position:relative;background:#fff;transition:all .12s;}
+  .tag-check input[type="checkbox"]:checked{background:var(--brand);border-color:var(--brand);}
+  .tag-check input[type="checkbox"]:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:13px;font-weight:700;}
+  .tag-chip{padding:10px 18px;border-radius:999px;border:1.5px solid var(--ln);background:#fff;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--font);color:var(--tx2);transition:all .12s;}
+  .tag-chip:hover{border-color:var(--tx3);}
+  .tag-chip.active{background:var(--brand-lt);border-color:var(--brand);color:var(--brand);font-weight:600;}
+</style>
 </body>
 </html>
