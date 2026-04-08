@@ -14723,7 +14723,7 @@ function filterThemeChip(btn) {
   // 칩 텍스트로 리스트 전환
   var text = btn.textContent.trim();
   var mode = 'default';
-  if (text.indexOf('워라밸') >= 0) mode = 'wlb';
+  if (text.indexOf('워라밸') >= 0) mode = 'trending-rising';
   if (text.indexOf('인기 리뷰') >= 0) mode = 'trending-hot';
   if (text.indexOf('조회 상승') >= 0) mode = 'trending-rising';
 
@@ -14752,8 +14752,6 @@ function filterThemeChip(btn) {
 
   if (mode === 'default') {
     ['theme-rising-sidebar'].forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display=''; });
-  } else if (mode === 'wlb') {
-    ['theme-wlb-sidebar','theme-wlb-cta'].forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display=''; });
   } else if (mode === 'trending-hot') {
     // 인기 리뷰: 우측 카드 없음
   } else if (mode === 'trending-rising') {
