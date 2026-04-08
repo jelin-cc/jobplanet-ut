@@ -5633,8 +5633,18 @@
 
     /* 탭 메뉴 */
     .review-tab-menu {
-      position: relative;
-      margin-bottom: 12px;
+      position: sticky;
+      top: 56px;
+      z-index: 90;
+      background: #fff;
+      margin-bottom: 0;
+    }
+    [data-tab-content] > div:first-child,
+    [data-tab-content] > :first-child {
+      margin-top: 8px;
+    }
+    [data-tab-content="interview"] .rv-card-list {
+      margin-top: 8px;
     }
     .review-tab-list {
       display: flex;
@@ -5742,6 +5752,18 @@
       border-radius: 4px;
       line-height: 18px;
       flex-shrink: 0;
+    }
+    [data-tab-content="work"] .rv-card[data-review-type="interview"] {
+      display: none !important;
+    }
+    .rv-banner .rv-card-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: #00c362;
+      background: rgba(0,195,98,0.1);
+      padding: 2px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(0,195,98,0.3);
     }
 
     /* 작성자 정보 */
@@ -5912,51 +5934,67 @@
     /* ===== 리뷰 배너 카드 ===== */
     #page-review .rv-banner {
       width: 100%;
-      background: #fff;
-      border: 1px solid #e5e6e9;
-      border-radius: 16px;
+      background: linear-gradient(135deg, #edf9f1 0%, #e4f5ea 100%);
+      border: none;
+      border-radius: 20px;
       overflow: hidden;
       display: flex;
-      align-items: center;
+      align-items: stretch;
       padding: 0;
       position: relative;
-      min-height: 140px;
+      min-height: 160px;
       font-family: 'Pretendard', var(--font), sans-serif;
       box-shadow: none;
       cursor: default;
-      transform: none;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    #page-review .rv-banner.rv-banner--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .rv-banner-chip {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #00c362;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 20px;
+      margin-bottom: 10px;
     }
     .rv-banner-illust {
-      width: 114px;
-      height: 140px;
+      width: 120px;
+      height: auto;
       flex-shrink: 0;
-      margin-left: 34px;
-      object-fit: cover;
+      object-fit: contain;
+      margin-right: 28px;
     }
     .rv-banner-body {
       flex: 1;
-      padding: 24px 0 24px 24px;
+      padding: 28px 0 28px 32px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 8px;
     }
     .rv-banner-top {
       display: flex;
       align-items: center;
-      gap: 4px;
-      margin-bottom: 6px;
+      gap: 6px;
+      margin-bottom: 2px;
     }
     .rv-banner-company {
-      font-size: 16px;
-      font-weight: 500;
-      color: #323438;
-      line-height: 24px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #57595b;
+      line-height: 20px;
     }
     .rv-banner-title {
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 20px;
+      font-weight: 800;
       color: #242628;
-      line-height: 28px;
+      line-height: 30px;
     }
     .rv-banner-link {
       font-size: 12px;
@@ -5966,6 +6004,7 @@
       display: flex;
       align-items: center;
       gap: 2px;
+      margin-top: 4px;
     }
     .rv-banner-link::after {
       content: '›';
@@ -5975,14 +6014,15 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      width: 184px;
+      width: 160px;
       flex-shrink: 0;
-      margin-right: 40px;
+      align-self: center;
+      margin-right: 28px;
     }
     .rv-banner-btn {
       width: 100%;
-      padding: 9px 12px;
-      border-radius: 6px;
+      padding: 10px 12px;
+      border-radius: 10px;
       font-size: 14px;
       font-weight: 700;
       font-family: 'Pretendard', var(--font), sans-serif;
@@ -5994,22 +6034,24 @@
       background: #00c362;
       color: #fff;
       border: none;
+      box-shadow: 0 2px 8px rgba(0,195,98,0.2);
     }
     .rv-banner-btn--fill:hover {
       background: #00a855;
     }
     .rv-banner-btn--outline {
-      background: #fff;
+      background: rgba(255,255,255,0.8);
       color: #00c362;
-      border: 1px solid #00c362;
+      border: 1.5px solid #00c362;
     }
     .rv-banner-btn--outline:hover {
-      background: #f3fcf9;
+      background: #fff;
     }
     .rv-banner-btn--grey {
       background: #fff;
       color: #686a6d;
       border: 1px solid #e5e6e9;
+      border-radius: 10px;
     }
     .rv-banner-btn--grey:hover {
       background: #f7f8f9;
@@ -6019,6 +6061,7 @@
       color: #c5c7cc;
       border: none;
       cursor: default;
+      border-radius: 10px;
     }
     .rv-banner-btn--grey.selected {
       border-color: #00c362;
@@ -6029,6 +6072,8 @@
       color: #fff;
       border: none;
       cursor: pointer;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,195,98,0.2);
     }
     .rv-banner-btn--submit-active:hover {
       background: #00a855;
@@ -6530,9 +6575,9 @@
       gap: 16px;
       font-family: 'Pretendard', var(--font), sans-serif;
       position: sticky;
-      top: 70px;
+      top: 112px;
       align-self: flex-start;
-      max-height: calc(100vh - 80px);
+      max-height: calc(100vh - 120px);
       overflow-y: auto;
       scrollbar-width: none;
     }
@@ -6834,13 +6879,12 @@
         <button class="rv-review-type-chip" onclick="toggleReviewType(this,'kakaobank','work')" style="padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid #e5e6e9;background:#fff;color:#242628;cursor:pointer;font-family:'Pretendard',var(--font),sans-serif;">카카오뱅크</button>
         <span style="flex:1;"></span>
         <span style="position:relative;">
-          <button id="work-sort-btn-1952" onclick="toggleWorkSortPanel1952()" style="display:inline-flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;font-family:'Pretendard',sans-serif;font-size:13px;font-weight:600;color:#242628;padding:4px 0;">
-            <span id="work-sort-label-1952">최신순</span> <span style="font-size:10px;">▾</span>
+          <button id="work-sort-btn" onclick="toggleTabSort('work')" style="display:inline-flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;font-family:'Pretendard',sans-serif;font-size:13px;font-weight:600;color:#242628;padding:4px 0;">
+            <span id="work-sort-label">최신순</span> <span style="font-size:10px;">▾</span>
           </button>
-          <div id="work-sort-panel-1952" style="display:none;position:absolute;top:32px;right:0;width:140px;background:#fff;border:1px solid #e5e6e9;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.1);padding:4px;z-index:100;">
-            <div onclick="selectWorkSort1952('최신순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">최신순</div>
-            <div onclick="selectWorkSort1952('인기순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">인기순</div>
-            <div onclick="selectWorkSort1952('도움이돼요 순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">도움이돼요 순</div>
+          <div id="work-sort-panel" style="display:none;position:absolute;top:32px;right:0;width:140px;background:#fff;border:1px solid #e5e6e9;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.1);padding:4px;z-index:100;">
+            <div onclick="selectTabSort('work','최신순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">최신순</div>
+            <div onclick="selectTabSort('work','인기순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">인기순</div>
           </div>
         </span>
       </div>
@@ -6877,6 +6921,7 @@
             <div class="rv-card-title">디자이너로서 다양한 프로젝트 경험 가능<br>안정적인 복지와 근무 환경이 좋음</div>
             <div class="rv-card-section"><p><span class="rv-card-badge rv-card-badge--pro">장점</span> 다양한 서비스를 경험할 수 있어 포트폴리오 쌓기 좋음. 사내 디자인 시스템이 잘 갖춰져 있고, 리서치 환경도 좋음.</p></div>
             <div class="rv-card-section"><p><span class="rv-card-badge rv-card-badge--con">단점</span> 조직이 크다보니 의사결정이 느릴 때가 있음. 원하는 프로젝트에 배치되지 않을 수 있음.</p></div>
+            <div class="rv-card-section"><p><span class="rv-card-badge rv-card-badge--wish">경영진에 바라는 점</span> 디자이너 커리어 패스를 더 명확하게 제시해주고, 직군 간 이동 기회를 넓혀줬으면 함.</p></div>
             <div class="rv-card-reactions">
               <span>— 1년 후 성장하고 있을 것 같아요</span><div class="rv-card-meta-sep"></div><span>👍 기업을 추천해요</span>
             </div>
@@ -6978,8 +7023,7 @@
 
       <!-- 여기어때 배너 (work) -->
       <div class="rv-banner" id="rv-banner-vote-work">
-        <div id="rv-banner-default-work" style="display:flex;align-items:center;width:100%;min-height:140px;">
-          <img class="rv-banner-illust" src="https://www.figma.com/api/mcp/asset/3d146177-7681-467a-addf-bbcdbdb76312" alt="">
+        <div id="rv-banner-default-work" style="display:flex;align-items:center;width:100%;min-height:160px;">
           <div class="rv-banner-body">
             <div>
               <div class="rv-banner-top">
@@ -6988,7 +7032,6 @@
               </div>
               <div class="rv-banner-title">복지·연봉은 괜찮지만<br>워라밸이 아쉽다는데 사실인가요?</div>
             </div>
-            <a href="#" class="rv-banner-link">리뷰 보러가기</a>
           </div>
           <div class="rv-banner-actions">
             <button class="rv-banner-btn rv-banner-btn--fill" onclick="showBannerDifferWork()">다른거 같아요</button>
@@ -7102,31 +7145,34 @@
       </div>
 
       <!-- 한 단어 배너 (work) -->
-      <div class="rv-banner" id="rv-word-banner-work" style="min-height:152px;height:152px;">
-        <div id="rv-word-default-work" style="display:flex;align-items:center;width:100%;height:100%;">
-          <img class="rv-banner-illust" src="https://www.figma.com/api/mcp/asset/698f6376-2d95-4e0f-9748-f05b24fa85ca" alt="" style="width:113px;height:66px;margin-left:31px;object-fit:cover;">
-          <div class="rv-banner-body" style="padding:20px 0 20px 24px;gap:0;">
+      <div class="rv-banner" id="rv-word-banner-work" style="min-height:160px;background:linear-gradient(135deg,#fff8e1 0%,#fff3cc 100%);">
+        <div id="rv-word-default-work" style="display:flex;align-items:center;justify-content:center;width:100%;min-height:160px;padding:28px 0;box-sizing:border-box;">
+          <div class="rv-banner-body" style="padding:0 0 0 32px;gap:8px;">
             <div>
-              <div style="font-size:18px;font-weight:700;color:#242628;line-height:28px;">경미님이 다녔던 <span style="color:#00c362;">(주)카카오뱅크</span>를</div>
+              <div style="font-size:20px;font-weight:800;color:#242628;line-height:30px;">경미님이 다녔던 <span style="color:#f5a623;">(주)카카오뱅크</span>를</div>
               <div style="display:flex;align-items:center;gap:6px;">
-                <span style="display:inline-flex;align-items:center;justify-content:center;padding:5px 8px;border:1px solid #e5e6e9;border-radius:6px;font-size:18px;font-weight:700;color:#57595b;line-height:28px;background:#fff;">한 단어</span>
-                <span style="font-size:18px;font-weight:700;color:#242628;line-height:28px;">로 표현한다면?</span>
+                <span style="display:inline-flex;align-items:center;justify-content:center;padding:5px 10px;border:1.5px solid #f5a623;border-radius:8px;font-size:20px;font-weight:800;color:#f5a623;line-height:28px;background:rgba(255,255,255,0.7);">한 단어</span>
+                <span style="font-size:20px;font-weight:800;color:#242628;line-height:30px;">로 표현한다면?</span>
               </div>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:222px;flex-shrink:0;margin-right:40px;">
-            <button class="rv-banner-btn rv-banner-btn--outline" onclick="selectWordWork(this)">안정적</button>
-            <button class="rv-banner-btn rv-banner-btn--outline" onclick="selectWordWork(this)">급진적인</button>
-            <button class="rv-banner-btn rv-banner-btn--outline" onclick="selectWordWork(this)">버티는</button>
-            <button class="rv-banner-btn rv-banner-btn--outline" onclick="selectWordWork(this)">직접 입력</button>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:222px;flex-shrink:0;margin-right:28px;align-self:center;">
+            <button class="rv-banner-btn" style="background:rgba(255,255,255,0.8);color:#242628;border:1.5px solid #f5a623;border-radius:10px;" onclick="selectWordWork(this)">안정적</button>
+            <button class="rv-banner-btn" style="background:rgba(255,255,255,0.8);color:#242628;border:1.5px solid #f5a623;border-radius:10px;" onclick="selectWordWork(this)">급진적인</button>
+            <button class="rv-banner-btn" style="background:rgba(255,255,255,0.8);color:#242628;border:1.5px solid #f5a623;border-radius:10px;" onclick="selectWordWork(this)">버티는</button>
+            <button class="rv-banner-btn" style="background:rgba(255,255,255,0.8);color:#242628;border:1.5px solid #f5a623;border-radius:10px;" onclick="selectWordWork(this)">직접 입력</button>
           </div>
         </div>
-        <div id="rv-word-result-work" style="display:none;align-items:center;width:100%;height:100%;padding:0 40px;">
+        <div id="rv-word-result-work" style="display:none;align-items:center;justify-content:center;width:100%;min-height:160px;padding:28px 32px;box-sizing:border-box;">
           <div style="flex:1;">
-            <div style="font-size:18px;font-weight:700;color:#242628;line-height:28px;">비슷하게 느낀 분들이 <span style="color:#00c362;" id="rv-word-count-work">24</span>명이에요.</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <span id="rv-word-selected-work" style="display:inline-block;padding:4px 14px;background:#f5a623;color:#fff;font-size:13px;font-weight:700;border-radius:20px;"></span>
+              <span style="font-size:13px;color:#686a6d;">을 선택했어요</span>
+            </div>
+            <div style="font-size:18px;font-weight:700;color:#242628;line-height:28px;">비슷하게 느낀 분들이 <span style="color:#f5a623;" id="rv-word-count-work">24</span>명이에요.</div>
             <div style="font-size:14px;color:#686a6d;line-height:22px;margin-top:4px;">이유가 있다면 남겨주세요</div>
           </div>
-          <button class="rv-banner-btn rv-banner-btn--fill" style="width:auto;padding:9px 24px;flex-shrink:0;" onclick="goDirectReviewWrite('(주)카카오뱅크')">내 경험 남기기</button>
+          <button class="rv-banner-btn rv-banner-btn--fill" style="width:auto;padding:10px 24px;flex-shrink:0;" onclick="goDirectReviewWrite('(주)카카오뱅크')">리뷰 쓰고 다른 의견 보기</button>
         </div>
       </div>
 
@@ -8414,7 +8460,7 @@
       </div>
 
       <!-- 넛지 1: 워라밸 의견 갈림 투표 -->
-      <div class="rv-nudge">
+      <div class="rv-nudge" id="nudge-jobreview-1">
         <div class="rv-nudge-poll-q">⚡ 디자이너들 사이에서 <span class="em">워라밸</span> 평점이 가장 의견이 갈려요<br>경미님 생각은?</div>
         <div class="rv-nudge-poll-options" id="nudge-poll-1">
           <button class="rv-nudge-poll-btn" onclick="votePoll(1, this, 38)">😊 만족하는 편</button>
@@ -8422,7 +8468,7 @@
           <button class="rv-nudge-poll-btn" onclick="votePoll(1, this, 28)">😩 아쉬운 편</button>
         </div>
         <div class="rv-nudge-poll-result" id="nudge-poll-result-1"></div>
-        <button class="rv-nudge-poll-cta" id="nudge-poll-cta-1" onclick="openCompanySelect()">경미님의 솔직한 점수도 남겨주세요</button>
+        <button class="rv-nudge-poll-cta" id="nudge-poll-cta-1" onclick="onUnifiedNudgeCta('nudge-jobreview-1')">경미님의 솔직한 점수도 남겨주세요</button>
       </div>
 
       <!-- 디자이너 4: 당근 -->
@@ -8586,7 +8632,7 @@
       </div>
 
       <!-- 넛지 2: 추천율 기반 유도 -->
-      <div class="rv-nudge">
+      <div class="rv-nudge" id="nudge-jobreview-2">
         <div class="rv-nudge-compat">
           <div class="rv-nudge-compat-gauge" id="nudge-gauge" style="background:conic-gradient(#00c362 0%, #00c362 53%, #f3f3f4 53%, #f3f3f4 100%);">
             <div class="rv-nudge-compat-gauge-inner" id="nudge-gauge-num">53%</div>
@@ -8594,7 +8640,7 @@
           <div class="rv-nudge-compat-body">
             <div class="rv-nudge-compat-title">🤔 컬리 디자이너 기업 추천율 53% — 절반만 추천하는 이유는?</div>
             <div class="rv-nudge-compat-desc">리뷰를 남기면 직군별 추천율·CEO 지지율·성장 가능성<br>상세 리포트를 확인할 수 있어요.</div>
-            <button class="rv-nudge-compat-btn" onclick="openCompanySelect()">리뷰 남기고 리포트 보기</button>
+            <button class="rv-nudge-compat-btn" onclick="onUnifiedNudgeCta('nudge-jobreview-2')">리뷰 남기고 리포트 보기</button>
           </div>
         </div>
       </div>
@@ -8773,13 +8819,12 @@
           <button id="jobreview-filter-job" onclick="toggleJobReviewPanel()" style="padding:8px 16px;border:1px solid #242628;border-radius:8px;font-size:13px;font-weight:700;color:#242628;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;display:flex;align-items:center;gap:6px;"><span id="jobreview-selected-job"></span> <span style="font-size:10px;">▾</span></button>
           <span style="flex:1;"></span>
           <span style="position:relative;">
-            <button id="jobreview-sort-btn" onclick="toggleJobreviewSortPanel()" style="display:inline-flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;font-family:'Pretendard',sans-serif;font-size:13px;font-weight:600;color:#242628;padding:4px 0;">
+            <button id="jobreview-sort-btn" onclick="toggleTabSort('jobreview')" style="display:inline-flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;font-family:'Pretendard',sans-serif;font-size:13px;font-weight:600;color:#242628;padding:4px 0;">
               <span id="jobreview-sort-label">최신순</span> <span style="font-size:10px;">▾</span>
             </button>
             <div id="jobreview-sort-panel" style="display:none;position:absolute;top:32px;right:0;width:140px;background:#fff;border:1px solid #e5e6e9;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.1);padding:4px;z-index:100;">
-              <div onclick="selectJobreviewSort('최신순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">최신순</div>
-              <div onclick="selectJobreviewSort('인기순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">인기순</div>
-              <div onclick="selectJobreviewSort('도움이돼요 순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">도움이돼요 순</div>
+              <div onclick="selectTabSort('jobreview','최신순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">최신순</div>
+              <div onclick="selectTabSort('jobreview','인기순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">인기순</div>
             </div>
           </span>
           <!-- 직군 리뷰 직군 패널 -->
@@ -8846,13 +8891,12 @@
         <button onclick="showInterestPopup()" style="padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;border:1px dashed #c5c7cc;background:#fff;color:#949ba8;cursor:pointer;font-family:'Pretendard',var(--font),sans-serif;display:flex;align-items:center;gap:4px;">관심 기업 <span style="font-size:14px;color:#00c362;">+</span></button>
         <span style="flex:1;"></span>
         <span style="position:relative;">
-          <button id="interest-sort-btn" onclick="toggleInterestSortPanel()" style="display:inline-flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;font-family:'Pretendard',sans-serif;font-size:13px;font-weight:600;color:#242628;padding:4px 0;">
+          <button id="interest-sort-btn" onclick="toggleTabSort('interest')" style="display:inline-flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;font-family:'Pretendard',sans-serif;font-size:13px;font-weight:600;color:#242628;padding:4px 0;">
             <span id="interest-sort-label">최신순</span> <span style="font-size:10px;">▾</span>
           </button>
           <div id="interest-sort-panel" style="display:none;position:absolute;top:32px;right:0;width:140px;background:#fff;border:1px solid #e5e6e9;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.1);padding:4px;z-index:100;">
-            <div onclick="selectInterestSort('최신순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">최신순</div>
-            <div onclick="selectInterestSort('인기순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">인기순</div>
-            <div onclick="selectInterestSort('도움이돼요 순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">도움이돼요 순</div>
+            <div onclick="selectTabSort('interest','최신순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">최신순</div>
+            <div onclick="selectTabSort('interest','인기순')" style="padding:10px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:#242628;" onmouseenter="this.style.background='#f7f8f9'" onmouseleave="this.style.background='transparent'">인기순</div>
           </div>
         </span>
       </div>
@@ -8981,7 +9025,7 @@
       </div>
 
       <!-- 넛지: 관심 기업 비교 투표 -->
-      <div class="rv-nudge">
+      <div class="rv-nudge" id="nudge-interest-1">
         <div class="rv-nudge-poll-q">🏢 경미님의 관심 기업 중 <span class="em">워라밸 만족도 1위</span>는 어디일까요?</div>
         <div class="rv-nudge-poll-options" id="nudge-poll-interest">
           <button class="rv-nudge-poll-btn" onclick="votePollInterest(this, 42, '토스')">토스</button>
@@ -8989,7 +9033,7 @@
           <button class="rv-nudge-poll-btn" onclick="votePollInterest(this, 27, '카카오')">카카오</button>
         </div>
         <div class="rv-nudge-poll-result" id="nudge-poll-result-interest"></div>
-        <button class="rv-nudge-poll-cta" id="nudge-poll-cta-interest" onclick="openCompanySelect()" style="display:none;">내 경험도 공유하기</button>
+        <button class="rv-nudge-poll-cta" id="nudge-poll-cta-interest" onclick="onUnifiedNudgeCta('nudge-interest-1')" style="display:none;">내 경험도 공유하기</button>
       </div>
 
       <!-- 관심4: 라인 -->
@@ -9153,13 +9197,13 @@
       </div>
 
       <!-- 넛지: 키워드 공개형 -->
-      <div class="rv-nudge">
+      <div class="rv-nudge" id="nudge-interest-2">
         <div class="rv-nudge-compat">
           <div style="width:100px;height:100px;border-radius:16px;background:#f7f8f9;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:40px;">🔍</div>
           <div class="rv-nudge-compat-body">
             <div class="rv-nudge-compat-title">토스 현직자가 가장 많이 언급한 키워드는?</div>
             <div class="rv-nudge-compat-desc">관심 기업의 리뷰에서 <strong>장점·단점 키워드 TOP 5</strong>를<br>리뷰 작성 후 확인할 수 있어요.</div>
-            <button class="rv-nudge-compat-btn" onclick="openCompanySelect()">리뷰 쓰고 키워드 확인하기</button>
+            <button class="rv-nudge-compat-btn" onclick="onUnifiedNudgeCta('nudge-interest-2')">리뷰 쓰고 키워드 확인하기</button>
           </div>
         </div>
       </div>
@@ -10289,17 +10333,17 @@
             <div id="iv-tier-1" onclick="ivTierAction(1)" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid #00c362;border-radius:10px;cursor:pointer;background:#fff;transition:all 0.3s;">
               <div style="width:24px;height:24px;border-radius:50%;background:#00c362;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;color:#fff;font-weight:700;" id="iv-tier-1-icon">1</div>
               <span style="font-size:12px;font-weight:700;color:#242628;flex:1;">면접 질문 TOP 10</span>
-              <span style="font-size:11px;font-weight:600;color:#00c362;">면접 리뷰 2건 작성 시</span>
+              <span style="font-size:11px;font-weight:600;color:#00c362;">면접 리뷰 1건 작성 시</span>
             </div>
             <div id="iv-tier-2" onclick="ivTierAction(2)" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid transparent;border-radius:10px;cursor:default;background:#f7f8f9;transition:all 0.3s;opacity:0.5;">
               <div style="width:24px;height:24px;border-radius:50%;background:#e5e6e9;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;" id="iv-tier-2-icon">🔒</div>
               <span style="font-size:12px;font-weight:700;color:#242628;flex:1;">합격자 답변 패턴</span>
-              <span style="font-size:11px;font-weight:600;color:#949ba8;">잠김</span>
+              <span style="font-size:11px;font-weight:600;color:#949ba8;">면접 리뷰 2건 작성 시</span>
             </div>
             <div id="iv-tier-3" onclick="ivTierAction(3)" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid transparent;border-radius:10px;cursor:default;background:#f7f8f9;transition:all 0.3s;opacity:0.5;">
               <div style="width:24px;height:24px;border-radius:50%;background:#e5e6e9;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;" id="iv-tier-3-icon">🔒</div>
               <span style="font-size:12px;font-weight:700;color:#242628;flex:1;">기업별 비교 분석</span>
-              <span style="font-size:11px;font-weight:600;color:#949ba8;">잠김</span>
+              <span style="font-size:11px;font-weight:600;color:#949ba8;">면접 리뷰 3건 작성 시</span>
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
@@ -10311,31 +10355,31 @@
         </div>
 
         <!-- 면접 경험 좋은 기업 (롤링 버전) -->
-        <div class="rv-side-cta" style="gap:6px;padding:16px 20px;">
+        <div class="rv-side-cta" id="rolling-interview-card" style="gap:6px;padding:16px 20px;cursor:pointer;" onclick="onRollingInterviewCardClick(event)">
           <div style="font-size:14px;font-weight:700;color:#242628;">😊 면접 경험이 좋은 기업</div>
           <div style="font-size:11px;color:#949ba8;margin-bottom:4px;">면접 경험 "긍정적" 비율 기준</div>
           <div id="rolling-interview" style="display:flex;flex-direction:column;gap:4px;">
 
-            <div class="rolling-item" data-idx="0" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid #00c362;border-radius:10px;cursor:pointer;background:#fff;transition:all 0.3s;" onclick="openCompanyPage('danggun')">
+            <div class="rolling-item" data-idx="0" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid #00c362;border-radius:10px;cursor:pointer;background:#fff;transition:all 0.3s;" onclick="onRollingItemClick(event,'danggun')">
               <div class="rv-status-logo" style="width:24px;height:24px;font-size:8px;font-weight:800;color:#ff6813;">당근</div>
               <span style="font-size:12px;font-weight:700;color:#242628;flex:1;">당근마켓</span>
               <span style="font-size:11px;font-weight:700;color:#00c362;">긍정 87%</span>
             </div>
-            <div class="rolling-summary" data-for="0" style="padding:6px 12px 10px;font-size:12px;color:#686a6d;line-height:18px;">"면접관이 편안한 분위기를 만들어줌. 지원자를 존중하는 느낌이 확실히 들었음."</div>
+            <div class="rolling-summary" data-for="0" style="padding:6px 12px 10px;font-size:12px;color:#686a6d;line-height:18px;cursor:pointer;" onclick="onRollingInterviewCardClick(event)">"면접관이 편안한 분위기를 만들어줌. 지원자를 존중하는 느낌이 확실히 들었음."</div>
 
-            <div class="rolling-item" data-idx="1" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid transparent;border-radius:10px;cursor:pointer;background:#f7f8f9;transition:all 0.3s;" onclick="openCompanyPage('line')">
+            <div class="rolling-item" data-idx="1" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid transparent;border-radius:10px;cursor:pointer;background:#f7f8f9;transition:all 0.3s;" onclick="onRollingItemClick(event,'line')">
               <div class="rv-status-logo" style="width:24px;height:24px;font-size:7px;font-weight:800;color:#1EC800;">LINE</div>
               <span style="font-size:12px;font-weight:700;color:#242628;flex:1;">라인플러스</span>
               <span style="font-size:11px;font-weight:700;color:#00c362;">긍정 82%</span>
             </div>
-            <div class="rolling-summary" data-for="1" style="display:none;padding:6px 12px 10px;font-size:12px;color:#686a6d;line-height:18px;">"피드백을 실시간으로 줘서 대화하는 느낌. 면접이라기보다 토론 같았음."</div>
+            <div class="rolling-summary" data-for="1" style="display:none;padding:6px 12px 10px;font-size:12px;color:#686a6d;line-height:18px;cursor:pointer;" onclick="onRollingInterviewCardClick(event)">"피드백을 실시간으로 줘서 대화하는 느낌. 면접이라기보다 토론 같았음."</div>
 
-            <div class="rolling-item" data-idx="2" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid transparent;border-radius:10px;cursor:pointer;background:#f7f8f9;transition:all 0.3s;" onclick="openCompanyPage('naver')">
+            <div class="rolling-item" data-idx="2" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid transparent;border-radius:10px;cursor:pointer;background:#f7f8f9;transition:all 0.3s;" onclick="onRollingItemClick(event,'naver')">
               <div class="rv-status-logo" style="width:24px;height:24px;"><img src="naver.png" alt="" style="max-width:20px;max-height:10px;"></div>
               <span style="font-size:12px;font-weight:700;color:#242628;flex:1;">네이버</span>
               <span style="font-size:11px;font-weight:700;color:#00c362;">긍정 78%</span>
             </div>
-            <div class="rolling-summary" data-for="2" style="display:none;padding:6px 12px 10px;font-size:12px;color:#686a6d;line-height:18px;">"모르는 부분은 힌트를 줌. 압박 없이 편안하게 진행돼서 실력 발휘하기 좋았음."</div>
+            <div class="rolling-summary" data-for="2" style="display:none;padding:6px 12px 10px;font-size:12px;color:#686a6d;line-height:18px;cursor:pointer;" onclick="onRollingInterviewCardClick(event)">"모르는 부분은 힌트를 줌. 압박 없이 편안하게 진행돼서 실력 발휘하기 좋았음."</div>
 
 
           </div>
@@ -10441,9 +10485,9 @@
 
       <!-- 테마 칩 필터 -->
       <div style="display:flex;gap:8px;padding:6px 0;width:100%;">
-        <button class="rpc-chip" onclick="filterThemeChip(this)" style="padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;border:1px solid #242628;background:#fff;color:#242628;cursor:pointer;font-family:'Pretendard',var(--font),sans-serif;">평점 상승중</button>
-        <button class="rpc-chip" onclick="filterThemeChip(this)" style="padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid #e5e6e9;background:#fff;color:#242628;cursor:pointer;font-family:'Pretendard',var(--font),sans-serif;">인기 리뷰</button>
-        <button class="rpc-chip" onclick="filterThemeChip(this)" style="padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid #e5e6e9;background:#fff;color:#242628;cursor:pointer;font-family:'Pretendard',var(--font),sans-serif;">리뷰 조회 상승중</button>
+        <button class="rpc-chip" onclick="filterThemeChip(this)" style="padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;border:1px solid #242628;background:#fff;color:#242628;cursor:pointer;font-family:'Pretendard',var(--font),sans-serif;display:inline-flex;align-items:center;gap:4px;line-height:1;"><img src="emoji-star.svg" alt="" style="width:16px;height:16px;vertical-align:middle;flex-shrink:0;">평점 상승중</button>
+        <button class="rpc-chip" onclick="filterThemeChip(this)" style="padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid #e5e6e9;background:#fff;color:#242628;cursor:pointer;font-family:'Pretendard',var(--font),sans-serif;display:inline-flex;align-items:center;gap:4px;line-height:1;"><img src="emoji-fire.svg" alt="" style="width:16px;height:16px;vertical-align:middle;flex-shrink:0;">인기 리뷰</button>
+        <button class="rpc-chip" onclick="filterThemeChip(this)" style="padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid #e5e6e9;background:#fff;color:#242628;cursor:pointer;font-family:'Pretendard',var(--font),sans-serif;display:inline-flex;align-items:center;gap:4px;line-height:1;"><img src="emoji-rocket.svg" alt="" style="width:16px;height:16px;vertical-align:middle;flex-shrink:0;">리뷰 조회 상승중</button>
       </div>
 
       <!-- 인기 리뷰 카드 리스트 -->
@@ -10588,6 +10632,30 @@
               <button class="rv-card-report">신고하기</button>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- 넛지: 인기리뷰1 - 현직자 추천율 의심 -->
+      <div id="nudge-hot-1" class="rv-nudge-inline rv-nudge-hot" style="width:100%;padding:24px 28px;background:#f7f8f9;border-radius:16px;font-family:'Pretendard',var(--font),sans-serif;box-sizing:border-box;">
+        <div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:6px;">🤫 인기 리뷰 기업인데, 현직자 추천율이 50% 이상인 곳이 있어요</div>
+        <div style="font-size:13px;color:#949ba8;margin-bottom:12px;">어디일까요?</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button onclick="onHotSuspect(this,'당근마켓')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">당근마켓</button>
+          <button onclick="onHotSuspect(this,'라인플러스')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">라인플러스</button>
+          <button onclick="onHotSuspect(this,'컬리')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">컬리</button>
+        </div>
+        <div class="rv-nudge-suspect-result" style="display:none;margin-top:12px;padding:14px 16px;background:#fff;border-radius:10px;border:1px solid #e5e6e9;">
+          <div style="display:flex;flex-direction:column;gap:6px;position:relative;">
+            <div style="filter:blur(6px);user-select:none;display:flex;flex-direction:column;gap:4px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:13px;color:#242628;">당근마켓</span><span style="font-size:13px;font-weight:700;color:#00c362;">██%</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:13px;color:#242628;">라인플러스</span><span style="font-size:13px;font-weight:700;color:#f44336;">██%</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:13px;color:#242628;">컬리</span><span style="font-size:13px;font-weight:700;color:#f44336;">██%</span></div>
+            </div>
+            <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;">
+              <span style="font-size:12px;font-weight:600;color:#686a6d;">🔒 추천율은 리뷰 작성 후 공개</span>
+            </div>
+          </div>
+          <button onclick="onThemeNudgeCta('nudge-hot-1')" style="margin-top:12px;width:100%;padding:10px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:'Pretendard',sans-serif;">리뷰 쓰고 추천율 확인하기</button>
         </div>
       </div>
 
@@ -10782,6 +10850,31 @@
               <span style="font-size:12px;color:#00c362;font-weight:600;flex-shrink:0;">최근 리뷰 보기 ›</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- 넛지: 인기리뷰2 - 연봉 만족도 -->
+      <div id="nudge-hot-2" class="rv-nudge-inline rv-nudge-hot" style="width:100%;padding:24px 28px;background:#f7f8f9;border-radius:16px;font-family:'Pretendard',var(--font),sans-serif;box-sizing:border-box;">
+        <div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:6px;">💰 인기 리뷰 기업 중 연봉 만족도 1위는 어디일까요?</div>
+        <div style="font-size:13px;color:#949ba8;margin-bottom:12px;">리뷰 많다고 연봉까지 좋을까?</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button onclick="onHotSalary(this,'토스')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">토스</button>
+          <button onclick="onHotSalary(this,'카카오')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">카카오</button>
+          <button onclick="onHotSalary(this,'네이버')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">네이버</button>
+          <button onclick="onHotSalary(this,'당근마켓')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">당근마켓</button>
+        </div>
+        <div class="rv-nudge-salary-result" style="display:none;margin-top:12px;padding:14px 16px;background:#fff;border-radius:10px;border:1px solid #e5e6e9;">
+          <div style="display:flex;flex-direction:column;gap:6px;position:relative;">
+            <div style="filter:blur(6px);user-select:none;display:flex;flex-direction:column;gap:4px;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:12px;font-weight:800;color:#00c362;width:16px;">1</span><span style="font-size:13px;color:#242628;flex:1;">████</span><div style="width:60%;height:6px;background:#00c362;border-radius:3px;"></div></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:12px;font-weight:800;color:#686a6d;width:16px;">2</span><span style="font-size:13px;color:#242628;flex:1;">██████</span><div style="width:48%;height:6px;background:#ffc107;border-radius:3px;"></div></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:12px;font-weight:800;color:#686a6d;width:16px;">3</span><span style="font-size:13px;color:#242628;flex:1;">████</span><div style="width:42%;height:6px;background:#e5e6e9;border-radius:3px;"></div></div>
+            </div>
+            <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;">
+              <span style="font-size:12px;font-weight:600;color:#686a6d;">🔒 리뷰 작성 후 순위 공개</span>
+            </div>
+          </div>
+          <button onclick="onThemeNudgeCta('nudge-hot-2')" style="margin-top:12px;width:100%;padding:10px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:'Pretendard',sans-serif;">리뷰 쓰고 연봉 순위 확인하기</button>
         </div>
       </div>
 
@@ -11109,6 +11202,34 @@
         </div>
       </div>
 
+      <!-- 넛지: 조회상승1 - 기업 월드컵 -->
+      <div id="nudge-rising-1" class="rv-nudge-inline rv-nudge-rising" style="width:100%;padding:24px 28px;background:#f7f8f9;border-radius:16px;font-family:'Pretendard',var(--font),sans-serif;box-sizing:border-box;">
+        <div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:4px;">⚡ 다녀본 사람만 아는 진짜 비교</div>
+        <div style="font-size:13px;color:#949ba8;margin-bottom:14px;">직장인 평가가 더 높은 곳은?</div>
+        <div id="rising-wc-round" style="display:flex;gap:12px;align-items:stretch;">
+          <button onclick="pickWorldCup(this,0)" class="wc-pick" style="flex:1;padding:20px 16px;border:1.5px solid #e5e6e9;border-radius:14px;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <div style="width:40px;height:40px;border-radius:10px;background:#ff6813;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;">당근</div>
+            <div style="font-size:14px;font-weight:700;color:#242628;">당근마켓</div>
+            <div style="font-size:11px;color:#949ba8;">★ 4.5</div>
+          </button>
+          <div style="display:flex;align-items:center;font-size:16px;font-weight:800;color:#c5c7cc;">VS</div>
+          <button onclick="pickWorldCup(this,1)" class="wc-pick" style="flex:1;padding:20px 16px;border:1.5px solid #e5e6e9;border-radius:14px;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <div style="width:40px;height:40px;border-radius:10px;background:#3617CE;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;">쿠팡</div>
+            <div style="font-size:14px;font-weight:700;color:#242628;">쿠팡</div>
+            <div style="font-size:11px;color:#949ba8;">★ 3.0</div>
+          </button>
+        </div>
+        <div id="rising-wc-result" class="rv-nudge-rising-result" style="display:none;margin-top:14px;padding:14px 16px;background:#fff;border-radius:10px;border:1px solid #e5e6e9;">
+          <div style="font-size:13px;color:#242628;line-height:20px;" id="rising-wc-msg"></div>
+          <div style="display:flex;gap:4px;align-items:center;margin-top:8px;">
+            <div style="flex:1;height:8px;background:#e5e6e9;border-radius:4px;overflow:hidden;"><div id="rising-wc-bar" style="height:100%;background:#00c362;border-radius:4px;transition:width .5s;width:0%;"></div></div>
+            <span style="font-size:12px;font-weight:700;color:#00c362;" id="rising-wc-pct"></span>
+          </div>
+          <div style="font-size:12px;color:#949ba8;margin-top:8px;">경미님이 다녔던 기업의 솔직한 평가도 궁금해하는 사람이 많아요</div>
+          <button onclick="onUnifiedNudgeCta('nudge-rising-1')" style="margin-top:10px;width:100%;padding:10px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:'Pretendard',sans-serif;">내 회사도 평가하기</button>
+        </div>
+      </div>
+
       <!-- 상승4: 당근 -->
       <div class="rv-card">
         <div class="rv-card-header">
@@ -11226,6 +11347,34 @@
               <button class="rv-card-report">신고하기</button>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- 넛지: 조회상승2 - 워라밸 월드컵 -->
+      <div id="nudge-rising-2" class="rv-nudge-inline rv-nudge-rising" style="width:100%;padding:24px 28px;background:#f7f8f9;border-radius:16px;font-family:'Pretendard',var(--font),sans-serif;box-sizing:border-box;">
+        <div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:4px;">🏖️ 워라밸 좋은 기업 월드컵</div>
+        <div style="font-size:13px;color:#949ba8;margin-bottom:14px;">칼퇴하고 싶다면 어디?</div>
+        <div id="rising-wc2-round" style="display:flex;gap:12px;align-items:stretch;">
+          <button onclick="pickWorldCup2(this,0)" class="wc-pick" style="flex:1;padding:20px 16px;border:1.5px solid #e5e6e9;border-radius:14px;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <div style="width:40px;height:40px;border-radius:10px;background:#1EC800;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">네이버</div>
+            <div style="font-size:14px;font-weight:700;color:#242628;">네이버</div>
+            <div style="font-size:11px;color:#949ba8;">워라밸 4.2</div>
+          </button>
+          <div style="display:flex;align-items:center;font-size:16px;font-weight:800;color:#c5c7cc;">VS</div>
+          <button onclick="pickWorldCup2(this,1)" class="wc-pick" style="flex:1;padding:20px 16px;border:1.5px solid #e5e6e9;border-radius:14px;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <div style="width:40px;height:40px;border-radius:10px;background:#0064ff;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">토스</div>
+            <div style="font-size:14px;font-weight:700;color:#242628;">토스</div>
+            <div style="font-size:11px;color:#949ba8;">워라밸 3.8</div>
+          </button>
+        </div>
+        <div id="rising-wc2-result" class="rv-nudge-compare-result" style="display:none;margin-top:14px;padding:14px 16px;background:#fff;border-radius:10px;border:1px solid #e5e6e9;">
+          <div style="font-size:13px;color:#242628;line-height:20px;" id="rising-wc2-msg"></div>
+          <div style="display:flex;gap:4px;align-items:center;margin-top:8px;">
+            <div style="flex:1;height:8px;background:#e5e6e9;border-radius:4px;overflow:hidden;"><div id="rising-wc2-bar" style="height:100%;background:#00c362;border-radius:4px;transition:width .5s;width:0%;"></div></div>
+            <span style="font-size:12px;font-weight:700;color:#00c362;" id="rising-wc2-pct"></span>
+          </div>
+          <div style="font-size:12px;color:#949ba8;margin-top:8px;">경미님이 다녔던 기업의 워라밸은 어땠나요?</div>
+          <button onclick="onUnifiedNudgeCta('nudge-rising-2')" style="margin-top:10px;width:100%;padding:10px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:'Pretendard',sans-serif;">내 회사 워라밸 평가하기</button>
         </div>
       </div>
 
@@ -11353,6 +11502,34 @@
         </div>
       </div>
 
+
+      <!-- 넛지1: 투표형 -->
+      <div id="nudge-theme-1" class="rv-nudge-inline" style="display:none;width:100%;padding:24px 28px;background:#f7f8f9;border-radius:16px;font-family:'Pretendard',var(--font),sans-serif;box-sizing:border-box;">
+        <div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:14px;">🤔 솔직히, 지금 다니는 회사 점수를 준다면?</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button onclick="onNudgeVote(this,'1~2점')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">😤 1~2점</button>
+          <button onclick="onNudgeVote(this,'3점')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">😐 3점</button>
+          <button onclick="onNudgeVote(this,'4점')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">😊 4점</button>
+          <button onclick="onNudgeVote(this,'5점')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">🤩 5점</button>
+        </div>
+        <div class="rv-nudge-result" style="display:none;margin-top:14px;padding:16px 18px;background:#fff;border-radius:12px;border:1px solid #e5e6e9;">
+          <div style="font-size:13px;font-weight:700;color:#242628;margin-bottom:10px;" class="rv-nudge-vote-msg"></div>
+          <div style="display:flex;flex-direction:column;gap:6px;position:relative;">
+            <div class="rv-nudge-rank" style="filter:blur(6px);user-select:none;display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f0faf4;border-radius:8px;"><span style="font-size:13px;font-weight:800;color:#00c362;width:18px;">1</span><span style="font-size:13px;font-weight:600;color:#242628;">██████</span><span style="font-size:12px;color:#949ba8;margin-left:auto;">32%</span></div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f7f8f9;border-radius:8px;"><span style="font-size:13px;font-weight:800;color:#686a6d;width:18px;">2</span><span style="font-size:13px;font-weight:600;color:#242628;">████████</span><span style="font-size:12px;color:#949ba8;margin-left:auto;">24%</span></div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f7f8f9;border-radius:8px;"><span style="font-size:13px;font-weight:800;color:#686a6d;width:18px;">3</span><span style="font-size:13px;font-weight:600;color:#242628;">████</span><span style="font-size:12px;color:#949ba8;margin-left:auto;">18%</span></div>
+            </div>
+            <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;">
+              <div style="text-align:center;">
+                <div style="font-size:20px;margin-bottom:6px;">🔒</div>
+                <div style="font-size:12px;font-weight:600;color:#686a6d;">리뷰 작성하면 순위 공개!</div>
+              </div>
+            </div>
+          </div>
+          <button onclick="onUnifiedNudgeCta('nudge-theme-1')" style="margin-top:12px;width:100%;padding:10px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:'Pretendard',sans-serif;" class="rv-nudge-vote-cta"></button>
+        </div>
+      </div>
 
       <!-- 테마4: 카카오 -->
       <div class="rv-card">
@@ -11515,6 +11692,23 @@
         </div>
       </div>
 
+      <!-- 넛지2: 빈칸 퀴즈형 -->
+      <div id="nudge-theme-2" class="rv-nudge-inline" style="display:none;width:100%;padding:24px 28px;background:#f7f8f9;border-radius:16px;font-family:'Pretendard',var(--font),sans-serif;box-sizing:border-box;">
+        <div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:6px;">💬 다른 직장인이 가장 많이 쓴 한마디</div>
+        <div style="font-size:13px;color:#949ba8;margin-bottom:14px;">이번 달 리뷰에서 가장 많이 등장한 키워드는?</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button onclick="onNudgeQuiz(this,'워라밸')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">워라밸</button>
+          <button onclick="onNudgeQuiz(this,'연봉')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">연봉</button>
+          <button onclick="onNudgeQuiz(this,'성장')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">성장</button>
+          <button onclick="onNudgeQuiz(this,'사람')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .2s;">사람</button>
+        </div>
+        <div class="rv-nudge-quiz-result" style="display:none;margin-top:14px;padding:14px 16px;background:#fff;border-radius:10px;border:1px solid #e5e6e9;">
+          <div style="font-size:13px;color:#242628;line-height:20px;">정답은 <span style="font-weight:700;color:#00c362;">워라밸</span>! 전체 리뷰의 <span style="font-weight:700;">34%</span>가 언급했어요</div>
+          <div style="font-size:12px;color:#949ba8;margin-top:4px;">경미님의 회사에선 어떤 키워드가 나올까요?</div>
+          <button onclick="onUnifiedNudgeCta('nudge-theme-2')" style="margin-top:10px;padding:8px 20px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:'Pretendard',sans-serif;">내 회사 키워드 남기기</button>
+        </div>
+      </div>
+
       <!-- 테마8: 야놀자 -->
       <div class="rv-card">
         <div class="rv-card-header">
@@ -11647,7 +11841,7 @@
         <!-- 지금 가장 반응 뜨거운 리뷰 (인기 리뷰 전용) -->
 
         <!-- 지금 뜨는 기업 TOP 5 (리뷰 조회 상승중 전용) -->
-        <div class="rv-side-cta" id="theme-trending-top5" style="display:none;gap:8px;padding:16px 20px;">
+        <div class="rv-side-cta" id="theme-trending-top5" style="display:none !important;gap:8px;padding:16px 20px;">
           <div style="font-size:14px;font-weight:700;color:#242628;">🔥 지금 뜨는 기업</div>
           <div style="font-size:11px;color:#949ba8;margin-bottom:8px;">이번 주 리뷰 조회수 상승률 기준</div>
           <div style="display:flex;flex-direction:column;gap:6px;">
@@ -11676,6 +11870,42 @@
               <span style="font-size:13px;font-weight:600;color:#242628;flex:1;">(주)네이버</span>
               <span style="font-size:12px;font-weight:700;color:#e65100;">+14%</span>
             </div>
+          </div>
+        </div>
+
+        <!-- 리뷰 조회 급상승 기업 (롤링 버전) -->
+        <div class="rv-side-cta" id="theme-rising-rolling" style="display:none;gap:6px;padding:16px 20px;cursor:pointer;" onclick="onRisingRollingClick(event)">
+          <div style="font-size:14px;font-weight:700;color:#242628;">📈 리뷰 조회 급상승 기업</div>
+          <div style="font-size:11px;color:#949ba8;margin-bottom:4px;">이번 주 리뷰 조회수 상승률 기준</div>
+          <div id="rolling-rising" style="display:flex;flex-direction:column;gap:4px;">
+
+            <div class="rolling-rising-item" data-idx="0" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid #00c362;border-radius:10px;cursor:pointer;background:#fff;transition:all 0.3s;" onclick="openCompanyPage('kakao')">
+              <div class="rv-status-logo" style="width:24px;height:24px;"><img src="kakao.png" alt="" style="max-width:20px;max-height:10px;"></div>
+              <span style="font-size:12px;font-weight:700;color:#242628;flex:1;">카카오</span>
+              <span style="font-size:11px;font-weight:500;color:#686a6d;">리뷰 조회</span>
+              <span style="font-size:11px;font-weight:700;color:#00c362;">+32%</span>
+              <span style="font-size:10px;font-weight:700;color:#f44336;background:#fef2f2;padding:1px 5px;border-radius:3px;"><span style="font-size:7px;">▲</span>12%</span>
+            </div>
+            <div class="rolling-rising-summary" data-for="0" style="padding:6px 12px 10px;font-size:12px;color:#686a6d;line-height:18px;cursor:pointer;" onclick="onRisingRollingClick(event)">"조직개편이 잦지만 킬러 서비스를 기반으로 다양한 사업을 경험할 수 있음."</div>
+
+            <div class="rolling-rising-item" data-idx="1" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid transparent;border-radius:10px;cursor:pointer;background:#f7f8f9;transition:all 0.3s;" onclick="openCompanyPage('coupang')">
+              <div class="rv-status-logo" style="width:24px;height:24px;font-size:8px;font-weight:800;color:#3617CE;">쿠팡</div>
+              <span style="font-size:12px;font-weight:700;color:#242628;flex:1;">쿠팡</span>
+              <span style="font-size:11px;font-weight:500;color:#686a6d;">리뷰 조회</span>
+              <span style="font-size:11px;font-weight:700;color:#00c362;">+25%</span>
+              <span style="font-size:10px;font-weight:700;color:#f44336;background:#fef2f2;padding:1px 5px;border-radius:3px;"><span style="font-size:7px;">▲</span>8%</span>
+            </div>
+            <div class="rolling-rising-summary" data-for="1" style="display:none;padding:6px 12px 10px;font-size:12px;color:#686a6d;line-height:18px;cursor:pointer;" onclick="onRisingRollingClick(event)">"대규모 이커머스 경험 가능. 빡센 만큼 성장은 확실함."</div>
+
+            <div class="rolling-rising-item" data-idx="2" style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid transparent;border-radius:10px;cursor:pointer;background:#f7f8f9;transition:all 0.3s;" onclick="openCompanyPage('toss')">
+              <div class="rv-status-logo" style="width:24px;height:24px;"><img src="toss.png" alt="" style="max-width:20px;max-height:10px;"></div>
+              <span style="font-size:12px;font-weight:700;color:#242628;flex:1;">토스</span>
+              <span style="font-size:11px;font-weight:500;color:#686a6d;">리뷰 조회</span>
+              <span style="font-size:11px;font-weight:700;color:#00c362;">+18%</span>
+              <span style="font-size:10px;font-weight:700;color:#f44336;background:#fef2f2;padding:1px 5px;border-radius:3px;"><span style="font-size:7px;">▲</span>5%</span>
+            </div>
+            <div class="rolling-rising-summary" data-for="2" style="display:none;padding:6px 12px 10px;font-size:12px;color:#686a6d;line-height:18px;cursor:pointer;" onclick="onRisingRollingClick(event)">"빠르게 움직이는 조직. 실력만 있으면 빠르게 성장 가능."</div>
+
           </div>
         </div>
 
@@ -12195,7 +12425,7 @@
       <!-- 검색 -->
       <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:#f7f8f9;border-radius:10px;margin-bottom:16px;">
         <span style="font-size:14px;color:#949ba8;">🔍</span>
-        <input id="interest-search" type="text" placeholder="기업명을 검색하세요" oninput="filterInterestList()" style="border:none;outline:none;background:transparent;font-size:13px;flex:1;font-family:'Pretendard',sans-serif;color:#242628;">
+        <input id="interest-search" type="text" placeholder="기업명을 검색하세요" oninput="filterInterestList()" onkeyup="filterInterestList()" oncompositionend="filterInterestList()" style="border:none;outline:none;background:transparent;font-size:13px;flex:1;font-family:'Pretendard',sans-serif;color:#242628;">
       </div>
     </div>
     <!-- 리스트 (스크롤) -->
@@ -12372,6 +12602,23 @@ function closeRisingPopup() {
     });
   }, 500);
 })();
+
+function _isRollingBlindState() {
+  var isLoggedIn = sessionStorage.getItem('jp_logged_in') === 'true';
+  var hasIvAccess = localStorage.getItem('jp_iv_reviewed') === 'true';
+  return !isLoggedIn || !hasIvAccess;
+}
+function _scrollToInterviewBlindCta() {
+  var cta = document.querySelector('[data-tab-content="interview"] .rv-blind-cta-wrap');
+  if (cta) cta.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+function onRollingInterviewCardClick(e) {
+  if (_isRollingBlindState()) { e.preventDefault(); e.stopPropagation(); _scrollToInterviewBlindCta(); }
+}
+function onRollingItemClick(e, key) {
+  if (_isRollingBlindState()) { e.preventDefault(); e.stopPropagation(); _scrollToInterviewBlindCta(); return; }
+  openCompanyPage(key);
+}
 
 function openManageCompanyPopup() {
   document.getElementById('iv-company-panel').style.display = 'none';
@@ -12611,12 +12858,21 @@ function selectIvJob(el, name) {
       };
       return getDate(b).localeCompare(getDate(a));
     });
-    // 뱃지 랜덤 적용 (최근 조회만)
+    // 뱃지 랜덤 적용 (최근 조회만 — 비로그인/권한 없으면 미노출)
+    var _ivHasAccess = sessionStorage.getItem('jp_logged_in') === 'true' && localStorage.getItem('jp_iv_reviewed') === 'true';
     cards.forEach(function(card, idx) {
       var header = card.querySelector('.rv-card-header');
       if (!header) return;
       var existing = header.querySelector('.iv-badge');
       if (existing) existing.remove();
+      if (!_ivHasAccess) {
+        // 비로그인/권한 없음: 관심 기업, 전직장 뱃지 제거
+        header.querySelectorAll('span').forEach(function(s) {
+          var txt = s.textContent.trim();
+          if (txt === '관심 기업' || txt === '전직장') s.style.display = 'none';
+        });
+        return;
+      }
       if (idx % 4 === 0) {
         var badge = document.createElement('span');
         badge.className = 'iv-badge';
@@ -12648,6 +12904,71 @@ function selectIvJob(el, name) {
 })();
 
 // 리뷰 카드 로고+기업명 클릭 시 기업 리뷰 페이지 이동
+// 탭 하위 필터 스크롤 방향별 표시/숨김
+(function() {
+  var lastY = window.scrollY;
+  var hidden = false;
+  function getActiveFilters() {
+    var tabs = document.querySelectorAll('[data-tab-content]');
+    for (var i = 0; i < tabs.length; i++) {
+      if (tabs[i].style.display !== 'none') {
+        return tabs[i].querySelector(':scope > div:first-child');
+      }
+    }
+    return null;
+  }
+  window.addEventListener('scroll', function() {
+    var y = window.scrollY;
+    var diff = y - lastY;
+    var el = getActiveFilters();
+    if (!el) { lastY = y; return; }
+    if (diff > 3 && y > 200 && !hidden) {
+      hidden = true;
+      el.style.transition = 'opacity 0.2s ease, max-height 0.2s ease, margin 0.2s ease, padding 0.2s ease';
+      el.style.opacity = '0';
+      el.style.maxHeight = '0';
+      el.style.overflow = 'hidden';
+      el.style.paddingTop = '0';
+      el.style.paddingBottom = '0';
+      el.style.marginTop = '0';
+      el.style.marginBottom = '0';
+    } else if (diff < -3 && hidden) {
+      hidden = false;
+      el.style.transition = 'opacity 0.2s ease, max-height 0.2s ease, margin 0.2s ease, padding 0.2s ease';
+      el.style.opacity = '';
+      el.style.maxHeight = '';
+      el.style.overflow = '';
+      el.style.paddingTop = '';
+      el.style.paddingBottom = '';
+      el.style.marginTop = '';
+      el.style.marginBottom = '';
+    }
+    lastY = y;
+  });
+})();
+
+// 배너 페이드인 인터렉션
+(function() {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('rv-banner--visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  function observeBanners() {
+    document.querySelectorAll('#page-review .rv-banner').forEach(function(b) {
+      observer.observe(b);
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', observeBanners);
+  } else {
+    observeBanners();
+  }
+})();
+
 document.addEventListener('DOMContentLoaded', function() {
   var nameToKey = {
     '비바리퍼블리카':'toss','토스':'toss','카카오':'kakao','당근마켓':'daangn','당근':'daangn',
@@ -13004,32 +13325,79 @@ function selectJobReviewTab(jobName) {
   document.querySelectorAll('.jobreview-sidebar-job').forEach(function(el){ el.textContent = jobName; });
   var list = document.getElementById('jobreview-list');
   list.innerHTML = '';
-  // 디자이너 리뷰 탭의 카드 UI를 복사하여 사용
-  var designerCards = document.querySelectorAll('[data-tab-content="designer"] .rv-card');
-  var count = 0;
-  designerCards.forEach(function(card) {
-    if (count < 8) {
-      var clone = card.cloneNode(true);
-      // 직군명에 맞게 메타 정보의 직군 텍스트 변경
-      var meta = clone.querySelector('.rv-card-meta');
-      if (meta) {
-        var firstSpan = meta.querySelector('span');
-        if (firstSpan) {
-          var jobDisplayNames = {
-            '디자인':'UX디자인','개발':'프론트엔드','기획/경영':'서비스기획',
-            '데이터':'데이터분석','엔지니어링':'인프라엔지니어','마케팅':'퍼포먼스마케팅',
-            '영업':'사업개발','인사/총무':'HR'
-          };
-          firstSpan.textContent = jobDisplayNames[jobName] || jobName;
-        }
-      }
-      list.appendChild(clone);
-      count++;
+  // 무한 스크롤 리스너 제거
+  if (window._jobreviewScrollHandler) {
+    window.removeEventListener('scroll', window._jobreviewScrollHandler);
+    window._jobreviewScrollHandler = null;
+  }
+  var oldJrLoader = document.getElementById('jobreview-scroll-loader');
+  if (oldJrLoader) oldJrLoader.remove();
+
+  // 디자이너 리뷰 탭의 카드 UI를 복사하여 50개 생성
+  var designerCards = Array.from(document.querySelectorAll('[data-tab-content="designer"] .rv-card'));
+  var jobDisplayNames = {
+    '디자인':'UX디자인','개발':'프론트엔드','기획/경영':'서비스기획',
+    '데이터':'데이터분석','엔지니어링':'인프라엔지니어','마케팅':'퍼포먼스마케팅',
+    '영업':'사업개발','인사/총무':'HR'
+  };
+  var jrDates = ['2026. 04','2026. 03','2026. 02','2026. 01','2025. 12','2025. 11','2025. 10','2025. 09','2025. 08','2025. 07'];
+  var jrTotal = 50;
+  var jrAllCards = [];
+  for (var ji = 0; ji < jrTotal && designerCards.length > 0; ji++) {
+    var src = designerCards[ji % designerCards.length];
+    var clone = src.cloneNode(true);
+    var meta = clone.querySelector('.rv-card-meta');
+    if (meta) {
+      var firstSpan = meta.querySelector('span');
+      if (firstSpan) firstSpan.textContent = jobDisplayNames[jobName] || jobName;
+      meta.querySelectorAll('span').forEach(function(s) {
+        if (s.textContent.match(/작성/)) s.textContent = jrDates[ji % jrDates.length] + ' 작성';
+      });
     }
-  });
-  if (count === 0) {
+    var helpBtn = clone.querySelector('.rv-card-action-btn');
+    if (helpBtn) {
+      var num = Math.floor(Math.random() * 200) + 10;
+      helpBtn.innerHTML = '도움이 돼요 👍 <span class="count">' + num + '</span>';
+    }
+    list.appendChild(clone);
+    jrAllCards.push(clone);
+  }
+  if (jrAllCards.length === 0) {
     list.innerHTML = '<div style="text-align:center;padding:40px 0;color:#949ba8;font-size:13px;">해당 직군의 리뷰가 아직 없어요.</div>';
   }
+
+  // 처음 10개만 표시
+  var jrShown = 10;
+  jrAllCards.forEach(function(c, i) { c.style.display = i < jrShown ? '' : 'none'; });
+
+  // 스켈레톤 로더
+  var jrSkWrap = document.createElement('div');
+  jrSkWrap.id = 'jobreview-scroll-loader';
+  jrSkWrap.className = 'rv-skeleton-wrap';
+  jrSkWrap.style.display = 'none';
+  jrSkWrap.innerHTML = createSkeletonCards(3);
+  list.after(jrSkWrap);
+
+  // 무한 스크롤
+  window._jobreviewScrollHandler = function() {
+    if (jrShown >= jrAllCards.length) return;
+    var lastCard = jrAllCards[jrShown - 1];
+    if (!lastCard) return;
+    var lastRect = lastCard.getBoundingClientRect();
+    if (lastRect.bottom < window.innerHeight + 300) {
+      jrSkWrap.style.display = '';
+      setTimeout(function() {
+        var nextBatch = Math.min(jrShown + 10, jrAllCards.length);
+        for (var jj = jrShown; jj < nextBatch; jj++) jrAllCards[jj].style.display = '';
+        jrShown = nextBatch;
+        jrSkWrap.style.display = 'none';
+        if (jrShown >= jrAllCards.length) jrSkWrap.remove();
+      }, 800);
+    }
+  };
+  window.addEventListener('scroll', window._jobreviewScrollHandler);
+
+  var count = jrAllCards.length;
   // 리뷰 2개 뒤에 투표 넛지 삽입 (비로그인 시 미노출)
   var cards = list.querySelectorAll('.rv-card');
   if (cards.length >= 2 && localStorage.getItem('jp_reviewed') === 'true') {
@@ -13060,6 +13428,48 @@ function selectJobReviewTab(jobName) {
     cards[1].after(voteNudge);
     document.getElementById('jrvote-big').addEventListener('click', function(){ jobreviewVote(this); });
     document.getElementById('jrvote-startup').addEventListener('click', function(){ jobreviewVote(this); });
+
+    // 공감형 넛지 1: 3번째 카드 뒤
+    if (cards.length >= 4) {
+      var empathyNudge1 = document.createElement('div');
+      empathyNudge1.id = 'nudge-jobreview-empathy1';
+      empathyNudge1.className = 'rv-nudge-inline';
+      empathyNudge1.style.cssText = 'width:100%;padding:24px 28px;background:#f7f8f9;border-radius:16px;font-family:Pretendard,sans-serif;box-sizing:border-box;';
+      empathyNudge1.innerHTML = '<div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:6px;">😮‍💨 ' + jobName + ' 하면서 가장 힘든 순간은?</div>' +
+        '<div style="font-size:13px;color:#949ba8;margin-bottom:12px;">같은 직군 직장인들이 가장 많이 공감한 순간</div>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+          '<button onclick="onJobEmpathy(this)" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;transition:all .2s;">야근하고 아무도 모를 때</button>' +
+          '<button onclick="onJobEmpathy(this)" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;transition:all .2s;">내 의견이 무시될 때</button>' +
+          '<button onclick="onJobEmpathy(this)" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;transition:all .2s;">성장이 멈춘 느낌일 때</button>' +
+        '</div>' +
+        '<div class="jr-empathy-result" style="display:none;margin-top:12px;padding:14px 16px;background:#fff;border-radius:10px;border:1px solid #e5e6e9;">' +
+          '<div style="font-size:13px;color:#242628;line-height:20px;" class="jr-empathy-msg"></div>' +
+          '<div style="font-size:12px;color:#949ba8;margin-top:4px;">같은 마음인 사람이 이렇게 많은데, 경미님의 이야기도 들려주세요</div>' +
+          '<button onclick="onUnifiedNudgeCta(\'nudge-jobreview-empathy1\')" style="margin-top:10px;padding:8px 20px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:Pretendard,sans-serif;">내 경험 솔직하게 남기기</button>' +
+        '</div>';
+      cards[3].after(empathyNudge1);
+    }
+
+    // 공감형 넛지 2: 7번째 카드 뒤
+    var updatedCards = list.querySelectorAll('.rv-card');
+    if (updatedCards.length >= 8) {
+      var empathyNudge2 = document.createElement('div');
+      empathyNudge2.id = 'nudge-jobreview-empathy2';
+      empathyNudge2.className = 'rv-nudge-inline';
+      empathyNudge2.style.cssText = 'width:100%;padding:24px 28px;background:#f7f8f9;border-radius:16px;font-family:Pretendard,sans-serif;box-sizing:border-box;';
+      empathyNudge2.innerHTML = '<div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:6px;">🙋 ' + jobName + ' 직장인에게 물었어요</div>' +
+        '<div style="font-size:13px;color:#949ba8;margin-bottom:12px;">"지금 회사, 후배한테 추천할 수 있어?"</div>' +
+        '<div style="display:flex;gap:8px;">' +
+          '<button onclick="onJobRecommend(this,\'yes\')" style="flex:1;padding:12px;border:1px solid #e5e6e9;border-radius:10px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;transition:all .2s;">👍 추천해요</button>' +
+          '<button onclick="onJobRecommend(this,\'no\')" style="flex:1;padding:12px;border:1px solid #e5e6e9;border-radius:10px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;transition:all .2s;">🤔 글쎄요</button>' +
+        '</div>' +
+        '<div class="jr-recommend-result" style="display:none;margin-top:12px;padding:14px 16px;background:#fff;border-radius:10px;border:1px solid #e5e6e9;">' +
+          '<div style="font-size:13px;color:#242628;line-height:20px;" class="jr-recommend-msg"></div>' +
+          '<div style="font-size:12px;color:#949ba8;margin-top:4px;">추천 이유까지 남기면 후배들이 정말 고마워해요</div>' +
+          '<button onclick="onUnifiedNudgeCta(\'nudge-jobreview-empathy2\')" style="margin-top:10px;padding:8px 20px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:Pretendard,sans-serif;">추천 이유 남기기</button>' +
+        '</div>';
+      updatedCards[7].after(empathyNudge2);
+    }
   }
 
   // 비로그인 시 블라인드 CTA 삽입
@@ -13217,6 +13627,37 @@ function toggleJobReviewPanel() {
   var panel = document.getElementById('jobreview-job-panel');
   panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
 }
+// 직군 리뷰 공감 넛지
+function onJobEmpathy(btn) {
+  var wrap = btn.closest('.rv-nudge-inline');
+  wrap.querySelectorAll('button').forEach(function(b) {
+    if (b.closest('.jr-empathy-result')) return;
+    b.style.border = '1px solid #e5e6e9'; b.style.background = '#fff'; b.style.color = '#686a6d';
+  });
+  btn.style.border = '1.5px solid #00c362'; btn.style.background = '#ecf9ef'; btn.style.color = '#00c362';
+  var result = wrap.querySelector('.jr-empathy-result');
+  result.style.display = 'block';
+  var pct = Math.floor(Math.random() * 20) + 40;
+  result.querySelector('.jr-empathy-msg').innerHTML = '같은 직군 <span style="font-weight:700;color:#00c362;">' + pct + '%</span>가 "' + btn.textContent.trim() + '"에 공감했어요';
+}
+function onJobRecommend(btn, answer) {
+  var wrap = btn.closest('.rv-nudge-inline');
+  wrap.querySelectorAll('button').forEach(function(b) {
+    if (b.closest('.jr-recommend-result')) return;
+    b.style.border = '1px solid #e5e6e9'; b.style.background = '#fff'; b.style.color = '#686a6d';
+  });
+  btn.style.border = '1.5px solid #00c362'; btn.style.background = '#ecf9ef'; btn.style.color = '#00c362';
+  var result = wrap.querySelector('.jr-recommend-result');
+  result.style.display = 'block';
+  var yPct = Math.floor(Math.random() * 15) + (answer === 'yes' ? 50 : 35);
+  var nPct = 100 - yPct;
+  if (answer === 'yes') {
+    result.querySelector('.jr-recommend-msg').innerHTML = '추천 <span style="font-weight:700;color:#00c362;">' + yPct + '%</span> vs 글쎄요 ' + nPct + '% — 의외로 엇갈리죠?';
+  } else {
+    result.querySelector('.jr-recommend-msg').innerHTML = '글쎄요 <span style="font-weight:700;color:#00c362;">' + nPct + '%</span> vs 추천 ' + yPct + '% — 생각보다 많이 고민하고 있어요';
+  }
+}
+
 function selectJobReviewFromPanel(jobName) {
   document.getElementById('jobreview-job-panel').style.display = 'none';
   selectJobReviewTab(jobName);
@@ -13360,9 +13801,9 @@ function updateIvTiers() {
     var spans = row.querySelectorAll('span');
     var subSpan = spans.length >= 2 ? spans[spans.length - 1] : null;
     if (unlockedTiers >= i) {
-      // 완료: 회색 배경, 라인 없음
-      icon.style.cssText = 'width:24px;height:24px;border-radius:50%;background:#00c362;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;color:#fff;font-weight:700;';
-      icon.textContent = '✓';
+      // 완료: 연한 초록 배경 + 초록 숫자
+      icon.style.cssText = 'width:24px;height:24px;border-radius:50%;background:#f3f3f4;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;color:#949ba8;font-weight:700;';
+      icon.textContent = i;
       row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid transparent;border-radius:10px;cursor:pointer;background:#f7f8f9;transition:all 0.3s;opacity:1;';
       if (subSpan) { subSpan.textContent = '확인하기 ›'; subSpan.style.cssText = 'font-size:11px;font-weight:700;color:#00c362;'; }
     } else if (unlockedTiers === i - 1) {
@@ -13370,19 +13811,20 @@ function updateIvTiers() {
       icon.style.cssText = 'width:24px;height:24px;border-radius:50%;background:#00c362;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;color:#fff;font-weight:700;';
       icon.textContent = i;
       row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid #00c362;border-radius:10px;cursor:pointer;background:#fff;transition:all 0.3s;opacity:1;';
-      if (subSpan) { subSpan.textContent = '면접 리뷰 ' + (i + 1) + '건 작성 시'; subSpan.style.cssText = 'font-size:11px;font-weight:600;color:#00c362;'; }
+      if (subSpan) { subSpan.textContent = '면접 리뷰 ' + i + '건 작성 시'; subSpan.style.cssText = 'font-size:11px;font-weight:600;color:#00c362;'; }
     } else {
       // 미래 단계: 잠금
       icon.style.cssText = 'width:24px;height:24px;border-radius:50%;background:#e5e6e9;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;';
       icon.textContent = '🔒';
       row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid transparent;border-radius:10px;cursor:default;background:#f7f8f9;transition:all 0.3s;opacity:0.5;';
-      if (subSpan) { subSpan.textContent = '잠김'; subSpan.style.cssText = 'font-size:11px;font-weight:600;color:#949ba8;'; }
+      if (subSpan) { subSpan.textContent = '면접 리뷰 ' + i + '건 작성 시'; subSpan.style.cssText = 'font-size:11px;font-weight:600;color:#949ba8;'; }
     }
   }
-  document.getElementById('iv-tier-count').textContent = Math.min(ivReviewCount, 4) + '/4건';
-  document.getElementById('iv-tier-progress').style.width = (Math.min(ivReviewCount, 4) / 4 * 100) + '%';
+  var insightCount = Math.max(0, ivReviewCount - 1);
+  document.getElementById('iv-tier-count').textContent = Math.min(insightCount, 3) + '/3건';
+  document.getElementById('iv-tier-progress').style.width = (Math.min(insightCount, 3) / 3 * 100) + '%';
   var cta = document.getElementById('iv-tier-cta');
-  if (ivReviewCount < 4) {
+  if (insightCount < 3) {
     cta.textContent = '후기 남기기';
   } else {
     cta.style.display = 'none';
@@ -13493,7 +13935,9 @@ function unlockInterviewTab() {
     '[data-tab-content="interview"] .rv-card-action-btn:nth-child(2) { display:inline-flex !important; }' +
     '[data-tab-content="interview"] .rv-card-report { display:inline !important; }' +
     '[data-tab-content="interview"] .rv-card-actions { border-top:1px solid #e5e6e9 !important; }' +
-    '[data-tab-content="interview"] .rv-card-action-btn:first-child { background:#fff !important; border:1px solid #e5e6e9 !important; border-radius:8px !important; padding:8px 14px !important; font-size:13px !important; font-weight:600 !important; color:#242628 !important; cursor:pointer !important; pointer-events:auto !important; }';
+    '[data-tab-content="interview"] .rv-card-action-btn:first-child { background:#fff !important; border:1px solid #e5e6e9 !important; border-radius:8px !important; padding:8px 14px !important; font-size:13px !important; font-weight:600 !important; color:#242628 !important; cursor:pointer !important; pointer-events:auto !important; }' +
+    '#rolling-interview .rolling-item .rv-status-logo { filter:none !important; user-select:auto !important; }' +
+    '#rolling-interview .rolling-item > span:first-of-type { filter:none !important; user-select:auto !important; }';
   document.head.appendChild(s);
 
   var container = document.querySelector('[data-tab-content="interview"]');
@@ -13558,54 +14002,323 @@ function simulateIvReviewSubmit() {
 }
 
 function showIvInsightFloating(tier) {
-  // 기존 플로팅 제거
-  var old = document.getElementById('iv-insight-floating');
+  // 기존 팝업 제거
+  var old = document.getElementById('iv-insight-floating-popup');
   if (old) old.remove();
 
   var label = ivTierLabels[tier - 1] || '';
-  var floating = document.createElement('div');
-  floating.id = 'iv-insight-floating';
-  floating.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9998;display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e5e6e9;border-radius:14px;padding:12px 16px 12px 20px;box-shadow:0 4px 24px rgba(0,0,0,0.12);font-family:Pretendard,sans-serif;animation:ivFloatIn 0.4s cubic-bezier(0.34,1.56,0.64,1);';
-  floating.innerHTML =
-    '<span style="font-size:18px;">🎉</span>' +
-    '<div style="flex:1;min-width:0;">' +
-      '<div style="font-size:14px;font-weight:700;color:#242628;">' + label + '이 열렸어요!</div>' +
-    '</div>' +
-    '<button onclick="openIvInsightPopup(' + tier + ');document.getElementById(\'iv-insight-floating\').remove();" style="padding:10px 20px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:Pretendard,sans-serif;white-space:nowrap;">확인하기</button>' +
-    '<button onclick="document.getElementById(\'iv-insight-floating\').remove();" style="background:none;border:none;font-size:18px;color:#949ba8;cursor:pointer;padding:0 0 0 4px;">✕</button>';
-  document.body.appendChild(floating);
-
-  // 애니메이션 CSS
-  if (!document.getElementById('iv-float-anim')) {
-    var s = document.createElement('style');
-    s.id = 'iv-float-anim';
-    s.textContent = '@keyframes ivFloatIn { from { opacity:0; transform:translateX(-50%) translateY(20px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }';
-    document.head.appendChild(s);
+  var overlay = document.createElement('div');
+  overlay.id = 'iv-insight-floating-popup';
+  overlay.className = 'rv-rate-popup-overlay';
+  overlay.style.display = 'flex';
+  overlay.innerHTML =
+    '<div class="rv-rate-popup" style="width:360px;text-align:center;padding:32px;">' +
+      '<div style="font-size:36px;margin-bottom:16px;">🎉</div>' +
+      '<div style="font-size:18px;font-weight:700;color:#242628;line-height:28px;margin-bottom:24px;">' + label + '이 열렸어요!</div>' +
+      '<div style="display:flex;gap:10px;justify-content:center;">' +
+        '<button onclick="closeIvInsightFloatingPopup()" style="flex:1;padding:12px;background:#f7f8f9;color:#686a6d;font-size:14px;font-weight:600;border:none;border-radius:8px;cursor:pointer;font-family:Pretendard,sans-serif;">취소</button>' +
+        '<button onclick="closeIvInsightFloatingPopup();openIvInsightPopup(' + tier + ');" style="flex:1;padding:12px;background:#00c362;color:#fff;font-size:14px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:Pretendard,sans-serif;">확인하기</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+}
+function closeIvInsightFloatingPopup() {
+  var el = document.getElementById('iv-insight-floating-popup');
+  if (el) el.remove();
+  document.body.style.overflow = '';
+}
+// 테마 넛지 인터랙션
+var nudgeVoteRankData = {
+  '1~2점': [['(주)쿠팡','32%'],['(주)여기어때컴퍼니','24%'],['(주)삼성SDS','18%']],
+  '3점': [['(주)네이버','28%'],['(주)카카오','22%'],['(주)라인플러스','16%']],
+  '4점': [['(주)당근마켓','35%'],['(주)비바리퍼블리카','26%'],['(주)버킷플레이스','20%']],
+  '5점': [['(주)당근마켓','38%'],['(주)비바리퍼블리카','30%'],['(주)네이버','22%']]
+};
+function unlockNudgeRank(wrap, label) {
+  var rank = wrap.querySelector('.rv-nudge-rank');
+  if (!rank) return;
+  var data = nudgeVoteRankData[label] || nudgeVoteRankData['3점'];
+  var colors = ['#f0faf4','#f7f8f9','#f7f8f9'];
+  var numColors = ['#00c362','#686a6d','#686a6d'];
+  rank.innerHTML = '';
+  for (var i = 0; i < 3; i++) {
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 10px;background:' + colors[i] + ';border-radius:8px;';
+    row.innerHTML = '<span style="font-size:13px;font-weight:800;color:' + numColors[i] + ';width:18px;">' + (i+1) + '</span><span style="font-size:13px;font-weight:600;color:#242628;flex:1;">' + data[i][0] + '</span><span style="font-size:12px;font-weight:700;color:#00c362;">' + data[i][1] + '</span>';
+    rank.appendChild(row);
   }
+  rank.style.filter = 'none';
+  rank.style.userSelect = 'auto';
+  // 잠금 오버레이 제거
+  var overlay = rank.parentElement.querySelector('div[style*="position:absolute"]');
+  if (overlay) overlay.remove();
+  // CTA 변경
+  var cta = wrap.querySelector('.rv-nudge-vote-cta');
+  if (cta) cta.style.display = 'none';
+}
+function checkNudgeUnlock() {
+  if (sessionStorage.getItem('jp_nudge_written') !== 'true') return;
+  document.querySelectorAll('.rv-nudge-result').forEach(function(result) {
+    if (result.style.display === 'none') return;
+    var wrap = result.closest('.rv-nudge-inline');
+    if (!wrap) return;
+    var selectedBtn = wrap.querySelector('button[style*="#00c362"]');
+    if (selectedBtn) {
+      ['1~2점','3점','4점','5점'].forEach(function(k) {
+        if (selectedBtn.textContent.indexOf(k) >= 0) unlockNudgeRank(wrap, k);
+      });
+    }
+  });
+}
+// 리뷰 권한 있을 때만 넛지 노출
+function showNudgesIfReviewed() {
+  if (localStorage.getItem('jp_reviewed') !== 'true') return;
+  document.querySelectorAll('.rv-nudge-inline').forEach(function(el) {
+    el.style.display = '';
+  });
+}
+// 비로그인/권한 없을 때 인기리뷰·조회상승 넛지 숨김
+function hideThemeNudgesIfNoAccess() {
+  if (localStorage.getItem('jp_reviewed') === 'true') return;
+  document.querySelectorAll('.rv-nudge-hot, .rv-nudge-rising').forEach(function(el) {
+    el.style.display = 'none';
+  });
+}
 
-  // 카드 3개 이상 스크롤하면 플로팅 사라짐
-  var cardList = document.querySelector('[data-tab-content="interview"] .rv-card-list');
-  if (cardList) {
-    var visibleCards = Array.from(cardList.querySelectorAll('.rv-card')).filter(function(c){ return c.style.display !== 'none'; });
-    var thirdCard = visibleCards.length >= 3 ? visibleCards[2] : null;
-    if (thirdCard) {
-      var startY = window.scrollY;
-      var handler = function() {
-        var el = document.getElementById('iv-insight-floating');
-        if (!el) { window.removeEventListener('scroll', handler); return; }
-        var rect = thirdCard.getBoundingClientRect();
-        if (rect.bottom < 0) {
-          el.style.transition = 'opacity 0.3s, transform 0.3s';
-          el.style.opacity = '0';
-          el.style.transform = 'translateX(-50%) translateY(20px)';
-          setTimeout(function(){ if (el.parentNode) el.remove(); }, 300);
-          window.removeEventListener('scroll', handler);
-        }
-      };
-      window.addEventListener('scroll', handler);
+function onNudgeCta() {
+  sessionStorage.setItem('jp_nudge_pending', 'true');
+  // 이미 리뷰 권한 있는 상태에서 추가 작성임을 기록
+  if (localStorage.getItem('jp_reviewed') === 'true') {
+    sessionStorage.setItem('jp_nudge_was_reviewed', 'true');
+  }
+  // 선택한 점수 저장
+  var wrap = document.querySelector('.rv-nudge-result[style*="block"]');
+  if (wrap) {
+    var parent = wrap.closest('.rv-nudge-inline');
+    var selected = parent ? parent.querySelector('button[style*="#00c362"]') : null;
+    if (selected) {
+      ['1~2점','3점','4점','5점'].forEach(function(k) {
+        if (selected.textContent.indexOf(k) >= 0) sessionStorage.setItem('jp_nudge_label', k);
+      });
     }
   }
+  openCompanySelect();
 }
+
+function onNudgeVote(btn, label) {
+  var wrap = btn.closest('.rv-nudge-inline');
+  wrap.querySelectorAll('button').forEach(function(b) {
+    b.style.border = '1px solid #e5e6e9'; b.style.background = '#fff'; b.style.color = '#686a6d';
+  });
+  btn.style.border = '1.5px solid #00c362'; btn.style.background = '#ecf9ef'; btn.style.color = '#00c362';
+  var result = wrap.querySelector('.rv-nudge-result');
+  result.style.display = 'block';
+  var msg = '', cta = '';
+  if (label === '1~2점') {
+    msg = '😤 ' + label + ' 준 직장인이 가장 많이 다닌 회사 TOP 3';
+    cta = '리뷰 쓰고 순위 확인하기';
+  } else if (label === '3점') {
+    msg = '😐 ' + label + ' 준 직장인이 가장 많이 다닌 회사 TOP 3';
+    cta = '리뷰 쓰고 순위 확인하기';
+  } else if (label === '4점') {
+    msg = '😊 ' + label + ' 준 직장인이 가장 많이 다닌 회사 TOP 3';
+    cta = '리뷰 쓰고 순위 확인하기';
+  } else {
+    msg = '🤩 ' + label + ' 준 직장인이 가장 많이 다닌 회사 TOP 3';
+    cta = '리뷰 쓰고 순위 확인하기';
+  }
+  result.querySelector('.rv-nudge-vote-msg').textContent = msg;
+  result.querySelector('.rv-nudge-vote-cta').textContent = cta;
+}
+// 통합 넛지 CTA: 넛지 ID + 현재 탭 저장 후 리뷰 작성 이동
+function onUnifiedNudgeCta(nudgeId) {
+  sessionStorage.setItem('jp_return_nudge_id', nudgeId);
+  sessionStorage.setItem('jp_return_nudge_pending', 'true');
+  var activeTab = document.querySelector('.review-tab.active');
+  if (activeTab) sessionStorage.setItem('jp_return_nudge_tab', activeTab.dataset.tab);
+  // 평점상승중 넛지: 선택한 점수 저장
+  if (nudgeId === 'nudge-theme-1') {
+    var wrap = document.getElementById(nudgeId);
+    if (wrap) {
+      var selected = wrap.querySelector('button[style*="#00c362"]');
+      if (selected) {
+        ['1~2점','3점','4점','5점'].forEach(function(k) {
+          if (selected.textContent.indexOf(k) >= 0) sessionStorage.setItem('jp_return_nudge_label', k);
+        });
+      }
+    }
+  }
+  openCompanySelect();
+}
+// 하위 호환
+function onThemeNudgeCta(nudgeId) { onUnifiedNudgeCta(nudgeId); }
+// 테마 넛지: 블러 해제 + 결과 패널 펼침
+function unlockThemeNudge(nudge) {
+  // 결과 패널 펼치기 (suspect-result, salary-result, rising-result, compare-result)
+  nudge.querySelectorAll('[class*="-result"]').forEach(function(el) {
+    if (el.style.display === 'none') el.style.display = 'block';
+  });
+  // 블러 해제 + 실제 데이터 채우기
+  var nudgeId = nudge.id || '';
+  nudge.querySelectorAll('[style*="blur"]').forEach(function(blurWrap) {
+    blurWrap.style.filter = 'none';
+    blurWrap.style.userSelect = 'auto';
+    // 연봉 넛지: 실제 기업명+바 교체
+    if (nudgeId === 'nudge-hot-2') {
+      var salaryData = [['당근마켓','72%','#00c362'],['토스','65%','#ffc107'],['네이버','58%','#e5e6e9']];
+      blurWrap.innerHTML = '';
+      salaryData.forEach(function(d, i) {
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:8px;';
+        row.innerHTML = '<span style="font-size:12px;font-weight:800;color:' + (i===0?'#00c362':'#686a6d') + ';width:16px;">' + (i+1) + '</span><span style="font-size:13px;color:#242628;width:70px;">' + d[0] + '</span><div style="flex:1;height:6px;background:#f3f3f4;border-radius:3px;overflow:hidden;"><div style="width:' + d[1] + ';height:100%;background:' + d[2] + ';border-radius:3px;"></div></div><span style="font-size:12px;font-weight:700;color:#242628;">' + d[1] + '</span>';
+        blurWrap.appendChild(row);
+      });
+    }
+    // 추천율 넛지: 실제 수치 교체
+    if (nudgeId === 'nudge-hot-1') {
+      var recData = [['당근마켓','86%','#00c362'],['라인플러스','47%','#f44336'],['컬리','42%','#f44336']];
+      blurWrap.innerHTML = '';
+      recData.forEach(function(d) {
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;';
+        row.innerHTML = '<span style="font-size:13px;color:#242628;">' + d[0] + '</span><span style="font-size:13px;font-weight:700;color:' + d[2] + ';">' + d[1] + '</span>';
+        blurWrap.appendChild(row);
+      });
+    }
+  });
+  // 잠금 오버레이 제거
+  nudge.querySelectorAll('[style*="position:absolute"]').forEach(function(el) {
+    if (el.textContent.indexOf('🔒') >= 0) el.remove();
+  });
+  // CTA 숨기기
+  var ctaBtn = nudge.querySelector('button[onclick*="onThemeNudgeCta"]');
+  if (ctaBtn) ctaBtn.style.display = 'none';
+  // 첫 번째 선택지 자동 선택 표시
+  var firstBtn = nudge.querySelector('button[onclick*="onHot"], button[onclick*="onRising"]');
+  if (firstBtn && firstBtn.style.color !== 'rgb(0, 195, 98)') {
+    firstBtn.style.border = '1.5px solid #00c362';
+    firstBtn.style.background = '#ecf9ef';
+    firstBtn.style.color = '#00c362';
+  }
+}
+
+// 인기리뷰 넛지: 추천율 의심
+function onHotSuspect(btn, company) {
+  var wrap = btn.closest('.rv-nudge-inline');
+  wrap.querySelectorAll('button').forEach(function(b) {
+    if (b.closest('.rv-nudge-suspect-result')) return;
+    b.style.border = '1px solid #e5e6e9'; b.style.background = '#fff'; b.style.color = '#686a6d';
+  });
+  btn.style.border = '1.5px solid #00c362'; btn.style.background = '#ecf9ef'; btn.style.color = '#00c362';
+  wrap.querySelector('.rv-nudge-suspect-result').style.display = 'block';
+}
+// 인기리뷰 넛지: 연봉 만족도
+function onHotSalary(btn, company) {
+  var wrap = btn.closest('.rv-nudge-inline');
+  wrap.querySelectorAll('button').forEach(function(b) {
+    if (b.closest('.rv-nudge-salary-result')) return;
+    b.style.border = '1px solid #e5e6e9'; b.style.background = '#fff'; b.style.color = '#686a6d';
+  });
+  btn.style.border = '1.5px solid #00c362'; btn.style.background = '#ecf9ef'; btn.style.color = '#00c362';
+  wrap.querySelector('.rv-nudge-salary-result').style.display = 'block';
+}
+// 리뷰 조회 급상승 카드 클릭 → 비로그인 시 블라인드 CTA로 스크롤
+function onRisingRollingClick(e) {
+  var isLoggedIn = sessionStorage.getItem('jp_logged_in') === 'true';
+  var hasAccess = localStorage.getItem('jp_reviewed') === 'true';
+  if (!isLoggedIn || !hasAccess) {
+    e.preventDefault();
+    e.stopPropagation();
+    // 리뷰 조회 상승중 탭의 블라인드 CTA 찾기
+    var cta = document.querySelector('#theme-trending-rising .rv-blind-cta-wrap');
+    if (!cta) cta = document.querySelector('[data-tab-content="theme"] .rv-blind-cta-wrap');
+    if (cta) cta.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+}
+
+// 리뷰 조회 급상승 롤링
+(function(){
+  var cur = 0, total = 3, timer, hov = false;
+  function activateRising(idx) {
+    var c = document.getElementById('rolling-rising');
+    if (!c) return;
+    var items = c.querySelectorAll('.rolling-rising-item');
+    var sums = c.querySelectorAll('.rolling-rising-summary');
+    for (var k = 0; k < total; k++) {
+      items[k].style.border = '1.5px solid transparent'; items[k].style.background = '#f7f8f9';
+      sums[k].style.display = 'none';
+    }
+    items[idx].style.border = '1.5px solid #00c362'; items[idx].style.background = '#fff';
+    sums[idx].style.display = 'block';
+    cur = idx;
+  }
+  function startRolling() { timer = setInterval(function() { if (!hov) activateRising((cur + 1) % total); }, 3000); }
+  startRolling();
+  setTimeout(function() {
+    var c = document.getElementById('rolling-rising');
+    if (!c) return;
+    c.querySelectorAll('.rolling-rising-item').forEach(function(item, idx) {
+      item.addEventListener('mouseenter', function() { hov = true; activateRising(idx); });
+      item.addEventListener('mouseleave', function() { hov = false; });
+    });
+  }, 500);
+})();
+
+// 기업 월드컵 1: 입사하고 싶은 기업
+function pickWorldCup(btn, idx) {
+  var round = document.getElementById('rising-wc-round');
+  var picks = round.querySelectorAll('.wc-pick');
+  var names = ['당근마켓','쿠팡'];
+  picks.forEach(function(p, i) {
+    if (i === idx) {
+      p.style.border = '2px solid #00c362'; p.style.background = '#f0faf4'; p.style.transform = 'scale(1.03)';
+    } else {
+      p.style.border = '1.5px solid #e5e6e9'; p.style.background = '#fff'; p.style.opacity = '0.5'; p.style.transform = 'scale(0.97)';
+    }
+    p.style.pointerEvents = 'none';
+  });
+  var pct = Math.floor(Math.random() * 25) + (idx === 0 ? 55 : 30);
+  var result = document.getElementById('rising-wc-result');
+  result.style.display = 'block';
+  document.getElementById('rising-wc-msg').innerHTML = '직장인 <span style="font-weight:700;color:#00c362;">' + pct + '%</span>가 <span style="font-weight:700;">' + names[idx] + '</span>을 더 높게 평가했어요';
+  document.getElementById('rising-wc-bar').style.width = pct + '%';
+  document.getElementById('rising-wc-pct').textContent = pct + '%';
+}
+// 기업 월드컵 2: 워라밸
+function pickWorldCup2(btn, idx) {
+  var round = document.getElementById('rising-wc2-round');
+  var picks = round.querySelectorAll('.wc-pick');
+  var names = ['네이버','토스'];
+  picks.forEach(function(p, i) {
+    if (i === idx) {
+      p.style.border = '2px solid #00c362'; p.style.background = '#f0faf4'; p.style.transform = 'scale(1.03)';
+    } else {
+      p.style.border = '1.5px solid #e5e6e9'; p.style.background = '#fff'; p.style.opacity = '0.5'; p.style.transform = 'scale(0.97)';
+    }
+    p.style.pointerEvents = 'none';
+  });
+  var pct = Math.floor(Math.random() * 20) + (idx === 0 ? 50 : 35);
+  var result = document.getElementById('rising-wc2-result');
+  result.style.display = 'block';
+  document.getElementById('rising-wc2-msg').innerHTML = '직장인 <span style="font-weight:700;color:#00c362;">' + pct + '%</span>가 <span style="font-weight:700;">' + names[idx] + '</span> 워라밸이 더 좋다고 평가했어요';
+  document.getElementById('rising-wc2-bar').style.width = pct + '%';
+  document.getElementById('rising-wc2-pct').textContent = pct + '%';
+}
+
+function onNudgeQuiz(btn, label) {
+  var wrap = btn.closest('.rv-nudge-inline');
+  wrap.querySelectorAll('button').forEach(function(b) {
+    b.style.border = '1px solid #e5e6e9'; b.style.background = '#fff'; b.style.color = '#686a6d';
+  });
+  if (label === '워라밸') {
+    btn.style.border = '1.5px solid #00c362'; btn.style.background = '#ecf9ef'; btn.style.color = '#00c362';
+  } else {
+    btn.style.border = '1.5px solid #f44336'; btn.style.background = '#fef2f2'; btn.style.color = '#f44336';
+  }
+  wrap.querySelector('.rv-nudge-quiz-result').style.display = 'block';
+}
+
 function filterInterviewChip(btn) {
   btn.parentElement.querySelectorAll('button').forEach(function(b) {
     b.style.border = '1px solid #e5e6e9';
@@ -13685,7 +14398,7 @@ function filterThemeChip(btn) {
   }
 
   // 사이드바 전환
-  var sideIds = ['theme-reason-sidebar','theme-rising-sidebar','theme-default-cta','theme-trending-top5'];
+  var sideIds = ['theme-reason-sidebar','theme-rising-sidebar','theme-default-cta','theme-trending-top5','theme-rising-rolling'];
   sideIds.forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; });
 
   if (mode === 'default') {
@@ -13695,7 +14408,7 @@ function filterThemeChip(btn) {
   } else if (mode === 'trending-hot') {
     // 인기 리뷰: 우측 카드 없음
   } else if (mode === 'trending-rising') {
-    ['theme-trending-top5'].forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display=''; });
+    ['theme-rising-rolling'].forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display=''; });
   }
 }
 // 테마별 리뷰 10개 카드 본 후 하단 플로팅 토스트
@@ -13706,26 +14419,23 @@ function filterThemeChip(btn) {
   var floating = document.createElement('div');
   floating.id = 'theme-scroll-floating';
   floating.style.cssText = 'position:fixed;bottom:-80px;left:50%;transform:translateX(-50%);z-index:9998;transition:bottom 0.4s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;';
-  floating.innerHTML = '<div onclick="openCompanySelect()" style="background:#fff;border:1px solid #e5e6e9;border-radius:14px;padding:14px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;box-shadow:0 4px 24px rgba(0,0,0,0.1);min-width:380px;transition:transform 0.15s;position:relative;" onmouseenter="this.style.transform=\'scale(1.02)\'" onmouseleave="this.style.transform=\'scale(1)\'">' +
-    '<div style="font-size:18px;flex-shrink:0;">📝</div>' +
-    '<div style="flex:1;">' +
-      '<div style="font-size:14px;font-weight:700;color:#242628;">읽다 보니 할 말이 생기지 않았나요?</div>' +
-      '<div style="font-size:12px;color:#949ba8;margin-top:1px;">경미님의 한마디가 누군가의 선택을 바꿔요</div>' +
+  floating.innerHTML = '<div style="background:linear-gradient(135deg,#f0faf4,#e8f5ee);border:1px solid #c8e6d0;border-radius:14px;padding:14px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 24px rgba(0,0,0,0.1);min-width:420px;position:relative;">' +
+    '<div style="flex:1;cursor:pointer;" onclick="openCompanySelect()">' +
+      '<div style="font-size:14px;font-weight:700;color:#242628;">지난 리뷰에 <span style="color:#00c362;">34명</span>이 도움 받았어요 👍</div>' +
+      '<div style="font-size:12px;color:#686a6d;margin-top:2px;">경미님의 경험이 누군가의 선택을 바꾸고 있어요</div>' +
     '</div>' +
-    '<div style="padding:6px 14px;background:#00c362;color:#fff;font-size:12px;font-weight:700;border-radius:8px;flex-shrink:0;">작성하기</div>' +
+    '<div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">' +
+      '<div onclick="openCompanySelect()" style="padding:8px 16px;background:#00c362;color:#fff;font-size:12px;font-weight:700;border-radius:8px;cursor:pointer;white-space:nowrap;">리뷰 작성하기</div>' +
+      '<button id="floating-dismiss" style="background:none;border:none;font-size:16px;color:#949ba8;cursor:pointer;padding:4px;">✕</button>' +
+    '</div>' +
   '</div>';
   document.body.appendChild(floating);
 
-  var dismissBtn = document.createElement('button');
-  dismissBtn.style.cssText = 'position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:#f7f8f9;border:1px solid #e5e6e9;font-size:11px;color:#949ba8;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,0.08);';
-  dismissBtn.textContent = '✕';
-  dismissBtn.onclick = function(e) {
+  document.getElementById('floating-dismiss').onclick = function(e) {
     e.stopPropagation();
     floating.style.bottom = '-80px';
     floating.style.pointerEvents = 'none';
   };
-  floating.querySelector('div').style.position = 'relative';
-  floating.querySelector('div').appendChild(dismissBtn);
 
   window.addEventListener('scroll', function() {
     if (floatingShown) return;
@@ -13756,13 +14466,12 @@ function filterThemeChip(btn) {
 (function() {
   var shownThemes = {}; // 주제별 최초 1회 추적
   function showHelpBanner(cardEl) {
-    var old = document.getElementById('theme-help-inline');
-    if (old) old.remove();
-    // "도움이 돼요" 버튼의 actions 영역 찾기
+    // 이미 이 카드에 배너가 있으면 중복 생성 안함
+    if (cardEl.querySelector('.theme-help-inline-item')) return;
     var actions = cardEl.querySelector('.rv-card-actions');
     if (!actions) return;
     var banner = document.createElement('div');
-    banner.id = 'theme-help-inline';
+    banner.className = 'theme-help-inline-item';
     banner.style.cssText = 'opacity:0;transform:translateY(4px);transition:opacity 0.5s ease,transform 0.5s ease;margin-top:12px;';
     banner.innerHTML = '<div onclick="openCompanySelect()" style="background:#f7f8f9;border:1px solid #e5e6e9;border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.15s;" onmouseenter="this.style.background=\'#f0f0f2\'" onmouseleave="this.style.background=\'#f7f8f9\'">' +
       '<div style="font-size:16px;flex-shrink:0;">💬</div>' +
@@ -13781,43 +14490,51 @@ function filterThemeChip(btn) {
     });
   }
 
-  // 테마별 리뷰 탭 내 "도움이 돼요" 버튼 클릭 감지 (토글)
+  // 모든 탭 내 "도움이 돼요" 버튼 클릭 감지 (리뷰 권한 있을 때만)
   document.addEventListener('click', function(e) {
     var btn = e.target.closest('.rv-card-action-btn');
     if (!btn) return;
-    var themeTab = btn.closest('[data-tab-content="theme"]');
-    if (!themeTab) return;
     if (btn.textContent.indexOf('도움이 돼요') < 0) return;
+    if (localStorage.getItem('jp_reviewed') !== 'true') return;
+    if (!btn.closest('#page-review')) return;
 
+    var card = btn.closest('.rv-card');
     var countEl = btn.querySelector('.count');
     var count = countEl ? parseInt(countEl.textContent) : 0;
 
     if (btn.dataset.liked === '1') {
-      // 이미 눌린 상태 → 취소 (-1)
       btn.dataset.liked = '0';
       btn.style.border = '';
       btn.style.background = '';
       if (countEl) countEl.textContent = count - 1;
-      // 배너 제거
-      var inlineBanner = document.getElementById('theme-help-inline');
-      if (inlineBanner) {
-        inlineBanner.style.opacity = '0';
-        inlineBanner.style.transform = 'translateY(4px)';
-        setTimeout(function() { inlineBanner.remove(); }, 400);
+      // 해당 카드의 배너만 제거
+      if (card) {
+        var cardBanner = card.querySelector('.theme-help-inline-item');
+        if (cardBanner) {
+          cardBanner.style.opacity = '0';
+          cardBanner.style.transform = 'translateY(4px)';
+          setTimeout(function() { cardBanner.remove(); }, 400);
+        }
       }
     } else {
-      // 안 눌린 상태 → 좋아요 (+1)
       btn.dataset.liked = '1';
       btn.style.border = '1px solid #00c362';
       btn.style.background = '#f3fcf9';
       if (countEl) countEl.textContent = count + 1;
-      // 현재 활성화된 테마 칩 확인
-      var activeChip = document.querySelector('[data-tab-content="theme"] .rpc-chip[style*="font-weight: 700"], [data-tab-content="theme"] .rpc-chip[style*="font-weight:700"]');
-      var currentTheme = activeChip ? activeChip.textContent.trim() : 'default';
-      if (!shownThemes[currentTheme]) {
-        shownThemes[currentTheme] = true;
-        var card = btn.closest('.rv-card');
-        if (card) setTimeout(function() { showHelpBanner(card); }, 300);
+      // 탭 + 필터 식별
+      var tabEl = btn.closest('[data-tab-content]');
+      var tabName = tabEl ? tabEl.getAttribute('data-tab-content') : 'unknown';
+      var themeKey = tabName;
+      if (tabName === 'theme') {
+        var activeChip = document.querySelector('[data-tab-content="theme"] .rpc-chip[style*="font-weight: 700"], [data-tab-content="theme"] .rpc-chip[style*="font-weight:700"]');
+        themeKey = activeChip ? 'theme-' + activeChip.textContent.trim() : 'theme-default';
+      } else if (tabName === 'work' || tabName === 'interest') {
+        var activeFilter = tabEl.querySelector('.rv-review-type-chip[style*="font-weight: 700"], .rv-review-type-chip[style*="font-weight:700"]');
+        themeKey = tabName + '-' + (activeFilter ? activeFilter.textContent.trim() : 'all');
+      }
+      if (!shownThemes[themeKey] && card) {
+        shownThemes[themeKey] = true;
+        setTimeout(function() { showHelpBanner(card); }, 300);
       }
     }
   });
@@ -13848,18 +14565,73 @@ document.addEventListener('click', function(e) {
     var p = document.getElementById('work-company-select-panel'); if (p) p.style.display = 'none';
   }
 });
-function toggleWorkSortPanel() {
-  var panel = document.getElementById('work-sort-panel');
+// 통합 정렬 시스템
+function toggleTabSort(tab) {
+  var panel = document.getElementById(tab + '-sort-panel');
+  if (!panel) return;
   panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
 }
-function selectWorkSort(label) {
-  document.getElementById('work-sort-label').textContent = label;
-  document.getElementById('work-sort-panel').style.display = 'none';
+function selectTabSort(tab, label) {
+  var labelEl = document.getElementById(tab + '-sort-label');
+  if (labelEl) labelEl.textContent = label;
+  var panel = document.getElementById(tab + '-sort-panel');
+  if (panel) panel.style.display = 'none';
+
+  // 카드 리스트 찾기
+  var tabMap = { work:'[data-tab-content="work"] .rv-card-list', interest:'[data-tab-content="interest"] .rv-card-list', jobreview:'[data-tab-content="jobreview"] .rv-card-list', interview:'[data-tab-content="interview"] .rv-card-list' };
+  var container = document.querySelector(tabMap[tab]);
+  if (!container) return;
+  // 배너/넛지 먼저 제거
+  var banners = Array.from(container.querySelectorAll('.rv-banner, .rv-nudge-inline, .rv-nudge'));
+  banners.forEach(function(el) { el.remove(); });
+
+  // 보이는 카드만 정렬 대상
+  var allCards = Array.from(container.querySelectorAll('.rv-card'));
+  var visibleCards = allCards.filter(function(c) { return c.style.display !== 'none' && !c.classList.contains('rv-card--hidden'); });
+  var hiddenCards = allCards.filter(function(c) { return c.style.display === 'none' || c.classList.contains('rv-card--hidden'); });
+
+  visibleCards.sort(function(a, b) {
+    if (label === '인기순') {
+      var getCount = function(el) {
+        var btn = el.querySelector('.rv-card-action-btn');
+        if (!btn) return 0;
+        var m = btn.textContent.match(/(\d+)/);
+        return m ? parseInt(m[1]) : 0;
+      };
+      return getCount(b) - getCount(a);
+    } else {
+      var getDate = function(el) {
+        var meta = el.querySelector('.rv-card-meta');
+        if (!meta) return '0000.00';
+        var spans = meta.querySelectorAll('span');
+        for (var k = 0; k < spans.length; k++) {
+          var m = spans[k].textContent.match(/(\d{4})\.\s*(\d{2})\s*작성/);
+          if (m) return m[1] + '.' + m[2];
+        }
+        return '0000.00';
+      };
+      return getDate(b).localeCompare(getDate(a));
+    }
+  });
+
+  // 컨테이너 비우고 보이는 카드 정렬 후 삽입
+  allCards.forEach(function(c) { c.remove(); });
+  visibleCards.forEach(function(c) { container.appendChild(c); });
+  hiddenCards.forEach(function(c) { container.appendChild(c); });
+
+  // 배너를 보이는 카드 기준 3,7번째 뒤에 삽입
+  var sorted = Array.from(container.querySelectorAll('.rv-card')).filter(function(c) { return c.offsetParent !== null; });
+  if (banners.length >= 1 && sorted.length >= 3) sorted[2].after(banners[0]);
+  if (banners.length >= 2 && sorted.length >= 7) sorted[6].after(banners[1]);
+  for (var ni = 2; ni < banners.length; ni++) container.appendChild(banners[ni]);
 }
 document.addEventListener('click', function(e) {
-  if (!e.target.closest('#work-sort-btn') && !e.target.closest('#work-sort-panel')) {
-    var p = document.getElementById('work-sort-panel'); if (p) p.style.display = 'none';
-  }
+  ['work','interest','jobreview','interview'].forEach(function(tab) {
+    if (!e.target.closest('#' + tab + '-sort-btn') && !e.target.closest('#' + tab + '-sort-panel')) {
+      var p = document.getElementById(tab + '-sort-panel');
+      if (p) p.style.display = 'none';
+    }
+  });
 });
 function toggleReviewType(btn, type, tabName) {
   // 칩 스타일 전환
@@ -14671,9 +15443,15 @@ function renderInterestList(filter) {
   });
 }
 function toggleInterest(idx) {
-  interestCompanies[idx].added = !interestCompanies[idx].added;
-  var search = document.getElementById('interest-search').value.trim();
-  renderInterestList(search || null);
+  var wasAdded = interestCompanies[idx].added;
+  interestCompanies[idx].added = !wasAdded;
+  // 추가 시 배열 맨 앞으로 이동
+  if (!wasAdded) {
+    var item = interestCompanies.splice(idx, 1)[0];
+    interestCompanies.unshift(item);
+  }
+  document.getElementById('interest-search').value = '';
+  renderInterestList(null);
 }
 function filterInterestList() {
   var val = document.getElementById('interest-search').value.trim();
@@ -14696,9 +15474,10 @@ function toggleInterestView(type) {
   }
 }
 function showInterestPopup() {
+  document.getElementById('interest-search').value = '';
   document.getElementById('rv-interest-popup').style.display = 'flex';
   document.body.style.overflow = 'hidden';
-  renderInterestList();
+  renderInterestList(null);
 }
 function closeInterestPopup() {
   document.getElementById('rv-interest-popup').style.display = 'none';
@@ -14743,9 +15522,11 @@ function startCompat() {
   setTimeout(function() { openCompanySelect(); }, 800);
 }
 function selectWordWork(btn) {
+  var selected = btn.textContent.trim();
   document.getElementById('rv-word-default-work').style.display = 'none';
   var result = document.getElementById('rv-word-result-work');
   result.style.display = 'flex';
+  document.getElementById('rv-word-selected-work').textContent = selected;
   document.getElementById('rv-word-count-work').textContent = Math.floor(Math.random() * 40) + 10;
 }
 function showBannerDiffer() {
