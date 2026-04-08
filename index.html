@@ -3671,6 +3671,26 @@
                 if(lbl) lbl.textContent = co.name + '의 데이터를 보고 있어요';
               }
 
+              // 내 기준 폴리곤 업데이트 (obSelectedConds 기반)
+              function updateMyRadar(){
+                var conds = (typeof obSelectedConds!=='undefined') ? obSelectedConds : [];
+                if(!conds.length) return;
+                // 조건 인덱스 → 레이더 축 매핑: 0=wlb, 1=salary, 2=promotion, 3=mgmt, 4=culture, 5=benefit
+                var myData = [0.35, 0.35, 0.35, 0.35, 0.35, 0.35]; // 기본값 (낮음)
+                conds.forEach(function(idx){ myData[idx] = 0.8 + Math.random()*0.15; }); // 선택한 조건은 높게
+                var myPoly = document.getElementById('myPoly');
+                if(myPoly) myPoly.setAttribute('points', pts(myData));
+                // 내 기준 닷도 업데이트
+                var myDots = document.querySelectorAll('#radarSvg circle[stroke="#A0B0A8"]');
+                myData.forEach(function(v,i){
+                  var p = toXY(angles[i], v);
+                  if(myDots[i]){
+                    myDots[i].setAttribute('cx', p.x);
+                    myDots[i].setAttribute('cy', p.y);
+                  }
+                });
+              }
+
               // 초기 세팅
               setCompany(0);
 
@@ -3718,7 +3738,7 @@
               <button onclick="openOB(true)" style="width:100%;padding:12px 0;border-radius:var(--rsm);font-size:14px;font-weight:700;border:none;background:var(--brand);color:#fff;cursor:pointer;font-family:var(--font);transition:background .15s;">시작하기</button>
             </div>
             <!-- 내 맞춤 조건 (결과 후, 접힘/펼침) -->
-            <div id="obResultBox" style="display:none;border-radius:14px;overflow:hidden;background:var(--surface);border:1.5px solid var(--ln);box-shadow:0 1px 4px rgba(0,0,0,.04);">
+            <div id="obResultBox" style="display:none;border-radius:14px;overflow:hidden;background:var(--surface);border:1.5px solid #E0E2E6;">
               <!-- 헤더: 항상 보임 -->
               <div id="obResultHeader" onclick="toggleObResult()" style="display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;transition:background .12s;" onmouseover="this.style.background='#FAFBFC'" onmouseout="this.style.background='transparent'">
                 <div style="width:28px;height:28px;border-radius:8px;background:var(--brand-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -20009,6 +20029,7 @@ function closeRatePopup() {
         sessionStorage.setItem('jp_ob_conds', JSON.stringify(obSelectedConds));
       }
       if(typeof shuffleInsightCos==='function') shuffleInsightCos();
+      if(typeof updateMyRadar==='function') updateMyRadar();
     }
     // 리뷰 탭 대기 중인 카테고리 활성화
     if(typeof checkRvPendingCat==='function') setTimeout(checkRvPendingCat, 300);
@@ -20415,6 +20436,7 @@ function closeRatePopup() {
         var lbl=document.getElementById('cta-label');
         if(lbl) lbl.textContent=obSelectedJob+' 직무 기준으로 분석했어요';
         if(typeof shuffleInsightCos==='function') shuffleInsightCos();
+        if(typeof updateMyRadar==='function') updateMyRadar();
         if(typeof renderReviewCards==='function') renderReviewCards();
       }
     } else {
@@ -20942,8 +20964,10 @@ function closeRatePopup() {
     // 채용 공고 (뉴스룸 탭 - 간단 리스트)
     const jobRoles = ['브랜드 마케터','프로덕트 디자이너','프론트엔드 개발자','데이터 분석가','서비스 기획자','UX 리서처','백엔드 개발자','콘텐츠 마케터'];
     const jobsArr = shuffle(jobRoles).slice(0,Math.min(jCount,3));
-    document.getElementById('cdJobsTitle').textContent = `현재 채용 중인 공고 ${jCount}건`;
-    document.getElementById('cdJobs').innerHTML = jobsArr.map(j=>{
+    var _cdJobsTitle = document.getElementById('cdJobsTitle');
+    if(_cdJobsTitle) _cdJobsTitle.textContent = `현재 채용 중인 공고 ${jCount}건`;
+    var _cdJobs = document.getElementById('cdJobs');
+    if(_cdJobs) _cdJobs.innerHTML = jobsArr.map(j=>{
       const dd = Math.floor(Math.random()*25)+1;
       return `<div class="cd-job">
         <div class="cd-job-info">
