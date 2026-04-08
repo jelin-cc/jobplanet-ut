@@ -3709,6 +3709,8 @@
         <button id="rv-scroll-left" onclick="scrollReviewCards(-1)" style="display:none;position:absolute;left:-16px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1.5px solid var(--ln);background:var(--surface);cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:2;transition:all .15s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.08)'">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
+        <!-- 우측 그라데이션 -->
+        <div id="rv-scroll-fade" style="position:absolute;top:0;right:0;bottom:4px;width:48px;background:linear-gradient(90deg,transparent,rgba(248,249,250,0.95));pointer-events:none;z-index:1;"></div>
         <!-- 우측 버튼 -->
         <button id="rv-scroll-right" onclick="scrollReviewCards(1)" style="position:absolute;right:-16px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:1.5px solid var(--ln);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:2;transition:all .15s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.08)'">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
@@ -3912,7 +3914,8 @@
         }
         function scrollReviewCards(dir){
           var el = document.getElementById('rv-grid');
-          el.scrollBy({left: dir * 340, behavior:'smooth'});
+          if(dir < 0){ el.scrollTo({left: 0, behavior:'smooth'}); }
+          else { el.scrollBy({left: 340, behavior:'smooth'}); }
           setTimeout(updateRvScrollBtns, 350);
         }
         function updateRvScrollBtns(){
@@ -3922,8 +3925,10 @@
           if(!el||!left||!right) return;
           var atStart = el.scrollLeft <= 10;
           var atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 10;
+          var fade = document.getElementById('rv-scroll-fade');
           left.style.display = atStart ? 'none' : 'flex';
           right.style.display = atEnd ? 'none' : 'flex';
+          if(fade) fade.style.display = atEnd ? 'none' : '';
         }
         // 스크롤 이벤트로도 업데이트
         document.addEventListener('DOMContentLoaded', function(){
