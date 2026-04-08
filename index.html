@@ -15526,6 +15526,7 @@ function segBar(label, filled) {
   return '<div><div style="font-size:12px;color:#323438;margin-bottom:4px;">' + label + '</div><div style="display:flex;gap:3px;">' + segs + '</div></div>';
 }
 function openCompanyPage(key) {
+  sessionStorage.setItem('jp_last_company_key', key);
   var data = {
     naver: { name:'네이버(주)', industry:'IT/웹/통신', rating:4.0, reviews:2002, salary:1653, interview:1333, color:'#1EC800', initial:'N',
       stats:{welfare:4.1,wlb:3.6,culture:3.8,promotion:3.5,exec:3.3}, recommend:86, ceo:69, growth:55,
@@ -16796,33 +16797,41 @@ function closeRatePopup() {
             }
           });
         }
-        // 잡코리아 코치마크 트리거
-        if(!_jkCoachShownThisSession){
-          _jkCoachShownThisSession = true;
+        // 잡코리아 코치마크 트리거 (localStorage로 1회성 보장)
+        if(!localStorage.getItem('jp_jk_coach_seen')){
           showJkCoachMark();
         }
       }
 
-      // 잡코리아 코치마크 (1회성, localStorage 기반) — renderCards 후 호출
-      var _jkCoachShownThisSession = false;
+      // 잡코리아 코치마크 (1회성, localStorage 기반)
+      var _jkCoachActive = false;
       function _dismissJkCoach(){
         var c = document.getElementById('jkCoachEl');
         if(!c) return;
+        _jkCoachActive = false;
         c.classList.add('fadeout');
         localStorage.setItem('jp_jk_coach_seen','1');
-        // 하이라이트 제거
         var hl = document.querySelector('.jk-coach-highlight');
         if(hl) hl.classList.remove('jk-coach-highlight');
         setTimeout(function(){if(c.parentNode) c.remove();},350);
       }
       function showJkCoachMark(){
+        // 이미 본 적 있으면 절대 다시 안 뜸
         if(localStorage.getItem('jp_jk_coach_seen')) return;
+        // 이미 떠 있으면 중복 생성 안 함
+        if(_jkCoachActive || document.getElementById('jkCoachEl')) return;
+        // 채용 공고 페이지가 활성화된 상태에서만
+        var jobPage = document.getElementById('page-job');
+        if(!jobPage || !jobPage.classList.contains('active')) return;
+        // 즉시 localStorage 세팅해서 중복 호출 차단
+        localStorage.setItem('jp_jk_coach_seen','1');
+        _jkCoachActive = true;
         setTimeout(function(){
-          var extTag = document.querySelector('#view-img .img-card .ic-tag.ext-tag');
-          if(!extTag) return;
-          // 태그에 펄스 하이라이트 효과
+          var jp2 = document.getElementById('page-job');
+          if(!jp2 || !jp2.classList.contains('active')){ _jkCoachActive=false; return; }
+          var extTag = document.querySelector('#view-img .img-card.visible .ic-tag.ext-tag');
+          if(!extTag){ _jkCoachActive=false; return; }
           extTag.classList.add('jk-coach-highlight');
-          // fixed 위치로 body에 삽입
           var coach = document.createElement('div');
           coach.id = 'jkCoachEl';
           coach.className = 'jk-coach';
@@ -16832,28 +16841,18 @@ function closeRatePopup() {
             + '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
             + '</span></div>';
           document.body.appendChild(coach);
-          // 위치 계산 (태그 아래)
           function positionCoach(){
             var r = extTag.getBoundingClientRect();
             coach.style.left = r.left + 'px';
             coach.style.top = (r.bottom + 10) + 'px';
           }
           positionCoach();
-          // 스크롤/리사이즈 시 위치 추적
-          var _rafId = null;
           function trackPos(){
             positionCoach();
-            if(coach.parentNode && !coach.classList.contains('fadeout')){
-              _rafId = requestAnimationFrame(trackPos);
-            }
+            if(coach.parentNode && !coach.classList.contains('fadeout')) requestAnimationFrame(trackPos);
           }
-          _rafId = requestAnimationFrame(trackPos);
-          // 페이드인
-          requestAnimationFrame(function(){
-            requestAnimationFrame(function(){
-              coach.classList.add('show');
-            });
-          });
+          requestAnimationFrame(trackPos);
+          requestAnimationFrame(function(){ requestAnimationFrame(function(){ coach.classList.add('show'); }); });
         }, 800);
       }
 
@@ -17721,14 +17720,13 @@ function closeRatePopup() {
       }
       </script>
       <div class="cd-main cd-newsroom-content">
+        <!-- 0: 기업 소개 -->
         <div class="cd-section">
           <div class="cd-section-label">소개글</div>
           <div class="cd-section-title" id="cdSlogan"></div>
           <div class="cd-section-desc" id="cdDesc"></div>
           <span class="cd-section-more">더보기</span>
-        </div>
-        <div class="cd-section">
-          <div class="cd-mv-grid">
+          <div class="cd-mv-grid" style="margin-top:24px;">
             <div class="cd-mv-card">
               <div class="cd-mv-label mission">미션</div>
               <div class="cd-mv-title" id="cdMission"></div>
@@ -17741,19 +17739,36 @@ function closeRatePopup() {
             </div>
           </div>
         </div>
+        <!-- 1: 사진/영상 -->
         <div class="cd-section">
-          <div class="cd-section-label">기업 정보</div>
-          <div class="cd-info-grid" id="cdInfoGrid"></div>
+          <div class="cd-section-label">사진/영상</div>
+          <div id="cdPhotos" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-radius:12px;overflow:hidden;"></div>
         </div>
+        <!-- 2: 현/전직원 리뷰 -->
         <div class="cd-section">
           <div class="cd-section-label">현/전직원 리뷰</div>
           <div class="cd-section-title">직원들이 말하는 이 회사</div>
           <div class="cd-review-list" id="cdReviews"></div>
         </div>
+        <!-- 3: 기업 스토리 -->
         <div class="cd-section">
-          <div class="cd-section-label">채용 공고</div>
-          <div class="cd-section-title" id="cdJobsTitle">현재 채용 중인 공고</div>
-          <div class="cd-jobs-list" id="cdJobs"></div>
+          <div class="cd-section-label">기업 스토리</div>
+          <div id="cdStory" style="display:flex;flex-direction:column;gap:16px;"></div>
+        </div>
+        <!-- 4: 뉴스 -->
+        <div class="cd-section">
+          <div class="cd-section-label">뉴스</div>
+          <div id="cdNews" style="display:flex;flex-direction:column;gap:12px;"></div>
+        </div>
+        <!-- 5: 대표 복지 -->
+        <div class="cd-section">
+          <div class="cd-section-label">대표 복지</div>
+          <div id="cdBenefits" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;"></div>
+        </div>
+        <!-- 6: 기업 정보 -->
+        <div class="cd-section">
+          <div class="cd-section-label">기업 정보</div>
+          <div class="cd-info-grid" id="cdInfoGrid"></div>
         </div>
       </div>
     </div>
@@ -20531,6 +20546,8 @@ function closeRatePopup() {
       if(id==='home'){_snk.classList.remove('hide');_snk.style.display='';_snk.classList.add('show');}
       else{_snk.classList.add('hide');setTimeout(function(){_snk.style.display='none';},400);}
     }
+    // 채용 공고 이외 페이지로 이동 시 코치마크 제거
+    if(id!=='job'){var _jkc=document.getElementById('jkCoachEl');if(_jkc)_jkc.remove();var _jkhl=document.querySelector('.jk-coach-highlight');if(_jkhl)_jkhl.classList.remove('jk-coach-highlight');}
     if(id==='news' && typeof renderNews==='function') renderNews();
     if(id==='community' && typeof renderComm==='function') renderComm();
     if(id==='job-detail'){
@@ -20869,6 +20886,58 @@ function closeRatePopup() {
         <div class="cd-rv-tags">${r.tags.map(t=>`<span class="cd-rv-tag">${t}</span>`).join('')}</div>
       </div>
     `).join('');
+
+    // 사진/영상 (Unsplash 오피스 이미지)
+    var _photoPool = (typeof corpImagePool !== 'undefined') ? corpImagePool : [];
+    var _photos = _photoPool.slice().sort(function(){return Math.random()-0.5;}).slice(0,6);
+    document.getElementById('cdPhotos').innerHTML = _photos.map(function(url,i){
+      var h = i===0 ? 'grid-row:span 2;' : '';
+      return '<div style="'+h+'overflow:hidden;"><img src="'+url+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block;"></div>';
+    }).join('');
+
+    // 기업 스토리
+    var _storyTitles = ['창업자가 말하는 우리의 시작','성장의 비결: 팀 문화 이야기','우리가 일하는 방식','신입사원이 본 첫 3개월'];
+    var _storyDescs = [
+      '처음에는 작은 사무실에서 시작했지만, 고객의 문제를 해결하겠다는 열정 하나로 여기까지 왔습니다.',
+      '수평적인 소통과 빠른 의사결정이 우리 팀의 핵심 경쟁력입니다. 모든 구성원이 주인의식을 갖고 일합니다.',
+      '자율 출퇴근, 원격 근무, 자기개발비 지원 등 구성원의 성장을 최우선으로 생각합니다.',
+      '온보딩 프로그램부터 멘토링까지, 신입사원도 빠르게 적응할 수 있는 환경을 만들고 있습니다.'
+    ];
+    document.getElementById('cdStory').innerHTML = _storyTitles.map(function(t,i){
+      return '<div style="padding:20px;background:#f9fafb;border-radius:12px;border:1px solid #f0f1f3;">'
+        +'<div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:8px;">'+t+'</div>'
+        +'<div style="font-size:13px;color:#686a6d;line-height:1.6;">'+_storyDescs[i]+'</div>'
+        +'</div>';
+    }).join('');
+
+    // 뉴스
+    var _newsItems = [
+      {date:'2026.03.28',title:data.name+', 2026년 상반기 신규 채용 확대 발표',src:'컴퍼니 타임스'},
+      {date:'2026.03.15',title:data.name+' 신사업 부문 조직개편… "AI·데이터 인력 대폭 충원"',src:'IT조선'},
+      {date:'2026.02.20',title:'"'+data.name+' 직원 만족도, 업계 상위 10% 진입"',src:'잡플래닛 리서치'},
+      {date:'2026.01.10',title:data.name+', ESG 경영 보고서 발간… 지속가능성 강화',src:'비즈니스워치'}
+    ];
+    document.getElementById('cdNews').innerHTML = _newsItems.map(function(n){
+      return '<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:16px 0;border-bottom:1px solid #f0f1f3;">'
+        +'<div style="flex:1;"><div style="font-size:14px;font-weight:600;color:#242628;margin-bottom:4px;">'+n.title+'</div><div style="font-size:12px;color:#949ba8;">'+n.src+' · '+n.date+'</div></div>'
+        +'</div>';
+    }).join('');
+
+    // 대표 복지
+    var _benefitItems = [
+      {icon:'🏠',name:'유연 근무제',desc:'자율 출퇴근 및 원격 근무 지원'},
+      {icon:'💰',name:'성과 인센티브',desc:'분기별 성과에 따른 보상 지급'},
+      {icon:'📚',name:'자기개발비',desc:'연간 교육·도서 구매비 지원'},
+      {icon:'🏥',name:'건강검진',desc:'본인 및 가족 종합검진 지원'},
+      {icon:'🍽️',name:'식사 제공',desc:'점심·저녁 식대 지원'},
+      {icon:'🎯',name:'장비 지원',desc:'최신 개발 장비 및 모니터 제공'}
+    ];
+    document.getElementById('cdBenefits').innerHTML = _benefitItems.map(function(b){
+      return '<div style="display:flex;align-items:flex-start;gap:12px;padding:16px;background:#f9fafb;border-radius:10px;">'
+        +'<span style="font-size:24px;">'+b.icon+'</span>'
+        +'<div><div style="font-size:14px;font-weight:600;color:#242628;margin-bottom:2px;">'+b.name+'</div><div style="font-size:12px;color:#949ba8;">'+b.desc+'</div></div>'
+        +'</div>';
+    }).join('');
 
     // 채용 공고 (뉴스룸 탭 - 간단 리스트)
     const jobRoles = ['브랜드 마케터','프로덕트 디자이너','프론트엔드 개발자','데이터 분석가','서비스 기획자','UX 리서처','백엔드 개발자','콘텐츠 마케터'];
@@ -23716,6 +23785,10 @@ function closeRatePopup() {
     };
   }
   function openReviewWithCallback() {
+    // 리뷰 작성 출발 페이지 저장 (기업 상세에서 왔는지 여부)
+    var activePage = document.querySelector('.page.active');
+    var originPage = activePage ? activePage.id.replace('page-','') : 'review';
+    sessionStorage.setItem('jp_review_origin', originPage);
     // 현재 탭 저장
     var activeTab = document.querySelector(".review-tab.active");
     if (activeTab) sessionStorage.setItem("jp_last_review_tab", activeTab.dataset.tab);
@@ -23809,7 +23882,7 @@ function closeRatePopup() {
             '<p style="font-size:12px;color:#949ba8;margin:12px 0 0;">ⓘ 리뷰가 승인되면 보안코드가 이메일로도 발송돼요.</p>' +
           '</div>' +
           '<div style="display:flex;justify-content:center;margin-bottom:40px;">' +
-            '<button onclick="if(window.opener){window.opener.localStorage.setItem(\'jp_reviewed\',\'pending\');window.opener.sessionStorage.setItem(\'jp_current_page\',\'review\');var _at=window.opener.document.querySelector(\'.review-tab.active\');if(_at)window.opener.sessionStorage.setItem(\'jp_current_review_tab\',_at.dataset.tab);window.opener.location.reload();}window.close();" style="padding:16px 48px;border:none;border-radius:10px;background:#00c362;font-size:16px;font-weight:700;color:#fff;cursor:pointer;font-family:Pretendard,sans-serif;">리뷰 둘러보기</button>' +
+            '<button onclick="if(window.opener){window.opener.localStorage.setItem(\'jp_reviewed\',\'pending\');var _origin=window.opener.sessionStorage.getItem(\'jp_review_origin\')||\'review\';window.opener.sessionStorage.setItem(\'jp_current_page\',_origin);if(_origin===\'review\'){var _at=window.opener.document.querySelector(\'.review-tab.active\');if(_at)window.opener.sessionStorage.setItem(\'jp_current_review_tab\',_at.dataset.tab);}window.opener.location.reload();}window.close();" style="padding:16px 48px;border:none;border-radius:10px;background:#00c362;font-size:16px;font-weight:700;color:#fff;cursor:pointer;font-family:Pretendard,sans-serif;">리뷰 둘러보기</button>' +
           '</div>' +
           '<div style="border-top:1px solid #e5e6e9;padding-top:20px;font-size:11px;color:#949ba8;line-height:18px;text-align:left;">모든 개인정보는 암호화되며, 어디에도 노출되지 않습니다. 게시물을 작성하시면, 같은 종류의 게시물을 6개월간 무료로 열람하실 수 있습니다.<br>회원님의 경험을 공유하고, 200만 건의 진솔한 후기를 확인해보세요! 잡플래닛은 회원님에서 가장 만족스러운 직장을 찾을 수 있도록 도와줍니다. 몇 분만 투자하세요!<br><br>본 내용에 대한 저작권 및 사용권은 잡플래닛에 있습니다.</div>' +
           '<div style="margin-top:20px;font-size:12px;color:#949ba8;">Copyright ©JOBPLANET. All rights reserved.</div>' +
