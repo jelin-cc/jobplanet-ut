@@ -20716,6 +20716,51 @@ function closeRatePopup() {
     document.querySelectorAll('#page-company > .cd-tab-content').forEach(function(c){ c.classList.remove('active'); });
     document.getElementById('cdTabNewsroom').classList.add('active');
 
+    // 리뷰 작성 완료 시 블라인드 해제 + 100건 리뷰 생성
+    if(localStorage.getItem('jp_reviewed') === 'true'){
+      var blindWraps = document.querySelectorAll('#page-company .cd-blind-wrap');
+      blindWraps.forEach(function(wrap){
+        var overlay = wrap.querySelector('.cd-blind-overlay');
+        if(overlay) overlay.style.display = 'none';
+        wrap.style.minHeight = 'auto';
+        wrap.style.overflow = 'visible';
+        // 랜덤 리뷰 100건 생성
+        var content = wrap.querySelector('.cd-blind-content');
+        if(!content) return;
+        var depts = ['개발','디자인','마케팅','기획','데이터','영업','HR','서비스','엔지니어링'];
+        var statuses = ['현직원','전직원'];
+        var locs = ['서울','경기','판교','성남','인천'];
+        var years = ['2026.04','2026.03','2026.02','2026.01','2025.12','2025.11','2025.10','2025.09'];
+        var scores = ['★★★★★ 5.0','★★★★☆ 4.0','★★★★☆ 4.5','★★★☆☆ 3.0','★★★★☆ 3.5','★★☆☆☆ 2.0','★★★★★ 4.5'];
+        var texts = [
+          '수평적 문화가 실제로 작동해요. 자유로운 분위기에서 일할 수 있습니다.',
+          '연봉은 만족하지만 워라밸은 팀바팀이에요. 좋은 팀을 만나야 합니다.',
+          '성장할 수 있는 환경이지만 자기 주도적이어야 해요.',
+          '복지가 정말 좋아요. 사내 카페, 식사 지원, 자기개발비 등 다양합니다.',
+          '경영진의 비전이 명확하고 소통도 원활한 편입니다.',
+          '업무 강도가 높지만 그만큼 빠르게 성장할 수 있어요.',
+          '동료들의 역량이 뛰어나서 자극을 많이 받습니다.',
+          '의사결정이 느린 편이지만 안정적인 환경에서 일할 수 있어요.',
+          '재택근무가 가능하고 자율 출퇴근제가 잘 지켜집니다.',
+          '팀 분위기가 좋고 서로 도와주는 문화가 있어요.',
+        ];
+        var cats = ['복지','워라밸','문화','승진','경영진'];
+        var html = '';
+        for(var ri=0;ri<100;ri++){
+          var dept=depts[Math.floor(Math.random()*depts.length)];
+          var st=statuses[Math.floor(Math.random()*statuses.length)];
+          var loc=locs[Math.floor(Math.random()*locs.length)];
+          var yr=years[Math.floor(Math.random()*years.length)];
+          var sc=scores[Math.floor(Math.random()*scores.length)];
+          var tx=texts[Math.floor(Math.random()*texts.length)];
+          var bars='';
+          cats.forEach(function(c){bars+='<div class="cd-rv-item-bar"><span class="cd-rv-item-bar-label">'+c+'</span><div class="cd-rv-item-bar-track"><div class="cd-rv-item-bar-fill" style="width:'+(30+Math.floor(Math.random()*60))+'%;"></div></div></div>';});
+          html+='<div class="cd-rv-item"><div class="cd-rv-item-header"><span class="cd-rv-item-meta">'+st+' · '+dept+' · '+loc+' · '+yr+'</span><span class="cd-rv-item-score">'+sc+'</span></div><div class="cd-rv-item-bars">'+bars+'</div><div class="cd-rv-item-text">'+tx+'</div></div>';
+        }
+        content.innerHTML = html;
+      });
+    }
+
     go('company');
   }
 
