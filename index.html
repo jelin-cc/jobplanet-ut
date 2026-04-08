@@ -3683,24 +3683,16 @@
               <button onclick="openOB(true)" style="width:100%;padding:12px 0;border-radius:var(--rsm);font-size:14px;font-weight:700;border:none;background:var(--brand);color:#fff;cursor:pointer;font-family:var(--font);transition:background .15s;">시작하기</button>
             </div>
             <!-- 내 맞춤 조건 (결과 후, 접힘/펼침) -->
-            <div id="obResultBox" style="display:none;border-radius:16px;overflow:hidden;background:var(--surface);box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid var(--ln2);">
-              <!-- 직무 헤더 (클릭으로 토글) -->
-              <div id="obResultHeader" onclick="toggleObResult()" style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;transition:background .12s;" onmouseover="this.style.background='var(--ln2)'" onmouseout="this.style.background='transparent'">
-                <div style="width:28px;height:28px;border-radius:8px;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 0 0-8 0v2"/></svg>
-                </div>
-                <div style="flex:1;min-width:0;">
-                  <span id="obResultJob" style="font-size:14px;font-weight:700;color:var(--tx);"></span>
-                  <span style="font-size:12px;color:var(--tx4);margin-left:6px;">내 맞춤 조건</span>
-                </div>
-                <svg id="obResultArrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2.5" style="flex-shrink:0;transition:transform .2s;transform:rotate(0deg);"><polyline points="6 9 12 15 18 9"/></svg>
+            <div id="obResultBox" style="display:none;border-radius:12px;overflow:hidden;background:var(--surface);border:1px solid var(--ln);">
+              <!-- 접힌 상태: 한 줄 요약 -->
+              <div id="obResultHeader" onclick="toggleObResult()" style="display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;transition:background .12s;" onmouseover="this.style.background='var(--ln2)'" onmouseout="this.style.background='transparent'">
+                <span id="obResultJob" style="font-size:13px;font-weight:700;color:var(--tx);"></span>
+                <span id="obResultTagsSummary" style="font-size:12px;color:var(--tx4);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+                <button onclick="event.stopPropagation();openOB(true)" style="font-size:11px;font-weight:600;color:var(--brand);background:none;border:none;cursor:pointer;font-family:var(--font);flex-shrink:0;padding:2px 6px;">변경</button>
+                <svg id="obResultArrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2.5" style="flex-shrink:0;transition:transform .2s;transform:rotate(0deg);"><polyline points="6 9 12 15 18 9"/></svg>
               </div>
-              <!-- 조건 목록 (기본 접힘) -->
-              <div id="obResultBody" style="display:none;padding:0 16px 12px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                  <span style="font-size:11px;font-weight:600;color:var(--tx4);letter-spacing:.3px;">중요 조건</span>
-                  <button onclick="event.stopPropagation();openOB(true)" style="font-size:11px;font-weight:600;color:var(--brand);background:none;border:none;cursor:pointer;font-family:var(--font);">변경</button>
-                </div>
+              <!-- 펼친 상태: 조건 상세 -->
+              <div id="obResultBody" style="display:none;padding:0 14px 14px;border-top:1px solid var(--ln2);">
                 <div id="obResultTags" style="display:flex;flex-direction:column;gap:0;"></div>
               </div>
             </div>
@@ -3710,6 +3702,12 @@
               var arrow=document.getElementById('obResultArrow');
               if(body.style.display==='none'){body.style.display='block';arrow.style.transform='rotate(180deg)';}
               else{body.style.display='none';arrow.style.transform='rotate(0deg)';}
+            }
+            function updateObResultSummary(){
+              var el=document.getElementById('obResultTagsSummary');
+              if(!el) return;
+              var conds=(typeof obSelectedConds!=='undefined'&&obSelectedConds)?obSelectedConds:[];
+              el.textContent=conds.length?conds.join(' · '):'';
             }
             </script>
           </div>
@@ -19833,6 +19831,7 @@ function closeRatePopup() {
     // 리뷰 탭 대기 중인 카테고리 활성화
     if(typeof checkRvPendingCat==='function') setTimeout(checkRvPendingCat, 300);
     if(typeof updateRvCatVisibility==='function') setTimeout(updateRvCatVisibility, 300);
+    if(typeof updateObResultSummary==='function') setTimeout(updateObResultSummary, 100);
   }
   function obLoginThenStart(){
     doLogin();
