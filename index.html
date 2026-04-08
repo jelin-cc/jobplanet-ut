@@ -21064,7 +21064,13 @@ function closeRatePopup() {
       if(overlay) overlay.style.display = 'none';
       wrap.style.minHeight = 'auto';
       wrap.style.overflow = 'visible';
+      // blur 필터 + pointer-events 해제
       var content = wrap.querySelector('.cd-blind-content');
+      if(content){
+        content.style.filter = 'none';
+        content.style.pointerEvents = 'auto';
+        content.style.userSelect = 'auto';
+      }
       if(!content) return;
       var depts=['개발','디자인','마케팅','기획','데이터','영업','HR','서비스','엔지니어링'];
       var statuses=['현직원','전직원'];
