@@ -11559,34 +11559,6 @@
         </div>
       </div>
 
-      <!-- 넛지: 조회상승1 - 기업 월드컵 -->
-      <div id="nudge-rising-1" class="rv-nudge-inline rv-nudge-rising" style="width:100%;padding:24px 28px;background:#f7f8f9;border-radius:16px;font-family:'Pretendard',var(--font),sans-serif;box-sizing:border-box;">
-        <div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:4px;">⚡ 다녀본 사람만 아는 진짜 비교</div>
-        <div style="font-size:13px;color:#949ba8;margin-bottom:14px;">직장인 평가가 더 높은 곳은?</div>
-        <div id="rising-wc-round" style="display:flex;gap:12px;align-items:stretch;">
-          <button onclick="pickWorldCup(this,0)" class="wc-pick" style="flex:1;padding:20px 16px;border:1.5px solid #e5e6e9;border-radius:14px;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:8px;">
-            <div style="width:40px;height:40px;border-radius:10px;background:#ff6813;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;">당근</div>
-            <div style="font-size:14px;font-weight:700;color:#242628;">당근마켓</div>
-            <div style="font-size:11px;color:#949ba8;">★ 4.5</div>
-          </button>
-          <div style="display:flex;align-items:center;font-size:16px;font-weight:800;color:#c5c7cc;">VS</div>
-          <button onclick="pickWorldCup(this,1)" class="wc-pick" style="flex:1;padding:20px 16px;border:1.5px solid #e5e6e9;border-radius:14px;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:8px;">
-            <div style="width:40px;height:40px;border-radius:10px;background:#3617CE;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;">쿠팡</div>
-            <div style="font-size:14px;font-weight:700;color:#242628;">쿠팡</div>
-            <div style="font-size:11px;color:#949ba8;">★ 3.0</div>
-          </button>
-        </div>
-        <div id="rising-wc-result" class="rv-nudge-rising-result" style="display:none;margin-top:14px;padding:14px 16px;background:#fff;border-radius:10px;border:1px solid #e5e6e9;">
-          <div style="font-size:13px;color:#242628;line-height:20px;" id="rising-wc-msg"></div>
-          <div style="display:flex;gap:4px;align-items:center;margin-top:8px;">
-            <div style="flex:1;height:8px;background:#e5e6e9;border-radius:4px;overflow:hidden;"><div id="rising-wc-bar" style="height:100%;background:#00c362;border-radius:4px;transition:width .5s;width:0%;"></div></div>
-            <span style="font-size:12px;font-weight:700;color:#00c362;" id="rising-wc-pct"></span>
-          </div>
-          <div style="font-size:12px;color:#949ba8;margin-top:8px;">경미님이 다녔던 기업의 솔직한 평가도 궁금해하는 사람이 많아요</div>
-          <button onclick="onUnifiedNudgeCta('nudge-rising-1')" style="margin-top:10px;width:100%;padding:10px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:'Pretendard',sans-serif;">내 회사도 평가하기</button>
-        </div>
-      </div>
-
       <!-- 상승4: 당근 -->
       <div class="rv-card">
         <div class="rv-card-header">
@@ -11707,10 +11679,10 @@
         </div>
       </div>
 
-      <!-- 넛지: 조회상승2 - 워라밸 월드컵 -->
+      <!-- 넛지: 워라밸 월드컵 -->
       <div id="nudge-rising-2" class="rv-nudge-inline rv-nudge-rising" style="width:100%;padding:24px 28px;background:#f7f8f9;border-radius:16px;font-family:'Pretendard',var(--font),sans-serif;box-sizing:border-box;">
         <div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:4px;">🏖️ 워라밸 좋은 기업 월드컵</div>
-        <div style="font-size:13px;color:#949ba8;margin-bottom:14px;">칼퇴하고 싶다면 어디?</div>
+        <div style="font-size:13px;color:#949ba8;margin-bottom:14px;">둘 중 어디를 더 가고 싶어?</div>
         <div id="rising-wc2-round" style="display:flex;gap:12px;align-items:stretch;">
           <button onclick="pickWorldCup2(this,0)" class="wc-pick" style="flex:1;padding:20px 16px;border:1.5px solid #e5e6e9;border-radius:14px;background:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:8px;">
             <div style="width:40px;height:40px;border-radius:10px;background:#1EC800;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;">네이버</div>
@@ -11724,14 +11696,17 @@
             <div style="font-size:11px;color:#949ba8;">워라밸 3.8</div>
           </button>
         </div>
+        <div id="rising-wc2-voted" style="display:none;margin-top:14px;padding:14px 16px;background:#fff;border-radius:10px;border:1px solid #e5e6e9;text-align:center;">
+          <div style="font-size:13px;color:#242628;font-weight:600;">투표 완료! 다른 직장인들은 어디를 골랐을까?</div>
+          <div style="font-size:12px;color:#949ba8;margin-top:4px;">리뷰 작성하면 결과를 확인할 수 있어요</div>
+          <button onclick="onUnifiedNudgeCta('nudge-rising-2')" style="margin-top:10px;width:100%;padding:10px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:'Pretendard',sans-serif;">리뷰 쓰고 결과 확인하기</button>
+        </div>
         <div id="rising-wc2-result" class="rv-nudge-compare-result" style="display:none;margin-top:14px;padding:14px 16px;background:#fff;border-radius:10px;border:1px solid #e5e6e9;">
           <div style="font-size:13px;color:#242628;line-height:20px;" id="rising-wc2-msg"></div>
           <div style="display:flex;gap:4px;align-items:center;margin-top:8px;">
             <div style="flex:1;height:8px;background:#e5e6e9;border-radius:4px;overflow:hidden;"><div id="rising-wc2-bar" style="height:100%;background:#00c362;border-radius:4px;transition:width .5s;width:0%;"></div></div>
             <span style="font-size:12px;font-weight:700;color:#00c362;" id="rising-wc2-pct"></span>
           </div>
-          <div style="font-size:12px;color:#949ba8;margin-top:8px;">경미님이 다녔던 기업의 워라밸은 어땠나요?</div>
-          <button onclick="onUnifiedNudgeCta('nudge-rising-2')" style="margin-top:10px;width:100%;padding:10px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:'Pretendard',sans-serif;">내 회사 워라밸 평가하기</button>
         </div>
       </div>
 
@@ -14577,6 +14552,21 @@ function unlockThemeNudge(nudge) {
   // CTA 숨기기
   var ctaBtn = nudge.querySelector('button[onclick*="onThemeNudgeCta"]');
   if (ctaBtn) ctaBtn.style.display = 'none';
+  // 워라밸 월드컵: voted 패널 숨기고 result 패널에 결과 표시
+  if (nudgeId === 'nudge-rising-2') {
+    var voted = nudge.querySelector('#rising-wc2-voted');
+    if (voted) voted.style.display = 'none';
+    var pick = sessionStorage.getItem('jp_wc2_pick') || '네이버';
+    var pct = Math.floor(Math.random() * 20) + (pick === '네이버' ? 50 : 35);
+    var resultEl = document.getElementById('rising-wc2-result');
+    if (resultEl) resultEl.style.display = 'block';
+    var msgEl = document.getElementById('rising-wc2-msg');
+    if (msgEl) msgEl.innerHTML = '직장인 <span style="font-weight:700;color:#00c362;">' + pct + '%</span>가 <span style="font-weight:700;">' + pick + '</span> 워라밸이 더 좋다고 평가했어요';
+    var barEl = document.getElementById('rising-wc2-bar');
+    if (barEl) barEl.style.width = pct + '%';
+    var pctEl = document.getElementById('rising-wc2-pct');
+    if (pctEl) pctEl.textContent = pct + '%';
+  }
   // 첫 번째 선택지 자동 선택 표시
   var firstBtn = nudge.querySelector('button[onclick*="onHot"], button[onclick*="onRising"]');
   if (firstBtn && firstBtn.style.color !== 'rgb(0, 195, 98)') {
@@ -14681,12 +14671,10 @@ function pickWorldCup2(btn, idx) {
     }
     p.style.pointerEvents = 'none';
   });
-  var pct = Math.floor(Math.random() * 20) + (idx === 0 ? 50 : 35);
-  var result = document.getElementById('rising-wc2-result');
-  result.style.display = 'block';
-  document.getElementById('rising-wc2-msg').innerHTML = '직장인 <span style="font-weight:700;color:#00c362;">' + pct + '%</span>가 <span style="font-weight:700;">' + names[idx] + '</span> 워라밸이 더 좋다고 평가했어요';
-  document.getElementById('rising-wc2-bar').style.width = pct + '%';
-  document.getElementById('rising-wc2-pct').textContent = pct + '%';
+  // 선택만 저장, 결과는 리뷰 작성 후에만 공개
+  sessionStorage.setItem('jp_wc2_pick', names[idx]);
+  var voted = document.getElementById('rising-wc2-voted');
+  if (voted) voted.style.display = 'block';
 }
 
 function onNudgeQuiz(btn, label) {
@@ -20320,6 +20308,59 @@ function closeRatePopup() {
     // 기업 리뷰 페이지도 로그인 상태 적용
     window._skipLoginLoader = true; if (typeof completeLogin === "function") completeLogin();
   }
+  // 넛지 복귀 로직: 리뷰 작성 후 해당 넛지로 돌아오기
+  setTimeout(function() {
+    if (sessionStorage.getItem('jp_return_nudge_pending') === 'true' && localStorage.getItem('jp_reviewed') === 'true') {
+      sessionStorage.removeItem('jp_return_nudge_pending');
+      var _rid = sessionStorage.getItem('jp_return_nudge_id');
+      var _rtab = sessionStorage.getItem('jp_return_nudge_tab');
+      sessionStorage.removeItem('jp_return_nudge_id');
+      sessionStorage.removeItem('jp_return_nudge_tab');
+      if (_rid) {
+        // 탭 전환
+        if (_rtab && typeof switchReviewTab === 'function') switchReviewTab(_rtab);
+        // 워라밸 칩 전환
+        if (_rid.indexOf('rising') >= 0) {
+          var chips = document.querySelectorAll('.rpc-chip');
+          for (var ci = 0; ci < chips.length; ci++) {
+            if (chips[ci].textContent.indexOf('워라밸') >= 0) { chips[ci].click(); break; }
+          }
+        }
+        setTimeout(function() {
+          var _t = document.getElementById(_rid);
+          if (!_t) return;
+          // 워라밸 월드컵: 투표 결과 표시
+          if (_rid === 'nudge-rising-2') {
+            var pick = sessionStorage.getItem('jp_wc2_pick') || '네이버';
+            var pct = Math.floor(Math.random() * 20) + (pick === '네이버' ? 50 : 35);
+            // voted 패널 숨기기
+            var voted = _t.querySelector('#rising-wc2-voted');
+            if (voted) voted.style.display = 'none';
+            // 선택 상태 복원
+            var picks = _t.querySelectorAll('.wc-pick');
+            var names = ['네이버','토스'];
+            picks.forEach(function(p, i) {
+              if (names[i] === pick) {
+                p.style.border = '2px solid #00c362'; p.style.background = '#f0faf4'; p.style.transform = 'scale(1.03)';
+              } else {
+                p.style.border = '1.5px solid #e5e6e9'; p.style.background = '#fff'; p.style.opacity = '0.5'; p.style.transform = 'scale(0.97)';
+              }
+              p.style.pointerEvents = 'none';
+            });
+            // 결과 표시
+            var resultEl = document.getElementById('rising-wc2-result');
+            if (resultEl) resultEl.style.display = 'block';
+            document.getElementById('rising-wc2-msg').innerHTML = '직장인 <span style="font-weight:700;color:#00c362;">' + pct + '%</span>가 <span style="font-weight:700;">' + pick + '</span> 워라밸이 더 좋다고 평가했어요';
+            document.getElementById('rising-wc2-bar').style.width = pct + '%';
+            document.getElementById('rising-wc2-pct').textContent = pct + '%';
+          } else {
+            unlockThemeNudge(_t);
+          }
+          _t.scrollIntoView({ behavior:'smooth', block:'center' });
+        }, 500);
+      }
+    }
+  }, 600);
   var _origDoLogin=doLogin;
   doLogin=function(){
     _origDoLogin();
