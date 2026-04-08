@@ -4151,8 +4151,8 @@
         function renderThemeCards(){
           var container = document.getElementById('theme-card-scroll');
           container.innerHTML = themeData.map(function(t, idx){
-            return '<div onclick="openThemeDetail('+idx+')" style="cursor:pointer;background:var(--surface);border-radius:12px;overflow:hidden;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s;min-width:220px;flex-shrink:0;" onmouseenter="this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 6px 20px rgba(0,0,0,0.1)\'" onmouseleave="this.style.transform=\'none\';this.style.boxShadow=\'var(--sh)\'">' +
-              '<div style="position:relative;width:220px;height:140px;overflow:hidden;">' +
+            return '<div onclick="openThemeDetail('+idx+')" style="cursor:pointer;background:var(--surface);border-radius:12px;overflow:hidden;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s;min-width:calc((100% - 36px) / 3);flex-shrink:0;" onmouseenter="this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 6px 20px rgba(0,0,0,0.1)\'" onmouseleave="this.style.transform=\'none\';this.style.boxShadow=\'var(--sh)\'">' +
+              '<div style="position:relative;width:100%;height:180px;overflow:hidden;">' +
                 '<img src="'+BASE+'img/'+t.img+'" alt="" style="width:100%;height:100%;object-fit:cover;">' +
                 '<div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,0.35) 100%);"></div>' +
               '</div>' +
