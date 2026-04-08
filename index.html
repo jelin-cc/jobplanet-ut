@@ -4594,10 +4594,10 @@
         <!-- ④ 팔로우 기업 마감 임박 -->
         <div class="side-card">
           <div class="side-hd">
-            <h3><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-fire.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 팔로우 기업의 마감 임박 공고</h3>
+            <h3 id="urgentTitle"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-fire.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 팔로우 기업의 마감 임박 공고</h3>
             <span class="side-more" onclick="go('job')">전체 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><polyline points="9 18 15 12 9 6"/></svg></span>
           </div>
-          <div class="urgent-list">
+          <div class="urgent-list" id="urgentList">
             <div class="urgent-item" onclick="go('job-detail')" style="cursor:pointer;">
               <div class="urg-info">
                 <div class="urg-title">Frontend Engineer (3년차 이상)</div>
@@ -20193,6 +20193,14 @@ function closeRatePopup() {
       if (typeof completeLogin === 'function') completeLogin();
       // 리뷰 칩 상태 업데이트
       if (typeof updateRvCatVisibility === 'function') setTimeout(updateRvCatVisibility, 300);
+      // 마감 임박 공고: 로그인 시 팔로우 기업 표시
+      var _ut = document.getElementById('urgentTitle');
+      var _ul = document.getElementById('urgentList');
+      if(_ut) _ut.innerHTML = '<img src="https://jelin-cc.github.io/jobplanet-ut/emoji-fire.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 팔로우 기업의 마감 임박 공고';
+      if(_ul) _ul.innerHTML =
+        '<div class="urgent-item" onclick="go(\'job-detail\')" style="cursor:pointer;"><div class="urg-info"><div class="urg-title">Frontend Engineer (3년차 이상)</div><div class="urg-co">토스</div><div class="urg-co">서울 · 경력 3년↑</div></div><span class="urg-dday red">D-3</span></div>'
+        +'<div class="urgent-item" onclick="go(\'job-detail\')" style="cursor:pointer;"><div class="urg-info"><div class="urg-title">Frontend Engineer 사업 부문 (일본...</div><div class="urg-co">카카오페이</div><div class="urg-co">판교 · 경력무관</div></div><span class="urg-dday red">D-5</span></div>'
+        +'<div class="urgent-item" onclick="go(\'job-detail\')" style="cursor:pointer;"><div class="urg-info"><div class="urg-title">UXUI 디자이너</div><div class="urg-co">라인플러스</div><div class="urg-co">서울 · 경력 2년↑</div></div><span class="urg-dday red">D-8</span></div>';
     });
   }
   function doLogout(){
@@ -20305,6 +20313,42 @@ function closeRatePopup() {
         var pctEl = el.querySelector('.fit-pct');
         if(pctEl) pctEl.textContent = d.pct;
       });
+    }
+
+    // 마감 임박 공고 섹션: 로그인 여부에 따라 제목·목록 변경
+    var urgTitle = document.getElementById('urgentTitle');
+    var urgList = document.getElementById('urgentList');
+    if(urgTitle && urgList){
+      if(sessionStorage.getItem('jp_logged_in')==='true'){
+        // 로그인: "팔로우 기업의 마감 임박 공고" + 고정 목록
+        urgTitle.innerHTML = '<img src="https://jelin-cc.github.io/jobplanet-ut/emoji-fire.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 팔로우 기업의 마감 임박 공고';
+        urgList.innerHTML =
+          '<div class="urgent-item" onclick="go(\'job-detail\')" style="cursor:pointer;"><div class="urg-info"><div class="urg-title">Frontend Engineer (3년차 이상)</div><div class="urg-co">토스</div><div class="urg-co">서울 · 경력 3년↑</div></div><span class="urg-dday red">D-3</span></div>'
+          +'<div class="urgent-item" onclick="go(\'job-detail\')" style="cursor:pointer;"><div class="urg-info"><div class="urg-title">Frontend Engineer 사업 부문 (일본...</div><div class="urg-co">카카오페이</div><div class="urg-co">판교 · 경력무관</div></div><span class="urg-dday red">D-5</span></div>'
+          +'<div class="urgent-item" onclick="go(\'job-detail\')" style="cursor:pointer;"><div class="urg-info"><div class="urg-title">UXUI 디자이너</div><div class="urg-co">라인플러스</div><div class="urg-co">서울 · 경력 2년↑</div></div><span class="urg-dday red">D-8</span></div>';
+      } else {
+        // 비로그인: "마감 임박 공고" + 랜덤 목록
+        urgTitle.innerHTML = '<img src="https://jelin-cc.github.io/jobplanet-ut/emoji-fire.svg" width="14" height="14" style="vertical-align:middle;margin-right:2px;"> 마감 임박 공고';
+        var _urgCos = ['넥슨코리아','크래프톤','하이브','무신사','야놀자','직방','쏘카','리디','버킷플레이스','왓챠','마이리얼트립','클래스101','센드버드','채널톡','뱅크샐러드','토스증권','카카오뱅크','쿠팡이츠','배달의민족','라인플러스','네이버클라우드','카카오엔터','SK텔레콤','LG전자','삼성SDS','현대오토에버'];
+        var _urgTitles = ['프론트엔드 개발자','백엔드 개발자','프로덕트 디자이너','서비스 기획자','데이터 분석가','UX 리서처','콘텐츠 마케터','DevOps 엔지니어','iOS 개발자','그로스 해커'];
+        var _urgMetas = ['서울 · 경력 3년↑','판교 · 경력무관','서울 · 경력 2년↑','성남 · 신입/경력','서울 · 경력 5년↑','판교 · 경력 1년↑'];
+        function _shuffleArr(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+        var _picked = _shuffleArr(_urgCos.slice()).slice(0,3);
+        var html = '';
+        for(var i=0;i<3;i++){
+          var dd = Math.floor(Math.random()*12)+1;
+          var yr = Math.floor(Math.random()*8)+1;
+          html += '<div class="urgent-item" onclick="go(\'job-detail\')" style="cursor:pointer;">'
+            +'<div class="urg-info">'
+            +'<div class="urg-title">'+_urgTitles[Math.floor(Math.random()*_urgTitles.length)]+' ('+yr+'년 이상)</div>'
+            +'<div class="urg-co">'+_picked[i]+'</div>'
+            +'<div class="urg-co">'+_urgMetas[Math.floor(Math.random()*_urgMetas.length)]+'</div>'
+            +'</div>'
+            +'<span class="urg-dday red">D-'+dd+'</span>'
+            +'</div>';
+        }
+        urgList.innerHTML = html;
+      }
     }
   })();
 
