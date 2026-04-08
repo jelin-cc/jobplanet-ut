@@ -23356,59 +23356,123 @@ function closeRatePopup() {
 </script>
 
 <!-- 플로팅 스낵바 CTA -->
-<div id="floating-snackbar" onclick="document.getElementById('salary-section').scrollIntoView({behavior:'smooth',block:'start'});this.style.opacity='0';this.style.transform='translateX(-50%) translateY(20px)';setTimeout(function(){document.getElementById('floating-snackbar').style.display='none'},400);" style="
-  position:fixed;bottom:32px;left:50%;transform:translateX(-50%);z-index:9999;
-  display:flex;align-items:center;gap:10px;
+<style>
+#floating-snackbar {
+  position:fixed;bottom:120px;left:50%;transform:translateX(-50%) translateY(40px);z-index:9999;
+  display:none;align-items:center;gap:10px;
   background:#fff;color:#191F28;
   padding:14px 24px 14px 18px;
   border-radius:999px;
-  box-shadow:0 4px 24px rgba(0,0,0,.15),0 1px 4px rgba(0,0,0,.08);
+  border:1.5px solid #00C274;
+  box-shadow:0 0 16px rgba(0,194,116,.35),0 0 40px rgba(0,194,116,.15),0 4px 20px rgba(0,0,0,.1);
   cursor:pointer;
   font-family:'Pretendard',-apple-system,system-ui,sans-serif;
   font-size:15px;font-weight:600;letter-spacing:-.2px;
-  transition:opacity .3s,transform .3s,box-shadow .2s;
-  animation:snackbarIn .5s cubic-bezier(.16,1,.3,1) forwards;
   opacity:0;
-">
-  <span style="font-size:18px;">💰</span>
-  <span>내 연봉, 평균 대비 몇 %일까?</span>
-  <svg class="bounce-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00C274" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>
-</div>
-
-<style>
+  transition:opacity .35s,transform .35s,box-shadow .2s;
+}
+#floating-snackbar.show {
+  display:flex;
+  animation:snackbarIn .6s cubic-bezier(.16,1,.3,1) forwards;
+}
+#floating-snackbar.hide {
+  opacity:0 !important;
+  transform:translateX(-50%) translateY(20px) !important;
+}
+#floating-snackbar:hover {
+  box-shadow:0 0 24px rgba(0,194,116,.45),0 0 56px rgba(0,194,116,.2),0 6px 28px rgba(0,0,0,.12);
+}
 @keyframes snackbarIn {
   0%   { opacity:0; transform:translateX(-50%) translateY(40px); }
   100% { opacity:1; transform:translateX(-50%) translateY(0); }
 }
 @keyframes bounceDown {
   0%, 100% { transform:translateY(0); }
-  50%      { transform:translateY(4px); }
+  50%      { transform:translateY(5px); }
 }
 #floating-snackbar .bounce-arrow {
-  animation:bounceDown 1.2s ease-in-out infinite;
-}
-#floating-snackbar:hover {
-  box-shadow:0 6px 32px rgba(0,0,0,.2),0 2px 8px rgba(0,0,0,.1);
+  animation:bounceDown 1s ease-in-out infinite;
 }
 </style>
 
+<div id="floating-snackbar">
+  <span style="font-size:18px;">💸</span>
+  <span>내 연봉, 평균 대비 몇 %일까?</span>
+  <svg class="bounce-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00C274" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>
+</div>
+
 <script>
-// 스크롤 시 스낵바 자동 숨김 (연봉 섹션이 보이면)
 (function(){
   var snackbar = document.getElementById('floating-snackbar');
   var salarySection = document.getElementById('salary-section');
   if(!snackbar || !salarySection) return;
-  var hidden = false;
+
+  var scrollHidden = false;
+
+  function isHomePage(){
+    var hash = window.location.hash;
+    return !hash || hash === '#home';
+  }
+
+  function showSnackbar(){
+    scrollHidden = false;
+    snackbar.classList.remove('hide');
+    snackbar.style.display = '';
+    snackbar.classList.add('show');
+  }
+
+  function hideSnackbar(){
+    snackbar.classList.add('hide');
+    setTimeout(function(){ snackbar.style.display='none'; }, 400);
+  }
+
+  // 1.5초 후 홈이면 표시
+  setTimeout(function(){
+    if(isHomePage()) showSnackbar();
+  }, 1500);
+
+  // 클릭 시 연봉 섹션으로 이동
+  snackbar.addEventListener('click', function(){
+    salarySection.scrollIntoView({behavior:'smooth',block:'start'});
+    scrollHidden = true;
+    hideSnackbar();
+  });
+
+  // 스크롤 시 연봉 섹션이 보이면 자동 숨김
   window.addEventListener('scroll', function(){
-    if(hidden) return;
+    if(scrollHidden) return;
+    if(!snackbar.classList.contains('show')) return;
     var rect = salarySection.getBoundingClientRect();
     if(rect.top < window.innerHeight * 0.8){
-      hidden = true;
-      snackbar.style.opacity = '0';
-      snackbar.style.transform = 'translateX(-50%) translateY(20px)';
-      setTimeout(function(){ snackbar.style.display = 'none'; }, 400);
+      scrollHidden = true;
+      hideSnackbar();
     }
   }, {passive:true});
+
+  // 페이지 전환 감지: 홈이 아닌 곳으로 가면 숨기고, 홈으로 돌아오면 다시 표시
+  window.addEventListener('popstate', function(){
+    setTimeout(function(){
+      if(isHomePage() && !scrollHidden){
+        showSnackbar();
+      } else {
+        snackbar.classList.add('hide');
+        snackbar.style.display='none';
+      }
+    }, 100);
+  });
+
+  // go() 함수 호출 감지를 위한 hashchange 리스너
+  window.addEventListener('hashchange', function(){
+    setTimeout(function(){
+      if(isHomePage()){
+        scrollHidden = false;
+        showSnackbar();
+      } else {
+        snackbar.classList.add('hide');
+        snackbar.style.display='none';
+      }
+    }, 100);
+  });
 })();
 </script>
 </body>
