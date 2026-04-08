@@ -3955,17 +3955,56 @@
         // 리뷰 카드 데이터 풀 (탭 클릭 시 랜덤 조합)
         var _emojiBase = 'https://jelin-cc.github.io/jobplanet-ut/';
         function rvEmoji(name){ return '<img src="'+_emojiBase+'emoji-'+name+'.svg" width="20" height="20" style="vertical-align:middle;">'; }
-        var rvThemes = [
-          {emoji:rvEmoji('fire'),label:'이번 주 가장 많이 본 리뷰'},
-          {emoji:rvEmoji('thunder'),label:'가장 최근에 올라온 리뷰'},
-          {emoji:rvEmoji('clover'),label:'워라밸 좋다는 리뷰'},
-          {emoji:rvEmoji('barchart'),label:'성장에 도움된 리뷰'},
-          {emoji:rvEmoji('moneybag'),label:'연봉이 높다는 리뷰'},
-          {emoji:rvEmoji('handshake'),label:'팀 문화가 좋다는 리뷰'},
-          {emoji:rvEmoji('wrappedgift'),label:'복지가 좋다는 리뷰'},
-          {emoji:rvEmoji('rocket'),label:'빠르게 성장 중인 회사 리뷰'},
-          {emoji:rvEmoji('star'),label:'평점이 높은 회사 리뷰'},
-          {emoji:rvEmoji('briefcase'),label:'신입에게 추천하는 리뷰'},
+        // === 인기 리뷰 (비로그인/기본) — 후킹용 ===
+        var rvThemesPopular = [
+          {emoji:rvEmoji('cardfire'),label:'"퇴사 각인데..." 솔직 후기'},
+          {emoji:rvEmoji('moneybag'),label:'연봉 1억 넘는 회사 후기'},
+          {emoji:rvEmoji('fire'),label:'이번 주 조회수 폭발 리뷰'},
+          {emoji:rvEmoji('clover'),label:'야근 없다는 회사, 진짜일까?'},
+          {emoji:rvEmoji('star'),label:'"여기 진짜 추천" 현직자 후기'},
+          {emoji:rvEmoji('handshake'),label:'면접 후기 TOP'},
+          {emoji:rvEmoji('thunder'),label:'방금 올라온 따끈한 후기'},
+          {emoji:rvEmoji('rocket'),label:'요즘 뜨는 스타트업 후기'},
+        ];
+        var rvQuotesPopular = [
+          '"퇴사를 고민 중이라면 이 회사는 피하세요"',
+          '"연봉 1.2억인데 워라밸까지 챙길 수 있어요"',
+          '"입사 3개월 만에 퇴사한 이유를 솔직하게 씁니다"',
+          '"야근 없다더니 진짜 6시에 다 퇴근해요"',
+          '"여기 다니면서 처음으로 일이 재밌었어요"',
+          '"면접에서 이런 질문을 받았는데 당황했어요"',
+          '"신입으로 들어갔는데 사수가 너무 잘 알려줘요"',
+          '"자유로운 분위기라더니 야근 압박이 장난 아닙니다"',
+        ];
+        // === 내 직무 (로그인+직무입력) — 개인화 ===
+        var rvThemesMyJob = [
+          {emoji:rvEmoji('briefcase'),label:'{job} 3년차가 쓴 후기'},
+          {emoji:rvEmoji('moneybag'),label:'{job} 연봉 TOP 5 회사'},
+          {emoji:rvEmoji('rocket'),label:'{job}로 이직한 사람들의 후기'},
+          {emoji:rvEmoji('star'),label:'{job}으로 입사하면 좋은 회사'},
+          {emoji:rvEmoji('barchart'),label:'{job} 성장하기 좋은 환경'},
+          {emoji:rvEmoji('handshake'),label:'{job} 팀 문화 좋다는 회사'},
+        ];
+        var rvQuotesMyJob = [
+          '"{job} 3년차인데 여기서 가장 많이 성장했어요"',
+          '"{job} 연봉이 업계 최고 수준이에요"',
+          '"{job}로 이직했는데 전 회사와 비교 불가에요"',
+          '"{job} 신입도 바로 실무에 투입되는 환경"',
+          '"{job}한테 자율권을 많이 주는 회사에요"',
+          '"{job} 팀 분위기가 정말 좋아서 출근이 즐거워요"',
+        ];
+        // === 팔로우 기업 (로그인) ===
+        var rvThemesFollow = [
+          {emoji:rvEmoji('thunder'),label:'팔로우한 기업의 최신 후기'},
+          {emoji:rvEmoji('moneybag'),label:'팔로우 기업 연봉 변동'},
+          {emoji:rvEmoji('briefcase'),label:'팔로우 기업 채용 소식'},
+          {emoji:rvEmoji('star'),label:'팔로우 기업 평점 변화'},
+        ];
+        var rvQuotesFollow = [
+          '"최근 조직 개편 이후 분위기가 많이 달라졌어요"',
+          '"올해 연봉 인상률이 업계 평균보다 높았어요"',
+          '"대규모 채용 중인데 면접 분위기가 좋았어요"',
+          '"경영진이 바뀌고 나서 복지가 확 좋아졌어요"',
         ];
         var rvCompanies = [
           {co:'비바리퍼블리카',logo:'https://jelin-cc.github.io/jobplanet-ut/toss.png',score:'4.1'},
@@ -3975,24 +4014,34 @@
           {co:'쿠팡',logo:'https://jelin-cc.github.io/jobplanet-ut/D-sample_logo_4.svg',score:'3.2'},
           {co:'배달의민족',logo:'https://jelin-cc.github.io/jobplanet-ut/D-sample_logo_5.svg',score:'3.9'},
         ];
-        var rvQuotes = [
-          '"복지는 줄었지만 다니기 좋은 회사, 인맥 관리가 중요해요"',
-          '"자유롭고 실행력 있게 할 수 있어요, 다만 야근 문화가..."',
-          '"칼퇴 문화가 확실하고 연차 사용이 자유로워요"',
-          '"빠르게 성장할 수 있지만 자기 주도적이어야 해요"',
-          '"수평적 문화가 실제로 작동해요, 주니어도 빠르게 성장"',
-          '"연봉은 만족하지만 워라밸은 팀바팀이에요"',
-          '"사내 스터디가 활발하고 배울 점이 많은 환경"',
-          '"복지가 정말 좋아요, 다만 승진 체계가 불명확해요"',
-        ];
         var rvHelps = [47,32,28,19,63,41,55,22];
 
         function shuffleArr(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
 
         function renderReviewCards(){
-          var themes = shuffleArr(rvThemes).slice(0,4);
+          // 활성 탭 확인
+          var activeBtn = document.querySelector('.rv-cat.active');
+          var activeCat = 'popular';
+          if(activeBtn){
+            var txt = activeBtn.textContent.trim();
+            if(txt.indexOf('내 직무')!==-1) activeCat='myjob';
+            else if(txt.indexOf('팔로우')!==-1) activeCat='follow';
+          }
+          var themes, quotes;
+          var job = (typeof obSelectedJob!=='undefined' && obSelectedJob) ? obSelectedJob : '개발';
+          if(activeCat==='myjob'){
+            themes = shuffleArr(rvThemesMyJob).slice(0,4).map(function(t){
+              return {emoji:t.emoji, label:t.label.replace(/\{job\}/g, job)};
+            });
+            quotes = shuffleArr(rvQuotesMyJob).map(function(q){ return q.replace(/\{job\}/g, job); });
+          } else if(activeCat==='follow'){
+            themes = shuffleArr(rvThemesFollow).slice(0,4);
+            quotes = shuffleArr(rvQuotesFollow);
+          } else {
+            themes = shuffleArr(rvThemesPopular).slice(0,4);
+            quotes = shuffleArr(rvQuotesPopular);
+          }
           var companies = shuffleArr(rvCompanies);
-          var quotes = shuffleArr(rvQuotes);
           var helps = shuffleArr(rvHelps);
 
           var html = themes.map(function(t,i){
