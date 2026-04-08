@@ -14745,13 +14745,10 @@ function closeRatePopup() {
   .filter-check-item:hover{color:var(--tx);}
   .filter-check-list{display:flex;flex-direction:column;gap:0;}
   .filter-check-list .filter-check-item{padding:12px 4px;}
-  .filter-job-cats{display:flex;flex-direction:column;gap:0;}
-  .filter-job-cat{display:flex;align-items:center;justify-content:space-between;padding:14px 4px;border-bottom:1px solid var(--ln2);font-size:14px;font-weight:500;color:var(--tx2);cursor:pointer;background:transparent;border-left:none;border-right:none;border-top:none;width:100;transition:all .15s;font-family:var(--font);}
-  .filter-job-cat:last-child{border-bottom:none;}
-  .filter-job-cat .cat-arrow{width:18px;height:18px;transition:transform .2s;color:var(--tx4);}
-  .filter-job-cat.active{color:var(--brand);font-weight:700;}
-  .filter-job-cat.active .cat-arrow{transform:rotate(180deg);color:var(--brand);}
-  .filter-job-sub{display:none;flex-wrap:wrap;gap:8px;padding:8px 4px 16px;}
+  .filter-job-cats{display:flex;flex-wrap:wrap;gap:8px;}
+  .filter-job-cat{padding:8px 16px;border-radius:var(--rfull);border:1.5px solid var(--ln);font-size:13px;font-weight:500;color:var(--tx3);cursor:pointer;background:var(--surface);transition:all .15s;font-family:var(--font);}
+  .filter-job-cat.active{border-color:var(--brand);color:var(--brand);font-weight:600;}
+  .filter-job-sub{display:none;flex-wrap:wrap;gap:8px;padding:12px 0 4px;width:100%;}
   .filter-job-sub.open{display:flex;}
   .filter-job-item{padding:7px 14px;border-radius:var(--rfull);border:1.5px solid var(--ln);font-size:13px;color:var(--tx3);cursor:pointer;background:var(--surface);transition:all .15s;}
   .filter-job-item.active{border-color:var(--brand);color:var(--brand);background:var(--brand-lt);}
@@ -21095,15 +21092,12 @@ function closeRatePopup() {
 
       document.body.insertAdjacentHTML('beforeend', filterHtml);
 
-      // 직무 카테고리 아코디언 렌더
+      // 직무 카테고리 칩 + 아코디언 렌더
       var filterJobHtml = '';
       var catKeys = Object.keys(obJobData);
       catKeys.forEach(function(cat){
         var jobs = obJobData[cat] || [];
-        filterJobHtml += '<div class="filter-job-cat" onclick="toggleFilterJobCat(this)">'
-          + '<span>'+cat+'</span>'
-          + '<svg class="cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'
-          + '</div>';
+        filterJobHtml += '<div class="filter-job-cat" onclick="toggleFilterJobCat(this)">'+cat+'</div>';
         filterJobHtml += '<div class="filter-job-sub" data-cat="'+cat+'">';
         jobs.forEach(function(j){
           filterJobHtml += '<div class="filter-job-item" onclick="this.classList.toggle(\'active\')">'+j+'</div>';
