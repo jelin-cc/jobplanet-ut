@@ -3823,7 +3823,7 @@
               </div>
               <button onclick="compareSalCompact()" style="height:46px;padding:0 22px;border-radius:10px;border:none;background:var(--brand);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);white-space:nowrap;transition:all .15s;" onmouseover="this.style.background='#00A862'" onmouseout="this.style.background='var(--brand)'">비교하기</button>
             </div>
-            <div id="sal-compact-result" style="margin-top:12px;font-size:13px;font-weight:600;color:var(--brand);display:none;padding-left:2px;"></div>
+            <div id="sal-compact-result" style="display:none;margin-top:14px;border-radius:12px;overflow:hidden;"></div>
           </div>
         </div>
       </div>
@@ -15759,16 +15759,53 @@ function closeRatePopup() {
         var d = salDB[salTabIdx];
         var diff = v - d.avgN;
         var pct = Math.round((diff / d.avgN) * 100);
+        var absPct = Math.abs(pct);
         var sign = diff >= 0 ? '+' : '';
+        // 로딩 표시
         if(r){
           r.style.display = '';
-          if(diff >= 0){
-            r.style.color = 'var(--brand)';
-            r.textContent = '직무 평균보다 ' + sign + pct + '% 높아요! ('+sign+(diff).toLocaleString()+'만원)';
-          } else {
-            r.style.color = '#EF4444';
-            r.textContent = '직무 평균보다 ' + Math.abs(pct) + '% 낮아요 ('+(diff).toLocaleString()+'만원)';
+          r.style.opacity = '1';
+          r.innerHTML = '<div style="padding:16px 18px;background:#fff;border:1.5px solid var(--ln);border-radius:12px;display:flex;align-items:center;gap:10px;">'
+            + '<div style="width:20px;height:20px;border:2.5px solid var(--ln);border-top-color:var(--brand);border-radius:50%;animation:salSpin .6s linear infinite;flex-shrink:0;"></div>'
+            + '<span style="font-size:14px;font-weight:600;color:var(--tx3);">연봉 비교중...</span>'
+            + '</div>';
+          // 스타일 주입 (한번만)
+          if(!document.getElementById('salSpinStyle')){
+            var st=document.createElement('style');st.id='salSpinStyle';
+            st.textContent='@keyframes salSpin{to{transform:rotate(360deg)}} @keyframes salFadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}';
+            document.head.appendChild(st);
           }
+          setTimeout(function(){
+            var isHigh = diff >= 0;
+            var color = isHigh ? 'var(--brand)' : '#EF4444';
+            var bgColor = isHigh ? 'rgba(0,194,116,.06)' : 'rgba(239,68,68,.04)';
+            var borderColor = isHigh ? 'rgba(0,194,116,.2)' : 'rgba(239,68,68,.15)';
+            var emoji = isHigh ? '🎉' : '💪';
+            var msg = isHigh
+              ? '직무 평균보다 <strong>'+sign+absPct+'%</strong> 높아요!'
+              : '직무 평균보다 <strong>'+absPct+'%</strong> 낮아요';
+            var subMsg = isHigh
+              ? '평균 대비 <strong>'+sign+(diff).toLocaleString()+'만원</strong> · 상위 '+(Math.max(1,50-absPct))+'%'
+              : '평균 대비 <strong>'+(diff).toLocaleString()+'만원</strong> · 조금만 더 화이팅!';
+            // 내 위치 바
+            var myPct = Math.max(5, Math.min(95, Math.round(((v - (d.avgN - 3000)) / 6000) * 100)));
+            var avgPct = Math.round(((d.avgN - (d.avgN - 3000)) / 6000) * 100);
+            r.innerHTML = '<div style="padding:18px 20px;background:'+bgColor+';border:1.5px solid '+borderColor+';border-radius:12px;animation:salFadeUp .35s ease;">'
+              + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'
+              + '<span style="font-size:18px;">'+emoji+'</span>'
+              + '<span style="font-size:15px;font-weight:700;color:'+color+';">'+msg+'</span>'
+              + '</div>'
+              + '<div style="font-size:13px;color:var(--tx3);margin-bottom:14px;">'+subMsg+'</div>'
+              // 위치 바
+              + '<div style="position:relative;height:6px;background:var(--ln);border-radius:3px;margin-bottom:6px;">'
+              + '<div style="position:absolute;left:0;top:0;height:100%;width:'+myPct+'%;background:linear-gradient(90deg,#A8E8C8,'+color+');border-radius:3px;transition:width .4s;"></div>'
+              + '<div style="position:absolute;left:'+avgPct+'%;top:-3px;width:2px;height:12px;background:var(--tx4);border-radius:1px;"></div>'
+              + '</div>'
+              + '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx4);">'
+              + '<span>하위</span><span style="font-weight:600;color:var(--tx3);">평균 '+d.avg+'원</span><span>상위</span>'
+              + '</div>'
+              + '</div>';
+          }, 900);
         }
         // 기존 로직도 연동
         salMyVal = v;
