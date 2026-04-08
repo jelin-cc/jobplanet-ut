@@ -14793,6 +14793,15 @@ function filterThemeChip(btn) {
   }
   // 리뷰 권한 없으면 넛지 숨김
   if (typeof hideThemeNudgesIfNoAccess === 'function') hideThemeNudgesIfNoAccess();
+  // 워라밸 탭: 리뷰 조회 뱃지 숨김 / 다른 탭: 복원
+  var risingList = document.getElementById('theme-trending-rising');
+  if (risingList) {
+    risingList.querySelectorAll('.rv-card-header span').forEach(function(el) {
+      if (el.textContent.indexOf('기업 리뷰 조회') >= 0) {
+        el.style.display = (text.indexOf('워라밸') >= 0) ? 'none' : '';
+      }
+    });
+  }
 }
 // 테마별 리뷰 10개 카드 본 후 하단 플로팅 토스트
 (function() {
