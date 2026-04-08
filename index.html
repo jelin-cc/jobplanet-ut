@@ -16785,30 +16785,30 @@ function closeRatePopup() {
       </button>
     </div>
     <div class="login-social">
-      <button class="login-social-btn kakao" onclick="doLogin();closeOB();">
+      <button class="login-social-btn kakao" onclick="obLoginThenStart();">
         <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 3C6.48 3 2 6.58 2 10.94c0 2.8 1.86 5.27 4.66 6.67-.15.56-.96 3.61-1 3.77 0 .05.02.1.05.13a.12.12 0 00.13.02c.2-.03 2.37-1.56 3.46-2.28.55.08 1.12.12 1.7.12 5.52 0 10-3.58 10-7.94S17.52 3 12 3z" fill="#191F28"/></svg>
         카카오로 시작
       </button>
-      <button class="login-social-btn naver" onclick="doLogin();closeOB();">
+      <button class="login-social-btn naver" onclick="obLoginThenStart();">
         <span style="font-size:16px;font-weight:900;">N</span> 네이버로 시작
       </button>
     </div>
     <div class="login-divider"><hr><span>또는</span><hr></div>
     <div class="login-icons">
-      <div class="login-icon" onclick="doLogin();closeOB();">
+      <div class="login-icon" onclick="obLoginThenStart();">
         <span style="font-size:18px;font-weight:700;color:#EA4335;">G</span>
       </div>
-      <div class="login-icon" onclick="doLogin();closeOB();">
+      <div class="login-icon" onclick="obLoginThenStart();">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9EA3B0" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
       </div>
-      <div class="login-icon" onclick="doLogin();closeOB();">
+      <div class="login-icon" onclick="obLoginThenStart();">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="#191F28"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83z"/></svg>
       </div>
     </div>
     <div class="login-email-label">이메일로 로그인</div>
     <input class="login-input" type="email" placeholder="이메일 주소를 입력해 주세요">
     <input class="login-input" type="password" placeholder="비밀번호를 입력해 주세요">
-    <button class="login-submit" onclick="doLogin();closeOB();">로그인</button>
+    <button class="login-submit" onclick="obLoginThenStart();">로그인</button>
     <div class="login-footer">
       <a>아이디/비밀번호찾기</a>
     </div>
@@ -18429,6 +18429,7 @@ function closeRatePopup() {
       document.getElementById('obStep3').style.display='none';
       document.getElementById('obLoginPopup').style.display='';
       document.getElementById('obOverlay').classList.add('open');
+      document.body.style.overflow='hidden';
       return;
     }
     obSelectedCat='';obSelectedJob='';obSelectedConds=[];
@@ -18439,14 +18440,34 @@ function closeRatePopup() {
     document.getElementById('obStep1Btn').disabled=true;
     renderObCats();
     document.getElementById('obOverlay').classList.add('open');
+    document.body.style.overflow='hidden';
   }
   function closeOB(){
     document.getElementById('obOverlay').classList.remove('open');
+    document.body.style.overflow='';
     // 시작하기 완료 시(직무 입력 후)에만 기업 셔플 + 저장
     if(obSelectedJob && obSelectedJob.length > 0){
       sessionStorage.setItem('jp_ob_job', obSelectedJob);
+      if(obSelectedConds && obSelectedConds.length > 0){
+        sessionStorage.setItem('jp_ob_conds', JSON.stringify(obSelectedConds));
+      }
       if(typeof shuffleInsightCos==='function') shuffleInsightCos();
     }
+  }
+  function obLoginThenStart(){
+    doLogin();
+    closeOB();
+    setTimeout(function(){
+      obSelectedCat='';obSelectedJob='';obSelectedConds=[];
+      document.getElementById('obStep1').style.display='';
+      document.getElementById('obStep2').style.display='none';
+      document.getElementById('obStep3').style.display='none';
+      document.getElementById('obLoginPopup').style.display='none';
+      document.getElementById('obStep1Btn').disabled=true;
+      renderObCats();
+      document.getElementById('obOverlay').classList.add('open');
+      document.body.style.overflow='hidden';
+    }, 800);
   }
 
   function renderObCats(){
@@ -18782,8 +18803,37 @@ function closeRatePopup() {
       document.getElementById('gnb-guest').style.display='none';
       document.getElementById('gnb-user').style.display='flex';
       var savedJob = sessionStorage.getItem('jp_ob_job');
+      var savedConds = sessionStorage.getItem('jp_ob_conds');
       if(savedJob){
         obSelectedJob = savedJob;
+        if(savedConds){
+          try { obSelectedConds = JSON.parse(savedConds); } catch(e){ obSelectedConds=[]; }
+        }
+        // UI 복원: 시작하기 박스 → 결과 박스
+        var startBox=document.getElementById('obStartBox');
+        var resultBox=document.getElementById('obResultBox');
+        if(startBox) startBox.style.display='none';
+        if(resultBox){
+          resultBox.style.display='';
+          document.getElementById('obResultJob').textContent=obSelectedJob;
+          var tagsHtml='';
+          obSelectedConds.forEach(function(idx,i){
+            var c=obCondData[idx];
+            var borderBot=i<obSelectedConds.length-1?'border-bottom:1px solid var(--ln2);':'';
+            tagsHtml+='<div style="display:flex;align-items:center;gap:10px;padding:7px 0;'+borderBot+'">'
+              +'<span style="width:20px;height:20px;border-radius:6px;background:var(--brand);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+(i+1)+'</span>'
+              +'<span style="font-size:13px;font-weight:600;color:var(--tx);flex:1;">'+c.name+'</span>'
+              +'<span style="flex-shrink:0;">'+c.icon+'</span>'
+              +'</div>';
+          });
+          document.getElementById('obResultTags').innerHTML=tagsHtml;
+        }
+        // 인사이트 타이틀 복원
+        if(obSelectedConds.length>0){
+          var condNames=obSelectedConds.map(function(idx){return obCondData[idx].name;});
+          var titleEl=document.querySelector('.ins-title');
+          if(titleEl) titleEl.innerHTML='<em>'+obSelectedJob+'</em> 직무에서<br>'+condNames.join(', ')+' 중시하는<br>기업을 찾았어요';
+        }
         if(typeof shuffleInsightCos==='function') shuffleInsightCos();
         if(typeof renderReviewCards==='function') renderReviewCards();
       }
@@ -22192,6 +22242,37 @@ function closeRatePopup() {
         el.style.opacity='0';el.style.transform='translateX(-50%) translateY(20px)';
       },2500);
     }
+
+    /* ── 팝업 열릴 때 바깥 스크롤 잠금 ── */
+    (function(){
+      var overlaySelectors = [
+        '.ob-overlay', '.jk-overlay', '.filter-overlay',
+        '.rv-rate-popup-overlay', '.resume-del-overlay',
+        '.apply-modal-overlay', '.post-apply-overlay',
+        '.ai-select-overlay', '.re-ai-loading-overlay',
+        '#loginOverlay', '#confirmOverlay'
+      ];
+      var allOverlays = [];
+      overlaySelectors.forEach(function(sel){
+        var els = document.querySelectorAll(sel);
+        for(var i=0;i<els.length;i++) allOverlays.push(els[i]);
+      });
+      function checkScrollLock(){
+        var anyOpen = false;
+        for(var i=0;i<allOverlays.length;i++){
+          var el = allOverlays[i];
+          var style = window.getComputedStyle(el);
+          if(style.display !== 'none' && style.visibility !== 'hidden'){
+            anyOpen = true; break;
+          }
+        }
+        document.body.style.overflow = anyOpen ? 'hidden' : '';
+      }
+      var obs = new MutationObserver(checkScrollLock);
+      allOverlays.forEach(function(el){
+        obs.observe(el, {attributes:true, attributeFilter:['style','class']});
+      });
+    })();
 </script>
 </body>
 </html>
