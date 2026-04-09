@@ -14297,6 +14297,14 @@ function simulateIvReviewSubmit() {
   ivReviewCount++;
   // 면접 후기 열람 권한 부여
   localStorage.setItem('jp_iv_reviewed', 'true');
+  // 기업 페이지에서 시작했으면 기업 페이지 면접 탭으로 복귀
+  if (sessionStorage.getItem('jp_return_page') === 'company') {
+    sessionStorage.removeItem('jp_return_page');
+    localStorage.setItem('jp_reviewed', 'true');
+    sessionStorage.setItem('jp_current_page', 'company');
+    location.reload();
+    return;
+  }
   // 면접 후기 블라인드 해제
   unlockInterviewTab();
   // 면접 인사이트 직접 표시
@@ -18211,7 +18219,7 @@ function closeRatePopup() {
               <div class="cd-blind-overlay-title">더 많은 면접 후기가 있습니다</div>
               <div class="cd-blind-overlay-desc">면접 후기를 작성하면 모든 후기를 확인할 수 있어요</div>
               <div class="cd-blind-btns">
-                <button class="cd-blind-btn green" onclick="openCompanySelect()">면접후기 작성하고 전체보기</button>
+                <button class="cd-blind-btn green" onclick="cdBlindIvReviewClick()">면접후기 작성하고 전체보기</button>
                 <button class="cd-blind-btn purple">멤버십 가입하고 전체보기</button>
               </div>
             </div>
@@ -21008,6 +21016,19 @@ function closeRatePopup() {
       openOB();
     } else {
       openReviewWithCallback();
+    }
+  };
+
+  window.cdBlindIvReviewClick = function() {
+    sessionStorage.setItem('jp_return_page', 'company');
+    sessionStorage.setItem('jp_return_company_tab', 'interview');
+    var isLoggedIn = sessionStorage.getItem('jp_logged_in') === 'true';
+    if (!isLoggedIn) {
+      window._afterLoginAction = 'ivReview';
+      sessionStorage.setItem('jp_current_page', 'company');
+      openOB();
+    } else {
+      openInterviewReviewWrite();
     }
   };
 
@@ -24187,6 +24208,15 @@ function closeRatePopup() {
           var overlay = wrap.querySelector('.cd-blind-overlay');
           if (overlay) overlay.style.display = 'none';
         });
+        // 면접 탭에서 작성 후 복귀 시 면접 탭으로 전환
+        var returnCompanyTab = sessionStorage.getItem('jp_return_company_tab');
+        if (returnCompanyTab) {
+          sessionStorage.removeItem('jp_return_company_tab');
+          setTimeout(function() {
+            var tab = document.querySelector('#cdTabsNav .cd-tab[data-tab="' + returnCompanyTab + '"]');
+            if (tab) tab.click();
+          }, 200);
+        }
       }
       if (savedPage === 'review') {
         var savedTab = sessionStorage.getItem('jp_current_review_tab');
