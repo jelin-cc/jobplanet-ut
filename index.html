@@ -13836,7 +13836,7 @@ function selectJobReviewTab(jobName) {
         if (actions1) actions1.style.display = 'none';
         var fadeMore1 = document.createElement('div');
         fadeMore1.style.cssText = 'text-align:center;margin-top:12px;';
-        fadeMore1.innerHTML = '<button onclick="var cta=this.closest(\'.rv-card\').nextElementSibling;if(cta)cta.scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="padding:8px 24px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;">더보기 ▾</button>';
+        fadeMore1.innerHTML = '<button onclick="var cta=document.querySelector(\'#jobreview-list .rv-blind-cta-wrap\');if(cta)cta.scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="padding:8px 24px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;">더보기 ▾</button>';
         cardContent1.appendChild(fadeMore1);
       }
       // 2번째 카드: 기업명+로고 블러 제거, 일부만 노출 + 더보기
@@ -13871,7 +13871,7 @@ function selectJobReviewTab(jobName) {
         // 더보기 버튼
         var fadeMore = document.createElement('div');
         fadeMore.style.cssText = 'text-align:center;margin-top:12px;';
-        fadeMore.innerHTML = '<button onclick="var cta=this.closest(\'.rv-card\').nextElementSibling;if(cta)cta.scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="padding:8px 24px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;">더보기 ▾</button>';
+        fadeMore.innerHTML = '<button onclick="var cta=document.querySelector(\'#jobreview-list .rv-blind-cta-wrap\');if(cta)cta.scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="padding:8px 24px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;">더보기 ▾</button>';
         cardContent.appendChild(fadeMore);
       }
       // 3번째 카드 이후 전체 블러 처리
