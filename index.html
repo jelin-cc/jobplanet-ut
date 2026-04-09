@@ -18190,29 +18190,106 @@ function closeRatePopup() {
             <div class="cd-rv-filter">합격여부</div>
           </div>
 
-          <!-- visible interview -->
-          <div class="cd-iv-item">
-            <div class="cd-iv-item-header">
-              <span class="cd-iv-item-meta">개발 · 경력 · 2025.10</span>
-              <span class="cd-iv-item-result pass">합격</span>
+          <!-- visible interview (리뷰 피드 면접 후기 카드 UI) -->
+          <div class="rv-card" style="margin-bottom:16px;">
+            <div class="rv-card-meta" style="padding:20px 24px 0;">
+              <span>프론트엔드</span><div class="rv-card-meta-sep"></div>
+              <span>경력</span><div class="rv-card-meta-sep"></div>
+              <span>2025. 10 작성</span>
             </div>
-            <div class="cd-iv-item-text">1차 코딩테스트, 2차 기술면접, 3차 임원면접 순서로 진행되었습니다. 기술면접에서는 프로젝트 경험 위주로 질문이 나왔고, 알고리즘보다는 설계에 대한 깊은 질문이 많았습니다.</div>
+            <div class="rv-card-body" style="padding:16px 24px 20px;">
+              <div class="rv-card-score" style="width:120px;">
+                <div style="font-size:13px;font-weight:600;color:#242628;margin-bottom:6px;">면접 난이도</div>
+                <div style="font-size:12px;color:#686a6d;margin-bottom:4px;">어려움</div>
+                <div style="display:flex;gap:2px;margin-bottom:16px;"><div style="width:16px;height:6px;border-radius:2px;background:#00c362;"></div><div style="width:16px;height:6px;border-radius:2px;background:#00c362;"></div><div style="width:16px;height:6px;border-radius:2px;background:#ffc107;"></div><div style="width:16px;height:6px;border-radius:2px;background:#ffc107;"></div><div style="width:16px;height:6px;border-radius:2px;background:#f44336;"></div></div>
+                <div style="font-size:13px;font-weight:600;color:#242628;margin-bottom:4px;margin-top:16px;">면접일자</div>
+                <div style="font-size:12px;color:#686a6d;">2025/08</div>
+                <div style="font-size:13px;font-weight:600;color:#242628;margin-bottom:4px;margin-top:16px;">면접 경로</div>
+                <div style="font-size:12px;color:#686a6d;">채용사이트</div>
+              </div>
+              <div class="rv-card-content">
+                <div class="rv-card-title">1차 코딩테스트, 2차 기술면접, 3차 임원면접<br>프로젝트 경험 위주 깊은 질문</div>
+                <div class="rv-card-section"><p><span class="rv-card-badge rv-card-badge--pro" style="background:#e3f2fd;color:#2196f3;">면접질문</span> 프로젝트 경험 위주로 질문. 알고리즘보다 설계에 대한 깊은 질문이 많았음.</p></div>
+                <div class="rv-card-section"><p><span class="rv-card-badge rv-card-badge--wish" style="background:#f3f3f4;color:#686a6d;">면접느낌</span> 면접관이 기술적 깊이를 중시. 준비를 많이 해야 통과 가능.</p></div>
+                <div style="display:flex;gap:12px;margin-top:12px;margin-bottom:12px;">
+                  <div style="font-size:12px;color:#686a6d;"><strong>채용방식</strong> 코딩테스트, 기술면접, 임원면접</div>
+                  <div style="font-size:12px;color:#686a6d;"><strong>발표시기</strong> 14일 후</div>
+                </div>
+                <div style="display:flex;align-items:center;padding:8px 14px;gap:0;background:#f7f8f9;border-radius:8px;margin-bottom:12px;">
+                  <div style="flex:1;display:flex;align-items:center;gap:8px;"><div style="font-size:11px;color:#686a6d;">면접결과</div><div style="font-size:13px;font-weight:700;color:#2196f3;">😊 합격</div></div>
+                  <div style="width:1px;background:#e5e6e9;height:20px;"></div>
+                  <div style="flex:1;display:flex;align-items:center;gap:8px;justify-content:center;"><div style="font-size:11px;color:#686a6d;">면접경험</div><div style="font-size:13px;font-weight:700;color:#00c362;">😊 긍정적</div></div>
+                </div>
+                <div class="rv-card-actions">
+                  <button class="rv-card-action-btn">도움이 돼요 👍 <span class="count">42</span></button>
+                  <button class="rv-card-report">신고하기</button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- blinded interviews -->
-          <div class="cd-blind-wrap" style="min-height:380px;">
+          <div class="cd-blind-wrap" style="min-height:500px;">
             <div class="cd-blind-content">
-              <div class="cd-iv-item">
-                <div class="cd-iv-item-header"><span class="cd-iv-item-meta">마케팅 · 신입 · 2025.08</span><span class="cd-iv-item-result fail">불합격</span></div>
-                <div class="cd-iv-item-text">면접 분위기는 편안했으나 마케팅 직무에 대한 깊은 이해를 요구했습니다. 사례 분석 과제가 있었고 프레젠테이션도 진행했습니다.</div>
+              <div class="rv-card" style="margin-bottom:16px;">
+                <div class="rv-card-meta" style="padding:20px 24px 0;">
+                  <span>마케팅</span><div class="rv-card-meta-sep"></div><span>신입</span><div class="rv-card-meta-sep"></div><span>2025. 08 작성</span>
+                </div>
+                <div class="rv-card-body" style="padding:16px 24px 20px;">
+                  <div class="rv-card-score" style="width:120px;">
+                    <div style="font-size:13px;font-weight:600;color:#242628;margin-bottom:6px;">면접 난이도</div>
+                    <div style="font-size:12px;color:#686a6d;margin-bottom:4px;">보통</div>
+                    <div style="display:flex;gap:2px;"><div style="width:16px;height:6px;border-radius:2px;background:#00c362;"></div><div style="width:16px;height:6px;border-radius:2px;background:#ffc107;"></div><div style="width:16px;height:6px;border-radius:2px;background:#ffc107;"></div><div style="width:16px;height:6px;border-radius:2px;background:#e5e6e9;"></div><div style="width:16px;height:6px;border-radius:2px;background:#e5e6e9;"></div></div>
+                    <div style="font-size:13px;font-weight:600;color:#242628;margin-bottom:4px;margin-top:16px;">면접일자</div>
+                    <div style="font-size:12px;color:#686a6d;">2025/06</div>
+                    <div style="font-size:13px;font-weight:600;color:#242628;margin-bottom:4px;margin-top:16px;">면접 경로</div>
+                    <div style="font-size:12px;color:#686a6d;">잡플래닛</div>
+                  </div>
+                  <div class="rv-card-content">
+                    <div class="rv-card-title">면접 분위기는 편안했으나<br>마케팅 직무에 대한 깊은 이해 요구</div>
+                    <div class="rv-card-section"><p><span class="rv-card-badge rv-card-badge--pro" style="background:#e3f2fd;color:#2196f3;">면접질문</span> 사례 분석 과제 + 프레젠테이션. 퍼포먼스 마케팅 경험 위주.</p></div>
+                    <div class="rv-card-section"><p><span class="rv-card-badge rv-card-badge--wish" style="background:#f3f3f4;color:#686a6d;">면접느낌</span> 편안한 분위기지만 실무 이해도를 깊이 검증함.</p></div>
+                    <div style="display:flex;align-items:center;padding:8px 14px;gap:0;background:#f7f8f9;border-radius:8px;margin-top:12px;">
+                      <div style="flex:1;display:flex;align-items:center;gap:8px;"><div style="font-size:11px;color:#686a6d;">면접결과</div><div style="font-size:13px;font-weight:700;color:#f44336;">😞 불합격</div></div>
+                      <div style="width:1px;background:#e5e6e9;height:20px;"></div>
+                      <div style="flex:1;display:flex;align-items:center;gap:8px;justify-content:center;"><div style="font-size:11px;color:#686a6d;">면접경험</div><div style="font-size:13px;font-weight:700;color:#ffc107;">😐 보통</div></div>
+                    </div>
+                    <div class="rv-card-actions" style="margin-top:12px;">
+                      <button class="rv-card-action-btn">도움이 돼요 👍 <span class="count">28</span></button>
+                      <button class="rv-card-report">신고하기</button>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="cd-iv-item">
-                <div class="cd-iv-item-header"><span class="cd-iv-item-meta">디자인 · 경력 · 2025.05</span><span class="cd-iv-item-result wait">대기중</span></div>
-                <div class="cd-iv-item-text">포트폴리오 리뷰 후 과제 전형이 진행되었습니다. 실무와 비슷한 과제를 주고 3일 안에 제출하는 방식이었습니다.</div>
-              </div>
-              <div class="cd-iv-item">
-                <div class="cd-iv-item-header"><span class="cd-iv-item-meta">기획 · 경력 · 2024.12</span><span class="cd-iv-item-result pass">합격</span></div>
-                <div class="cd-iv-item-text">서비스 기획 역량과 데이터 분석 능력을 주로 평가했습니다. SQL 관련 질문도 나왔습니다.</div>
+              <div class="rv-card" style="margin-bottom:16px;">
+                <div class="rv-card-meta" style="padding:20px 24px 0;">
+                  <span>디자인</span><div class="rv-card-meta-sep"></div><span>경력</span><div class="rv-card-meta-sep"></div><span>2025. 05 작성</span>
+                </div>
+                <div class="rv-card-body" style="padding:16px 24px 20px;">
+                  <div class="rv-card-score" style="width:120px;">
+                    <div style="font-size:13px;font-weight:600;color:#242628;margin-bottom:6px;">면접 난이도</div>
+                    <div style="font-size:12px;color:#686a6d;margin-bottom:4px;">보통</div>
+                    <div style="display:flex;gap:2px;"><div style="width:16px;height:6px;border-radius:2px;background:#00c362;"></div><div style="width:16px;height:6px;border-radius:2px;background:#00c362;"></div><div style="width:16px;height:6px;border-radius:2px;background:#ffc107;"></div><div style="width:16px;height:6px;border-radius:2px;background:#e5e6e9;"></div><div style="width:16px;height:6px;border-radius:2px;background:#e5e6e9;"></div></div>
+                    <div style="font-size:13px;font-weight:600;color:#242628;margin-bottom:4px;margin-top:16px;">면접일자</div>
+                    <div style="font-size:12px;color:#686a6d;">2025/03</div>
+                    <div style="font-size:13px;font-weight:600;color:#242628;margin-bottom:4px;margin-top:16px;">면접 경로</div>
+                    <div style="font-size:12px;color:#686a6d;">헤드헌팅</div>
+                  </div>
+                  <div class="rv-card-content">
+                    <div class="rv-card-title">포트폴리오 리뷰 후 과제 전형<br>실무와 비슷한 과제를 3일 내 제출</div>
+                    <div class="rv-card-section"><p><span class="rv-card-badge rv-card-badge--pro" style="background:#e3f2fd;color:#2196f3;">면접질문</span> 포트폴리오에서 가장 임팩트 있었던 프로젝트. 디자인 결정의 근거는?</p></div>
+                    <div class="rv-card-section"><p><span class="rv-card-badge rv-card-badge--wish" style="background:#f3f3f4;color:#686a6d;">면접느낌</span> 동료와 대화하는 느낌. 피드백이 즉각적이고 분위기 편안.</p></div>
+                    <div style="display:flex;align-items:center;padding:8px 14px;gap:0;background:#f7f8f9;border-radius:8px;margin-top:12px;">
+                      <div style="flex:1;display:flex;align-items:center;gap:8px;"><div style="font-size:11px;color:#686a6d;">면접결과</div><div style="font-size:13px;font-weight:700;color:#d97706;">⏳ 대기중</div></div>
+                      <div style="width:1px;background:#e5e6e9;height:20px;"></div>
+                      <div style="flex:1;display:flex;align-items:center;gap:8px;justify-content:center;"><div style="font-size:11px;color:#686a6d;">면접경험</div><div style="font-size:13px;font-weight:700;color:#00c362;">😊 긍정적</div></div>
+                    </div>
+                    <div class="rv-card-actions" style="margin-top:12px;">
+                      <button class="rv-card-action-btn">도움이 돼요 👍 <span class="count">19</span></button>
+                      <button class="rv-card-report">신고하기</button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="cd-blind-overlay">
