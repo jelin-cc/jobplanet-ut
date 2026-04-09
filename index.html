@@ -13832,7 +13832,7 @@ function selectJobReviewTab(jobName) {
         // 더보기 버튼
         var fadeMore = document.createElement('div');
         fadeMore.style.cssText = 'text-align:center;margin-top:12px;';
-        fadeMore.innerHTML = '<button onclick="var cta=this.closest(\'.rv-card\').nextElementSibling;if(cta)cta.scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="padding:8px 24px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;">더보기 ▾</button>';
+        fadeMore.innerHTML = '<button onclick="expandJrCard2(this)" style="padding:8px 24px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;">더보기 ▾</button>';
         cardContent.appendChild(fadeMore);
       }
       // 3번째 카드 이후 전체 블러 처리
@@ -13980,6 +13980,21 @@ function toggleJobReviewPanel() {
   panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
 }
 // 직군 리뷰 공감 넛지
+function expandJrCard2(btn) {
+  var card = btn.closest('.rv-card');
+  if (!card) return;
+  // 좌측 점수/바 복원
+  var score = card.querySelector('.rv-card-score');
+  if (score) score.style.display = '';
+  // 숨겨진 섹션 복원
+  card.querySelectorAll('.rv-card-section').forEach(function(s) { s.style.display = ''; });
+  var reactions = card.querySelector('.rv-card-reactions');
+  if (reactions) reactions.style.display = '';
+  var actions = card.querySelector('.rv-card-actions');
+  if (actions) actions.style.display = '';
+  // 더보기 버튼 제거
+  btn.parentElement.remove();
+}
 function onJobEmpathy(btn) {
   var wrap = btn.closest('.rv-nudge-inline');
   wrap.querySelectorAll('button').forEach(function(b) {
