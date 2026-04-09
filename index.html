@@ -13810,10 +13810,30 @@ function selectJobReviewTab(jobName) {
     if (jrLayout) jrLayout.style.marginTop = '0';
     var jrCards = list.querySelectorAll('.rv-card');
     if (jrCards.length >= 2) {
-      // 1,2번째 카드: 기업명+로고만 블러
-      for (var ji = 0; ji < Math.min(2, jrCards.length); ji++) {
-        var co = jrCards[ji].querySelector('.rv-card-company'); if (co) { co.style.filter = 'blur(6px)'; co.style.userSelect = 'none'; }
-        var lo = jrCards[ji].querySelector('.rv-card-logo'); if (lo) { lo.style.filter = 'blur(6px)'; lo.style.userSelect = 'none'; }
+      // 1번째 카드: 기업명+로고만 블러
+      var co1 = jrCards[0].querySelector('.rv-card-company'); if (co1) { co1.style.filter = 'blur(6px)'; co1.style.userSelect = 'none'; }
+      var lo1 = jrCards[0].querySelector('.rv-card-logo'); if (lo1) { lo1.style.filter = 'blur(6px)'; lo1.style.userSelect = 'none'; }
+      // 2번째 카드: 기업명+로고 블러 제거, 일부만 노출 + 더보기
+      var card2 = jrCards[1];
+      var co2 = card2.querySelector('.rv-card-company'); if (co2) { co2.style.filter = 'none'; }
+      var lo2 = card2.querySelector('.rv-card-logo'); if (lo2) { lo2.style.filter = 'none'; }
+      // 좌측 점수/바 그래프 숨김
+      var cardScore = card2.querySelector('.rv-card-score');
+      if (cardScore) cardScore.style.display = 'none';
+      // 내용 영역: 타이틀+장점만 보이고 나머지 숨김
+      var cardContent = card2.querySelector('.rv-card-content');
+      if (cardContent) {
+        var sections = cardContent.querySelectorAll('.rv-card-section');
+        var reactions = cardContent.querySelector('.rv-card-reactions');
+        var actions = cardContent.querySelector('.rv-card-actions');
+        for (var si = 1; si < sections.length; si++) sections[si].style.display = 'none';
+        if (reactions) reactions.style.display = 'none';
+        if (actions) actions.style.display = 'none';
+        // 더보기 버튼
+        var fadeMore = document.createElement('div');
+        fadeMore.style.cssText = 'text-align:center;margin-top:12px;';
+        fadeMore.innerHTML = '<button onclick="var cta=this.closest(\'.rv-card\').nextElementSibling;if(cta)cta.scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="padding:8px 24px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;">더보기 ▾</button>';
+        cardContent.appendChild(fadeMore);
       }
       // 3번째 카드 이후 전체 블러 처리
       for (var ji = 2; ji < jrCards.length; ji++) {
