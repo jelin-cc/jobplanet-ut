@@ -21133,6 +21133,16 @@ function closeRatePopup() {
     });
   };
 
+  window.cdCompanyVote = function(btn, choice) {
+    var banner = btn.closest('.rv-banner');
+    if (!banner) return;
+    banner.innerHTML = '<div style="flex:1;padding:20px 0;">' +
+      '<div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:8px;">' + (choice === 'agree' ? '공감해주셨군요! 👍' : '다른 의견이시군요! 🤔') + '</div>' +
+      '<div style="font-size:13px;color:#686a6d;line-height:20px;">경미님의 솔직한 의견이 다른 지원자에게 큰 도움이 돼요</div>' +
+      '<button onclick="openCompanySelect()" style="margin-top:12px;padding:10px 24px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:Pretendard,sans-serif;">내 경험도 남기기</button>' +
+    '</div>';
+  };
+
   window.cdBlindReviewClick = function() {
     sessionStorage.setItem('jp_return_page', 'company');
     var isLoggedIn = sessionStorage.getItem('jp_logged_in') === 'true';
@@ -21410,6 +21420,22 @@ function closeRatePopup() {
           '<div class="rv-card-reactions"><span>— 1년 후 성장하고 있을 것 같아요</span><div class="rv-card-meta-sep"></div><span>👍 기업을 추천해요</span></div>'+
           '<div class="rv-card-actions"><button class="rv-card-action-btn">도움이 돼요 👍 <span class="count">'+helpN+'</span></button><button class="rv-card-action-btn">리포스트 🔄</button><button class="rv-card-report">신고하기</button></div>'+
           '</div></div></div>';
+          // 여기어때글로벌: 4번째 카드 뒤에 투표 배너 삽입
+          if (ri === 3 && data.name && data.name.indexOf('여기어때') >= 0) {
+            html += '<div class="rv-banner" style="width:100%;background:linear-gradient(135deg,#f0faf4 0%,#e8f5ee 100%);border:none;border-radius:20px;padding:28px 32px;margin-bottom:16px;display:flex;align-items:center;min-height:auto;opacity:1;transform:none;">' +
+              '<div style="flex:1;">' +
+                '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">' +
+                  '<span style="font-size:13px;font-weight:600;color:#57595b;">(주)여기어때컴퍼니</span>' +
+                  '<span style="font-size:12px;font-weight:600;color:#00c362;background:rgba(0,195,98,0.1);padding:2px 10px;border-radius:20px;border:1px solid rgba(0,195,98,0.3);">전직장</span>' +
+                '</div>' +
+                '<div style="font-size:20px;font-weight:800;color:#242628;line-height:30px;">복지·연봉은 괜찮지만<br>워라밸이 아쉽다는데 사실인가요?</div>' +
+              '</div>' +
+              '<div style="display:flex;flex-direction:column;gap:8px;width:160px;flex-shrink:0;">' +
+                '<button onclick="cdCompanyVote(this,\'differ\')" style="width:100%;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:700;background:#00c362;color:#fff;border:none;cursor:pointer;font-family:Pretendard,sans-serif;box-shadow:0 2px 8px rgba(0,195,98,0.2);">다른거 같아요</button>' +
+                '<button onclick="cdCompanyVote(this,\'agree\')" style="width:100%;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:700;background:rgba(255,255,255,0.8);color:#00c362;border:1.5px solid #00c362;cursor:pointer;font-family:Pretendard,sans-serif;">공감해요</button>' +
+              '</div>' +
+            '</div>';
+          }
         }
         content.innerHTML = html;
       });
