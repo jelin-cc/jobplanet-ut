@@ -21266,6 +21266,12 @@ function closeRatePopup() {
         if(overlay) overlay.style.display = 'none';
         wrap.style.minHeight = 'auto';
         wrap.style.overflow = 'visible';
+        // 면접 탭의 블라인드는 면접 카드 UI 유지 (덮어쓰기 안 함)
+        if (wrap.closest('#cdTabInterview')) {
+          var content = wrap.querySelector('.cd-blind-content');
+          if (content) { content.style.filter = 'none'; content.style.pointerEvents = 'auto'; content.style.userSelect = 'auto'; }
+          return;
+        }
         // 랜덤 리뷰 100건 생성
         var content = wrap.querySelector('.cd-blind-content');
         if(!content) return;
