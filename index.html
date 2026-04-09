@@ -13810,9 +13810,36 @@ function selectJobReviewTab(jobName) {
     if (jrLayout) jrLayout.style.marginTop = '0';
     var jrCards = list.querySelectorAll('.rv-card');
     if (jrCards.length >= 2) {
-      // 1번째 카드: 기업명+로고만 블러
-      var co1 = jrCards[0].querySelector('.rv-card-company'); if (co1) { co1.style.filter = 'blur(6px)'; co1.style.userSelect = 'none'; }
-      var lo1 = jrCards[0].querySelector('.rv-card-logo'); if (lo1) { lo1.style.filter = 'blur(6px)'; lo1.style.userSelect = 'none'; }
+      // 1번째 카드: 기업명+로고 블러 + 축소 UI
+      var card1 = jrCards[0];
+      var co1 = card1.querySelector('.rv-card-company'); if (co1) { co1.style.filter = 'blur(6px)'; co1.style.userSelect = 'none'; }
+      var lo1 = card1.querySelector('.rv-card-logo'); if (lo1) { lo1.style.filter = 'blur(6px)'; lo1.style.userSelect = 'none'; }
+      var cardScore1 = card1.querySelector('.rv-card-score');
+      var scoreNum1 = cardScore1 ? cardScore1.querySelector('.rv-card-score-num') : null;
+      var starsEl1 = cardScore1 ? cardScore1.querySelector('.rv-card-stars') : null;
+      var scoreVal1 = scoreNum1 ? scoreNum1.textContent : '4.5';
+      var starsHtml1 = starsEl1 ? starsEl1.innerHTML : '';
+      if (cardScore1) cardScore1.style.display = 'none';
+      var metaEl1 = card1.querySelector('.rv-card-meta');
+      if (metaEl1) {
+        var topScore1 = document.createElement('div');
+        topScore1.style.cssText = 'float:right;text-align:right;margin-top:-4px;';
+        topScore1.innerHTML = '<div style="font-size:18px;font-weight:800;color:#242628;">' + scoreVal1 + '</div><div style="font-size:14px;color:#00c362;">' + starsHtml1 + '</div>';
+        metaEl1.parentElement.insertBefore(topScore1, metaEl1.nextSibling);
+      }
+      var cardContent1 = card1.querySelector('.rv-card-content');
+      if (cardContent1) {
+        var sections1 = cardContent1.querySelectorAll('.rv-card-section');
+        var reactions1 = cardContent1.querySelector('.rv-card-reactions');
+        var actions1 = cardContent1.querySelector('.rv-card-actions');
+        for (var s1i = 1; s1i < sections1.length; s1i++) sections1[s1i].style.display = 'none';
+        if (reactions1) reactions1.style.display = 'none';
+        if (actions1) actions1.style.display = 'none';
+        var fadeMore1 = document.createElement('div');
+        fadeMore1.style.cssText = 'text-align:center;margin-top:12px;';
+        fadeMore1.innerHTML = '<button onclick="var cta=this.closest(\'.rv-card\').nextElementSibling;if(cta)cta.scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="padding:8px 24px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;">더보기 ▾</button>';
+        cardContent1.appendChild(fadeMore1);
+      }
       // 2번째 카드: 기업명+로고 블러 제거, 일부만 노출 + 더보기
       var card2 = jrCards[1];
       var co2 = card2.querySelector('.rv-card-company'); if (co2) { co2.style.filter = 'none'; }
