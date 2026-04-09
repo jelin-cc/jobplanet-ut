@@ -9755,58 +9755,6 @@
         </div>
 
 
-        <!-- 관심 기업 관점 (토글) -->
-        <div class="rv-side-cta rv-interest-loggedin-card" style="gap:8px;padding:16px 20px;box-sizing:border-box;position:relative;">
-          <!-- 우측 상단 토글 버튼 -->
-          <div id="interest-toggle-btn" onclick="toggleInterestView(document.getElementById('interest-content-job').style.display==='none'?'job':'all')" style="position:absolute;top:16px;right:16px;width:28px;height:28px;background:transparent;border:none;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;opacity:0;" title="직군별 보기">☐</div>
-          <!-- 전체 관점 (기본) -->
-          <div id="interest-content-all">
-            <div style="font-size:14px;font-weight:700;color:#242628;margin-bottom:2px;">팔로우 기업 한눈에 보기</div>
-            <div style="font-size:11px;color:#949ba8;margin-bottom:8px;">팔로우 기업 전체 리뷰 기준</div>
-            <div style="display:flex;flex-direction:column;gap:6px;">
-              <div style="padding:10px 12px;background:#f7f8f9;border-radius:8px;cursor:pointer;" onclick="openCompanyPage('daangn')">
-                <div style="display:flex;align-items:center;justify-content:space-between;">
-                  <div style="font-size:13px;font-weight:700;color:#242628;">평점 가장 높은 기업</div>
-                  <span style="font-size:11px;color:#ffc107;font-weight:700;">★ 4.5</span>
-                </div>
-                <div style="font-size:12px;color:#686a6d;margin-top:3px;">당근마켓 · 카카오</div>
-              </div>
-              <div style="padding:10px 12px;background:#f7f8f9;border-radius:8px;cursor:pointer;" onclick="openCompanyPage('coupang')">
-                <div style="display:flex;align-items:center;justify-content:space-between;">
-                  <div style="font-size:13px;font-weight:700;color:#242628;">이번 주 리뷰 가장 많은</div>
-                  <span style="font-size:11px;color:#00c362;font-weight:700;">+12건</span>
-                </div>
-                <div style="font-size:12px;color:#686a6d;margin-top:3px;">쿠팡</div>
-              </div>
-              <div style="padding:10px 12px;background:#f7f8f9;border-radius:8px;cursor:pointer;" onclick="openCompanyPage('coupang')">
-                <div style="display:flex;align-items:center;justify-content:space-between;">
-                  <div style="font-size:13px;font-weight:700;color:#242628;">평점 변동 가장 큰</div>
-                  <span style="font-size:11px;color:#f44336;font-weight:700;">▼ 0.3</span>
-                </div>
-                <div style="font-size:12px;color:#686a6d;margin-top:3px;">쿠팡 (3.3 → 3.0)</div>
-              </div>
-            </div>
-          </div>
-          <!-- 디자이너 관점 -->
-          <div id="interest-content-job" style="display:none;">
-            <div style="font-size:14px;font-weight:700;color:#242628;margin-bottom:2px;">디자이너 관점</div>
-            <div style="font-size:11px;color:#949ba8;margin-bottom:8px;">관심 기업의 디자이너 리뷰 기준</div>
-            <div style="display:flex;flex-direction:column;gap:6px;">
-              <div style="padding:10px 12px;background:#ecf9ef;border-radius:8px;cursor:pointer;" onclick="openCompanyPage('daangn')">
-                <div style="font-size:11px;color:#00c362;font-weight:600;">만족도 1위</div>
-                <div style="font-size:13px;font-weight:700;color:#242628;margin-top:2px;">당근마켓 <span style="color:#ffc107;">★ 4.7</span></div>
-              </div>
-              <div style="padding:10px 12px;background:#fff0f2;border-radius:8px;cursor:pointer;" onclick="openCompanyPage('toss')">
-                <div style="font-size:11px;color:#f44336;font-weight:600;">가장 아쉬운 점</div>
-                <div style="font-size:13px;font-weight:700;color:#242628;margin-top:2px;">토스 워라밸 <span style="color:#f44336;">2.8</span></div>
-              </div>
-              <div style="padding:10px 12px;background:#f7f8f9;border-radius:8px;cursor:pointer;" onclick="openCompanyPage('kakao')">
-                <div style="font-size:11px;color:#686a6d;font-weight:600;">리뷰 가장 활발</div>
-                <div style="font-size:13px;font-weight:700;color:#242628;margin-top:2px;">카카오 <span style="font-size:11px;color:#949ba8;font-weight:400;">이번 달 12건</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         <div class="rv-side-cta rv-side-write-cta" style="gap:8px;padding:14px 16px;">
           <div style="font-size:14px;font-weight:700;color:#242628;">✍️ 리뷰 작성하기</div>
