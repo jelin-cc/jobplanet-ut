@@ -21133,6 +21133,20 @@ function closeRatePopup() {
     });
   };
 
+  window.onCdNudgeVote = function(btn, label) {
+    var wrap = btn.parentElement.parentElement;
+    wrap.querySelectorAll('button').forEach(function(b) {
+      b.style.border = '1px solid #e5e6e9'; b.style.background = '#fff'; b.style.color = '#686a6d';
+    });
+    btn.style.border = '1.5px solid #00c362'; btn.style.background = '#ecf9ef'; btn.style.color = '#00c362';
+    var result = wrap.querySelector('.cd-nudge-vote-result');
+    if (result) {
+      result.style.display = 'block';
+      var msg = result.querySelector('.cd-nudge-vote-msg');
+      if (msg) msg.textContent = '😤 ' + label + ' 준 직장인이 가장 많이 다닌 회사 TOP 3';
+    }
+  };
+
   window.cdCompanyVote = function(btn, choice) {
     var banner = btn.closest('.rv-banner');
     if (!banner) return;
@@ -21420,6 +21434,30 @@ function closeRatePopup() {
           '<div class="rv-card-reactions"><span>— 1년 후 성장하고 있을 것 같아요</span><div class="rv-card-meta-sep"></div><span>👍 기업을 추천해요</span></div>'+
           '<div class="rv-card-actions"><button class="rv-card-action-btn">도움이 돼요 👍 <span class="count">'+helpN+'</span></button><button class="rv-card-action-btn">리포스트 🔄</button><button class="rv-card-report">신고하기</button></div>'+
           '</div></div></div>';
+          // 3번째 카드 뒤에 점수 투표 넛지 삽입
+          if (ri === 2) {
+            html += '<div style="width:100%;padding:24px 28px;background:#f7f8f9;border-radius:16px;font-family:Pretendard,sans-serif;box-sizing:border-box;margin-bottom:20px;">' +
+              '<div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:14px;">🤔 솔직히, 지금 다니는 회사 점수를 준다면?</div>' +
+              '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+                '<button onclick="onCdNudgeVote(this,\'1~2점\')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;transition:all .2s;">😤 1~2점</button>' +
+                '<button onclick="onCdNudgeVote(this,\'3점\')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;transition:all .2s;">😐 3점</button>' +
+                '<button onclick="onCdNudgeVote(this,\'4점\')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;transition:all .2s;">😊 4점</button>' +
+                '<button onclick="onCdNudgeVote(this,\'5점\')" style="padding:8px 18px;border:1px solid #e5e6e9;border-radius:20px;font-size:13px;font-weight:600;color:#686a6d;background:#fff;cursor:pointer;font-family:Pretendard,sans-serif;transition:all .2s;">🤩 5점</button>' +
+              '</div>' +
+              '<div class="cd-nudge-vote-result" style="display:none;margin-top:14px;padding:16px 18px;background:#fff;border-radius:12px;border:1px solid #e5e6e9;">' +
+                '<div style="font-size:13px;font-weight:700;color:#242628;margin-bottom:10px;" class="cd-nudge-vote-msg"></div>' +
+                '<div style="display:flex;flex-direction:column;gap:6px;position:relative;">' +
+                  '<div class="cd-nudge-rank" style="filter:blur(6px);user-select:none;display:flex;flex-direction:column;gap:6px;">' +
+                    '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f0faf4;border-radius:8px;"><span style="font-size:13px;font-weight:800;color:#00c362;min-width:18px;">1</span><span style="font-size:13px;font-weight:600;color:#242628;">██████</span><span style="font-size:12px;color:#949ba8;margin-left:auto;">32%</span></div>' +
+                    '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f7f8f9;border-radius:8px;"><span style="font-size:13px;font-weight:800;color:#686a6d;min-width:18px;">2</span><span style="font-size:13px;font-weight:600;color:#242628;">████████</span><span style="font-size:12px;color:#949ba8;margin-left:auto;">24%</span></div>' +
+                    '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f7f8f9;border-radius:8px;"><span style="font-size:13px;font-weight:800;color:#686a6d;min-width:18px;">3</span><span style="font-size:13px;font-weight:600;color:#242628;">████</span><span style="font-size:12px;color:#949ba8;margin-left:auto;">18%</span></div>' +
+                  '</div>' +
+                  '<div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;"><div style="text-align:center;"><div style="font-size:20px;margin-bottom:6px;">🔒</div><div style="font-size:12px;font-weight:600;color:#686a6d;">리뷰 작성하면 순위 공개!</div></div></div>' +
+                '</div>' +
+                '<button onclick="openCompanySelect()" style="margin-top:12px;width:100%;padding:10px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:Pretendard,sans-serif;">리뷰 쓰고 순위 확인하기</button>' +
+              '</div>' +
+            '</div>';
+          }
           // 여기어때글로벌: 4번째 카드 뒤에 투표 배너 삽입
           if (ri === 3 && data.name && data.name.indexOf('여기어때') >= 0) {
             html += '<div class="rv-banner" style="width:100%;background:linear-gradient(135deg,#e4f5ea 0%,#d4edda 100%);border:1.5px solid #00c362;border-radius:20px;padding:28px 32px;margin-bottom:20px;display:flex;align-items:center;min-height:auto;opacity:1;transform:none;">' +
