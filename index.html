@@ -21159,6 +21159,7 @@ function closeRatePopup() {
 
   window.cdBlindReviewClick = function() {
     sessionStorage.setItem('jp_return_page', 'company');
+    sessionStorage.setItem('jp_return_company_tab', 'review');
     var isLoggedIn = sessionStorage.getItem('jp_logged_in') === 'true';
     if (!isLoggedIn) {
       window._loginThenWrite = true;
