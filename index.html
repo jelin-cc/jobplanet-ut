@@ -24480,6 +24480,29 @@ function closeRatePopup() {
           setTimeout(function() {
             var tab = document.querySelector('#cdTabsNav .cd-tab[data-tab="' + returnCompanyTab + '"]');
             if (tab) tab.click();
+            // 리뷰 탭 넛지: 작성 후 돌아왔으면 결과 공개된 넛지 삽입
+            if (returnCompanyTab === 'review' && sessionStorage.getItem('jp_cd_nudge_pending') === 'true') {
+              sessionStorage.removeItem('jp_cd_nudge_pending');
+              setTimeout(function() {
+                var reviewSection = document.querySelector('#cdTabReview .cd-section:last-child');
+                var cards = reviewSection ? reviewSection.querySelectorAll('.rv-card') : [];
+                if (cards.length >= 3) {
+                  var nudge = document.createElement('div');
+                  nudge.style.cssText = 'width:100%;padding:24px 28px;background:#f7f8f9;border-radius:16px;font-family:Pretendard,sans-serif;box-sizing:border-box;margin-bottom:20px;';
+                  nudge.innerHTML = '<div style="font-size:15px;font-weight:700;color:#242628;margin-bottom:14px;">🤔 솔직히, 지금 다니는 회사 점수를 준다면?</div>' +
+                    '<div style="margin-top:14px;padding:16px 18px;background:#fff;border-radius:12px;border:1px solid #e5e6e9;">' +
+                      '<div style="font-size:13px;font-weight:700;color:#242628;margin-bottom:10px;">🎉 순위가 공개되었어요!</div>' +
+                      '<div style="display:flex;flex-direction:column;gap:6px;">' +
+                        '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f0faf4;border-radius:8px;"><span style="font-size:13px;font-weight:800;color:#00c362;min-width:18px;">1</span><span style="font-size:13px;font-weight:600;color:#242628;flex:1;">당근마켓</span><span style="font-size:12px;font-weight:700;color:#00c362;">32%</span></div>' +
+                        '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f7f8f9;border-radius:8px;"><span style="font-size:13px;font-weight:800;color:#686a6d;min-width:18px;">2</span><span style="font-size:13px;font-weight:600;color:#242628;flex:1;">토스</span><span style="font-size:12px;font-weight:700;color:#686a6d;">24%</span></div>' +
+                        '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f7f8f9;border-radius:8px;"><span style="font-size:13px;font-weight:800;color:#686a6d;min-width:18px;">3</span><span style="font-size:13px;font-weight:600;color:#242628;flex:1;">네이버</span><span style="font-size:12px;font-weight:700;color:#686a6d;">18%</span></div>' +
+                      '</div>' +
+                    '</div>';
+                  cards[2].after(nudge);
+                  nudge.scrollIntoView({ behavior:'smooth', block:'center' });
+                }
+              }, 400);
+            }
           }, 200);
         }
       }
