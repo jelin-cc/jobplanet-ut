@@ -13820,12 +13820,13 @@ function selectJobReviewTab(jobName) {
       var scoreVal1 = scoreNum1 ? scoreNum1.textContent : '4.5';
       var starsHtml1 = starsEl1 ? starsEl1.innerHTML : '';
       if (cardScore1) cardScore1.style.display = 'none';
-      var metaEl1 = card1.querySelector('.rv-card-meta');
-      if (metaEl1) {
+      var header1 = card1.querySelector('.rv-card-header');
+      if (header1) {
+        header1.style.position = 'relative';
         var topScore1 = document.createElement('div');
-        topScore1.style.cssText = 'float:right;text-align:right;margin-top:-4px;';
-        topScore1.innerHTML = '<div style="font-size:18px;font-weight:800;color:#242628;">' + scoreVal1 + '</div><div style="font-size:14px;color:#00c362;">' + starsHtml1 + '</div>';
-        metaEl1.parentElement.insertBefore(topScore1, metaEl1.nextSibling);
+        topScore1.style.cssText = 'position:absolute;top:0;right:0;text-align:right;';
+        topScore1.innerHTML = '<div style="font-size:18px;font-weight:800;color:#242628;">' + scoreVal1 + '</div><div style="font-size:12px;color:#00c362;">' + starsHtml1 + '</div>';
+        header1.appendChild(topScore1);
       }
       var cardContent1 = card1.querySelector('.rv-card-content');
       if (cardContent1) {
@@ -13852,12 +13853,13 @@ function selectJobReviewTab(jobName) {
       var starsHtml = starsEl ? starsEl.innerHTML : '';
       if (cardScore) cardScore.style.display = 'none';
       // 우측 상단 별점 삽입
-      var metaEl = card2.querySelector('.rv-card-meta');
-      if (metaEl) {
-        var topScore = document.createElement('div');
-        topScore.style.cssText = 'float:right;text-align:right;margin-top:-4px;';
-        topScore.innerHTML = '<div style="font-size:18px;font-weight:800;color:#242628;">' + scoreVal + '</div><div style="font-size:14px;color:#00c362;">' + starsHtml + '</div>';
-        metaEl.parentElement.insertBefore(topScore, metaEl.nextSibling);
+      var header2 = card2.querySelector('.rv-card-header');
+      if (header2) {
+        header2.style.position = 'relative';
+        var topScore2 = document.createElement('div');
+        topScore2.style.cssText = 'position:absolute;top:0;right:0;text-align:right;';
+        topScore2.innerHTML = '<div style="font-size:18px;font-weight:800;color:#242628;">' + scoreVal + '</div><div style="font-size:12px;color:#00c362;">' + starsHtml + '</div>';
+        header2.appendChild(topScore2);
       }
       // 내용 영역: 타이틀+장점만 보이고 나머지 숨김
       var cardContent = card2.querySelector('.rv-card-content');
