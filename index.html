@@ -3523,7 +3523,7 @@
         <div class="insight-inner">
           <div class="ins-left">
             <div class="ins-label">리뷰 인사이트</div>
-            <div class="ins-title">나와 <em>적합도 80%</em> 이상인<br>기업을 찾았어요</div>
+            <div class="ins-title"><em>내 직군</em>과 <em>조건</em>에 맞는<br>기업을 찾았어요</div>
             <svg id="radarSvg" viewBox="0 0 260 250" width="100%" style="max-width:220px;display:block;margin:0 auto;flex:1;min-height:0;">
               <defs>
                 <linearGradient id="gFill" x1="0" y1="0" x2="0.5" y2="1">
@@ -3852,7 +3852,7 @@
           // 내 직무: 비로그인 → 로그인(→직무입력), 로그인+직무없음 → 직무 입력
           if(cat === 'myjob'){
             if(!isLoggedIn){ _rvPendingCat = 'myjob'; openOB(true); return; }
-            if(!obSelectedJob || obSelectedJob.length===0){ _rvPendingCat = 'myjob'; openOB(true); return; }
+            if(!obSelectedJob || obSelectedJob.length===0){ _rvPendingCat = 'myjob'; openOBJobOnly(); return; }
           }
           // 팔로우: 비로그인 → 로그인 팝업
           if(cat === 'follow'){
@@ -16827,8 +16827,9 @@ function closeRatePopup() {
         if(fEmploy.length) filtered = filtered.filter(function(c){ return c.employ && fEmploy.indexOf(c.employ) !== -1; });
         if(fEdu.length) filtered = filtered.filter(function(c){ return c.edu && fEdu.some(function(e){ return e === '학력무관' || c.edu === e; }); });
 
-        // 필터 결과가 20건 미만이면 전체에서 랜덤으로 채움
-        if(filtered.length < 20){
+        // 필터 결과가 20건 미만이고 필터가 없을 때만 전체에서 랜덤으로 채움
+        var _hasActiveFilter = fRegions.length > 0 || fJobs.length > 0 || fCareer > 0 || fEmploy.length > 0 || fEdu.length > 0;
+        if(filtered.length < 20 && !_hasActiveFilter){
           var extra = allCards.slice();
           for(var ei=extra.length-1;ei>0;ei--){var ej=Math.floor(Math.random()*(ei+1));var et=extra[ei];extra[ei]=extra[ej];extra[ej]=et;}
           var existing = filtered.map(function(c){return c.title;});
@@ -16871,15 +16872,17 @@ function closeRatePopup() {
           }
           var thumbSrc = getCardThumb(c.co);
           var jkBadge = isExt ? '<div style="position:absolute;top:12px;left:12px;z-index:2;display:inline-flex;align-items:center;gap:6px;padding:3px 8px;background:rgba(41,44,50,0.80);border-radius:100px;outline:2px rgba(255,255,255,0.40) solid;"><div style="width:16px;height:16px;background:#083CCC;border-radius:4px;display:flex;align-items:center;justify-content:center;"><img src="https://jelin-cc.github.io/jobplanet-ut/jk.png" width="10" height="10"></div><span><span style="color:#517FFF;font-size:12px;font-weight:700;">잡코리아</span><span style="color:#fff;font-size:12px;font-weight:700;"> 지원</span></span></div>' : '';
+          // 잡코리아 지원과 취업축하금은 공존 불가
+          if(isExt) bonusBadge = '';
           var thumb = '<div class="thumb">'
             + '<img src="' + thumbSrc + '" alt="">'
             + bonusBadge
             + jkBadge
             + '<div class="bk-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>'
             + '</div>';
-          // Tag priority: 취업축하금 > 잡코리아 > 리뷰태그 > 비중태그 (각 1개, max 3)
+          // Tag priority: 취업축하금 > 리뷰태그 > 비중태그 (잡코리아 공고는 취업축하금 미표시)
           var cardTags = [];
-          if(c.bonus) {
+          if(c.bonus && !isExt) {
             var bMatch = c.bonus.match(/(\d+)/);
             cardTags.push({text:'<svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="vertical-align:middle;margin-right:2px;"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 13.125C10.3827 13.125 13.125 10.3827 13.125 7C13.125 3.61726 10.3827 0.875 7 0.875C3.61726 0.875 0.875 3.61726 0.875 7C0.875 10.3827 3.61726 13.125 7 13.125Z" fill="#FFB701"/><path d="M7.75087 9.44648L7.00002 6.89361L6.26028 9.40874C6.21799 9.60061 6.07523 9.7642 5.87342 9.82356C5.82084 9.83902 5.7678 9.84637 5.71564 9.84633C5.66349 9.84637 5.61045 9.83902 5.55787 9.82356C5.35605 9.7642 5.21329 9.60061 5.17101 9.40874L4.40521 6.80502H3.65911C3.35159 6.80502 3.10229 6.55572 3.10229 6.2482C3.10229 5.94067 3.35159 5.69138 3.65911 5.69138H4.07767L3.89722 5.07785C3.81044 4.78282 3.97927 4.47331 4.27429 4.38654C4.56932 4.29977 4.87883 4.46859 4.9656 4.76362L5.71564 7.31376L6.46568 4.76362C6.53707 4.5209 6.75921 4.3636 7.00002 4.36377C7.24083 4.3636 7.46297 4.5209 7.53436 4.76362L8.28549 7.31746L9.03662 4.76362C9.12339 4.46859 9.4329 4.29977 9.72793 4.38654C10.023 4.47331 10.1918 4.78282 10.105 5.07785L9.92455 5.69138H10.3427C10.6503 5.69138 10.8996 5.94067 10.8996 6.2482C10.8996 6.55572 10.6503 6.80502 10.3427 6.80502H9.59701L8.82011 9.44648C8.74869 9.68929 8.5264 9.84662 8.28549 9.84633C8.04457 9.84662 7.82228 9.68929 7.75087 9.44648Z" fill="white"/></svg> 취업축하금 '+(bMatch?bMatch[1]:'100')+'만원', cls:'bonus-tag'});
           }
@@ -17007,9 +17010,9 @@ function closeRatePopup() {
           var clickAttr = isExt ? ' onclick="openJK()"' : ' onclick="goJobDetail(\''+sTitle2+'\',\''+sCo2+'\',\''+sMeta2+'\',\''+listThumb+'\')"';
           var ddayCls = c.urgent ? 'lc-dday' : 'lc-dday normal';
 
-          // Tags: D-day + 취업축하금 + 리뷰태그 (잡코리아 라벨 제거, 현직자 비중 제거)
+          // Tags: D-day + 취업축하금 + 리뷰태그 (잡코리아 공고는 취업축하금 미표시)
           var cardTags2 = [];
-          if(c.bonus) {
+          if(c.bonus && !isExt) {
             var bMatch2 = c.bonus.match(/(\d+)/);
             cardTags2.push({text:'<svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="vertical-align:middle;margin-right:2px;"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 13.125C10.3827 13.125 13.125 10.3827 13.125 7C13.125 3.61726 10.3827 0.875 7 0.875C3.61726 0.875 0.875 3.61726 0.875 7C0.875 10.3827 3.61726 13.125 7 13.125Z" fill="#FFB701"/><path d="M7.75087 9.44648L7.00002 6.89361L6.26028 9.40874C6.21799 9.60061 6.07523 9.7642 5.87342 9.82356C5.82084 9.83902 5.7678 9.84637 5.71564 9.84633C5.66349 9.84637 5.61045 9.83902 5.55787 9.82356C5.35605 9.7642 5.21329 9.60061 5.17101 9.40874L4.40521 6.80502H3.65911C3.35159 6.80502 3.10229 6.55572 3.10229 6.2482C3.10229 5.94067 3.35159 5.69138 3.65911 5.69138H4.07767L3.89722 5.07785C3.81044 4.78282 3.97927 4.47331 4.27429 4.38654C4.56932 4.29977 4.87883 4.46859 4.9656 4.76362L5.71564 7.31376L6.46568 4.76362C6.53707 4.5209 6.75921 4.3636 7.00002 4.36377C7.24083 4.3636 7.46297 4.5209 7.53436 4.76362L8.28549 7.31746L9.03662 4.76362C9.12339 4.46859 9.4329 4.29977 9.72793 4.38654C10.023 4.47331 10.1918 4.78282 10.105 5.07785L9.92455 5.69138H10.3427C10.6503 5.69138 10.8996 5.94067 10.8996 6.2482C10.8996 6.55572 10.6503 6.80502 10.3427 6.80502H9.59701L8.82011 9.44648C8.74869 9.68929 8.5264 9.84662 8.28549 9.84633C8.04457 9.84662 7.82228 9.68929 7.75087 9.44648Z" fill="white"/></svg> 취업축하금 '+(bMatch2?bMatch2[1]:'100')+'만원', cls:'bonus-tag'});
           }
@@ -20574,6 +20577,32 @@ function closeRatePopup() {
   var obSelectedConds=[];
 
   var _obFromInsight = false;
+  // 직무만 입력받는 간소화 팝업 (내 직무 탭에서 호출)
+  function openOBJobOnly(){
+    var gnbUser=document.getElementById('gnb-user');
+    if(gnbUser && window.getComputedStyle(gnbUser).display==='none'){
+      openOB(); return;
+    }
+    obSelectedCat='';obSelectedJob='';
+    document.getElementById('obStep1').style.display='';
+    document.getElementById('obStep2').style.display='none';
+    document.getElementById('obStep3').style.display='none';
+    document.getElementById('obLoginPopup').style.display='none';
+    // 인디케이터 숨기기
+    var indicators=document.querySelectorAll('#obStep1 .ob-indicator, #obStep1 .ob-steps');
+    indicators.forEach(function(el){el.style.display='none';});
+    // "다음" 버튼을 "완료"로 변경
+    var nextBtn=document.getElementById('obStep1Btn');
+    if(nextBtn){
+      nextBtn.textContent='완료';
+      nextBtn._jobOnly=true;
+    }
+    nextBtn.disabled=true;
+    renderObCats();
+    document.getElementById('obOverlay').classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+
   function openOB(fromInsight){
     _obFromInsight = !!fromInsight;
     var gnbUser=document.getElementById('gnb-user');
@@ -20659,6 +20688,23 @@ function closeRatePopup() {
     document.querySelectorAll('#obJobList .ob-col-item').forEach(function(el){el.classList.toggle('selected',el.textContent.trim()===job);});
   }
   function obGoStep2(){
+    var nextBtn=document.getElementById('obStep1Btn');
+    // 직무만 입력 모드 (내 직무 탭에서 호출)
+    if(nextBtn && nextBtn._jobOnly){
+      nextBtn._jobOnly=false;
+      nextBtn.textContent='다음';
+      // 인디케이터 복원
+      var indicators=document.querySelectorAll('#obStep1 .ob-indicator, #obStep1 .ob-steps');
+      indicators.forEach(function(el){el.style.display='';});
+      // 바로 완료 처리
+      closeOB();
+      sessionStorage.setItem('jp_ob_job', obSelectedJob);
+      if(typeof matchSalaryToOBJob==='function') matchSalaryToOBJob();
+      if(typeof checkRvPendingCat==='function') checkRvPendingCat();
+      if(typeof renderReviewCards==='function') renderReviewCards();
+      showToast('직무가 설정되었어요!');
+      return;
+    }
     document.getElementById('obStep1').style.display='none';
     document.getElementById('obStep2').style.display='';
     obSelectedConds=[];
@@ -21141,7 +21187,7 @@ function closeRatePopup() {
             var condNames=obSelectedConds.map(function(idx){return obCondData[idx].name;});
             titleEl.innerHTML='<em>'+obSelectedJob+'</em> 직무에서<br>'+condNames.join(', ')+' 중시하는<br>기업을 찾았어요';
           } else {
-            titleEl.innerHTML='<em>'+obSelectedJob+'</em> 직무에서<br>나와 <em>적합도 80%</em> 이상인<br>기업을 찾았어요';
+            titleEl.innerHTML='<em>'+obSelectedJob+'</em> 직무에서<br><em>내 직군</em>과 <em>조건</em>에 맞는<br>기업을 찾았어요';
           }
         }
         // CTA 라벨 복원
