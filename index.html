@@ -3608,8 +3608,7 @@
                   if(nameEl) nameEl.textContent = co.name;
                   var scoreEl = el.querySelector('.fit-score');
                   if(scoreEl) scoreEl.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> '+co.score;
-                  var pctEl = el.querySelector('.fit-pct');
-                  if(pctEl) pctEl.textContent = (90-idx*3-Math.floor(Math.random()*5))+'%';
+                  // fit-pct removed
                   var hiringEl = el.querySelector('.fit-hiring');
                   if(hiringEl) hiringEl.style.display = Math.random()>0.3 ? '' : 'none';
                 });
@@ -3691,54 +3690,65 @@
                 });
               }
 
+              // 추천 근거 데이터 (기업별)
+              var insightReasons = [
+                ['"워라밸이 좋고 자유로운 분위기에서 성장할 수 있어요. 복지 만족도가 높은 편."', '"연봉 인상률이 꾸준하고, 사내 스터디 문화가 잘 갖춰져 있어요."', '"경영진이 투명하게 소통하고, 승진 기회가 열려있는 편이에요."'],
+                ['"빠르게 성장하는 환경에서 커리어를 키울 수 있어요. 연봉 수준도 높은 편."', '"사내문화가 수평적이고, 도전적인 프로젝트를 경험할 수 있어요."', '"복지가 잘 되어있고, 팀 분위기가 좋다는 리뷰가 많아요."'],
+                ['"안정적인 환경에서 다양한 경험을 쌓을 수 있어요. 워라밸도 좋은 편."', '"기술 스택이 탄탄하고, 성장 지원이 잘 되어 있어요."', '"사내 복지가 다양하고, 팀워크가 좋다는 평이 많아요."']
+              ];
+
               // 초기 세팅
               setCompany(0);
 
-              // 자동 순환
-              setInterval(function(){
+              // 자동 순환 (온보딩 완료 전에만)
+              var _insightAutoTimer = setInterval(function(){
+                if(typeof obSelectedJob!=='undefined' && obSelectedJob && obSelectedJob.length>0) return; // 온보딩 완료 시 순환 중지
                 setCompany((current+1) % 3);
               }, 2500);
+
+              // 온보딩 완료 후 기업 클릭 핸들러 (레이더만 표시, 상세 이동X)
+              function onInsightCompanyClick(idx){
+                var obDone = (typeof obSelectedJob!=='undefined' && obSelectedJob && obSelectedJob.length>0);
+                if(obDone){
+                  // 레이더 차트만 업데이트 + 하이라이트 + 추천 근거 표시
+                  setCompany(idx);
+                  showInsightReason(idx);
+                } else {
+                  // 온보딩 전: 기존 동작 (상세 이동)
+                  goToInsightCompany(idx);
+                }
+              }
+
+              // 추천 근거 표시
+              function showInsightReason(idx){
+                [0,1,2].forEach(function(i){
+                  var r = document.getElementById('fi-reason-'+i);
+                  if(!r) return;
+                  if(i===idx){
+                    var reasons = insightReasons[i] || insightReasons[0];
+                    var pick = reasons[Math.floor(Math.random()*reasons.length)];
+                    r.textContent = pick;
+                    r.style.display='block';
+                  } else {
+                    r.style.display='none';
+                  }
+                });
+              }
+
+              // 온보딩 완료 후 UI 활성화
+              function activateInsightPostOB(){
+                // 상세 버튼 표시, 화살표 숨김
+                document.querySelectorAll('.fit-detail-btn').forEach(function(b){ b.style.display=''; });
+                document.querySelectorAll('.fit-arrow').forEach(function(a){ a.style.display='none'; });
+                // 첫 번째 기업 선택 + 근거 표시
+                setCompany(0);
+                showInsightReason(0);
+              }
             </script>
           </div>
           <div class="ins-right">
-            <!-- 기업 리스트 -->
-            <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
-              <div id="fi-0" onclick="goToInsightCompany(0)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
-                <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/naver.png" alt=""></div>
-                <span class="fit-name" style="white-space:nowrap;max-width:5em;overflow:hidden;text-overflow:ellipsis;">네이버</span>
-                <span class="fit-hiring" style="font-size:10px;font-weight:700;color:#EF4444;background:#FEF2F2;padding:2px 7px;border-radius:99px;white-space:nowrap;">채용중</span>
-                <span style="flex:1;"></span>
-                <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.1</span>
-                <span class="fit-pct" style="color:var(--brand);background:var(--brand-lt);border:none;">88%</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
-              </div>
-              <div id="fi-1" onclick="goToInsightCompany(1)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
-                <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/toss.png" alt=""></div>
-                <span class="fit-name" style="white-space:nowrap;max-width:5em;overflow:hidden;text-overflow:ellipsis;">토스</span>
-                <span class="fit-hiring" style="font-size:10px;font-weight:700;color:#EF4444;background:#FEF2F2;padding:2px 7px;border-radius:99px;white-space:nowrap;">채용중</span>
-                <span style="flex:1;"></span>
-                <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 3.6</span>
-                <span class="fit-pct" style="color:var(--brand);background:var(--brand-lt);border:none;">85%</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
-              </div>
-              <div id="fi-2" onclick="goToInsightCompany(2)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
-                <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/kakao.png" alt=""></div>
-                <span class="fit-name" style="white-space:nowrap;max-width:5em;overflow:hidden;text-overflow:ellipsis;">카카오</span>
-                <span style="flex:1;"></span>
-                <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 3.2</span>
-                <span class="fit-pct" style="color:var(--brand);background:var(--brand-lt);border:none;">82%</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
-              </div>
-            </div>
-
-            <!-- 내 직군에 맞는 기업 찾기 -->
-            <div id="obStartBox" style="border:1.5px solid var(--ln);border-radius:var(--r);padding:18px 16px;">
-              <h3 style="font-size:15px;font-weight:700;color:var(--tx);margin-bottom:6px;">내 직군에 맞는 기업 찾기</h3>
-              <p style="font-size:13px;color:var(--tx3);line-height:1.5;margin-bottom:16px;">직무와 중요 조건을 입력하면 나에게 맞는 기업을 추천해드려요!</p>
-              <button onclick="openOB(true)" style="width:100%;padding:12px 0;border-radius:var(--rsm);font-size:14px;font-weight:700;border:none;background:var(--brand);color:#fff;cursor:pointer;font-family:var(--font);transition:background .15s;">시작하기</button>
-            </div>
-            <!-- 내 맞춤 조건 (결과 후, 접힘/펼침) -->
-            <div id="obResultBox" style="display:none;border-radius:14px;overflow:hidden;background:var(--surface);border:1.5px solid #E0E2E6;">
+            <!-- 내 맞춤 조건 (결과 후, 기업 목록 상단) -->
+            <div id="obResultBox" style="display:none;border-radius:14px;overflow:hidden;background:var(--surface);border:1.5px solid #E0E2E6;margin-bottom:10px;">
               <!-- 헤더: 항상 보임 -->
               <div id="obResultHeader" onclick="toggleObResult()" style="display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;transition:background .12s;" onmouseover="this.style.background='#FAFBFC'" onmouseout="this.style.background='transparent'">
                 <div style="width:28px;height:28px;border-radius:8px;background:var(--brand-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -3758,6 +3768,45 @@
                   <div id="obResultTags" style="display:flex;flex-direction:column;gap:0;"></div>
                 </div>
               </div>
+            </div>
+            <!-- 기업 리스트 -->
+            <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
+              <div id="fi-0" onclick="onInsightCompanyClick(0)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
+                <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/naver.png" alt=""></div>
+                <span class="fit-name" style="white-space:nowrap;max-width:5em;overflow:hidden;text-overflow:ellipsis;">네이버</span>
+                <span class="fit-hiring" style="font-size:10px;font-weight:700;color:#EF4444;background:#FEF2F2;padding:2px 7px;border-radius:99px;white-space:nowrap;">채용중</span>
+                <span style="flex:1;"></span>
+                <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.1</span>
+                <span class="fit-detail-btn" style="display:none;font-size:11px;font-weight:600;color:#6B7280;background:#F3F4F6;padding:3px 10px;border-radius:99px;cursor:pointer;white-space:nowrap;" onclick="event.stopPropagation();goToInsightCompany(0)">상세</span>
+                <svg class="fit-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="fit-reason" id="fi-reason-0" style="display:none;padding:4px 13px 10px 63px;font-size:12px;color:#6B7280;line-height:1.5;"></div>
+              <div id="fi-1" onclick="onInsightCompanyClick(1)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
+                <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/toss.png" alt=""></div>
+                <span class="fit-name" style="white-space:nowrap;max-width:5em;overflow:hidden;text-overflow:ellipsis;">토스</span>
+                <span class="fit-hiring" style="font-size:10px;font-weight:700;color:#EF4444;background:#FEF2F2;padding:2px 7px;border-radius:99px;white-space:nowrap;">채용중</span>
+                <span style="flex:1;"></span>
+                <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 3.6</span>
+                <span class="fit-detail-btn" style="display:none;font-size:11px;font-weight:600;color:#6B7280;background:#F3F4F6;padding:3px 10px;border-radius:99px;cursor:pointer;white-space:nowrap;" onclick="event.stopPropagation();goToInsightCompany(1)">상세</span>
+                <svg class="fit-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="fit-reason" id="fi-reason-1" style="display:none;padding:4px 13px 10px 63px;font-size:12px;color:#6B7280;line-height:1.5;"></div>
+              <div id="fi-2" onclick="onInsightCompanyClick(2)" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;background:#F9FAFB;cursor:pointer;transition:all .2s;">
+                <div class="fit-logo"><img src="https://jelin-cc.github.io/jobplanet-ut/kakao.png" alt=""></div>
+                <span class="fit-name" style="white-space:nowrap;max-width:5em;overflow:hidden;text-overflow:ellipsis;">카카오</span>
+                <span style="flex:1;"></span>
+                <span class="fit-score"><svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 3.2</span>
+                <span class="fit-detail-btn" style="display:none;font-size:11px;font-weight:600;color:#6B7280;background:#F3F4F6;padding:3px 10px;border-radius:99px;cursor:pointer;white-space:nowrap;" onclick="event.stopPropagation();goToInsightCompany(2)">상세</span>
+                <svg class="fit-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx4)" stroke-width="2" style="flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+              <div class="fit-reason" id="fi-reason-2" style="display:none;padding:4px 13px 10px 63px;font-size:12px;color:#6B7280;line-height:1.5;"></div>
+            </div>
+
+            <!-- 내 직군에 맞는 기업 찾기 -->
+            <div id="obStartBox" style="border:1.5px solid var(--ln);border-radius:var(--r);padding:18px 16px;">
+              <h3 style="font-size:15px;font-weight:700;color:var(--tx);margin-bottom:6px;">내 직군에 맞는 기업 찾기</h3>
+              <p style="font-size:13px;color:var(--tx3);line-height:1.5;margin-bottom:16px;">직무와 중요 조건을 입력하면 나에게 맞는 기업을 추천해드려요!</p>
+              <button onclick="openOB(true)" style="width:100%;padding:12px 0;border-radius:var(--rsm);font-size:14px;font-weight:700;border:none;background:var(--brand);color:#fff;cursor:pointer;font-family:var(--font);transition:background .15s;">시작하기</button>
             </div>
             <script>
             function toggleObResult(){
@@ -3902,6 +3951,22 @@
               </div>
             </div>
             <span style="font-size:22px;font-weight:700;color:var(--tx);letter-spacing:-.3px;">기준 연봉</span>
+            <!-- 년차 선택 드롭다운 -->
+            <div style="position:relative;display:inline-flex;align-items:center;margin-left:8px;">
+              <button id="sal-year-btn" onclick="toggleSalaryYears()" style="display:flex;align-items:center;gap:4px;padding:6px 14px;border-radius:8px;border:1.5px solid var(--ln);background:var(--surface);cursor:pointer;font-family:var(--font);font-size:13px;font-weight:600;color:var(--tx2);transition:all .15s;" onmouseover="this.style.borderColor='var(--brand)'" onmouseout="this.style.borderColor='var(--ln)'">
+                <span id="sal-year-label">전체</span>
+                <svg id="sal-year-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.5" style="transition:transform .2s;"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div id="sal-year-tabs" style="display:none;position:absolute;z-index:50;top:calc(100% + 6px);left:0;background:var(--surface);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.12);border:1px solid var(--ln);padding:6px 0;min-width:120px;">
+                <button onclick="setSalaryYear(-1)" class="sal-yr-opt" style="display:block;width:100%;padding:10px 16px;text-align:left;font-size:13px;font-weight:700;color:var(--brand);background:var(--brand-lt);border:none;cursor:pointer;font-family:var(--font);">전체</button>
+                <button onclick="setSalaryYear(1)" class="sal-yr-opt" style="display:block;width:100%;padding:10px 16px;text-align:left;font-size:13px;font-weight:500;color:var(--tx2);background:none;border:none;cursor:pointer;font-family:var(--font);" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='none'">1년차</button>
+                <button onclick="setSalaryYear(2)" class="sal-yr-opt" style="display:block;width:100%;padding:10px 16px;text-align:left;font-size:13px;font-weight:500;color:var(--tx2);background:none;border:none;cursor:pointer;font-family:var(--font);" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='none'">2년차</button>
+                <button onclick="setSalaryYear(3)" class="sal-yr-opt" style="display:block;width:100%;padding:10px 16px;text-align:left;font-size:13px;font-weight:500;color:var(--tx2);background:none;border:none;cursor:pointer;font-family:var(--font);" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='none'">3년차</button>
+                <button onclick="setSalaryYear(5)" class="sal-yr-opt" style="display:block;width:100%;padding:10px 16px;text-align:left;font-size:13px;font-weight:500;color:var(--tx2);background:none;border:none;cursor:pointer;font-family:var(--font);" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='none'">5년차</button>
+                <button onclick="setSalaryYear(7)" class="sal-yr-opt" style="display:block;width:100%;padding:10px 16px;text-align:left;font-size:13px;font-weight:500;color:var(--tx2);background:none;border:none;cursor:pointer;font-family:var(--font);" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='none'">7년차</button>
+                <button onclick="setSalaryYear(10)" class="sal-yr-opt" style="display:block;width:100%;padding:10px 16px;text-align:left;font-size:13px;font-weight:500;color:var(--tx2);background:none;border:none;cursor:pointer;font-family:var(--font);" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='none'">10년차+</button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -4261,7 +4326,7 @@
           {priority:3, html:'<span style="font-size:11px;font-weight:600;color:#00C274;background:#F3FCF9;padding:4px 8px;border-radius:6px;">승진 언급 '+arrowSvg+'{n}건</span>',dynamic:true},
           {priority:3, html:'<span style="font-size:11px;font-weight:600;color:#00C274;background:#F3FCF9;padding:4px 8px;border-radius:6px;">연봉 언급 '+arrowSvg+'{n}건</span>',dynamic:true},
           {priority:3, html:'<span style="font-size:11px;font-weight:600;color:#00C274;background:#F3FCF9;padding:4px 8px;border-radius:6px;">워라밸 언급 '+arrowSvg+'{n}건</span>',dynamic:true},
-          {priority:4, html:'<span style="font-size:11px;font-weight:600;color:#768091;background:#F4F5F7;padding:4px 8px;border-radius:6px;">현직자 비중 {p}%</span>',dynamic:true},
+          {priority:4, html:'<span style="font-size:11px;font-weight:600;color:#768091;background:#F4F5F7;padding:4px 8px;border-radius:6px;">성장성 상위 {p}%</span>',dynamic:true},
           {priority:4, html:'<span style="font-size:11px;font-weight:600;color:#768091;background:#F4F5F7;padding:4px 8px;border-radius:6px;">최근 {m}개월 기준</span>',dynamic:true},
         ];
         function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
@@ -16247,7 +16312,7 @@ function closeRatePopup() {
   .img-card.visible{opacity:1;transform:translateY(0);}
   .list-card{opacity:0;transform:translateY(12px);transition:opacity .4s,transform .4s;}
   .list-card.visible{opacity:1;transform:translateY(0);}
-  .list-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px;}
+  .list-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:24px;}
   .list-card{padding:20px;background:#fff;box-shadow:0 1px 12px rgba(0,0,0,0.08);border-radius:16px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;}
   .list-card .lc-body{flex:1;display:flex;flex-direction:column;gap:8px;}
   .list-card .lc-logo{height:16px;margin-bottom:4px;}
@@ -16755,9 +16820,11 @@ function closeRatePopup() {
               + '</div>';
           }
           var thumbSrc = getCardThumb(c.co);
+          var jkBadge = isExt ? '<div style="position:absolute;top:12px;left:12px;z-index:2;display:inline-flex;align-items:center;gap:6px;padding:3px 8px;background:rgba(41,44,50,0.80);border-radius:100px;outline:2px rgba(255,255,255,0.40) solid;"><div style="width:14px;height:14px;background:#083CCC;border-radius:4px;display:flex;align-items:center;justify-content:center;"><span style="color:#fff;font-size:8px;font-weight:800;">J</span></div><span><span style="color:#517FFF;font-size:12px;font-weight:700;">잡코리아</span><span style="color:#fff;font-size:12px;font-weight:700;"> 지원</span></span></div>' : '';
           var thumb = '<div class="thumb">'
             + '<img src="' + thumbSrc + '" alt="">'
             + bonusBadge
+            + jkBadge
             + '<div class="bk-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>'
             + '</div>';
           // Tag priority: 취업축하금 > 잡코리아 > 리뷰태그 > 비중태그 (각 1개, max 3)
@@ -16766,9 +16833,9 @@ function closeRatePopup() {
             var bMatch = c.bonus.match(/(\d+)/);
             cardTags.push({text:'<svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="vertical-align:middle;margin-right:2px;"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 13.125C10.3827 13.125 13.125 10.3827 13.125 7C13.125 3.61726 10.3827 0.875 7 0.875C3.61726 0.875 0.875 3.61726 0.875 7C0.875 10.3827 3.61726 13.125 7 13.125Z" fill="#FFB701"/><path d="M7.75087 9.44648L7.00002 6.89361L6.26028 9.40874C6.21799 9.60061 6.07523 9.7642 5.87342 9.82356C5.82084 9.83902 5.7678 9.84637 5.71564 9.84633C5.66349 9.84637 5.61045 9.83902 5.55787 9.82356C5.35605 9.7642 5.21329 9.60061 5.17101 9.40874L4.40521 6.80502H3.65911C3.35159 6.80502 3.10229 6.55572 3.10229 6.2482C3.10229 5.94067 3.35159 5.69138 3.65911 5.69138H4.07767L3.89722 5.07785C3.81044 4.78282 3.97927 4.47331 4.27429 4.38654C4.56932 4.29977 4.87883 4.46859 4.9656 4.76362L5.71564 7.31376L6.46568 4.76362C6.53707 4.5209 6.75921 4.3636 7.00002 4.36377C7.24083 4.3636 7.46297 4.5209 7.53436 4.76362L8.28549 7.31746L9.03662 4.76362C9.12339 4.46859 9.4329 4.29977 9.72793 4.38654C10.023 4.47331 10.1918 4.78282 10.105 5.07785L9.92455 5.69138H10.3427C10.6503 5.69138 10.8996 5.94067 10.8996 6.2482C10.8996 6.55572 10.6503 6.80502 10.3427 6.80502H9.59701L8.82011 9.44648C8.74869 9.68929 8.5264 9.84662 8.28549 9.84633C8.04457 9.84662 7.82228 9.68929 7.75087 9.44648Z" fill="white"/></svg> 취업축하금 '+(bMatch?bMatch[1]:'100')+'만원', cls:'bonus-tag'});
           }
-          if(isExt && cardTags.length<3) cardTags.push({text:'잡코리아 ↗', cls:'ext-tag'});
+          // 잡코리아 라벨은 이미지 배지로 대체 (하단 태그에서 제거)
           if(c.tags.length>0 && cardTags.length<3) cardTags.push({text:c.tags[0], cls:''});
-          var ratioTags = ['현직자 비중 '+Math.floor(50+Math.random()*30)+'%', '승진 언급 ▲'+Math.floor(5+Math.random()*20)+'건', '연봉 언급 +'+Math.floor(3+Math.random()*15)+'건', '워라밸 언급 +'+Math.floor(3+Math.random()*10)+'건'];
+          var ratioTags = ['승진 언급 ▲'+Math.floor(5+Math.random()*20)+'건', '연봉 언급 +'+Math.floor(3+Math.random()*15)+'건', '워라밸 언급 +'+Math.floor(3+Math.random()*10)+'건', '성장성 상위 '+Math.floor(10+Math.random()*20)+'%'];
           if(cardTags.length < 3) {
             cardTags.push({text:ratioTags[Math.floor(Math.random()*ratioTags.length)], cls:'ratio-tag'});
           }
@@ -16801,7 +16868,7 @@ function closeRatePopup() {
           var bonusHtml = c.bonus ? '<span style="font-size:11px;font-weight:700;color:#F59E0B;background:#FFFBEB;padding:2px 7px;border-radius:var(--rfull);margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:2px;"><path d="M12 2l1.5 4.5L18 5l-2 4 4 2-4.5 1.5L17 17l-4-2.5L10 17l1.5-4.5L7 11l4-2-2-4 4.5 1.5z"/><circle cx="6" cy="4" r="1" fill="#EF4444"/><circle cx="19" cy="7" r="1" fill="#3B82F6"/><circle cx="18" cy="18" r="1" fill="#22C55E"/></svg> ' + c.bonus + '</span>' : '';
           var ddayStyle = c.urgent ? 'color:#EF4444;' : 'color:var(--tx4);';
           var skillsHtml = c.skills ? '<div class="lc-meta">' + c.meta + ' · ' + c.skills + '</div>' : '<div class="lc-meta">' + c.meta + '</div>';
-          var extBadgeHtml = isExt ? ' <span class="ext-badge">잡코리아 ' + extSvg + '</span>' : '';
+          var extBadgeHtml = '';
           var lcImgFile = logoMap[c.logo];
           var lcLogoInner = lcImgFile
             ? '<img src="' + lcImgFile + '" alt="">'
@@ -16890,39 +16957,37 @@ function closeRatePopup() {
           var clickAttr = isExt ? ' onclick="openJK()"' : ' onclick="goJobDetail(\''+sTitle2+'\',\''+sCo2+'\',\''+sMeta2+'\',\''+listThumb+'\')"';
           var ddayCls = c.urgent ? 'lc-dday' : 'lc-dday normal';
 
-          // Tag priority: 취업축하금 > 잡코리아 > 리뷰태그 > 비중태그 (각 1개, max 3)
+          // Tags: D-day + 취업축하금 + 리뷰태그 (잡코리아 라벨 제거, 현직자 비중 제거)
           var cardTags2 = [];
           if(c.bonus) {
             var bMatch2 = c.bonus.match(/(\d+)/);
             cardTags2.push({text:'<svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="vertical-align:middle;margin-right:2px;"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 13.125C10.3827 13.125 13.125 10.3827 13.125 7C13.125 3.61726 10.3827 0.875 7 0.875C3.61726 0.875 0.875 3.61726 0.875 7C0.875 10.3827 3.61726 13.125 7 13.125Z" fill="#FFB701"/><path d="M7.75087 9.44648L7.00002 6.89361L6.26028 9.40874C6.21799 9.60061 6.07523 9.7642 5.87342 9.82356C5.82084 9.83902 5.7678 9.84637 5.71564 9.84633C5.66349 9.84637 5.61045 9.83902 5.55787 9.82356C5.35605 9.7642 5.21329 9.60061 5.17101 9.40874L4.40521 6.80502H3.65911C3.35159 6.80502 3.10229 6.55572 3.10229 6.2482C3.10229 5.94067 3.35159 5.69138 3.65911 5.69138H4.07767L3.89722 5.07785C3.81044 4.78282 3.97927 4.47331 4.27429 4.38654C4.56932 4.29977 4.87883 4.46859 4.9656 4.76362L5.71564 7.31376L6.46568 4.76362C6.53707 4.5209 6.75921 4.3636 7.00002 4.36377C7.24083 4.3636 7.46297 4.5209 7.53436 4.76362L8.28549 7.31746L9.03662 4.76362C9.12339 4.46859 9.4329 4.29977 9.72793 4.38654C10.023 4.47331 10.1918 4.78282 10.105 5.07785L9.92455 5.69138H10.3427C10.6503 5.69138 10.8996 5.94067 10.8996 6.2482C10.8996 6.55572 10.6503 6.80502 10.3427 6.80502H9.59701L8.82011 9.44648C8.74869 9.68929 8.5264 9.84662 8.28549 9.84633C8.04457 9.84662 7.82228 9.68929 7.75087 9.44648Z" fill="white"/></svg> 취업축하금 '+(bMatch2?bMatch2[1]:'100')+'만원', cls:'bonus-tag'});
           }
-          if(isExt && cardTags2.length<3) cardTags2.push({text:'잡코리아 ↗', cls:'ext-tag'});
-          if(c.tags.length>0 && cardTags2.length<3) cardTags2.push({text:c.tags[0], cls:''});
-          var rt2 = ['현직자 비중 '+Math.floor(50+Math.random()*30)+'%','승진 언급 ▲'+Math.floor(5+Math.random()*20)+'건','연봉 언급 +'+Math.floor(3+Math.random()*15)+'건','워라밸 언급 +'+Math.floor(3+Math.random()*10)+'건'];
-          if(cardTags2.length < 3) {
-            cardTags2.push({text:rt2[Math.floor(Math.random()*rt2.length)], cls:'ratio-tag'});
-          }
-          if(cardTags2.length === 0) {
-            cardTags2.push({text:rt2[Math.floor(Math.random()*rt2.length)], cls:'ratio-tag'});
+          if(c.tags.length>0 && cardTags2.length<2) cardTags2.push({text:c.tags[0], cls:''});
+          var rt2 = ['승진 언급 ▲'+Math.floor(5+Math.random()*20)+'건','연봉 언급 +'+Math.floor(3+Math.random()*15)+'건','워라밸 언급 +'+Math.floor(3+Math.random()*10)+'건','성장성 상위 '+Math.floor(10+Math.random()*20)+'%'];
+          if(cardTags2.length < 2) {
+            cardTags2.push({text:rt2[Math.floor(Math.random()*rt2.length)], cls:''});
           }
           cardTags2 = cardTags2.slice(0,2);
-          var tags2Html = cardTags2.map(function(t){return '<span class="lc-tag '+t.cls+'">'+t.text+'</span>';}).join('');
+          var ddayTag = '<span class="lc-tag" style="background:#FFF0F0;color:#FA5252;font-weight:700;">'+c.dday+'</span>';
+          var tags2Html = ddayTag + cardTags2.map(function(t){return '<span class="lc-tag '+t.cls+'">'+t.text+'</span>';}).join('');
 
-          // Logo for logo view
-          var logoImg = logoFiles[ci % logoFiles.length];
-          var logoHtml2 = currentListShowLogo ? '<div class="lc-logo"><img src="'+logoImg+'" alt=""></div>' : '';
+          // 잡코리아 지원 버튼 (external=jobkorea인 경우)
+          var jkApplyBtn = isExt ? '<div style="display:flex;align-items:flex-end;flex-shrink:0;"><button onclick="event.stopPropagation();openJK()" style="display:inline-flex;align-items:center;gap:2px;height:36px;padding:0 12px;background:#083CCC;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;"><div style="width:16px;height:16px;display:flex;align-items:center;justify-content:center;"><img src="https://jelin-cc.github.io/jobplanet-ut/jk.png" width="12" height="12" style="filter:brightness(10);"></div><span style="color:#fff;font-size:13px;font-weight:600;font-family:var(--font);">잡코리아에서 지원</span></button></div>' : '';
 
           return '<div class="list-card"'+clickAttr+'>'
             + '<div class="lc-body">'
-            + logoHtml2
             + '<div style="display:flex;flex-direction:column;gap:4px;">'
             + '<div class="lc-title">'+c.title+'</div>'
-            + '<div class="lc-company">'+c.co+' <span class="'+ddayCls+'">'+c.dday+'</span></div>'
+            + '<div class="lc-company">'+c.co+'</div>'
             + '</div>'
             + '<div class="lc-meta">'+c.meta+'</div>'
-            + (tags2Html ? '<div class="lc-tags">'+tags2Html+'</div>' : '')
+            + '<div class="lc-tags">'+tags2Html+'</div>'
             + '</div>'
+            + '<div style="display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end;align-self:stretch;">'
             + '<div class="lc-bk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>'
+            + jkApplyBtn
+            + '</div>'
             + '</div>';
         }).join('');
 
@@ -16971,10 +17036,7 @@ function closeRatePopup() {
             }
           });
         }
-        // 잡코리아 코치마크 트리거 (localStorage로 1회성 보장)
-        if(!localStorage.getItem('jp_jk_coach_seen')){
-          showJkCoachMark();
-        }
+        // 잡코리아 코치마크 제거됨
       }
 
       // 잡코리아 코치마크 (1회성, localStorage 기반)
@@ -17157,17 +17219,23 @@ function closeRatePopup() {
         var val = parseInt(inp.value.replace(/,/g,''));
         if(!val || val < 1000){ showToast('연봉을 입력해주세요 (만원 단위)'); return; }
         var d = salDB[salTabIdx];
-        var pct = Math.round(((val - d.lo) / (d.hi - d.lo)) * 100);
+        var mult=1;
+        if(salSelectedYear===1) mult=0.72; else if(salSelectedYear===2) mult=0.80;
+        else if(salSelectedYear===3) mult=0.88; else if(salSelectedYear===5) mult=1.0;
+        else if(salSelectedYear===7) mult=1.12; else if(salSelectedYear>=10) mult=1.28;
+        var adjLo=Math.round(d.lo*mult), adjHi=Math.round(d.hi*mult), adjAvg=Math.round(d.avgN*mult);
+        var pct = Math.round(((val - adjLo) / (adjHi - adjLo)) * 100);
         pct = Math.max(1, Math.min(99, pct));
         var topPct = 100 - pct;
         var emoji = topPct <= 20 ? '🎉' : topPct <= 50 ? '💪' : '📈';
         var msg = topPct <= 20 ? '상위권이에요! 훌륭합니다' : topPct <= 50 ? '평균 이상이에요! 좋아요' : '아직 성장 여지가 있어요';
+        var yrLabel=salSelectedYear>0?salSelectedYear+'년차 ':'';
         var result = document.getElementById('sal-compare-result');
         if(result){
           result.style.display = 'block';
           result.innerHTML = ''
             + '<div style="background:var(--brand-lt);border-radius:12px;padding:20px;text-align:center;">'
-            + '<div style="font-size:14px;color:var(--tx3);margin-bottom:8px;">'+d.name+' 직무 기준</div>'
+            + '<div style="font-size:14px;color:var(--tx3);margin-bottom:8px;">'+yrLabel+d.name+' 직무 기준</div>'
             + '<div style="font-size:32px;font-weight:800;color:var(--brand);margin-bottom:4px;">상위 '+topPct+'%</div>'
             + '<div style="font-size:14px;color:var(--tx2);margin-bottom:16px;">'+emoji+' '+msg+'</div>'
             + '<div style="height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden;margin-bottom:8px;position:relative;">'
@@ -17213,17 +17281,23 @@ function closeRatePopup() {
         var val = parseInt(inp.value.replace(/,/g,''));
         if(!val || val < 1000){ showToast('연봉을 입력해주세요 (만원 단위)'); return; }
         var d = salDB[salTabIdx];
-        var pct = Math.round(((val - d.lo) / (d.hi - d.lo)) * 100);
+        var mult=1;
+        if(salSelectedYear===1) mult=0.72; else if(salSelectedYear===2) mult=0.80;
+        else if(salSelectedYear===3) mult=0.88; else if(salSelectedYear===5) mult=1.0;
+        else if(salSelectedYear===7) mult=1.12; else if(salSelectedYear>=10) mult=1.28;
+        var adjLo=Math.round(d.lo*mult), adjHi=Math.round(d.hi*mult), adjAvg=Math.round(d.avgN*mult);
+        var pct = Math.round(((val - adjLo) / (adjHi - adjLo)) * 100);
         pct = Math.max(1, Math.min(99, pct));
         var topPct = 100 - pct;
         var emoji = topPct <= 20 ? '🎉' : topPct <= 50 ? '💪' : '📈';
         var msg = topPct <= 20 ? '상위권이에요! 훌륭합니다' : topPct <= 50 ? '평균 이상이에요! 좋아요' : '아직 성장 여지가 있어요';
+        var yrLabel=salSelectedYear>0?salSelectedYear+'년차 ':'';
         var result = document.getElementById('sal-compare-result-c');
         if(result){
           result.style.display = 'block';
           result.innerHTML = ''
             + '<div style="background:var(--brand-lt);border-radius:12px;padding:20px;text-align:center;">'
-            + '<div style="font-size:14px;color:var(--tx3);margin-bottom:8px;">'+d.name+' 직무 기준</div>'
+            + '<div style="font-size:14px;color:var(--tx3);margin-bottom:8px;">'+yrLabel+d.name+' 직무 기준</div>'
             + '<div style="font-size:32px;font-weight:800;color:var(--brand);margin-bottom:4px;">상위 '+topPct+'%</div>'
             + '<div style="font-size:14px;color:var(--tx2);margin-bottom:16px;">'+emoji+' '+msg+'</div>'
             + '<div style="height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden;margin-bottom:8px;position:relative;">'
@@ -17526,6 +17600,119 @@ function closeRatePopup() {
         var btn = g('sal-more-btn');
         if (wrap) wrap.style.display = 'none';
         if (btn) btn.innerHTML = '더보기 <svg id="sal-more-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+      }
+
+      // ─── 년차 선택 ───
+      var salSelectedYear = -1; // -1 = 전체
+      var salShowYears = false;
+      function toggleSalaryYears(){
+        salShowYears=!salShowYears;
+        document.getElementById('sal-year-tabs').style.display=salShowYears?'block':'none';
+        document.getElementById('sal-year-arrow').style.transform=salShowYears?'rotate(180deg)':'rotate(0deg)';
+      }
+      document.addEventListener('click',function(e){
+        if(!salShowYears)return;
+        var tabs=document.getElementById('sal-year-tabs');
+        var btn=document.getElementById('sal-year-btn');
+        if(tabs&&!tabs.contains(e.target)&&btn&&!btn.contains(e.target)){
+          salShowYears=false;tabs.style.display='none';
+          document.getElementById('sal-year-arrow').style.transform='rotate(0deg)';
+        }
+      });
+      function setSalaryYear(yr){
+        salSelectedYear=yr;
+        var label=document.getElementById('sal-year-label');
+        if(label) label.textContent=yr===-1?'전체':yr+'년차'+(yr>=10?'+':'');
+        // 스타일 업데이트
+        var opts=document.querySelectorAll('.sal-yr-opt');
+        opts.forEach(function(o,i){
+          var optYr=[-1,1,2,3,5,7,10][i];
+          if(optYr===yr){
+            o.style.fontWeight='700';o.style.color='var(--brand)';o.style.background='var(--brand-lt)';
+          } else {
+            o.style.fontWeight='500';o.style.color='var(--tx2)';o.style.background='none';
+          }
+        });
+        salShowYears=false;
+        document.getElementById('sal-year-tabs').style.display='none';
+        document.getElementById('sal-year-arrow').style.transform='rotate(0deg)';
+        // 년차에 따른 연봉 보정
+        applySalaryYearAdjust();
+      }
+      function applySalaryYearAdjust(){
+        var d=salDB[salTabIdx];
+        var mult=1;
+        if(salSelectedYear===1) mult=0.72;
+        else if(salSelectedYear===2) mult=0.80;
+        else if(salSelectedYear===3) mult=0.88;
+        else if(salSelectedYear===5) mult=1.0;
+        else if(salSelectedYear===7) mult=1.12;
+        else if(salSelectedYear>=10) mult=1.28;
+        var adjAvg=Math.round(d.avgN*mult);
+        var adjLo=Math.round(d.lo*mult);
+        var adjHi=Math.round(d.hi*mult);
+        var fmtAvg=(adjAvg/10000>=1?(adjAvg/10000).toFixed(0)+','+('000'+(adjAvg%10000)).slice(-3):adjAvg.toLocaleString())+'만';
+        // 간소화 포맷
+        fmtAvg=Math.floor(adjAvg/10)+'0만';
+        var fmtLo=Math.floor(adjLo/10)+'0만';
+        var fmtHi=Math.floor(adjHi/10)+'0만';
+        // 포맷 개선
+        function fmtSal(n){return n.toLocaleString()+'만';}
+        fmtAvg=fmtSal(Math.round(adjAvg/10)*10);
+        fmtLo=fmtSal(Math.round(adjLo/10)*10);
+        fmtHi=fmtSal(Math.round(adjHi/10)*10);
+        var yrLabel=salSelectedYear===-1?'':salSelectedYear+'년차 ';
+        var g=function(id){return document.getElementById(id);};
+        if(g('sal-anchor-val')) g('sal-anchor-val').textContent=fmtAvg+'원';
+        if(g('d-lo')) g('d-lo').textContent='하위 · ~'+fmtLo;
+        if(g('d-avg')) g('d-avg').textContent='평균 '+fmtAvg;
+        if(g('d-hi')) g('d-hi').textContent='상위 · '+fmtHi+'↑';
+        if(g('sal-compact-val')) g('sal-compact-val').textContent=fmtAvg+'원';
+        if(g('d-lo-c')) g('d-lo-c').textContent='하위 · ~'+fmtLo;
+        if(g('d-avg-c')) g('d-avg-c').textContent='평균 '+fmtAvg;
+        if(g('d-hi-c')) g('d-hi-c').textContent='상위 · '+fmtHi+'↑';
+        if(g('sal-anchor-label')) g('sal-anchor-label').textContent=yrLabel+'직무 평균 연봉';
+        // TOP3도 보정
+        var el=g('sal-compact-top3');
+        if(el){
+          el.innerHTML=d.items.slice(0,3).map(function(item,i){
+            var adjAmt=Math.round(item.amtN*mult/10)*10;
+            var rankColor=i<3?'color:var(--brand)':'color:var(--tx4)';
+            var imgFile=(typeof logoMap!=='undefined')?logoMap[item.logo]:null;
+            var logoInner=imgFile?'<img src="'+imgFile+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">':'<span style="font-size:11px;font-weight:700;color:var(--tx3);">'+item.logo+'</span>';
+            var borderBot=i<2?'border-bottom:1px solid var(--ln2);':'';
+            return '<div style="display:flex;align-items:center;gap:12px;padding:12px 24px;'+borderBot+'">'
+              +'<div style="font-size:14px;font-weight:700;'+rankColor+';width:20px;text-align:center;">'+(i+1)+'</div>'
+              +'<div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:700;color:var(--tx);">'+item.co+'</div><div style="font-size:11px;color:var(--tx4);margin-top:1px;">'+item.meta+'</div></div>'
+              +'<div style="text-align:right;flex-shrink:0;"><div style="font-size:15px;font-weight:700;color:var(--tx);">'+adjAmt.toLocaleString()+'만원</div><div style="font-size:11px;color:var(--brand);margin-top:1px;">'+item.stars+' · '+item.cnt+'</div></div></div>';
+          }).join('');
+        }
+      }
+
+      // ─── 온보딩 후 직무 매칭 ───
+      function matchSalaryToOBJob(){
+        if(typeof obSelectedJob==='undefined'||!obSelectedJob) return;
+        var job=obSelectedJob;
+        // 직무명 → salDB 인덱스 매핑
+        var map={'프론트엔드 개발자':0,'백엔드 개발자':0,'풀스택 개발자':0,'iOS 개발자':0,'안드로이드 개발자':0,'서버 개발자':0,'DevOps 엔지니어':0,
+          'UX 디자이너':1,'UI 디자이너':1,'프로덕트 디자이너':1,'BX 디자이너':1,'그래픽 디자이너':1,
+          '콘텐츠 마케터':2,'퍼포먼스 마케터':2,'그로스 마케터':2,'브랜드 마케터':2,'CRM 마케터':2,
+          '서비스 기획자':3,'사업 기획자':3,'PM':3,'PO':3,'프로덕트 매니저':3,'전략 기획':3,
+          '데이터 분석가':4,'데이터 엔지니어':4,'데이터 사이언티스트':4,'ML 엔지니어':4};
+        var idx=map[job];
+        if(typeof idx==='undefined'){
+          // 키워드 기반 매칭
+          if(/개발|엔지니어|서버/.test(job)) idx=0;
+          else if(/디자인|디자이너/.test(job)) idx=1;
+          else if(/마케|광고|홍보/.test(job)) idx=2;
+          else if(/기획|PM|PO|매니저/.test(job)) idx=3;
+          else if(/데이터|분석|ML|AI/.test(job)) idx=4;
+          else idx=0;
+        }
+        setSalaryTab(idx);
+        // 타이틀을 사용자 직무로 갱신
+        var titleEl=document.getElementById('sal-title');
+        if(titleEl) titleEl.textContent=job;
       }
 
       // 연봉 뷰 토글 (기본 ↔ 컴팩트)
@@ -19749,7 +19936,7 @@ function closeRatePopup() {
             <div class="bm-grid">
               <div class="img-card visible" onclick="goJobDetail('프로덕트 디자이너','(유)잡플래닛','서울 · 경력 3년↑','https://jelin-cc.github.io/jobplanet-ut/img/Banner_gBJ6Ui725082910083325.jpg')">
                 <div class="thumb"><img src="https://jelin-cc.github.io/jobplanet-ut/img/Banner_gBJ6Ui725082910083325.jpg" alt=""><div class="bk-btn bm-bk-saved" onclick="event.stopPropagation();showToast('저장이 취소되었습니다.')"><svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div></div>
-                <div class="ic-body"><div style="display:flex;flex-direction:column;gap:4px;"><div class="ic-title">프로덕트 디자이너</div><div class="ic-co">(유)잡플래닛 <span class="ic-dday">D-12</span></div></div><div class="ic-meta">서울 · 경력 3년↑</div><div class="ic-tags"><span class="ic-tag">워라밸 상위 10%</span><span class="ic-tag ratio-tag">현직자 비중 72%</span></div></div>
+                <div class="ic-body"><div style="display:flex;flex-direction:column;gap:4px;"><div class="ic-title">프로덕트 디자이너</div><div class="ic-co">(유)잡플래닛 <span class="ic-dday">D-12</span></div></div><div class="ic-meta">서울 · 경력 3년↑</div><div class="ic-tags"><span class="ic-tag">워라밸 상위 10%</span><span class="ic-tag ratio-tag">성장성 상위 15%</span></div></div>
               </div>
               <div class="img-card visible" onclick="goJobDetail('Frontend Engineer','(주)바비톡','서울 · 경력 5년↑','https://jelin-cc.github.io/jobplanet-ut/img/Banner_kAifOHK25082013255486.jpg')">
                 <div class="thumb"><img src="https://jelin-cc.github.io/jobplanet-ut/img/Banner_kAifOHK25082013255486.jpg" alt=""><div class="bk-btn bm-bk-saved" onclick="event.stopPropagation();showToast('저장이 취소되었습니다.')"><svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div></div>
@@ -19770,7 +19957,7 @@ function closeRatePopup() {
           <div class="bm-grid">
             <div class="img-card visible" onclick="goJobDetail('프론트엔드 개발자','비바리퍼블리카(토스)','서울 · 경력 3년↑','https://jelin-cc.github.io/jobplanet-ut/img/Banner_1tW2cFJ25032514173967.jpg')">
               <div class="thumb"><img src="https://jelin-cc.github.io/jobplanet-ut/img/Banner_1tW2cFJ25032514173967.jpg" alt=""><div class="bk-btn" onclick="event.stopPropagation();showToast('공고를 저장했습니다.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div></div>
-              <div class="ic-body"><div style="display:flex;flex-direction:column;gap:4px;"><div class="ic-title">프론트엔드 개발자</div><div class="ic-co">비바리퍼블리카(토스) <span class="ic-dday">D-8</span></div></div><div class="ic-meta">서울 · 경력 3년↑</div><div class="ic-tags"><span class="ic-tag">성장하는 조직</span><span class="ic-tag ratio-tag">현직자 비중 68%</span></div></div>
+              <div class="ic-body"><div style="display:flex;flex-direction:column;gap:4px;"><div class="ic-title">프론트엔드 개발자</div><div class="ic-co">비바리퍼블리카(토스) <span class="ic-dday">D-8</span></div></div><div class="ic-meta">서울 · 경력 3년↑</div><div class="ic-tags"><span class="ic-tag">성장하는 조직</span><span class="ic-tag ratio-tag">연봉 상위 20%</span></div></div>
             </div>
             <div class="img-card visible" onclick="goJobDetail('UI/UX 디자이너','(주)네이버','경기 · 경력 5년↑','https://jelin-cc.github.io/jobplanet-ut/img/Banner_2loOfzo25052915140814.jpg')">
               <div class="thumb"><img src="https://jelin-cc.github.io/jobplanet-ut/img/Banner_2loOfzo25052915140814.jpg" alt=""><div class="bk-btn" onclick="event.stopPropagation();showToast('공고를 저장했습니다.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div></div>
@@ -19782,7 +19969,7 @@ function closeRatePopup() {
             </div>
             <div class="img-card visible" onclick="goJobDetail('iOS 개발자','(주)당근마켓','서울 · 경력 3년↑','https://jelin-cc.github.io/jobplanet-ut/img/Banner_5DoT1nZ24111411320084.jpg')">
               <div class="thumb"><img src="https://jelin-cc.github.io/jobplanet-ut/img/Banner_5DoT1nZ24111411320084.jpg" alt=""><div class="bk-btn" onclick="event.stopPropagation();showToast('공고를 저장했습니다.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div></div>
-              <div class="ic-body"><div style="display:flex;flex-direction:column;gap:4px;"><div class="ic-title">iOS 개발자</div><div class="ic-co">(주)당근마켓 <span class="ic-dday normal">D-30</span></div></div><div class="ic-meta">서울 · 경력 3년↑</div><div class="ic-tags"><span class="ic-tag">자율출퇴근</span><span class="ic-tag ratio-tag">현직자 비중 81%</span></div></div>
+              <div class="ic-body"><div style="display:flex;flex-direction:column;gap:4px;"><div class="ic-title">iOS 개발자</div><div class="ic-co">(주)당근마켓 <span class="ic-dday normal">D-30</span></div></div><div class="ic-meta">서울 · 경력 3년↑</div><div class="ic-tags"><span class="ic-tag">자율출퇴근</span><span class="ic-tag ratio-tag">워라밸 상위 12%</span></div></div>
             </div>
             <div class="img-card visible" onclick="goJobDetail('게임 기획자','(주)크래프톤','서울 · 경력 5년↑','https://jelin-cc.github.io/jobplanet-ut/img/Banner_ABi9lTY25101711202489.jpg')">
               <div class="thumb"><img src="https://jelin-cc.github.io/jobplanet-ut/img/Banner_ABi9lTY25101711202489.jpg" alt=""><div class="bk-btn" onclick="event.stopPropagation();showToast('공고를 저장했습니다.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div></div>
@@ -19790,7 +19977,7 @@ function closeRatePopup() {
             </div>
             <div class="img-card visible" onclick="goJobDetail('서비스 기획자','(주)무신사','서울 · 신입 가능','https://jelin-cc.github.io/jobplanet-ut/img/Banner_DiMdvUg24111216474465.jpg')">
               <div class="thumb"><img src="https://jelin-cc.github.io/jobplanet-ut/img/Banner_DiMdvUg24111216474465.jpg" alt=""><div class="bk-btn" onclick="event.stopPropagation();showToast('공고를 저장했습니다.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div></div>
-              <div class="ic-body"><div style="display:flex;flex-direction:column;gap:4px;"><div class="ic-title">서비스 기획자</div><div class="ic-co">(주)무신사 <span class="ic-dday normal">D-21</span></div></div><div class="ic-meta">서울 · 신입 가능</div><div class="ic-tags"><span class="ic-tag">패션테크</span><span class="ic-tag ratio-tag">현직자 비중 59%</span></div></div>
+              <div class="ic-body"><div style="display:flex;flex-direction:column;gap:4px;"><div class="ic-title">서비스 기획자</div><div class="ic-co">(주)무신사 <span class="ic-dday normal">D-21</span></div></div><div class="ic-meta">서울 · 신입 가능</div><div class="ic-tags"><span class="ic-tag">패션테크</span><span class="ic-tag ratio-tag">승진 언급 ▲18건</span></div></div>
             </div>
             <div class="img-card visible" onclick="goJobDetail('콘텐츠 마케터','(주)하이브','서울 · 경력 2년↑','https://jelin-cc.github.io/jobplanet-ut/img/Banner_HNPO3bT24072313252617.jpg')">
               <div class="thumb"><img src="https://jelin-cc.github.io/jobplanet-ut/img/Banner_HNPO3bT24072313252617.jpg" alt=""><div class="bk-btn" onclick="event.stopPropagation();showToast('공고를 저장했습니다.')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div></div>
@@ -20404,41 +20591,61 @@ function closeRatePopup() {
 
   function applyObResult(){
     closeOB();
-    // 인사이트 타이틀 업데이트
-    var condNames=obSelectedConds.map(function(idx){return obCondData[idx].name;});
-    var titleEl=document.querySelector('.ins-title');
-    if(titleEl){
-      titleEl.innerHTML='<em>'+obSelectedJob+'</em> 직무에서<br>'+condNames.join(', ')+' 중시하는<br>기업을 찾았어요';
-    }
-    // 레이더 차트 모션
+
+    // ── 레이더 영역에 "맞춤 조건 설정중.." 로딩 표시 ──
     var radar=document.getElementById('radarSvg');
-    if(radar){
-      radar.style.transition='transform .6s ease';
-      radar.style.transform='scale(1.08)';
-      setTimeout(function(){radar.style.transform='scale(1)';},600);
-    }
-    // CTA 라벨
-    var lbl=document.getElementById('cta-label');
-    if(lbl) lbl.textContent=obSelectedJob+' 직무 기준으로 분석했어요';
-    // 시작 박스 → 결과 박스
-    var startBox=document.getElementById('obStartBox');
-    var resultBox=document.getElementById('obResultBox');
-    if(startBox)startBox.style.display='none';
-    if(resultBox){
-      resultBox.style.display='';
-      document.getElementById('obResultJob').textContent=obSelectedJob;
-      var tagsHtml='';
-      obSelectedConds.forEach(function(idx,i){
-        var c=obCondData[idx];
-        tagsHtml+='<div style="display:flex;align-items:center;gap:10px;padding:10px 8px;border-radius:10px;transition:background .12s;" onmouseover="this.style.background=\'var(--bg)\'" onmouseout="this.style.background=\'transparent\'">'
-          +'<span style="width:24px;height:24px;border-radius:8px;background:var(--brand);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+(i+1)+'</span>'
-          +'<span style="font-size:13px;font-weight:600;color:var(--tx);flex:1;">'+c.name+'</span>'
-          +'<span style="flex-shrink:0;opacity:.85;">'+c.icon+'</span>'
-          +'</div>';
-      });
-      document.getElementById('obResultTags').innerHTML=tagsHtml;
-    }
-    showToast('맞춤 조건이 설정되었어요!');
+    var insLeft=document.querySelector('.ins-left');
+    var loadingOverlay=document.createElement('div');
+    loadingOverlay.id='radarLoadingOverlay';
+    loadingOverlay.style.cssText='position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,0.92);border-radius:14px;z-index:5;transition:opacity .4s;';
+    loadingOverlay.innerHTML='<div style="width:40px;height:40px;border:3px solid #E0E2E6;border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px;"></div><div style="font-size:14px;font-weight:700;color:var(--tx);">맞춤 조건 설정중..</div><div style="font-size:12px;color:var(--tx4);margin-top:4px;">잠시만 기다려주세요</div>';
+    if(insLeft){insLeft.style.position='relative';insLeft.appendChild(loadingOverlay);}
+
+    setTimeout(function(){
+      // 로딩 페이드아웃
+      if(loadingOverlay){loadingOverlay.style.opacity='0';setTimeout(function(){if(loadingOverlay.parentNode)loadingOverlay.parentNode.removeChild(loadingOverlay);},400);}
+
+      // 인사이트 타이틀 업데이트
+      var condNames=obSelectedConds.map(function(idx){return obCondData[idx].name;});
+      var titleEl=document.querySelector('.ins-title');
+      if(titleEl){
+        titleEl.innerHTML='<em>'+obSelectedJob+'</em> 직무에서<br>'+condNames.join(', ')+' 중시하는<br>기업을 찾았어요';
+      }
+      // 레이더 차트 모션
+      if(radar){
+        radar.style.transition='transform .6s ease';
+        radar.style.transform='scale(1.08)';
+        setTimeout(function(){radar.style.transform='scale(1)';},600);
+      }
+      // CTA 라벨
+      var lbl=document.getElementById('cta-label');
+      if(lbl) lbl.textContent=obSelectedJob+' 직무 기준으로 분석했어요';
+      // 시작 박스 → 결과 박스
+      var startBox=document.getElementById('obStartBox');
+      var resultBox=document.getElementById('obResultBox');
+      if(startBox)startBox.style.display='none';
+      if(resultBox){
+        resultBox.style.display='';
+        document.getElementById('obResultJob').textContent=obSelectedJob;
+        var tagsHtml='';
+        obSelectedConds.forEach(function(idx,i){
+          var c=obCondData[idx];
+          tagsHtml+='<div style="display:flex;align-items:center;gap:10px;padding:10px 8px;border-radius:10px;transition:background .12s;" onmouseover="this.style.background=\'var(--bg)\'" onmouseout="this.style.background=\'transparent\'">'
+            +'<span style="width:24px;height:24px;border-radius:8px;background:var(--brand);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+(i+1)+'</span>'
+            +'<span style="font-size:13px;font-weight:600;color:var(--tx);flex:1;">'+c.name+'</span>'
+            +'<span style="flex-shrink:0;opacity:.85;">'+c.icon+'</span>'
+            +'</div>';
+        });
+        document.getElementById('obResultTags').innerHTML=tagsHtml;
+      }
+      // 내 기준 레이더 업데이트 + 기업 UI 활성화
+      if(typeof updateMyRadar==='function') updateMyRadar();
+      if(typeof shuffleInsightCos==='function') shuffleInsightCos();
+      if(typeof activateInsightPostOB==='function') activateInsightPostOB();
+      // 연봉 섹션 직무 매칭
+      if(typeof matchSalaryToOBJob==='function') matchSalaryToOBJob();
+      showToast('맞춤 조건이 설정되었어요!');
+    }, 1500);
   }
 
   /* 직군 맞춤 팝업 */
@@ -20675,9 +20882,9 @@ function closeRatePopup() {
       closeAllPopups();
       // 기본 기업 복원
       var defaults = [
-        {name:'네이버', logo:'https://jelin-cc.github.io/jobplanet-ut/naver.png', score:'4.1', pct:'88%'},
-        {name:'토스', logo:'https://jelin-cc.github.io/jobplanet-ut/toss.png', score:'3.6', pct:'85%'},
-        {name:'카카오', logo:'https://jelin-cc.github.io/jobplanet-ut/kakao.png', score:'3.2', pct:'82%'}
+        {name:'네이버', logo:'https://jelin-cc.github.io/jobplanet-ut/naver.png', score:'4.1'},
+        {name:'토스', logo:'https://jelin-cc.github.io/jobplanet-ut/toss.png', score:'3.6'},
+        {name:'카카오', logo:'https://jelin-cc.github.io/jobplanet-ut/kakao.png', score:'3.2'}
       ];
       defaults.forEach(function(d, i){
         var el = document.getElementById('fi-'+i);
@@ -20686,8 +20893,11 @@ function closeRatePopup() {
         var li = el.querySelector('.fit-logo img'); if(li) li.src = d.logo;
         var nm = el.querySelector('.fit-name'); if(nm) nm.textContent = d.name;
         var sc = el.querySelector('.fit-score'); if(sc) sc.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> '+d.score;
-        var pc = el.querySelector('.fit-pct'); if(pc) pc.textContent = d.pct;
         el.style.background='#F9FAFB'; el.style.boxShadow='none';
+        // hide detail btn and reason on logout
+        var db = el.querySelector('.fit-detail-btn'); if(db) db.style.display='none';
+        var arw = el.querySelector('.fit-arrow'); if(arw) arw.style.display='';
+        var reas = document.getElementById('fi-reason-'+i); if(reas) reas.style.display='none';
       });
       // 시작하기 결과 → 시작하기 박스 복원
       var sb = document.getElementById('obStartBox');
@@ -20750,14 +20960,16 @@ function closeRatePopup() {
         if(lbl) lbl.textContent=obSelectedJob+' 직무 기준으로 분석했어요';
         if(typeof shuffleInsightCos==='function') shuffleInsightCos();
         if(typeof updateMyRadar==='function') updateMyRadar();
+        if(typeof activateInsightPostOB==='function') activateInsightPostOB();
+        if(typeof matchSalaryToOBJob==='function') matchSalaryToOBJob();
         if(typeof renderReviewCards==='function') renderReviewCards();
       }
     } else {
       // 비로그인: 기본 기업 복원
       var defaults = [
-        {name:'네이버', logo:'https://jelin-cc.github.io/jobplanet-ut/naver.png', score:'4.1', pct:'88%'},
-        {name:'토스', logo:'https://jelin-cc.github.io/jobplanet-ut/toss.png', score:'3.6', pct:'85%'},
-        {name:'카카오', logo:'https://jelin-cc.github.io/jobplanet-ut/kakao.png', score:'3.2', pct:'82%'}
+        {name:'네이버', logo:'https://jelin-cc.github.io/jobplanet-ut/naver.png', score:'4.1'},
+        {name:'토스', logo:'https://jelin-cc.github.io/jobplanet-ut/toss.png', score:'3.6'},
+        {name:'카카오', logo:'https://jelin-cc.github.io/jobplanet-ut/kakao.png', score:'3.2'}
       ];
       defaults.forEach(function(d, i){
         var el = document.getElementById('fi-'+i);
@@ -20770,8 +20982,6 @@ function closeRatePopup() {
         if(nameEl) nameEl.textContent = d.name;
         var scoreEl = el.querySelector('.fit-score');
         if(scoreEl) scoreEl.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="#F59E0B" style="vertical-align:middle;margin-right:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> '+d.score;
-        var pctEl = el.querySelector('.fit-pct');
-        if(pctEl) pctEl.textContent = d.pct;
       });
     }
 
@@ -21897,6 +22107,16 @@ function closeRatePopup() {
     function goJobDetail(title, co, meta, thumbSrc) {
       clickedCardInfo = {title:title, co:co, meta:meta, thumb:thumbSrc};
       go('job-detail');
+      // 저장 상태 복원
+      setTimeout(function(){
+        var key = title+'|'+co;
+        var saved = _savedJobs && _savedJobs[key];
+        var btn = document.querySelector('.detail-wish-btn');
+        if(btn){
+          btn.classList.toggle('saved', !!saved);
+          btn.innerHTML = saved ? '<i class="jp-bookmark"></i> 저장 완료' : '<i class="jp-bookmark"></i> 공고 저장';
+        }
+      }, 50);
     }
 
     function renderJobDetail(jobId) {
@@ -23227,10 +23447,21 @@ function closeRatePopup() {
     });
 
 
+    // 공고별 저장 상태 관리
+    var _savedJobs = JSON.parse(sessionStorage.getItem('jp_saved_jobs') || '{}');
+    function _getJobKey(){
+      if(clickedCardInfo && clickedCardInfo.title) return clickedCardInfo.title+'|'+clickedCardInfo.co;
+      return 'default';
+    }
     document.getElementById('page-job-detail').addEventListener('click', function(e) {
       var btn = e.target.closest('.detail-wish-btn');
       if (!btn) return;
-      var saved = btn.classList.toggle('saved');
+      var key = _getJobKey();
+      var saved = !_savedJobs[key];
+      _savedJobs[key] = saved || undefined;
+      if(!saved) delete _savedJobs[key];
+      sessionStorage.setItem('jp_saved_jobs', JSON.stringify(_savedJobs));
+      btn.classList.toggle('saved', saved);
       btn.innerHTML = saved
         ? '<i class="jp-bookmark"></i> 저장 완료'
         : '<i class="jp-bookmark"></i> 공고 저장';
