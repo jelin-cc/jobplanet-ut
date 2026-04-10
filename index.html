@@ -17270,9 +17270,9 @@ function closeRatePopup() {
         if(!val || val < 1000){ showToast('연봉을 입력해주세요 (만원 단위)'); return; }
         var d = salDB[salTabIdx];
         var mult=1;
-        if(salSelectedYear===1) mult=0.72; else if(salSelectedYear===2) mult=0.80;
-        else if(salSelectedYear===3) mult=0.88; else if(salSelectedYear===5) mult=1.0;
-        else if(salSelectedYear===7) mult=1.12; else if(salSelectedYear>=10) mult=1.28;
+        if(salSelectedYear===1) mult=0.65; else if(salSelectedYear===2) mult=0.75;
+        else if(salSelectedYear===3) mult=0.85; else if(salSelectedYear===5) mult=1.05;
+        else if(salSelectedYear===7) mult=1.18; else if(salSelectedYear>=10) mult=1.35;
         var adjLo=Math.round(d.lo*mult), adjHi=Math.round(d.hi*mult), adjAvg=Math.round(d.avgN*mult);
         var pct = Math.round(((val - adjLo) / (adjHi - adjLo)) * 100);
         pct = Math.max(1, Math.min(99, pct));
@@ -17332,9 +17332,9 @@ function closeRatePopup() {
         if(!val || val < 1000){ showToast('연봉을 입력해주세요 (만원 단위)'); return; }
         var d = salDB[salTabIdx];
         var mult=1;
-        if(salSelectedYear===1) mult=0.72; else if(salSelectedYear===2) mult=0.80;
-        else if(salSelectedYear===3) mult=0.88; else if(salSelectedYear===5) mult=1.0;
-        else if(salSelectedYear===7) mult=1.12; else if(salSelectedYear>=10) mult=1.28;
+        if(salSelectedYear===1) mult=0.65; else if(salSelectedYear===2) mult=0.75;
+        else if(salSelectedYear===3) mult=0.85; else if(salSelectedYear===5) mult=1.05;
+        else if(salSelectedYear===7) mult=1.18; else if(salSelectedYear>=10) mult=1.35;
         var adjLo=Math.round(d.lo*mult), adjHi=Math.round(d.hi*mult), adjAvg=Math.round(d.avgN*mult);
         var pct = Math.round(((val - adjLo) / (adjHi - adjLo)) * 100);
         pct = Math.max(1, Math.min(99, pct));
@@ -17698,12 +17698,12 @@ function closeRatePopup() {
       function applySalaryYearAdjust(){
         var d=salDB[salTabIdx];
         var mult=1;
-        if(salSelectedYear===1) mult=0.72;
-        else if(salSelectedYear===2) mult=0.80;
-        else if(salSelectedYear===3) mult=0.88;
-        else if(salSelectedYear===5) mult=1.0;
-        else if(salSelectedYear===7) mult=1.12;
-        else if(salSelectedYear>=10) mult=1.28;
+        if(salSelectedYear===1) mult=0.65;
+        else if(salSelectedYear===2) mult=0.75;
+        else if(salSelectedYear===3) mult=0.85;
+        else if(salSelectedYear===5) mult=1.05;
+        else if(salSelectedYear===7) mult=1.18;
+        else if(salSelectedYear>=10) mult=1.35;
         var adjAvg=Math.round(d.avgN*mult);
         var adjLo=Math.round(d.lo*mult);
         var adjHi=Math.round(d.hi*mult);
