@@ -16812,7 +16812,7 @@ function closeRatePopup() {
               + '</div>';
           }
           var thumbSrc = getCardThumb(c.co);
-          var jkBadge = isExt ? '<div style="position:absolute;top:12px;left:12px;z-index:2;display:inline-flex;align-items:center;gap:6px;padding:3px 8px;background:rgba(41,44,50,0.80);border-radius:100px;outline:2px rgba(255,255,255,0.40) solid;"><div style="width:14px;height:14px;background:#083CCC;border-radius:4px;display:flex;align-items:center;justify-content:center;"><span style="color:#fff;font-size:8px;font-weight:800;">J</span></div><span><span style="color:#517FFF;font-size:12px;font-weight:700;">잡코리아</span><span style="color:#fff;font-size:12px;font-weight:700;"> 지원</span></span></div>' : '';
+          var jkBadge = isExt ? '<div style="position:absolute;top:12px;left:12px;z-index:2;display:inline-flex;align-items:center;gap:6px;padding:3px 8px;background:rgba(41,44,50,0.80);border-radius:100px;outline:2px rgba(255,255,255,0.40) solid;"><div style="width:16px;height:16px;background:#083CCC;border-radius:4px;display:flex;align-items:center;justify-content:center;"><img src="https://jelin-cc.github.io/jobplanet-ut/jk.png" width="10" height="10"></div><span><span style="color:#517FFF;font-size:12px;font-weight:700;">잡코리아</span><span style="color:#fff;font-size:12px;font-weight:700;"> 지원</span></span></div>' : '';
           var thumb = '<div class="thumb">'
             + '<img src="' + thumbSrc + '" alt="">'
             + bonusBadge
@@ -16851,7 +16851,7 @@ function closeRatePopup() {
             + '<div class="ic-meta">' + c.meta + '</div>'
             + '<div class="ic-tags" style="display:flex;align-items:center;justify-content:space-between;">'
             + '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">' + tagsHtml + '</div>'
-            + (isExt ? '<button onclick="event.stopPropagation();openJK()" style="display:inline-flex;align-items:center;gap:2px;height:32px;padding:0 10px;background:#083CCC;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;"><img src="https://jelin-cc.github.io/jobplanet-ut/jk.png" width="14" height="14" style="filter:brightness(10);"><span style="color:#fff;font-size:12px;font-weight:600;font-family:var(--font);">잡코리아에서 지원</span></button>' : '')
+            + (isExt ? '<button onclick="event.stopPropagation();openJK()" style="display:inline-flex;align-items:center;gap:4px;height:32px;padding:0 10px;background:#083CCC;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;"><div style="width:18px;height:18px;background:#083CCC;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><img src="https://jelin-cc.github.io/jobplanet-ut/jk.png" width="14" height="14"></div><span style="color:#fff;font-size:12px;font-weight:600;font-family:var(--font);">잡코리아에서 지원</span></button>' : '')
             + '</div>'
             + '</div></div>';
         }).join('');
@@ -16968,7 +16968,7 @@ function closeRatePopup() {
           var tags2Html = ddayTag + cardTags2.map(function(t){return '<span class="lc-tag '+t.cls+'">'+t.text+'</span>';}).join('');
 
           // 잡코리아 지원 버튼 (external=jobkorea인 경우)
-          var jkApplyBtn = isExt ? '<div style="display:flex;align-items:flex-end;flex-shrink:0;"><button onclick="event.stopPropagation();openJK()" style="display:inline-flex;align-items:center;gap:2px;height:36px;padding:0 12px;background:#083CCC;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;"><div style="width:16px;height:16px;display:flex;align-items:center;justify-content:center;"><img src="https://jelin-cc.github.io/jobplanet-ut/jk.png" width="12" height="12" style="filter:brightness(10);"></div><span style="color:#fff;font-size:13px;font-weight:600;font-family:var(--font);">잡코리아에서 지원</span></button></div>' : '';
+          var jkApplyBtn = isExt ? '<div style="display:flex;align-items:flex-end;flex-shrink:0;"><button onclick="event.stopPropagation();openJK()" style="display:inline-flex;align-items:center;gap:4px;height:36px;padding:0 12px;background:#083CCC;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;"><div style="width:18px;height:18px;background:#083CCC;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><img src="https://jelin-cc.github.io/jobplanet-ut/jk.png" width="14" height="14"></div><span style="color:#fff;font-size:13px;font-weight:600;font-family:var(--font);">잡코리아에서 지원</span></button></div>' : '';
 
           return '<div class="list-card"'+clickAttr+'>'
             + '<div class="lc-body">'
