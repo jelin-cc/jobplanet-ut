@@ -23805,7 +23805,7 @@ function closeRatePopup() {
         + '<div class="filter-range-wrap">'
         + '<div class="filter-range-value" id="filterCareerValue">전체</div>'
         + '<div class="filter-range"><input type="range" min="0" max="11" value="0" id="filterCareerRange"></div>'
-        + '<div class="filter-range-labels"><span>신입</span><span>3년</span><span>5년</span><span>7년</span><span>10년+</span></div>'
+        + '<div class="filter-range-labels"><span>전체</span><span>신입</span><span>3년</span><span>5년</span><span>7년</span><span>10년+</span></div>'
         + '</div></div>'
 
         // 고용형태
@@ -23833,17 +23833,16 @@ function closeRatePopup() {
       document.body.insertAdjacentHTML('beforeend', filterHtml);
 
       // 직무 카테고리 칩 + 아코디언 렌더
-      var filterJobHtml = '';
+      var filterJobHtml = '<div class="filter-job-cat-row" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:0;">';
       var catKeys = Object.keys(obJobData);
       catKeys.forEach(function(cat){
-        var jobs = obJobData[cat] || [];
-        filterJobHtml += '<div class="filter-job-cat" onclick="toggleFilterJobCat(this)">'+cat+'</div>';
-        filterJobHtml += '<div class="filter-job-sub" data-cat="'+cat+'">';
-        jobs.forEach(function(j){
-          filterJobHtml += '<div class="filter-job-item" onclick="this.classList.toggle(\'active\')">'+j+'</div>';
-        });
-        filterJobHtml += '</div>';
+        filterJobHtml += '<div class="filter-job-cat" data-cat="'+cat+'" onclick="toggleFilterJobCat(this)">'+cat+'</div>';
       });
+      filterJobHtml += '</div>';
+      filterJobHtml += '<div id="filterJobSubArea" style="display:none;border-top:1px solid var(--ln);margin-top:12px;padding-top:12px;">';
+      filterJobHtml += '<div style="font-size:11px;font-weight:600;color:#949BA8;margin-bottom:8px;letter-spacing:.3px;">세부 직무</div>';
+      filterJobHtml += '<div id="filterJobSubItems" style="display:flex;flex-wrap:wrap;gap:8px;"></div>';
+      filterJobHtml += '</div>';
       document.getElementById('filterJobCats').innerHTML = filterJobHtml;
 
       // 탭 클릭 → 스크롤
@@ -23885,14 +23884,22 @@ function closeRatePopup() {
 
     window.toggleFilterJobCat = function(el){
       var wasActive = el.classList.contains('active');
-      // 다른 카테고리 닫기
+      var cat = el.getAttribute('data-cat');
+      // 다른 카테고리 비활성
       document.querySelectorAll('.filter-job-cat').forEach(function(c){c.classList.remove('active');});
-      document.querySelectorAll('.filter-job-sub').forEach(function(s){s.classList.remove('open');});
-      // 토글
-      if(!wasActive){
+      var subArea = document.getElementById('filterJobSubArea');
+      var subItems = document.getElementById('filterJobSubItems');
+      if(!wasActive && cat){
         el.classList.add('active');
-        var sub = el.nextElementSibling;
-        if(sub) sub.classList.add('open');
+        // 세부 직무 렌더
+        var jobs = (typeof obJobData!=='undefined') ? (obJobData[cat]||[]) : [];
+        subItems.innerHTML = jobs.map(function(j){
+          return '<div class="filter-job-item" onclick="this.classList.toggle(\'active\')">'+j+'</div>';
+        }).join('');
+        subArea.style.display = '';
+      } else {
+        subArea.style.display = 'none';
+        subItems.innerHTML = '';
       }
     };
 
@@ -24177,12 +24184,30 @@ function closeRatePopup() {
         return { ceo:'-', revenue:'-', addr:'서울특별시', web:'-', hist:'빠르게 성장 중인 기업', rating:(3.0+((seed%15)/10)).toFixed(1), emp:(50+(seed%2000))+'명' };
       }
       var TMPL = {
-        dev:{intro:'수백만 사용자가 사용하는 서비스를 함께 만들어 나갈 개발자를 찾습니다.',tasks:'<ul><li>서비스 핵심 기능 설계 및 개발</li><li>코드 품질 개선 및 기술 부채 해소</li><li>개발팀·PO·디자인팀과 긴밀한 협업</li><li>장애 대응 및 서비스 성능 최적화</li></ul>',qual:'<ul><li>관련 분야 경력 3년 이상</li><li>주요 기술 스택에 대한 깊은 이해</li><li>문제 해결 능력과 자기주도적 업무 태도</li></ul>',pref:'<ul><li>대규모 트래픽 서비스 개발 경험</li><li>오픈소스 기여 경험</li></ul>'},
-        design:{intro:'사용자가 더 나은 결정을 내릴 수 있도록 직관적인 경험을 만드는 디자이너를 찾습니다.',tasks:'<ul><li>제품 내 UI/UX 설계 및 Figma 프로토타입 제작</li><li>사용자 리서치 및 데이터 분석을 통한 개선 방향 도출</li><li>디자인 시스템 구축 및 운영</li></ul>',qual:'<ul><li>웹·모바일 UX/UI 디자인 경험 3년 이상</li><li>Figma 능숙 사용자</li></ul>',pref:'<ul><li>디자인 시스템 구축 경험</li><li>A/B 테스트 설계 및 분석 경험</li></ul>'},
-        marketing:{intro:'더 많은 고객에게 가치를 전달하는 마케팅을 함께할 분을 찾습니다.',tasks:'<ul><li>디지털 채널 마케팅 캠페인 기획 및 운영</li><li>퍼포먼스 데이터 분석 및 인사이트 도출</li><li>콘텐츠 전략 수립 및 제작 감수</li></ul>',qual:'<ul><li>마케팅 관련 경력 2년 이상</li><li>GA, Meta Ads 등 디지털 툴 활용 경험</li></ul>',pref:'<ul><li>스타트업 마케팅 경험</li><li>SQL 또는 BI 툴 활용 능력</li></ul>'},
-        planner:{intro:'사용자 니즈와 비즈니스 목표를 연결하는 서비스를 만듭니다.',tasks:'<ul><li>서비스 기능 기획 및 스펙 문서 작성</li><li>사용자 리서치 및 시장 분석</li><li>개발·디자인 팀과의 긴밀한 협업</li></ul>',qual:'<ul><li>서비스 기획 경력 2년 이상</li><li>논리적 사고와 커뮤니케이션 능력</li></ul>',pref:'<ul><li>B2C 플랫폼 서비스 경험</li><li>A/B 테스트 기획 경험</li></ul>'},
-        data:{intro:'데이터로 의사결정을 바꾸는 팀입니다.',tasks:'<ul><li>사용자 행동 데이터 분석 및 인사이트 도출</li><li>대시보드 및 리포트 설계·개발</li><li>A/B 테스트 설계 및 통계 분석</li></ul>',qual:'<ul><li>데이터 분석 경력 2년 이상</li><li>SQL 고급 활용 능력</li></ul>',pref:'<ul><li>머신러닝 모델 활용 경험</li><li>통계학 관련 학위 또는 자격증</li></ul>'},
-        general:{intro:'빠르게 성장하는 팀에서 함께 일할 인재를 찾고 있습니다.',tasks:'<ul><li>담당 분야 핵심 업무 수행</li><li>팀 내외 부서와의 긴밀한 협업</li><li>업무 프로세스 개선 및 효율화</li></ul>',qual:'<ul><li>관련 분야 경력 2년 이상</li><li>뛰어난 문제 해결 능력</li></ul>',pref:'<ul><li>스타트업 또는 빠른 성장 환경 경험</li></ul>'},
+        dev:{intro:'수백만 사용자가 매일 사용하는 서비스를 함께 만들어 나갈 개발자를 찾습니다. 저희 팀은 기술적 도전을 즐기고, 빠른 실험과 피드백 루프를 통해 제품을 개선합니다. 자율적인 문화 속에서 최고의 동료들과 함께 성장할 수 있는 환경을 제공합니다.',
+          tasks:'<ul><li>서비스 핵심 기능 설계, 개발 및 배포 (CI/CD 파이프라인 활용)</li><li>대규모 트래픽 환경에서의 성능 최적화 및 안정성 확보</li><li>코드 리뷰를 통한 품질 관리 및 기술 부채 해소</li><li>PO, 디자이너, QA팀과의 긴밀한 협업을 통한 제품 개선</li><li>시스템 아키텍처 설계 및 기술 의사결정 참여</li><li>장애 대응 및 모니터링 체계 구축·운영</li></ul>',
+          qual:'<ul><li>관련 분야 경력 3년 이상 (또는 그에 준하는 역량)</li><li>Java/Kotlin, TypeScript, Python 중 1개 이상 언어에 능숙</li><li>RESTful API 설계 및 데이터베이스(MySQL/PostgreSQL) 운영 경험</li><li>Git 기반 협업 및 코드 리뷰 경험</li><li>문제 해결 능력과 자기주도적 업무 태도</li></ul>',
+          pref:'<ul><li>대규모 트래픽(DAU 100만+) 서비스 개발·운영 경험</li><li>MSA(마이크로서비스) 아키텍처 설계 경험</li><li>Kubernetes, Docker 등 컨테이너 환경 경험</li><li>오픈소스 기여 또는 기술 블로그 운영 경험</li><li>Agile/Scrum 환경에서의 개발 경험</li></ul>'},
+        design:{intro:'사용자가 더 나은 결정을 내릴 수 있도록 직관적이고 아름다운 경험을 설계하는 디자이너를 찾습니다. 데이터 기반의 의사결정과 빠른 프로토타이핑을 중시하며, 디자인이 비즈니스 성과에 직접 기여하는 환경입니다.',
+          tasks:'<ul><li>제품 전반의 UI/UX 설계 및 Figma 기반 프로토타입 제작</li><li>사용자 리서치(인터뷰, 설문, 유저빌리티 테스트) 기획 및 수행</li><li>데이터 분석을 통한 UX 개선 포인트 도출 및 A/B 테스트 설계</li><li>디자인 시스템 구축·운영 및 컴포넌트 라이브러리 관리</li><li>개발팀·PO와 협업하여 디자인 QA 및 완성도 검수</li><li>브랜드 가이드라인에 맞는 일관된 비주얼 경험 제공</li></ul>',
+          qual:'<ul><li>웹·모바일 UX/UI 디자인 경력 3년 이상</li><li>Figma 고급 활용 능력 (Auto Layout, 컴포넌트, 프로토타이핑)</li><li>디자인 의도를 논리적으로 설명할 수 있는 커뮤니케이션 능력</li><li>사용자 중심 사고와 데이터 기반 의사결정 경험</li></ul>',
+          pref:'<ul><li>디자인 시스템 구축 경험 (토큰, 컴포넌트 체계)</li><li>A/B 테스트 설계 및 결과 분석 경험</li><li>프론트엔드 개발 기초 지식 (HTML/CSS)</li><li>B2C 서비스 또는 커머스 플랫폼 디자인 경험</li></ul>'},
+        marketing:{intro:'더 많은 고객에게 우리 서비스의 가치를 전달하고, 데이터 기반으로 성장을 이끄는 마케터를 찾습니다. 퍼포먼스부터 브랜딩까지, 마케팅의 전 영역에서 전문성을 발휘할 수 있는 환경입니다.',
+          tasks:'<ul><li>디지털 채널(Google, Meta, 네이버 등) 마케팅 캠페인 기획·운영·최적화</li><li>퍼포먼스 데이터 분석을 통한 ROI 개선 및 예산 효율화</li><li>콘텐츠 전략 수립, 제작 감수 및 채널별 배포 관리</li><li>CRM 마케팅(앱 푸시, 이메일, 카카오 알림톡) 시나리오 설계</li><li>신규 고객 획득 및 리텐션 개선을 위한 그로스 실험 설계·실행</li><li>마케팅 성과 리포트 작성 및 인사이트 공유</li></ul>',
+          qual:'<ul><li>디지털 마케팅 경력 2년 이상</li><li>Google Analytics, Meta Ads Manager 등 광고/분석 툴 활용 경험</li><li>데이터 기반 의사결정 및 A/B 테스트 경험</li><li>엑셀/스프레드시트 고급 활용 능력</li></ul>',
+          pref:'<ul><li>SQL 또는 BI 툴(Amplitude, Mixpanel 등) 활용 능력</li><li>스타트업 또는 빠르게 성장하는 조직에서의 마케팅 경험</li><li>콘텐츠 기획 및 카피라이팅 능력</li><li>브랜딩 캠페인 기획·실행 경험</li></ul>'},
+        planner:{intro:'사용자 니즈와 비즈니스 목표를 연결하는 서비스를 만듭니다. 복잡한 문제를 구조화하고, 개발·디자인팀과 함께 최적의 솔루션을 찾아가는 과정을 즐기는 분을 기다립니다.',
+          tasks:'<ul><li>서비스 기능 기획 및 PRD(제품 요구사항 문서) 작성</li><li>사용자 리서치, 경쟁사 분석, 시장 트렌드 조사</li><li>개발·디자인팀과의 긴밀한 협업을 통한 스프린트 운영</li><li>KPI 설정 및 데이터 기반 서비스 개선 방향 도출</li><li>A/B 테스트 설계 및 결과 분석, 의사결정 지원</li><li>이해관계자 커뮤니케이션 및 프로젝트 일정 관리</li></ul>',
+          qual:'<ul><li>서비스 기획 또는 PM 경력 2년 이상</li><li>논리적 사고와 구조화 능력</li><li>Jira, Confluence 등 협업 도구 활용 경험</li><li>SQL 기본 활용 또는 데이터 분석 경험</li></ul>',
+          pref:'<ul><li>B2C 플랫폼 서비스 기획 경험</li><li>애자일/스크럼 환경 경험</li><li>와이어프레임 및 프로토타이핑 도구(Figma 등) 활용 경험</li><li>기술적 이해도가 높은 분 우대</li></ul>'},
+        data:{intro:'데이터로 의사결정의 질을 높이고, 서비스 성장을 가속화하는 팀입니다. 대규모 데이터를 다루며, 분석 결과가 실제 제품과 비즈니스에 직접 반영되는 임팩트를 경험할 수 있습니다.',
+          tasks:'<ul><li>사용자 행동 데이터 분석 및 핵심 인사이트 도출</li><li>대시보드 및 리포트 설계·개발 (Looker, Redash, Tableau 등)</li><li>A/B 테스트 통계 설계, 실행 및 결과 분석</li><li>데이터 파이프라인 구축 및 ETL 프로세스 관리</li><li>ML 모델 개발 및 서빙 (추천, 예측, 이상탐지 등)</li><li>데이터 기반 의사결정 문화 확산 및 조직 내 분석 교육</li></ul>',
+          qual:'<ul><li>데이터 분석 또는 엔지니어링 경력 2년 이상</li><li>SQL 고급 활용 능력 (윈도우 함수, 서브쿼리 등)</li><li>Python(pandas, scikit-learn) 활용 경험</li><li>통계 기반 가설 검정 및 실험 설계 능력</li></ul>',
+          pref:'<ul><li>Spark, Airflow 등 빅데이터 인프라 경험</li><li>머신러닝 모델 프로덕션 서빙 경험</li><li>통계학, 수학, 컴퓨터공학 관련 학위</li><li>비즈니스 도메인에 대한 깊은 이해</li></ul>'},
+        general:{intro:'빠르게 성장하는 팀에서 함께 일할 인재를 찾고 있습니다. 각 분야의 전문가들과 협업하며, 자율적이고 수평적인 문화 속에서 본인의 역량을 마음껏 발휘할 수 있는 환경을 제공합니다.',
+          tasks:'<ul><li>담당 분야 핵심 업무 기획, 실행 및 성과 관리</li><li>팀 내외 부서와의 긴밀한 협업 및 커뮤니케이션</li><li>업무 프로세스 분석, 개선 방안 도출 및 실행</li><li>주간/월간 업무 보고 및 성과 분석</li><li>관련 시장·경쟁사 동향 모니터링 및 전략 제안</li></ul>',
+          qual:'<ul><li>관련 분야 경력 2년 이상 (또는 그에 준하는 역량)</li><li>뛰어난 문제 해결 능력 및 분석적 사고</li><li>원활한 커뮤니케이션 및 협업 능력</li><li>MS Office(엑셀, PPT) 고급 활용 능력</li></ul>',
+          pref:'<ul><li>스타트업 또는 빠른 성장 환경 경험</li><li>프로젝트 매니지먼트 경험</li><li>관련 분야 자격증 보유자 우대</li></ul>'},
       };
       function getJobCat(title) {
         if (/개발|엔지니어|DevOps|SRE|QA|iOS|Android|풀스택|백엔드|프론트/.test(title)) return 'dev';
@@ -24208,11 +24233,14 @@ function closeRatePopup() {
         var shuffled=candidates.slice();for(var i=shuffled.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=shuffled[i];shuffled[i]=shuffled[j];shuffled[j]=t;}
         var others=shuffled.slice(0,19);
         var items=[{co:clickedCard.co,title:clickedCard.title,active:true}].concat(others.map(function(c){return{co:c.co,title:c.title,active:false};}));
-        var html=items.map(function(item,idx){var info=getCompanyLogo(item.co);var ts='width:56px;height:56px;border-radius:12px;flex-shrink:0;border:1.5px solid #E5E7EB;background:#fff;overflow:hidden;';var ti='<img src="'+info.img+'" style="width:100%;height:100%;object-fit:contain;display:block;" alt="">';var rk=RATING_KEYS[idx%RATING_KEYS.length];var rv=(3.0+((idx*17+7)%15)/10).toFixed(1);var safeCo=item.co.replace(/"/g,'&quot;');var safeTitle=item.title.replace(/"/g,'&quot;');return'<div class="sidebar-job-item'+(item.active?' active':'')+'" data-jd-co="'+safeCo+'" data-jd-title="'+safeTitle+'" onclick="selectJobFromCard(this)"><div style="'+ts+'">'+ti+'</div><div class="sidebar-job-info"><div class="sidebar-job-title">'+item.title+'</div><div class="sidebar-job-company">'+item.co+'</div><div class="sidebar-job-rating">'+rk+' : '+rv+'</div></div></div>';}).join('');
+        var html=items.map(function(item,idx){var info=getCompanyLogo(item.co);var ts='width:56px;height:56px;border-radius:12px;flex-shrink:0;border:1.5px solid #E5E7EB;background:#FAFBFC;overflow:hidden;display:flex;align-items:center;justify-content:center;';var ti='<img src="'+info.img+'" style="width:28px;height:28px;object-fit:contain;opacity:0.5;" alt="">';var rk=RATING_KEYS[idx%RATING_KEYS.length];var rv=(3.0+((idx*17+7)%15)/10).toFixed(1);var safeCo=item.co.replace(/"/g,'&quot;');var safeTitle=item.title.replace(/"/g,'&quot;');return'<div class="sidebar-job-item'+(item.active?' active':'')+'" data-jd-co="'+safeCo+'" data-jd-title="'+safeTitle+'" onclick="selectJobFromCard(this)"><div style="'+ts+'">'+ti+'</div><div class="sidebar-job-info"><div class="sidebar-job-title">'+item.title+'</div><div class="sidebar-job-company">'+item.co+'</div><div class="sidebar-job-rating">'+rk+' : '+rv+'</div></div></div>';}).join('');
         var sidebar=document.querySelector('#page-job-detail .detail-sidebar');if(!sidebar) return;
         sidebar.innerHTML='<div class="sidebar-count"><span class="sidebar-count-num">총 533건</span><div style="position:relative;display:inline-block;"><span class="sidebar-count-sort" onclick="var dd=this.nextElementSibling;dd.style.display=dd.style.display===\'block\'?\'none\':\'block\';" style="cursor:pointer;">정확도순 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;vertical-align:middle;"><polyline points="6 9 12 15 18 9"/></svg></span><div class="sidebar-sort-dd" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid var(--line-primary);border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.1);min-width:130px;z-index:50;overflow:hidden;"><button onclick="this.closest(\'.sidebar-sort-dd\').previousElementSibling.childNodes[0].textContent=\'최신순 \';this.closest(\'.sidebar-sort-dd\').style.display=\'none\';refreshDetailSidebar();" style="display:block;width:100%;padding:11px 16px;text-align:left;font-size:13px;font-weight:700;color:var(--brand);background:var(--brand-lt);border:none;cursor:pointer;font-family:var(--font);">최신순</button><button onclick="this.closest(\'.sidebar-sort-dd\').previousElementSibling.childNodes[0].textContent=\'인기순 \';this.closest(\'.sidebar-sort-dd\').style.display=\'none\';refreshDetailSidebar();" style="display:block;width:100%;padding:11px 16px;text-align:left;font-size:13px;border:none;cursor:pointer;font-family:var(--font);color:var(--tx2);">인기순</button><button onclick="this.closest(\'.sidebar-sort-dd\').previousElementSibling.childNodes[0].textContent=\'마감임박순 \';this.closest(\'.sidebar-sort-dd\').style.display=\'none\';refreshDetailSidebar();" style="display:block;width:100%;padding:11px 16px;text-align:left;font-size:13px;border:none;cursor:pointer;font-family:var(--font);color:var(--tx2);">마감임박순</button></div></div></div>'+html;
       }
-      window.selectJobFromCard=function(el){document.querySelectorAll('#page-job-detail .sidebar-job-item').forEach(function(i){i.classList.remove('active');});el.classList.add('active');var co=el.getAttribute('data-jd-co');var title=el.getAttribute('data-jd-title');currentJobId='card_'+title+'_'+co;updateApplyBtnState();buildDetailFromCard({title:title,co:co,meta:'서울 · 경력 3년↑'});if(typeof shuffleDetailImages==='function') shuffleDetailImages(co);window.scrollTo(0,0);};
+      window.selectJobFromCard=function(el){document.querySelectorAll('#page-job-detail .sidebar-job-item').forEach(function(i){i.classList.remove('active');});el.classList.add('active');var co=el.getAttribute('data-jd-co');var title=el.getAttribute('data-jd-title');clickedCardInfo={title:title,co:co,meta:'서울 · 경력 3년↑',thumb:''};currentJobId='card_'+title+'_'+co;updateApplyBtnState();buildDetailFromCard({title:title,co:co,meta:'서울 · 경력 3년↑'});if(typeof shuffleDetailImages==='function') shuffleDetailImages(co);
+        // 저장 버튼 상태 복원
+        var key=title+'|'+co;var saved=(typeof _savedJobs!=='undefined')&&_savedJobs[key];var btn=document.querySelector('.detail-wish-btn');if(btn){btn.classList.toggle('saved',!!saved);btn.innerHTML=saved?'<i class="jp-bookmark"></i> 저장 완료':'<i class="jp-bookmark"></i> 공고 저장';}
+        window.scrollTo(0,0);};
       window.goJobDetail=function(title,co,meta,thumbSrc){clickedCardInfo={title:title,co:co,meta:meta,thumb:thumbSrc};currentJobId='card_'+title+'_'+co;go('job-detail');setTimeout(function(){if(typeof shuffleDetailImages==='function') shuffleDetailImages(co);buildJobDetailSidebar({title:title,co:co,meta:meta});buildDetailFromCard({title:title,co:co,meta:meta});updateApplyBtnState();},20);};
       (function initSidebarLogos(){document.querySelectorAll('#page-job-detail .sidebar-job-item').forEach(function(item){var coEl=item.querySelector('.sidebar-job-company');var thumbEl=item.querySelector('.sidebar-job-thumb');if(!coEl||!thumbEl) return;var coName=coEl.textContent.trim();var info=getCompanyLogo(coName);thumbEl.style.cssText='background:#fff;border:1.5px solid #E5E7EB;border-radius:12px;overflow:hidden;width:56px;height:56px;flex-shrink:0;';thumbEl.innerHTML='<img src="'+info.img+'" style="width:100%;height:100%;object-fit:contain;display:block;" alt="">';});})();
       window.buildJobDetailSidebar = buildJobDetailSidebar;
