@@ -13616,16 +13616,7 @@ function filterIvCards() {
   repositionNudge();
 }
 function repositionNudge() {
-  var container = document.querySelector('[data-tab-content="interview"] .rv-card-list');
-  var nudge = document.getElementById('iv-mid-nudge');
-  if (!container || !nudge) return;
-  nudge.style.display = '';
-  var visible = Array.from(container.querySelectorAll('.rv-card')).filter(function(c){ return c.style.display !== 'none'; });
-  if (visible.length >= 2) {
-    visible[1].after(nudge);
-  } else if (visible.length > 0) {
-    visible[visible.length - 1].after(nudge);
-  }
+  // iv-mid-nudge 면접 후기 탭에서 비활성화
 }
 function updateIvJobAllState(selectedName) {
   var allEl = document.getElementById('iv-job-all');
@@ -14475,28 +14466,47 @@ function simulateIvReviewSubmit() {
   var insightEntry = document.getElementById('iv-insight-entry');
   if (insightEntry) insightEntry.style.setProperty('display', 'flex', 'important');
   updateIvTiers();
-  // 피드 넛지 카드 변경
-  var nudge = document.getElementById('iv-mid-nudge');
-  if (nudge) {
-    nudge.style.background = '#fff';
-    nudge.style.border = '1px solid #e5e6e9';
-    nudge.style.borderRadius = '16px';
-    nudge.style.padding = '24px 28px';
-    var nextTier = ivReviewCount + 1;
-    var nextLabel = nextTier <= 3 ? ivTierLabels[nextTier - 1] : '';
-    if (ivReviewCount < 3) {
-      nudge.innerHTML = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;"><span style="font-size:20px;">🎉</span><div><div style="font-size:15px;font-weight:700;color:#242628;">' + ivTierLabels[ivReviewCount - 1] + '이 열렸어요!</div><div style="font-size:12px;color:#949ba8;margin-top:2px;">후기 1건 더 남기면 <strong style="color:#00c362;">' + nextLabel + '</strong>도 확인할 수 있어요</div></div></div>' +
-        '<div style="display:flex;align-items:center;gap:12px;padding:16px;background:#f7f8f9;border-radius:12px;">' +
-          '<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#242628;">🔒 다음: ' + nextLabel + '</div>' +
-            '<div style="display:flex;align-items:center;gap:8px;margin-top:8px;"><div style="flex:1;height:4px;background:#e5e6e9;border-radius:2px;overflow:hidden;"><div style="height:100%;width:' + (ivReviewCount/3*100) + '%;background:#00c362;border-radius:2px;"></div></div><span style="font-size:10px;font-weight:600;color:#00c362;">' + ivReviewCount + '/3건</span></div></div>' +
-          '<button onclick="showInterviewNudgePopup()" style="padding:10px 20px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:Pretendard,sans-serif;white-space:nowrap;flex-shrink:0;">후기 남기기</button>' +
-        '</div>';
+  // iv-mid-nudge 숨기기
+  var oldNudge = document.getElementById('iv-mid-nudge');
+  if (oldNudge) oldNudge.style.setProperty('display', 'none', 'important');
+  // 면접 후기 작성 유도 배너 삽입 또는 업데이트
+  var ivCardList = document.querySelector('[data-tab-content="interview"] .rv-card-list');
+  if (ivCardList) {
+    var unlockedTiers = Math.max(0, ivReviewCount - 1);
+    var nextLabel = unlockedTiers < 3 ? ivTierLabels[unlockedTiers] : '';
+    var progressPct = (unlockedTiers / 3 * 100) + '%';
+    var titleText, subText;
+    if (unlockedTiers === 0) {
+      titleText = '리뷰 1건 더 작성하고 면접 질문 TOP 10 확인하세요!';
+      subText = '면접 리뷰를 남기면 다른 지원자들의 실제 면접 질문을 모아볼 수 있어요';
     } else {
-      nudge.style.display = 'none';
+      titleText = ivTierLabels[unlockedTiers - 1] + '이 열렸어요!';
+      subText = '후기 1건 더 남기면 <strong style="color:#00c362;">' + nextLabel + '</strong>도 확인할 수 있어요';
+    }
+    var bannerHtml = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;"><span style="font-size:20px;">' + (unlockedTiers === 0 ? '✍️' : '🎉') + '</span><div><div style="font-size:15px;font-weight:700;color:#242628;">' + titleText + '</div><div style="font-size:12px;color:#949ba8;margin-top:2px;">' + subText + '</div></div></div>' +
+      '<div style="display:flex;align-items:center;gap:12px;padding:16px;background:#e8f5e9;border-radius:12px;">' +
+        '<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#242628;">🔒 다음: ' + nextLabel + '</div>' +
+          '<div style="display:flex;align-items:center;gap:8px;margin-top:8px;"><div style="flex:1;height:4px;background:#fff;border-radius:2px;overflow:hidden;"><div style="height:100%;width:' + progressPct + ';background:#00c362;border-radius:2px;"></div></div><span style="font-size:10px;font-weight:600;color:#' + (unlockedTiers > 0 ? '00c362' : '949ba8') + ';">' + unlockedTiers + '건 / 3건</span></div></div>' +
+        '<button onclick="showInterviewNudgePopup()" style="padding:10px 20px;background:#00c362;color:#fff;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:Pretendard,sans-serif;white-space:nowrap;flex-shrink:0;">후기 남기기</button>' +
+      '</div>';
+    var existingBanner = document.getElementById('iv-write-nudge-banner');
+    if (existingBanner) {
+      existingBanner.innerHTML = bannerHtml;
+    } else {
+      var banner = document.createElement('div');
+      banner.id = 'iv-write-nudge-banner';
+      banner.style.cssText = 'width:100%;background:linear-gradient(135deg,#f0faf4 0%,#f7fdf9 100%);border:1.5px solid #c8e6c9;border-radius:16px;padding:24px 28px;font-family:Pretendard,sans-serif;';
+      banner.innerHTML = bannerHtml;
+      var cards = ivCardList.querySelectorAll('.rv-card');
+      if (cards.length >= 3) { cards[2].before(banner); } else { ivCardList.appendChild(banner); }
+    }
+    if (unlockedTiers >= 3) {
+      var b = document.getElementById('iv-write-nudge-banner');
+      if (b) b.style.display = 'none';
     }
   }
-  var entry = document.getElementById('iv-insight-entry');
-  if (entry) entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  var scrollTarget = document.getElementById('iv-write-nudge-banner');
+  if (scrollTarget) scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
   // 2회차 이상 작성 시 플로팅 표시 (열린 단계 = ivReviewCount - 1)
   var unlockedNow = ivReviewCount - 1;
@@ -14579,6 +14589,7 @@ function checkNudgeUnlock() {
 function showNudgesIfReviewed() {
   if (localStorage.getItem('jp_reviewed') !== 'true') return;
   document.querySelectorAll('.rv-nudge-inline').forEach(function(el) {
+    if (el.closest('[data-tab-content="interview"]')) return;
     el.style.display = '';
   });
   document.querySelectorAll('.rv-side-write-cta').forEach(function(el) {
