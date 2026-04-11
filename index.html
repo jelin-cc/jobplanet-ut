@@ -14460,8 +14460,9 @@ function simulateIvReviewSubmit() {
   hideIvFloatingCta();
   var wasFirstWrite = ivReviewCount === 0;
   ivReviewCount++;
-  // 면접 후기 열람 권한 부여
+  // 면접 후기 열람 권한 부여 (일반 리뷰 권한도 함께 부여)
   localStorage.setItem('jp_iv_reviewed', 'true');
+  localStorage.setItem('jp_reviewed', 'true');
   // 기업 페이지에서 시작했으면 기업 페이지 면접 탭으로 복귀 (리로드하여 48개 카드 + 배너 생성)
   if (sessionStorage.getItem('jp_return_page') === 'company') {
     sessionStorage.removeItem('jp_return_page');
