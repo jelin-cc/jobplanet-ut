@@ -931,6 +931,8 @@
     .re-section-nav-item:hover { background: var(--bg-secondary); color: var(--text-primary); }
     .re-section-nav-item.active { background: var(--brand-primary-light); color: var(--brand-primary); font-weight: 600; }
     .re-nav-badge { font-size: 11px; color: var(--text-disabled); flex-shrink: 0; }
+    .re-nav-badge--required { color: var(--brand-primary); font-weight: 600; }
+    .re-nav-add { color: var(--brand-primary); border-color: var(--brand-primary); }
     .re-nav-toggle {
       width: 20px; height: 20px; border-radius: 50%;
       border: 1px solid var(--line-primary); background: var(--bg-primary);
@@ -19890,58 +19892,62 @@ function closeRatePopup() {
 
       <!-- 우측 사이드바 -->
       <aside class="re-sidebar">
-        <div class="re-sidebar-label">이력서 항목</div>
-        <nav class="re-section-nav">
-          <div class="re-section-nav-item active" data-nav="re-sec-basic">
-            <a href="#re-sec-basic">기본 정보</a>
-            <span class="re-nav-badge">필수</span>
-          </div>
-          <div class="re-section-nav-item" data-nav="re-sec-career">
-            <a href="#re-sec-career">경력</a>
-            <span class="re-nav-badge">필수</span>
-          </div>
-          <div class="re-section-nav-item" data-nav="re-sec-edu">
-            <a href="#re-sec-edu">학력</a>
-            <span class="re-nav-badge">필수</span>
-          </div>
-          <div class="re-section-nav-item" data-nav="re-sec-skill" data-sec="re-sec-skill">
-            <a href="#re-sec-skill">스킬</a>
-            <button class="re-nav-toggle" onclick="toggleReSection('re-sec-skill',this)">−</button>
-          </div>
-          <div class="re-section-nav-item" data-nav="re-sec-intro" data-sec="re-sec-intro">
-            <a href="#re-sec-intro">자기소개서</a>
-            <button class="re-nav-toggle" onclick="toggleReSection('re-sec-intro',this)">−</button>
-          </div>
-          <div class="re-section-nav-item" data-nav="re-sec-activity" data-sec="re-sec-activity">
-            <a href="#re-sec-activity">수상 / 활동</a>
-            <button class="re-nav-toggle" onclick="toggleReSection('re-sec-activity',this)">−</button>
-          </div>
-          <div class="re-section-nav-item" data-nav="re-sec-cert" data-sec="re-sec-cert">
-            <a href="#re-sec-cert">자격증</a>
-            <button class="re-nav-toggle" onclick="toggleReSection('re-sec-cert',this)">−</button>
-          </div>
-          <div class="re-section-nav-item" data-nav="re-sec-file" data-sec="re-sec-file">
-            <a href="#re-sec-file">파일 첨부</a>
-            <button class="re-nav-toggle" onclick="toggleReSection('re-sec-file',this)">−</button>
-          </div>
-          <div class="re-section-nav-item" data-nav="re-sec-link" data-sec="re-sec-link">
-            <a href="#re-sec-link">링크</a>
-            <button class="re-nav-toggle" onclick="toggleReSection('re-sec-link',this)">−</button>
-          </div>
-          <div class="re-section-nav-item" data-nav="re-sec-salary" data-sec="re-sec-salary">
-            <a href="#re-sec-salary">희망 연봉</a>
-            <button class="re-nav-toggle" onclick="toggleReSection('re-sec-salary',this)">−</button>
-          </div>
-        </nav>
-        <div class="re-sidebar-progress">
+        <!-- 이력서 완성도 (상단) -->
+        <div class="re-sidebar-progress" style="margin-bottom:16px;">
           <div class="re-sidebar-progress-label">
-            <span>작성 완료도</span>
+            <span>이력서 완성도</span>
             <span class="re-sidebar-progress-pct" id="reProgressPct">10%</span>
           </div>
           <div class="re-sidebar-progress-bar">
             <div class="re-sidebar-progress-fill" id="reProgressFill" style="width:10%"></div>
           </div>
         </div>
+        <hr style="border:none;border-top:1px solid var(--line-primary);margin:0 0 16px;">
+        <div class="re-sidebar-label">이력서 항목</div>
+        <nav class="re-section-nav">
+          <!-- 필수 항목 -->
+          <div class="re-section-nav-item active" data-nav="re-sec-basic">
+            <a href="#re-sec-basic">기본 정보</a>
+            <span class="re-nav-badge re-nav-badge--required">필수</span>
+          </div>
+          <div class="re-section-nav-item" data-nav="re-sec-career">
+            <a href="#re-sec-career">경력</a>
+            <span class="re-nav-badge re-nav-badge--required">필수</span>
+          </div>
+          <div class="re-section-nav-item" data-nav="re-sec-edu">
+            <a href="#re-sec-edu">학력</a>
+            <span class="re-nav-badge re-nav-badge--required">필수</span>
+          </div>
+          <!-- 선택 항목 (초기: + 버튼, 추가 시 − 토글) -->
+          <div class="re-section-nav-item re-nav-optional" data-nav="re-sec-skill" data-sec="re-sec-skill">
+            <a href="#re-sec-skill">스킬</a>
+            <button class="re-nav-toggle re-nav-add" onclick="addReOptionalSection('re-sec-skill',this)">+</button>
+          </div>
+          <div class="re-section-nav-item re-nav-optional" data-nav="re-sec-intro" data-sec="re-sec-intro">
+            <a href="#re-sec-intro">자기소개서</a>
+            <button class="re-nav-toggle re-nav-add" onclick="addReOptionalSection('re-sec-intro',this)">+</button>
+          </div>
+          <div class="re-section-nav-item re-nav-optional" data-nav="re-sec-activity" data-sec="re-sec-activity">
+            <a href="#re-sec-activity">수상 / 활동</a>
+            <button class="re-nav-toggle re-nav-add" onclick="addReOptionalSection('re-sec-activity',this)">+</button>
+          </div>
+          <div class="re-section-nav-item re-nav-optional" data-nav="re-sec-cert" data-sec="re-sec-cert">
+            <a href="#re-sec-cert">자격증</a>
+            <button class="re-nav-toggle re-nav-add" onclick="addReOptionalSection('re-sec-cert',this)">+</button>
+          </div>
+          <div class="re-section-nav-item re-nav-optional" data-nav="re-sec-file" data-sec="re-sec-file">
+            <a href="#re-sec-file">파일 첨부</a>
+            <button class="re-nav-toggle re-nav-add" onclick="addReOptionalSection('re-sec-file',this)">+</button>
+          </div>
+          <div class="re-section-nav-item re-nav-optional" data-nav="re-sec-link" data-sec="re-sec-link">
+            <a href="#re-sec-link">링크</a>
+            <button class="re-nav-toggle re-nav-add" onclick="addReOptionalSection('re-sec-link',this)">+</button>
+          </div>
+          <div class="re-section-nav-item re-nav-optional" data-nav="re-sec-salary" data-sec="re-sec-salary">
+            <a href="#re-sec-salary">희망 연봉</a>
+            <button class="re-nav-toggle re-nav-add" onclick="addReOptionalSection('re-sec-salary',this)">+</button>
+          </div>
+        </nav>
       </aside>
 
     </div>
@@ -22741,6 +22747,29 @@ function closeRatePopup() {
         btn.textContent = '+';
       }
     }
+    // 선택 항목 추가 (+ → − 전환, 섹션 표시)
+    function addReOptionalSection(secId, btn) {
+      var sec = document.getElementById(secId);
+      if (!sec) return;
+      sec.style.display = '';
+      btn.textContent = '−';
+      btn.classList.remove('re-nav-add');
+      btn.setAttribute('onclick', "removeReOptionalSection('"+secId+"',this)");
+    }
+    // 선택 항목 제거 (− → + 전환, 섹션 숨기기)
+    function removeReOptionalSection(secId, btn) {
+      var sec = document.getElementById(secId);
+      if (!sec) return;
+      sec.style.display = 'none';
+      btn.textContent = '+';
+      btn.classList.add('re-nav-add');
+      btn.setAttribute('onclick', "addReOptionalSection('"+secId+"',this)");
+    }
+    // 초기 상태: 선택 항목 섹션 숨기기
+    ['re-sec-skill','re-sec-intro','re-sec-activity','re-sec-cert','re-sec-file','re-sec-link','re-sec-salary'].forEach(function(id){
+      var sec = document.getElementById(id);
+      if(sec) sec.style.display = 'none';
+    });
 
     // 마이페이지 지원현황 탭 전환 + 필터
     document.addEventListener('click', function(e) {
@@ -22855,14 +22884,13 @@ function closeRatePopup() {
         if (basicData[idx] !== undefined) el.value = basicData[idx];
       });
 
-      // 경력
+      // 경력 — 3개 채우기
       var careerCard = document.querySelector('#careerList .re-card');
       var careerInputs = careerCard.querySelectorAll('.re-input');
       var careerData = ['(주)잡플래닛', '프로덕트 디자인팀 / 시니어 디자이너', '2022.03'];
       careerInputs.forEach(function(el, idx) {
         if (careerData[idx] !== undefined) el.value = careerData[idx];
       });
-      // 재직 중 체크
       var currentCheck = careerCard.querySelector('input[type="checkbox"]');
       if (currentCheck) {
         currentCheck.checked = true;
@@ -22871,6 +22899,37 @@ function closeRatePopup() {
       }
       var careerTextarea = careerCard.querySelector('textarea');
       if (careerTextarea) careerTextarea.value = 'B2B/B2C 서비스 UX·UI 디자인\n사용자 인터뷰 및 UT 기획·진행\n디자인 시스템 구축 및 운영\nFigma 기반 프로토타이핑 및 스펙 문서 작성';
+      // 경력 2 추가
+      var addCareerBtn = document.querySelector('#careerList + .re-add-btn, .re-card-list .re-add-btn');
+      if(addCareerBtn) { addCareerBtn.click(); }
+      setTimeout(function(){
+        var cards = document.querySelectorAll('#careerList .re-card');
+        if(cards[1]){
+          var ins = cards[1].querySelectorAll('.re-input');
+          if(ins[0]) ins[0].value = '(주)네이버';
+          if(ins[1]) ins[1].value = 'UX디자인팀 / 디자이너';
+          if(ins[2]) ins[2].value = '2019.06';
+          var endD = cards[1].querySelector('input[placeholder="YYYY.MM"]:not([id*="Start"])');
+          if(!endD) { var dts=cards[1].querySelectorAll('input[placeholder="YYYY.MM"]'); if(dts[1]) dts[1].value='2022.02'; }
+          else endD.value = '2022.02';
+          var ta = cards[1].querySelector('textarea');
+          if(ta) ta.value = '모바일 앱 UI/UX 디자인 및 프로토타이핑\n사용자 여정 맵 기반 서비스 개선\nA/B 테스트 설계 및 결과 분석';
+        }
+        // 경력 3 추가
+        if(addCareerBtn) addCareerBtn.click();
+        setTimeout(function(){
+          var cards2 = document.querySelectorAll('#careerList .re-card');
+          if(cards2[2]){
+            var ins2 = cards2[2].querySelectorAll('.re-input');
+            if(ins2[0]) ins2[0].value = '스타트업 브릿지';
+            if(ins2[1]) ins2[1].value = '디자인파트 / 주니어 디자이너';
+            if(ins2[2]) ins2[2].value = '2017.07';
+            var dts2=cards2[2].querySelectorAll('input[placeholder="YYYY.MM"]'); if(dts2[1]) dts2[1].value='2019.05';
+            var ta2 = cards2[2].querySelector('textarea');
+            if(ta2) ta2.value = '웹/모바일 서비스 UI 디자인\n와이어프레임 및 GUI 디자인\n디자인 에셋 관리 및 가이드 제작';
+          }
+        },100);
+      },100);
 
       // 학력
       var eduCard = document.querySelector('#eduList .re-card');
@@ -22883,11 +22942,19 @@ function closeRatePopup() {
       if (eduDateInputs[0]) eduDateInputs[0].value = '2013.03';
       if (eduDateInputs[1]) eduDateInputs[1].value = '2017.02';
 
-      // 스킬
+      // 스킬 — 섹션 표시 + 데이터 채우기
+      var skillSec = document.getElementById('re-sec-skill');
+      if(skillSec) skillSec.style.display = '';
+      var skillNavBtn = document.querySelector('[data-nav="re-sec-skill"] .re-nav-toggle');
+      if(skillNavBtn) { skillNavBtn.textContent='−'; skillNavBtn.classList.remove('re-nav-add'); skillNavBtn.setAttribute('onclick',"removeReOptionalSection('re-sec-skill',this)"); }
       var skillInput = document.querySelector('#re-sec-skill .re-input');
       if (skillInput) skillInput.value = 'Figma, Sketch, Zeplin, Jira, Notion, HTML/CSS';
 
-      // 자기소개서
+      // 자기소개서 — 섹션 표시 + 데이터 채우기
+      var introSec = document.getElementById('re-sec-intro');
+      if(introSec) introSec.style.display = '';
+      var introNavBtn = document.querySelector('[data-nav="re-sec-intro"] .re-nav-toggle');
+      if(introNavBtn) { introNavBtn.textContent='−'; introNavBtn.classList.remove('re-nav-add'); introNavBtn.setAttribute('onclick',"removeReOptionalSection('re-sec-intro',this)"); }
       var introTextarea = document.querySelector('#re-sec-intro textarea');
       if (introTextarea) introTextarea.value = '안녕하세요. 6년차 프로덕트 디자이너 송인경입니다.\n사용자 리서치를 기반으로 문제를 정의하고, 데이터와 직관을 함께 활용해 서비스를 개선하는 것을 좋아합니다.\n잡플래닛에서 채용 서비스 UX 개선 프로젝트를 주도하며 지원 전환율 18% 향상을 이끌었습니다.';
 
@@ -22915,6 +22982,13 @@ function closeRatePopup() {
         var ic = document.getElementById('introCount'); if(ic) ic.textContent = '0';
         var pf = document.getElementById('reProgressFill'); if(pf) pf.style.width = '10%';
         var pp = document.getElementById('reProgressPct'); if(pp) pp.textContent = '10%';
+        // 선택 항목 숨기기 + 네비 버튼 초기화
+        ['re-sec-skill','re-sec-intro','re-sec-activity','re-sec-cert','re-sec-file','re-sec-link','re-sec-salary'].forEach(function(id){
+          var sec = document.getElementById(id);
+          if(sec) sec.style.display = 'none';
+          var btn = document.querySelector('[data-nav="'+id+'"] .re-nav-toggle');
+          if(btn){ btn.textContent='+'; btn.classList.add('re-nav-add'); btn.setAttribute('onclick',"addReOptionalSection('"+id+"',this)"); }
+        });
       } catch(e){ console.warn('resume init:', e); }
       go('resume-editor');
     }
@@ -23153,6 +23227,7 @@ function closeRatePopup() {
       var scrollY = window.scrollY + gnbH + topbarH + 32;
       var activeIdx = 0;
       sections.forEach(function(sec, i) {
+        if (sec.style.display === 'none') return; // 숨겨진 섹션 제외
         if (sec.offsetTop <= scrollY) activeIdx = i;
       });
       navItems.forEach(function(n) { n.classList.remove('active'); });
