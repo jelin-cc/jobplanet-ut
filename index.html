@@ -4034,7 +4034,7 @@
           <div style="padding:28px 28px 24px;">
             <p id="sal-anchor-label" style="font-size:13px;color:var(--tx3);margin-bottom:4px;">직무 평균 연봉</p>
             <p id="sal-anchor-val" style="font-size:28px;font-weight:700;color:var(--tx);letter-spacing:-.5px;margin-bottom:8px;">7,540만원</p>
-            <span id="sal-anchor-sub" onclick="toggleSalView()" style="display:inline-block;font-size:12px;font-weight:600;color:var(--brand);background:var(--brand-lt);padding:3px 12px;border-radius:var(--rfull);margin-bottom:20px;cursor:pointer;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">연봉 데이터 2,015,619건 기준</span>
+            <span id="sal-anchor-sub" onclick="toggleSalView()" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--brand);background:var(--brand-lt);padding:4px 14px;border-radius:var(--rfull);margin-bottom:20px;cursor:pointer;transition:opacity .15s;border:1px solid rgba(0,194,116,.12);" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'"><img src="images/nhis.svg" width="14" height="14" style="flex-shrink:0;">건강보험 연봉 데이터 2,015,619건 기준</span>
 
             <!-- 분포 바 -->
             <div style="margin-bottom:8px;">
@@ -4096,7 +4096,7 @@
               <div style="position:absolute;right:0;top:28px;bottom:24px;width:1px;background:var(--ln2);"></div>
               <p style="font-size:13px;color:var(--tx3);margin-bottom:4px;">직무 평균 연봉</p>
               <p id="sal-compact-val" style="font-size:28px;font-weight:700;color:var(--tx);letter-spacing:-.5px;margin-bottom:8px;">7,540만원</p>
-              <span onclick="toggleSalView()" style="display:inline-block;font-size:12px;font-weight:600;color:var(--brand);background:var(--brand-lt);padding:3px 12px;border-radius:var(--rfull);margin-bottom:20px;cursor:pointer;transition:opacity .15s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">연봉 데이터 2,015,619건 기준</span>
+              <span onclick="toggleSalView()" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--brand);background:var(--brand-lt);padding:4px 14px;border-radius:var(--rfull);margin-bottom:20px;cursor:pointer;transition:opacity .15s;border:1px solid rgba(0,194,116,.12);" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'"><img src="images/nhis.svg" width="14" height="14" style="flex-shrink:0;">건강보험 연봉 데이터 2,015,619건 기준</span>
               <div style="margin-bottom:8px;">
                 <div style="height:16px;border-radius:3px;background:var(--ln2);overflow:hidden;">
                   <div id="dist-fill-compact" style="width:55%;height:100%;border-radius:3px;background:linear-gradient(90deg, #A8E8C8 0%, #5CD89A 50%, var(--brand) 100%);transition:width .4s;"></div>
@@ -4371,6 +4371,27 @@
             <h2 id="theme-detail-title" style="font-size:22px;font-weight:700;color:#fff;margin:0 0 6px 0;"></h2>
             <p id="theme-detail-desc" style="font-size:14px;color:rgba(255,255,255,0.85);margin:0;"></p>
           </div>
+        </div>
+        <!-- 연봉 컬렉션 심플 헤더 (토스 스타일) -->
+        <div id="salary-collection-header" style="display:none;background:#fff;">
+          <div style="height:3px;background:linear-gradient(90deg,#00C274,#5CE5A5);"></div>
+          <div style="max-width:1060px;margin:0 auto;padding:0 20px;">
+            <div style="padding:16px 0 0;">
+              <button onclick="closeThemeDetail()" style="width:36px;height:36px;border-radius:50%;background:#F5F6F8;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;" onmouseover="this.style.background='#ECEDF0'" onmouseout="this.style.background='#F5F6F8'">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+            </div>
+            <div style="padding:20px 0 28px;">
+              <span style="display:inline-block;padding:4px 10px;border-radius:20px;background:#F0FAF5;color:#00C274;font-size:12px;font-weight:700;margin-bottom:10px;letter-spacing:-.2px;">연봉 추천</span>
+              <h2 id="salary-col-title" style="font-size:24px;font-weight:800;color:#191F28;margin:0 0 8px;letter-spacing:-.5px;line-height:1.3;"></h2>
+              <p id="salary-col-desc" style="font-size:14px;color:#8B95A1;margin:0 0 14px;font-weight:400;"></p>
+              <div style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:#F2F4F6;border-radius:8px;font-size:12px;color:#4E5968;font-weight:500;">
+                <span style="font-size:14px;">💰</span>
+                <span>내 연봉 <strong id="salary-col-amount"></strong> 기준</span>
+              </div>
+            </div>
+          </div>
+          <div style="height:1px;background:#F2F4F6;"></div>
         </div>
         <!-- 카운트 바 + 공고 그리드: 1060px 중앙 정렬 -->
         <div style="max-width:1060px;margin:0 auto;">
@@ -4662,6 +4683,8 @@
         }
 
         function openThemeDetail(idx){
+          document.getElementById('theme-detail-hero').style.display = '';
+          document.getElementById('salary-collection-header').style.display = 'none';
           var t = themeData[idx];
           document.getElementById('theme-detail-hero-img').src = t.extImg ? t.img : BASE+'img/'+t.img;
           document.getElementById('theme-detail-badge').textContent = t.badge;
@@ -4689,6 +4712,35 @@
           document.getElementById('theme-detail-overlay').style.display = 'none';
           document.getElementById('theme-detail-overlay').onscroll = null;
           document.body.style.overflow = '';
+          document.getElementById('theme-detail-hero').style.display = '';
+          document.getElementById('salary-collection-header').style.display = 'none';
+        }
+
+        function openSalaryCollection(pct, isHigh, salary){
+          document.getElementById('theme-detail-hero').style.display = 'none';
+          document.getElementById('salary-collection-header').style.display = '';
+          document.getElementById('salary-col-title').innerHTML = isHigh
+            ? '지금보다 연봉이 더 높은 기업'
+            : '지금보다 <span style="color:#00C274;">'+pct+'%</span> 높은 기업';
+          document.getElementById('salary-col-desc').textContent = isHigh
+            ? '더 좋은 조건의 기업들이 기다리고 있어요'
+            : '내 연봉 대비 더 높은 기업들을 모아봤어요';
+          document.getElementById('salary-col-amount').textContent = salary.toLocaleString()+'만원';
+          _themeJobsLoaded = 0;
+          _themeLoading = false;
+          var jobGrid = document.getElementById('theme-detail-jobs');
+          jobGrid.innerHTML = renderThemeJobCards(16);
+          _themeJobsLoaded = 16;
+          document.getElementById('theme-detail-count').textContent = '총 '+_themeJobsTotal+'건';
+          document.getElementById('theme-detail-overlay').style.display = 'block';
+          document.body.style.overflow = 'hidden';
+          var overlay = document.getElementById('theme-detail-overlay');
+          overlay.scrollTop = 0;
+          overlay.onscroll = function(){
+            if(overlay.scrollTop + overlay.clientHeight >= overlay.scrollHeight - 300){
+              loadMoreThemeJobs();
+            }
+          };
         }
 
         // setCat 호환 stub (resetAll 등에서 호출됨)
@@ -17854,7 +17906,7 @@ function closeRatePopup() {
           if (lbl) lbl.textContent = '직무 평균 연봉';
           val.textContent = d.avg + '원';
           val.style.color = 'var(--tx)'; val.style.fontSize = '28px';
-          if (sub) { sub.textContent = '연봉 데이터 2,015,619건 기준'; sub.style.color = 'var(--brand)'; sub.style.background = 'var(--brand-lt)'; sub.style.padding = '3px 12px'; }
+          if (sub) { sub.innerHTML = '<img src="images/nhis.svg" width="14" height="14" style="flex-shrink:0;">건강보험 연봉 데이터 2,015,619건 기준'; sub.style.color = 'var(--brand)'; sub.style.background = 'var(--brand-lt)'; sub.style.padding = '4px 14px'; sub.style.display = 'inline-flex'; sub.style.alignItems = 'center'; sub.style.gap = '5px'; sub.style.border = '1px solid rgba(0,194,116,.12)'; }
           if (res) res.textContent = '';
           if (topLbl) topLbl.textContent = '연봉 높은 기업 TOP 3';
         } else {
@@ -17939,7 +17991,7 @@ function closeRatePopup() {
               + '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx4);">'
               + '<span>하위</span><span style="font-weight:600;color:var(--tx3);">평균 '+d.avg+'원</span><span>상위</span>'
               + '</div>'
-              + '<div onclick="go(\'job\')" style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding:12px 14px;background:#fff;border-radius:10px;border:1.5px solid var(--ln);cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor=\'var(--brand)\';this.style.background=\'rgba(0,194,116,.03)\'" onmouseout="this.style.borderColor=\'var(--ln)\';this.style.background=\'#fff\'">'
+              + '<div onclick="openSalaryCollection('+higherPct+','+(isHigh?'true':'false')+','+v+')" style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding:12px 14px;background:#fff;border-radius:10px;border:1.5px solid var(--ln);cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor=\'var(--brand)\';this.style.background=\'rgba(0,194,116,.03)\'" onmouseout="this.style.borderColor=\'var(--ln)\';this.style.background=\'#fff\'">'
               + '<div style="display:flex;align-items:center;gap:8px;">'
               + '<span style="font-size:16px;">'+(isHigh ? '👑' : '🚀')+'</span>'
               + '<div><div style="font-size:13px;font-weight:700;color:var(--tx);">'+(isHigh ? '지금보다 연봉이 더 높은 기업 보기' : '지금보다 '+higherPct+'% 높은 기업 보기')+'</div>'
@@ -18034,7 +18086,7 @@ function closeRatePopup() {
         // 앵커 초기화
         if (g('sal-anchor-label')) g('sal-anchor-label').textContent = '직무 평균 연봉';
         if (g('sal-anchor-val')) { g('sal-anchor-val').textContent = d.avg + '원'; g('sal-anchor-val').style.color = 'var(--tx)'; g('sal-anchor-val').style.fontSize = '28px'; }
-        if (g('sal-anchor-sub')) { g('sal-anchor-sub').textContent = '연봉 데이터 2,015,619건 기준'; g('sal-anchor-sub').style.color = 'var(--brand)'; g('sal-anchor-sub').style.background = 'var(--brand-lt)'; g('sal-anchor-sub').style.padding = '3px 12px'; }
+        if (g('sal-anchor-sub')) { g('sal-anchor-sub').innerHTML = '<img src="images/nhis.svg" width="14" height="14" style="flex-shrink:0;">건강보험 연봉 데이터 2,015,619건 기준'; g('sal-anchor-sub').style.color = 'var(--brand)'; g('sal-anchor-sub').style.background = 'var(--brand-lt)'; g('sal-anchor-sub').style.padding = '4px 14px'; g('sal-anchor-sub').style.display = 'inline-flex'; g('sal-anchor-sub').style.alignItems = 'center'; g('sal-anchor-sub').style.gap = '5px'; g('sal-anchor-sub').style.border = '1px solid rgba(0,194,116,.12)'; }
         if (g('sal-inp-result')) g('sal-inp-result').textContent = '';
         if (g('top3-label')) g('top3-label').textContent = '연봉 높은 기업 TOP 3';
         // CTA 초기 상태
