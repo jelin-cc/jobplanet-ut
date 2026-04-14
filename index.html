@@ -26580,9 +26580,9 @@ function closeRatePopup() {
       html += '<div style="width:100%;height:1px;background:#E5E6E9;margin:12px 0;"></div>';
       // Content row - redesigned hierarchy
       var rvCount = (Math.floor(Math.random()*5000)+2000).toLocaleString();
-      // Row 1: Dept + content
-      html += '<div>';
-      html += '<div>';
+      // Row 1: Dept + AI button (vertically centered)
+      html += '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">';
+      html += '<div style="flex:1;min-width:0;">';
       html += '<div style="font-size:14px;font-weight:700;color:#242628;margin-bottom:10px;">' + item.dept + '</div>';
       // Row 2: Q. + question (main content)
       html += '<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;">';
@@ -26595,8 +26595,8 @@ function closeRatePopup() {
       html += '<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 8px;background:#EBF4FF;border-radius:20px;font-size:10px;font-weight:600;color:#3182F6;white-space:nowrap;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#3182F6" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>면접후기 '+rvCount+'건 기반</span>';
       html += '</div>';
       html += '</div>';
-      // Center - AI button
-      html += '<div style="display:flex;justify-content:center;margin-top:14px;">';
+      // Right side - AI button (vertically centered)
+      html += '<div style="flex-shrink:0;">';
       html += '<button style="display:flex;align-items:center;gap:5px;padding:7px 14px;background:#242628;border-radius:8px;border:none;font-size:12px;font-weight:600;color:#fff;cursor:pointer;font-family:\'Pretendard\',sans-serif;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.1);">';
       html += '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/><line x1="9" y1="21" x2="15" y2="21"/></svg> 답변 모아보기';
       html += '</button>';
