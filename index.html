@@ -3865,10 +3865,12 @@
                 var base='https://jelin-cc.github.io/jobplanet-ut/D-sample_logo_';
                 var c=document.getElementById('obLogoStack');
                 nums.forEach(function(n,i){
+                  var wrap=document.createElement('div');
+                  wrap.style.cssText='width:36px;height:36px;border-radius:50%;border:2.5px solid #fff;overflow:hidden;background:#fff;flex-shrink:0;position:relative;z-index:'+(3-i)+(i>0?';margin-left:-10px':'');
                   var img=document.createElement('img');
                   img.src=base+n+'.svg';img.width=36;img.height=36;
-                  img.style.cssText='border-radius:50%;border:2.5px solid #fff;object-fit:cover;position:relative;z-index:'+(3-i)+(i>0?';margin-left:-10px':'');
-                  c.appendChild(img);
+                  img.style.cssText='width:100%;height:100%;object-fit:contain;display:block;';
+                  wrap.appendChild(img);c.appendChild(wrap);
                 });
               })();
               </script>
