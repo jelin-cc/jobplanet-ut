@@ -3819,7 +3819,7 @@
                 <button onclick="event.stopPropagation();openOB(true)" style="font-size:12px;font-weight:600;color:var(--brand);background:#fff;border:none;cursor:pointer;font-family:var(--font);flex-shrink:0;padding:5px 12px;border-radius:99px;transition:background .12s;" onmouseover="this.style.background='#F0FAF5'" onmouseout="this.style.background='#fff'">변경</button>
               </div>
               <!-- 토글 버튼 -->
-              <div style="padding:0 16px 12px;">
+              <div id="obResultToggleWrap" style="padding:0 16px 12px;">
                 <button id="obResultToggleBtn" onclick="toggleObResult()" style="width:100%;padding:9px 0;border-radius:8px;border:none;background:var(--brand);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:4px;transition:background .12s;" onmouseover="this.style.background='var(--brand-dk)'" onmouseout="this.style.background='var(--brand)'">선택한 조건 보기 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
               </div>
               <!-- 펼친 상태: 조건 상세 -->
@@ -3891,11 +3891,17 @@
             function toggleObResult(){
               var body=document.getElementById('obResultBody');
               var btn=document.getElementById('obResultToggleBtn');
+              var wrap=document.getElementById('obResultToggleWrap');
+              var header=document.getElementById('obResultHeader');
               if(body.style.display==='none'){
                 body.style.display='block';
+                // 버튼을 body 뒤(아래)로 이동
+                body.parentNode.insertBefore(wrap, body.nextSibling);
                 btn.innerHTML='선택한 조건 접기 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>';
               } else {
                 body.style.display='none';
+                // 버튼을 header 뒤(원래 위치)로 복귀
+                header.parentNode.insertBefore(wrap, header.nextSibling);
                 btn.innerHTML='선택한 조건 보기 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
               }
             }
