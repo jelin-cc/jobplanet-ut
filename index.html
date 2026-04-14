@@ -16836,11 +16836,14 @@ function closeRatePopup() {
           el.style.color = 'var(--tx2)';
         });
         // 필터 버튼 상태 초기화
-        document.querySelectorAll('.jb-filter-btn').forEach(function(btn){
-          btn.style.borderColor = 'var(--ln)';
-          btn.style.color = 'var(--tx2)';
-          btn.style.background = '#fff';
+        document.querySelectorAll('.jb-fc').forEach(function(btn){
+          btn.style.borderColor = '';
+          btn.style.color = '';
+          btn.style.background = '';
+          btn.classList.remove('filtered');
         });
+        // 필터 칩 라벨 초기화
+        if(typeof updateFilterChips === 'function') updateFilterChips();
         // 필터 상태 초기화 저장
         try { sessionStorage.removeItem('jp_filter_state'); } catch(e) {}
         // 카드 다시 렌더링
@@ -17257,14 +17260,19 @@ function closeRatePopup() {
         var countEl = document.querySelector('.jb-total-count');
         if(countEl) countEl.textContent = '총 ' + (_hasFilter ? filtered.length.toLocaleString() : '1,481') + '건';
 
-        // 잡코리아 공고 2건 이상 상위 노출
+        // 잡코리아 공고 2건 이상 상위 노출 (필터 결과에 없으면 전체 풀에서 강제 보충)
         var jkCards = filtered.filter(function(c){return c.external==='jobkorea';});
+        if(jkCards.length === 0 && allCards){
+          var jkAll = allCards.filter(function(c){return c.external==='jobkorea';});
+          for(var _jai=jkAll.length-1;_jai>0;_jai--){var _jaj=Math.floor(Math.random()*(_jai+1));var _jat=jkAll[_jai];jkAll[_jai]=jkAll[_jaj];jkAll[_jaj]=_jat;}
+          jkCards = jkAll.slice(0, Math.min(2, jkAll.length));
+        }
         var nonJk = filtered.filter(function(c){return c.external!=='jobkorea';});
         for(var _si=nonJk.length-1;_si>0;_si--){var _sj=Math.floor(Math.random()*(_si+1));var _st=nonJk[_si];nonJk[_si]=nonJk[_sj];nonJk[_sj]=_st;}
         for(var _ji=jkCards.length-1;_ji>0;_ji--){var _jj=Math.floor(Math.random()*(_ji+1));var _jt=jkCards[_ji];jkCards[_ji]=jkCards[_jj];jkCards[_jj]=_jt;}
         var jkTop = jkCards.slice(0, Math.min(2, jkCards.length));
-        // 2,4번째 위치에 잡코리아 삽입
-        filtered = nonJk.slice(0,1).concat(jkTop.slice(0,1)).concat(nonJk.slice(1,3)).concat(jkTop.slice(1,2)).concat(nonJk.slice(3));
+        // 첫 번째 행(1번째)에 잡코리아 1건 + 나머지 위치에 추가분 삽입
+        filtered = jkTop.slice(0,1).concat(nonJk.slice(0,2)).concat(jkTop.slice(1,2)).concat(nonJk.slice(2));
         var shuffled = filtered;
         // 정렬 적용
         var cards = sortCards(shuffled);
