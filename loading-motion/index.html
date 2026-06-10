@@ -75,8 +75,8 @@
     position: relative;
     width: 32px;
     height: 32px;
-    animation: spinner-rotate 1s steps(12, end) infinite;
   }
+  /* 막대는 고정, 각 막대의 투명도만 시차를 두고 변함 (제자리 페이드) */
   .spinner i {
     position: absolute;
     top: 0;
@@ -87,22 +87,25 @@
     border-radius: 1.3px;
     transform-origin: 1.3px 16px;
     background: var(--spoke, #8A9099);
+    animation: spinner-fade 1s linear infinite both;
   }
-  /* trailing opacity gradient over 12 spokes */
-  .spinner i:nth-child(1)  { transform: rotate(0deg);   opacity: 1.00; }
-  .spinner i:nth-child(2)  { transform: rotate(30deg);  opacity: 0.92; }
-  .spinner i:nth-child(3)  { transform: rotate(60deg);  opacity: 0.83; }
-  .spinner i:nth-child(4)  { transform: rotate(90deg);  opacity: 0.75; }
-  .spinner i:nth-child(5)  { transform: rotate(120deg); opacity: 0.66; }
-  .spinner i:nth-child(6)  { transform: rotate(150deg); opacity: 0.58; }
-  .spinner i:nth-child(7)  { transform: rotate(180deg); opacity: 0.50; }
-  .spinner i:nth-child(8)  { transform: rotate(210deg); opacity: 0.42; }
-  .spinner i:nth-child(9)  { transform: rotate(240deg); opacity: 0.33; }
-  .spinner i:nth-child(10) { transform: rotate(270deg); opacity: 0.25; }
-  .spinner i:nth-child(11) { transform: rotate(300deg); opacity: 0.16; }
-  .spinner i:nth-child(12) { transform: rotate(330deg); opacity: 0.08; }
+  .spinner i:nth-child(1)  { transform: rotate(0deg);   animation-delay: -0.917s; }
+  .spinner i:nth-child(2)  { transform: rotate(30deg);  animation-delay: -0.833s; }
+  .spinner i:nth-child(3)  { transform: rotate(60deg);  animation-delay: -0.750s; }
+  .spinner i:nth-child(4)  { transform: rotate(90deg);  animation-delay: -0.667s; }
+  .spinner i:nth-child(5)  { transform: rotate(120deg); animation-delay: -0.583s; }
+  .spinner i:nth-child(6)  { transform: rotate(150deg); animation-delay: -0.500s; }
+  .spinner i:nth-child(7)  { transform: rotate(180deg); animation-delay: -0.417s; }
+  .spinner i:nth-child(8)  { transform: rotate(210deg); animation-delay: -0.333s; }
+  .spinner i:nth-child(9)  { transform: rotate(240deg); animation-delay: -0.250s; }
+  .spinner i:nth-child(10) { transform: rotate(270deg); animation-delay: -0.167s; }
+  .spinner i:nth-child(11) { transform: rotate(300deg); animation-delay: -0.083s; }
+  .spinner i:nth-child(12) { transform: rotate(330deg); animation-delay: 0s; }
 
-  @keyframes spinner-rotate { to { transform: rotate(360deg); } }
+  @keyframes spinner-fade {
+    0%   { opacity: 1; }
+    100% { opacity: 0.08; }
+  }
 
   /* spoke color per background */
   .stage.white .spinner, .stage.gray .spinner { --spoke: #AEB3BA; }
@@ -121,9 +124,9 @@
 
     <div class="spec">
       <b>모션 스펙</b><br />
-      · 형태: 12개 스포크(둥근 막대) 원형 배열, 순차 페이드<br />
-      · 회전: 1초 / 1바퀴, <b>12단계 스텝(step) 회전</b> (선형 회전 아님)<br />
-      · 스포크 투명도: 선두 100% → 후미 8%로 단계 감소<br />
+      · 형태: 12개 스포크(둥근 막대) 원형 배열, <b>막대는 고정</b><br />
+      · 모션: 막대가 회전하지 않고, <b>각 막대의 투명도만 시차(1/12초)를 두고 깜빡임</b><br />
+      · 투명도: 100% → 8%로 페이드, 1초 주기로 반복 (밝은 지점이 원을 따라 도는 착시)<br />
       · 색상: 라이트 배경 <b>#AEB3BA</b> · 다크 배경(그린/레드) <b>#FFFFFF</b>
     </div>
 
@@ -158,8 +161,9 @@
     </div>
 
     <footer>
-      안드로이드 구현 참고: 스텝 회전은 <code>steps(12)</code> 이징과 동일하게,
-      매 <code>1/12초</code> 마다 30° 씩 끊어서 회전함. 선형 보간이 아닌 점이 핵심임.
+      안드로이드 구현 참고: 막대(View/Drawable)는 회전시키지 않음. 12개 막대를 고정 배치하고
+      각 막대의 <code>alpha</code> 를 <code>1.0 → 0.08</code> 로 페이드하는 애니메이션을
+      <code>1/12초</code>(약 83ms) 씩 지연(delay) 시켜 동시 실행함. 밝은 막대가 도는 것처럼 보이는 착시임.
     </footer>
   </div>
 </body>
