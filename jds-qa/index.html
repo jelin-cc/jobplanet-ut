@@ -99,6 +99,28 @@
     background:#fff; transition:transform .15s; }
   .toggle.on .sw::after { transform:translateX(12px); }
 
+  /* ===== Custom dropdown (Toss style) ===== */
+  .dd { position:relative; display:inline-block; }
+  .dd-btn { font-family:inherit; font-size:13.5px; font-weight:600; color:var(--tx2); background:var(--bg1);
+    border:1.5px solid var(--line2); border-radius:9px; padding:9px 34px 9px 12px; cursor:pointer; outline:none;
+    white-space:nowrap; position:relative; transition:border-color .15s, background .15s; text-align:left; }
+  .dd-btn:hover { border-color:#D1D6DB; }
+  .dd.open .dd-btn { border-color:var(--green); background:var(--bg0); }
+  .dd-btn::after { content:''; position:absolute; right:13px; top:50%; width:13px; height:13px; transform:translateY(-50%);
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%234E5968' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat center; transition:transform .15s; }
+  .dd.open .dd-btn::after { transform:translateY(-50%) rotate(180deg); }
+  .dd-menu { position:absolute; z-index:60; top:calc(100% + 6px); left:0; min-width:100%;
+    background:var(--bg0); border:1px solid var(--line2); border-radius:13px; box-shadow:0 10px 28px rgba(0,0,0,0.14);
+    padding:6px; display:none; max-height:300px; overflow:auto; }
+  .dd.open .dd-menu { display:block; animation:ddIn .15s ease; }
+  @keyframes ddIn { from{opacity:0; transform:translateY(-5px);} to{opacity:1; transform:none;} }
+  .dd-opt { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:10px 12px; border-radius:9px;
+    font-size:13.5px; font-weight:500; color:var(--tx2); cursor:pointer; white-space:nowrap; transition:background .1s; }
+  .dd-opt:hover { background:var(--bg2); }
+  .dd-opt.sel { color:#00864F; font-weight:700; background:#F0FAF5; }
+  .dd-opt .ck { width:16px; height:16px; flex:none; opacity:0; }
+  .dd-opt.sel .ck { opacity:1; }
+
   /* ===== Group ===== */
   .group { margin-bottom:24px; }
   .group-head { display:flex; align-items:center; gap:9px; padding:0 4px 10px; }
@@ -182,9 +204,8 @@
   <div class="toolbar">
     <div class="field">
       <label>담당자</label>
-      <select id="meSel"><option value="">선택 안 함</option></select>
+      <select id="meSel"><option value="">전체</option></select>
     </div>
-    <div class="toggle" id="mineToggle"><span class="sw"></span>내 담당만</div>
     <div class="field">
       <label>진행단계</label>
       <select id="stageFilter">
@@ -305,13 +326,26 @@ const LS_ASSIGN = 'jds_qa_assignees_v1';   // 개발 담당자 override
 const LS_QA = 'jds_qa_qaowner_v1';         // QA 담당자
 const LS_ME = 'jds_qa_me_v1';
 
+// QA 담당자 (지라 customfield_10030, QA 담당 3인 기준)
+const QA_OF = {
+  'HMS-174':'최경미','RNC-226':'최지원','RNC-227':'최지원','RNC-228':'최지원','RNC-230':'최경미',
+  'HMS-190':'','RNC-316':'최경미','HMS-209':'최경미','RNC-345':'최지원','RNC-346':'최지원',
+  'RNC-348':'최지원','RNC-349':'최경미','RNC-350':'송인경','RNC-351':'최경미','RNC-352':'최경미',
+  'RNC-355':'송인경','RNC-356':'최지원','HMS-241':'최지원',
+  'RNC-195':'최지원','HMS-193':'최지원','HMS-194':'최경미','HMS-195':'송인경','HMS-196':'송인경',
+  'HMS-197':'최지원','HMS-198':'최경미','HMS-200':'최지원','HMS-201':'최경미','HMS-202':'최경미',
+  'HMS-204':'최지원','HMS-246':'최경미','HMS-249':'','HMS-265':'',
+  'HMS-168':'','HMS-207':'최지원','HMS-208':'최경미','RNC-320':'최지원','RNC-374':'최경미',
+  'RNC-375':'최경미','RNC-386':'최경미','RNC-407':'','RNC-432':'',
+};
+
 const Data = {
   _overrides: JSON.parse(localStorage.getItem(LS_ASSIGN) || '{}'),
   _qa: JSON.parse(localStorage.getItem(LS_QA) || '{}'),
   all() {
     return SEED.map(t => ({...t,
       who: (this._overrides[t.key] !== undefined ? this._overrides[t.key] : t.who),
-      qa: this._qa[t.key] || '',
+      qa: (this._qa[t.key] !== undefined ? this._qa[t.key] : (QA_OF[t.key] || '')),
       sp: SPRINT_OF[t.key] || ''}));
   },
   setAssignee(key, who) {
@@ -394,7 +428,7 @@ function renderList() {
   const me = Data.getMe();
   let list = Data.all();
   if (state.platform) list = list.filter(t => t.pf === state.platform);
-  if (state.mineOnly && me) list = list.filter(t => t.who === me || t.qa === me);
+  if (me) list = list.filter(t => t.who === me || t.qa === me);
   if (state.stage) list = list.filter(t => t.stage === state.stage);
   if (state.cat) list = list.filter(t => t.cat === state.cat);
   if (state.sprint) list = list.filter(t => state.sprint === 'none' ? !t.sp : t.sp === state.sprint);
@@ -463,6 +497,44 @@ function rowHTML(me, t) {
 }
 
 /* ====================================================================
+   커스텀 드롭다운 (네이티브 select → 토스 스타일 팝업)
+   ==================================================================== */
+const ALL_DD = [];
+function closeAllDD() { ALL_DD.forEach(d => d.classList.remove('open')); }
+document.addEventListener('click', closeAllDD);
+
+function enhanceSelect(sel) {
+  const dd = document.createElement('div'); dd.className = 'dd';
+  sel.parentNode.insertBefore(dd, sel);
+  dd.appendChild(sel); sel.style.display = 'none';
+  const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'dd-btn';
+  const menu = document.createElement('div'); menu.className = 'dd-menu';
+  dd.appendChild(btn); dd.appendChild(menu);
+  function render() {
+    const cur = sel.options[sel.selectedIndex];
+    btn.textContent = cur ? cur.text : '';
+    menu.innerHTML = Array.from(sel.options).map((o, i) =>
+      `<div class="dd-opt${i===sel.selectedIndex?' sel':''}" data-i="${i}"><span>${o.text}</span>`
+      + `<svg class="ck" viewBox="0 0 24 24" fill="none" stroke="#00C274" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>`
+    ).join('');
+    menu.querySelectorAll('.dd-opt').forEach(it => it.addEventListener('click', e => {
+      e.stopPropagation();
+      sel.selectedIndex = +it.dataset.i;
+      sel.dispatchEvent(new Event('change'));
+      render(); dd.classList.remove('open');
+    }));
+  }
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const willOpen = !dd.classList.contains('open');
+    closeAllDD();
+    if (willOpen) dd.classList.add('open');
+  });
+  render();
+  ALL_DD.push(dd);
+}
+
+/* ====================================================================
    초기화 / 이벤트
    ==================================================================== */
 function init() {
@@ -472,18 +544,12 @@ function init() {
   meSel.value = Data.getMe();
   meSel.addEventListener('change', e => { Data.setMe(e.target.value); renderList(); });
 
-  const mt = document.getElementById('mineToggle');
-  mt.addEventListener('click', () => {
-    if (!Data.getMe()) { document.getElementById('meSel').focus(); return; }
-    state.mineOnly = !state.mineOnly;
-    mt.classList.toggle('on', state.mineOnly);
-    renderList();
-  });
-
   document.getElementById('stageFilter').addEventListener('change', e => { state.stage = e.target.value; renderList(); });
   document.getElementById('catFilter').addEventListener('change', e => { state.cat = e.target.value; renderList(); });
   document.getElementById('sprintFilter').addEventListener('change', e => { state.sprint = e.target.value; renderList(); });
   document.getElementById('searchInput').addEventListener('input', e => { state.q = e.target.value.trim(); renderList(); });
+
+  ['meSel','stageFilter','catFilter','sprintFilter'].forEach(id => enhanceSelect(document.getElementById(id)));
 
   renderKPI();
   renderTabs();
