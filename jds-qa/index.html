@@ -67,7 +67,12 @@
   .tab .pf-dot { width:8px; height:8px; border-radius:50%; }
 
   /* ===== Toolbar ===== */
-  .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:16px; }
+  .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:20px;
+    background:var(--bg0); border:1px solid var(--line); border-radius:14px; padding:14px 16px;
+    box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+  .toolbar select, .toolbar .search input { background:var(--bg1); }
+  .toolbar .toggle { background:var(--bg1); }
+  .toolbar .toggle.on { background:#EBF4FF; }
   .field { display:flex; align-items:center; gap:7px; }
   .field label { font-size:12.5px; color:var(--tx4); font-weight:600; }
   select, .search input {
