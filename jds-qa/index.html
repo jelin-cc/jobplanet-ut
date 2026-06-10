@@ -289,17 +289,17 @@ const SEED = [
   {key:'RNC-316', name:'Chip', pf:'FE', cat:'컴포넌트', stage:'qa', who:'채수민/FE', js:'In QA'},
   {key:'HMS-209', name:'Icon (아이콘)', pf:'FE', cat:'컴포넌트', stage:'qa', who:'민지희', js:'In QA'},
   {key:'RNC-345', name:'TextButton', pf:'FE', cat:'컴포넌트', stage:'done', who:'채수민/FE', js:'완료'},
-  {key:'RNC-346', name:'Icon Emoji', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
+  {key:'RNC-346', name:'Icon Emoji', pf:'FE', cat:'컴포넌트', stage:'qa', who:'채수민/FE', js:'In QA'},
   {key:'RNC-348', name:'Search', pf:'FE', cat:'컴포넌트', stage:'done', who:'채수민/FE', js:'완료'},
   {key:'RNC-349', name:'Toast', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
   {key:'RNC-350', name:'Modal', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
   {key:'RNC-351', name:'Tab', pf:'FE', cat:'컴포넌트', stage:'done', who:'채수민/FE', js:'완료'},
-  {key:'RNC-352', name:'Checkbox', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
+  {key:'RNC-352', name:'Checkbox', pf:'FE', cat:'컴포넌트', stage:'qa', who:'채수민/FE', js:'In QA'},
   {key:'RNC-355', name:'TextField', pf:'FE', cat:'컴포넌트', stage:'done', who:'채수민/FE', js:'완료'},
-  {key:'RNC-356', name:'HomeSearch', pf:'FE', cat:'컴포넌트', stage:'qa', who:'채수민/FE', js:'In QA'},
-  {key:'HMS-241', name:'Button Pagination', pf:'FE', cat:'컴포넌트', stage:'qa', who:'강태완', js:'In QA'},
+  {key:'RNC-356', name:'HomeSearch', pf:'FE', cat:'컴포넌트', stage:'done', who:'채수민/FE', js:'완료'},
+  {key:'HMS-241', name:'Button Pagination', pf:'FE', cat:'컴포넌트', stage:'done', who:'강태완', js:'완료'},
   // Android
-  {key:'RNC-195', name:'Typography & Color', pf:'Android', cat:'Foundation', stage:'ready', who:'배효진', js:'Ready For QA'},
+  {key:'RNC-195', name:'Typography & Color', pf:'Android', cat:'Foundation', stage:'qa', who:'배효진', js:'In QA'},
   {key:'HMS-193', name:'Icon / Graphic', pf:'Android', cat:'컴포넌트', stage:'qa', who:'문지예', js:'In QA'},
   {key:'HMS-194', name:'Tag / Badge', pf:'Android', cat:'컴포넌트', stage:'qa', who:'문지예', js:'In QA'},
   {key:'HMS-195', name:'Modal', pf:'Android', cat:'컴포넌트', stage:'dev', who:'문지예', js:'In Development'},
@@ -315,18 +315,18 @@ const SEED = [
   {key:'HMS-265', name:'Dropdown', pf:'Android', cat:'컴포넌트', stage:'dev', who:'문지예', js:'해야 할 일'},
   // iOS
   {key:'HMS-168', name:'모듈 구조 설계', pf:'iOS', cat:'인프라', stage:'done', who:'송레지나', js:'Ready for Release'},
-  {key:'HMS-207', name:'Foundation', pf:'iOS', cat:'Foundation', stage:'ready', who:'송레지나', js:'Ready For QA'},
-  {key:'HMS-208', name:'Tag', pf:'iOS', cat:'컴포넌트', stage:'ready', who:'송레지나', js:'Ready For QA'},
-  {key:'RNC-320', name:'Button', pf:'iOS', cat:'컴포넌트', stage:'ready', who:'한지민', js:'Ready For QA'},
-  {key:'RNC-374', name:'Tab', pf:'iOS', cat:'컴포넌트', stage:'ready', who:'한지민', js:'Ready For QA'},
+  {key:'HMS-207', name:'Foundation', pf:'iOS', cat:'Foundation', stage:'qa', who:'송레지나', js:'In QA'},
+  {key:'HMS-208', name:'Tag', pf:'iOS', cat:'컴포넌트', stage:'qa', who:'송레지나', js:'In QA'},
+  {key:'RNC-320', name:'Button', pf:'iOS', cat:'컴포넌트', stage:'dev', who:'한지민', js:'해야 할 일'},
+  {key:'RNC-374', name:'Tab', pf:'iOS', cat:'컴포넌트', stage:'qa', who:'한지민', js:'In QA'},
   {key:'RNC-375', name:'Spacing', pf:'iOS', cat:'Foundation', stage:'dev', who:'한지민', js:'In Development'},
-  {key:'RNC-386', name:'Chip', pf:'iOS', cat:'컴포넌트', stage:'ready', who:'한지민', js:'Ready For QA'},
-  {key:'RNC-407', name:'Icon Button', pf:'iOS', cat:'컴포넌트', stage:'ready', who:'한지민', js:'Ready For QA'},
-  {key:'RNC-432', name:'Button isFullWidth 추가', pf:'iOS', cat:'컴포넌트', stage:'ready', who:'한지민', js:'Ready For QA'},
+  {key:'RNC-386', name:'Chip', pf:'iOS', cat:'컴포넌트', stage:'qa', who:'한지민', js:'In QA'},
+  {key:'RNC-407', name:'Icon Button', pf:'iOS', cat:'컴포넌트', stage:'done', who:'한지민', js:'완료'},
+  {key:'RNC-432', name:'Button isFullWidth 추가', pf:'iOS', cat:'컴포넌트', stage:'done', who:'한지민', js:'완료'},
 ];
 
 const JIRA_BASE = 'https://jobplanet.atlassian.net/browse/';
-const ASOF = '2026-06-10 21:19';  // 지라 최신 반영 시각
+const ASOF = '2026-06-10 22:26';  // 지라 최신 반영 시각
 const ROSTER = ['강태완','채수민/FE','민지희','배효진','문지예','송레지나','한지민','최경미','최지원','송인경'];
 
 // 적용 스프린트 (지라 customfield_10020 현재 스프린트 기준)
@@ -359,8 +359,8 @@ const QA_OF = {
   'RNC-195':'최지원','HMS-193':'최지원','HMS-194':'최경미','HMS-195':'송인경','HMS-196':'송인경',
   'HMS-197':'최지원','HMS-198':'최경미','HMS-200':'최지원','HMS-201':'최경미','HMS-202':'최경미',
   'HMS-204':'최지원','HMS-246':'최경미','HMS-249':'','HMS-265':'',
-  'HMS-168':'','HMS-207':'최지원','HMS-208':'최경미','RNC-320':'최지원','RNC-374':'최경미',
-  'RNC-375':'최경미','RNC-386':'최경미','RNC-407':'','RNC-432':'',
+  'HMS-168':'','HMS-207':'송인경','HMS-208':'최경미','RNC-320':'송인경','RNC-374':'최경미',
+  'RNC-375':'최경미','RNC-386':'최경미','RNC-407':'최경미','RNC-432':'최지원',
 };
 
 // 하위 작업 (지라 subtasks)
@@ -368,7 +368,8 @@ const SUBTASKS = {
   'RNC-195':[{k:'RNC-436',s:'컬러 확인',st:'In PR Review'}],
   'HMS-174':[{k:'HMS-231',s:'Large 사이즈 높이 수정',st:'완료'},{k:'HMS-237',s:'태그 컬러 마다 아이콘 on/off 시 없음',st:'완료'},{k:'HMS-248',s:'Small 사이즈 내 아이콘 크기 수정',st:'Ready For QA'}],
   'RNC-226':[{k:'RNC-381',s:'[JDS-QA] 버튼 BG/폰트 색상 다르게 적용되어있음',st:'완료'},{k:'RNC-383',s:'[JDS-QA] 버튼 sm/xs에서 아이콘 사이즈/위치 다르게 적용되어 있음',st:'완료'},{k:'RNC-384',s:'[JDS-QA] 버튼 sm/xs에서 radius full 적용되지 않음',st:'완료'}],
-  'RNC-316':[{k:'RNC-369',s:'호버 삭제',st:'완료'},{k:'RNC-400',s:'이모지 확인',st:'Ready For QA'}],
+  'RNC-316':[{k:'RNC-369',s:'호버 삭제',st:'완료'},{k:'RNC-400',s:'이모지 확인',st:'Ready For QA'},{k:'RNC-461',s:'멀티플라인 케이스 삭제',st:'해야 할 일'}],
+  'RNC-346':[{k:'RNC-462',s:'[JDS-QA] 등록되지 않은 이모지가 있음',st:'해야 할 일'}],
   'HMS-194':[{k:'HMS-294',s:'Tag 아이콘사이즈/텍스트 크기 확인',st:'해야 할 일'},{k:'HMS-295',s:'Tag -> Hug로 변경',st:'해야 할 일'}],
   'HMS-196':[{k:'HMS-303',s:'[QA] 텍스트 필드 플레이스 홀더 컬러 Gray300 적용',st:'In Development'}],
   'HMS-198':[{k:'HMS-293',s:'패딩/텍스트 크기/아이콘 크기 확인',st:'In Development'}],
@@ -379,8 +380,8 @@ const SUBTASKS = {
   'HMS-209':[{k:'HMS-238',s:'check-20 아이콘 추가',st:'완료'}],
   'RNC-348':[{k:'RNC-413',s:'[JDS-QA] 폰트 및 아이콘 색상 다르게 적용되어 있음',st:'완료'}],
   'RNC-351':[{k:'RNC-370',s:'탭 높이값 확인',st:'완료'}],
-  'RNC-352':[{k:'RNC-367',s:'체크 아이콘 수정',st:'완료'},{k:'RNC-368',s:'상태값 제거 및 수정 필요',st:'Ready For QA'}],
-  'RNC-356':[{k:'RNC-385',s:'[JDS-QA] placeholder 폰트 및 아이콘 색상 다르게 적용되어 있음',st:'Ready For QA'}],
+  'RNC-352':[{k:'RNC-367',s:'체크 아이콘 수정',st:'완료'},{k:'RNC-368',s:'상태값 제거 및 수정 필요',st:'완료'},{k:'RNC-463',s:'텍스트 컬러 확인',st:'해야 할 일'}],
+  'RNC-356':[{k:'RNC-385',s:'[JDS-QA] placeholder 폰트 및 아이콘 색상 다르게 적용되어 있음',st:'완료'}],
   'RNC-374':[{k:'RNC-446',s:'Tab Divider 컬러 수정',st:'해야 할 일'},{k:'RNC-447',s:'tab 좌우 패딩 확인',st:'해야 할 일'}],
   'RNC-386':[{k:'RNC-445',s:'Fill Type > Unselect 시 arrow 컬러확인',st:'해야 할 일'}],
   'HMS-249':[{k:'HMS-304',s:'JDS QA 수정에 따른 카탈로그 수정',st:'In Development'}],
