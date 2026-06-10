@@ -54,6 +54,18 @@
   .dev-card .mini { display:flex; height:8px; border-radius:6px; overflow:hidden; background:var(--bg2); }
   .dev-card .mini > span { display:block; }
 
+  /* ===== Tabs ===== */
+  .tabs { display:flex; gap:4px; background:var(--bg0); border-radius:12px; padding:5px;
+    box-shadow:0 1px 4px rgba(0,0,0,0.04); margin-bottom:16px; }
+  .tab { flex:1; text-align:center; padding:10px 8px; border-radius:9px; font-size:14px; font-weight:700;
+    color:var(--tx4); cursor:pointer; transition:all .15s; border:none; background:none; font-family:inherit;
+    display:flex; align-items:center; justify-content:center; gap:7px; }
+  .tab:hover { color:var(--tx2); }
+  .tab.on { background:var(--bg2); color:var(--tx1); }
+  .tab .tcount { font-size:12px; font-weight:600; color:var(--tx5); }
+  .tab.on .tcount { color:var(--tx3); }
+  .tab .pf-dot { width:8px; height:8px; border-radius:50%; }
+
   /* ===== Toolbar ===== */
   .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:16px; }
   .field { display:flex; align-items:center; gap:7px; }
@@ -64,6 +76,11 @@
     transition:border-color .15s;
   }
   select:focus, .search input:focus { border-color:var(--blue); }
+  select {
+    appearance:none; -webkit-appearance:none; padding-right:38px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238B95A1' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 14px center;
+  }
   .search { position:relative; flex:1; min-width:180px; }
   .search input { width:100%; cursor:text; padding-left:34px; }
   .search svg { position:absolute; left:11px; top:50%; transform:translateY(-50%); }
@@ -95,7 +112,7 @@
   .r-name .cat { font-size:11px; font-weight:600; color:var(--tx4); background:var(--bg2); padding:2px 7px; border-radius:6px; }
   .r-name .sprint { font-size:11px; font-weight:700; padding:2px 8px; border-radius:6px; }
   .r-sub { font-size:12px; color:var(--tx5); margin-top:3px; }
-  .r-assignee select { padding:7px 10px; font-size:12.5px; font-weight:600; min-width:104px; border-radius:8px; }
+  .r-assignee select { padding:7px 30px 7px 11px; font-size:12.5px; font-weight:600; min-width:110px; border-radius:8px; background-position:right 11px center; }
   .r-assignee select.mine { background:#F0FAF5; border-color:var(--green); color:#00864F; }
   .r-assignee select.empty { color:var(--tx5); }
   .jira { flex:none; width:34px; height:34px; border-radius:9px; background:var(--bg2); display:flex; align-items:center; justify-content:center;
@@ -144,10 +161,13 @@
   <!-- Device cards -->
   <section class="devices" id="devices"></section>
 
+  <!-- Tabs -->
+  <div class="tabs" id="tabs"></div>
+
   <!-- Toolbar -->
   <div class="toolbar">
     <div class="field">
-      <label>나</label>
+      <label>담당자</label>
       <select id="meSel"><option value="">선택 안 함</option></select>
     </div>
     <div class="toggle" id="mineToggle"><span class="sw"></span>내 담당만</div>
@@ -297,7 +317,7 @@ const STAGES = {
 const PF_COLOR = {FE:'#3182F6', iOS:'#8B5CF6', Android:'#00C274'};
 const PF_ORDER = ['FE','iOS','Android'];
 
-const state = { mineOnly:false, stage:'', cat:'', sprint:'', q:'' };
+const state = { platform:'', mineOnly:false, stage:'', cat:'', sprint:'', q:'' };
 
 /* ====================================================================
    집계 + 렌더
@@ -336,9 +356,23 @@ function renderKPI() {
   }).join('');
 }
 
+function renderTabs() {
+  const all = Data.all();
+  const tabs = [{v:'', name:'전체', color:null}].concat(PF_ORDER.map(pf => ({v:pf, name:pf, color:PF_COLOR[pf]})));
+  document.getElementById('tabs').innerHTML = tabs.map(t => {
+    const n = t.v ? all.filter(x => x.pf === t.v).length : all.length;
+    const dot = t.color ? `<span class="pf-dot" style="background:${t.color}"></span>` : '';
+    return `<button class="tab${state.platform===t.v?' on':''}" data-pf="${t.v}">${dot}${t.name}<span class="tcount">${n}</span></button>`;
+  }).join('');
+  document.querySelectorAll('#tabs .tab').forEach(b => b.addEventListener('click', () => {
+    state.platform = b.dataset.pf; renderTabs(); renderList();
+  }));
+}
+
 function renderList() {
   const me = Data.getMe();
   let list = Data.all();
+  if (state.platform) list = list.filter(t => t.pf === state.platform);
   if (state.mineOnly && me) list = list.filter(t => t.who === me);
   if (state.stage) list = list.filter(t => t.stage === state.stage);
   if (state.cat) list = list.filter(t => t.cat === state.cat);
@@ -419,6 +453,7 @@ function init() {
   document.getElementById('searchInput').addEventListener('input', e => { state.q = e.target.value.trim(); renderList(); });
 
   renderKPI();
+  renderTabs();
   renderList();
 }
 init();
