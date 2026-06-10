@@ -153,6 +153,27 @@
     text-decoration:none; transition:background .15s; }
   .jira:hover { background:var(--bg3); }
 
+  .col-exp { width:52px; flex:none; }
+  .exp-btn { display:inline-flex; align-items:center; gap:4px; padding:5px 8px; border-radius:8px; border:none;
+    background:var(--bg2); color:var(--tx3); font-family:inherit; font-size:12px; font-weight:700; cursor:pointer; transition:background .15s; }
+  .exp-btn:hover { background:var(--bg3); }
+  .exp-btn svg { transition:transform .18s; }
+  .row-wrap.open .exp-btn { background:#E3F8ED; color:#00864F; }
+  .row-wrap.open .exp-btn svg { transform:rotate(180deg); }
+  .row-wrap { border-bottom:1px solid var(--line); }
+  .row-wrap:last-child { border-bottom:none; }
+  .row-wrap .row { border-bottom:none; }
+  .subpanel { display:none; padding:6px 18px 16px 76px; background:var(--bg1); }
+  .row-wrap.open .subpanel { display:block; }
+  .sub-cap { font-size:11.5px; font-weight:700; color:var(--tx4); margin:6px 0 8px; }
+  .sub-item { display:flex; align-items:center; gap:12px; padding:8px 10px; border-radius:9px; }
+  .sub-item:hover { background:var(--bg0); }
+  .sub-badge { flex:none; font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:20px; width:78px; text-align:center; }
+  .sub-key { flex:none; font-size:12px; font-weight:700; color:var(--tx4); width:66px; }
+  .sub-sum { flex:1; min-width:0; font-size:13px; color:var(--tx2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sub-link { flex:none; width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; text-decoration:none; }
+  .sub-link:hover { background:var(--bg2); }
+
   .empty-state { text-align:center; padding:50px 20px; color:var(--tx4); font-size:14px; }
 
   .footer-note { margin-top:24px; font-size:12px; color:var(--tx5); text-align:center; line-height:1.7; }
@@ -339,6 +360,30 @@ const QA_OF = {
   'RNC-375':'최경미','RNC-386':'최경미','RNC-407':'','RNC-432':'',
 };
 
+// 하위 작업 (지라 subtasks)
+const SUBTASKS = {
+  'RNC-195':[{k:'RNC-436',s:'컬러 확인',st:'In PR Review'}],
+  'HMS-174':[{k:'HMS-231',s:'Large 사이즈 높이 수정',st:'완료'},{k:'HMS-237',s:'태그 컬러 마다 아이콘 on/off 시 없음',st:'완료'},{k:'HMS-248',s:'Small 사이즈 내 아이콘 크기 수정',st:'Ready For QA'}],
+  'RNC-226':[{k:'RNC-381',s:'[JDS-QA] 버튼 BG/폰트 색상 다르게 적용되어있음',st:'완료'},{k:'RNC-383',s:'[JDS-QA] 버튼 sm/xs에서 아이콘 사이즈/위치 다르게 적용되어 있음',st:'완료'},{k:'RNC-384',s:'[JDS-QA] 버튼 sm/xs에서 radius full 적용되지 않음',st:'완료'}],
+  'RNC-316':[{k:'RNC-369',s:'호버 삭제',st:'완료'},{k:'RNC-400',s:'이모지 확인',st:'Ready For QA'}],
+  'HMS-194':[{k:'HMS-294',s:'Tag 아이콘사이즈/텍스트 크기 확인',st:'해야 할 일'},{k:'HMS-295',s:'Tag -> Hug로 변경',st:'해야 할 일'}],
+  'HMS-196':[{k:'HMS-303',s:'[QA] 텍스트 필드 플레이스 홀더 컬러 Gray300 적용',st:'In Development'}],
+  'HMS-198':[{k:'HMS-293',s:'패딩/텍스트 크기/아이콘 크기 확인',st:'In Development'}],
+  'HMS-201':[{k:'HMS-287',s:'[Bug]chip 좌우 패딩 확인',st:'해야 할 일'},{k:'HMS-288',s:'[Bug]Outlined type -> emoji option 제거',st:'In Development'},{k:'HMS-289',s:'[Bug]Chip Type 사이즈 확인',st:'해야 할 일'},{k:'HMS-291',s:'[Bug]Select off 상태 폰트 웨이트 확인',st:'In Development'},{k:'HMS-292',s:'[Bug]Chip Removable -> stroke 컬러 확인',st:'In Development'}],
+  'HMS-204':[{k:'HMS-296',s:'Icon Button 크기 수정',st:'해야 할 일'}],
+  'HMS-207':[{k:'HMS-302',s:'[Color] 컬러 수정',st:'해야 할 일'}],
+  'HMS-208':[{k:'HMS-300',s:'태그 사이즈 확인',st:'In QA'}],
+  'HMS-209':[{k:'HMS-238',s:'check-20 아이콘 추가',st:'완료'}],
+  'RNC-348':[{k:'RNC-413',s:'[JDS-QA] 폰트 및 아이콘 색상 다르게 적용되어 있음',st:'완료'}],
+  'RNC-351':[{k:'RNC-370',s:'탭 높이값 확인',st:'완료'}],
+  'RNC-352':[{k:'RNC-367',s:'체크 아이콘 수정',st:'완료'},{k:'RNC-368',s:'상태값 제거 및 수정 필요',st:'Ready For QA'}],
+  'RNC-356':[{k:'RNC-385',s:'[JDS-QA] placeholder 폰트 및 아이콘 색상 다르게 적용되어 있음',st:'Ready For QA'}],
+  'RNC-374':[{k:'RNC-446',s:'Tab Divider 컬러 수정',st:'해야 할 일'},{k:'RNC-447',s:'tab 좌우 패딩 확인',st:'해야 할 일'}],
+  'RNC-386':[{k:'RNC-445',s:'Fill Type > Unselect 시 arrow 컬러확인',st:'해야 할 일'}],
+  'HMS-249':[{k:'HMS-304',s:'JDS QA 수정에 따른 카탈로그 수정',st:'In Development'}],
+};
+function stageOf(js){ if(js==='완료'||js==='Ready for Release') return 'done'; if(js==='In QA') return 'qa'; if(js==='Ready For QA') return 'ready'; return 'dev'; }
+
 const Data = {
   _overrides: JSON.parse(localStorage.getItem(LS_ASSIGN) || '{}'),
   _qa: JSON.parse(localStorage.getItem(LS_QA) || '{}'),
@@ -454,6 +499,7 @@ function renderList() {
           <span class="col-dev">개발 담당자</span>
           <span class="col-qa">QA 담당자</span>
           <span class="col-jira">Jira</span>
+          <span class="col-exp">하위</span>
         </div>
         ${rows.map(rowHTML.bind(null, me)).join('')}
       </div>
@@ -468,6 +514,9 @@ function renderList() {
       renderList();
     });
   });
+  host.querySelectorAll('.exp-btn').forEach(btn => {
+    btn.addEventListener('click', () => btn.closest('.row-wrap').classList.toggle('open'));
+  });
 }
 
 function assigneeSelect(role, key, value, me) {
@@ -479,20 +528,44 @@ function assigneeSelect(role, key, value, me) {
   return `<select data-key="${key}" data-role="${role}" class="${cls}">${opts}</select>`;
 }
 
+function subPanelHTML(subs) {
+  const done = subs.filter(x => stageOf(x.st) === 'done').length;
+  const items = subs.map(x => {
+    const ss = STAGES[stageOf(x.st)];
+    return `<div class="sub-item">
+      <span class="sub-badge" style="background:${ss.bg};color:${ss.tc}">${x.st}</span>
+      <span class="sub-key">${x.k}</span>
+      <span class="sub-sum" title="${x.s.replace(/"/g,'&quot;')}">${x.s}</span>
+      <a class="sub-link" href="${JIRA_BASE+x.k}" target="_blank" title="지라에서 열기">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8B95A1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>`;
+  }).join('');
+  return `<div class="subpanel"><div class="sub-cap">하위 작업 ${subs.length} · 완료 ${done}/${subs.length}</div>${items}</div>`;
+}
+
 function rowHTML(me, t) {
   const s = STAGES[t.stage];
   const spChip = t.sp ? `<span class="sprint" style="color:${SPRINTS[t.sp].color};background:${SPRINTS[t.sp].bg}">${SPRINTS[t.sp].short}</span>` : '';
-  return `<div class="row">
-    <span class="badge col-stage" style="background:${s.bg};color:${s.tc}">${s.label}</span>
-    <div class="r-main">
-      <div class="r-name">${t.name}<span class="cat">${t.cat}</span>${spChip}</div>
-      <div class="r-sub">${t.key} · ${t.js}${t.sp ? ' · 🗓 '+SPRINTS[t.sp].label : ''}</div>
+  const subs = SUBTASKS[t.key];
+  const expBtn = subs && subs.length
+    ? `<button class="exp-btn" type="button" title="하위 작업 보기">${subs.length}<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>`
+    : '';
+  return `<div class="row-wrap">
+    <div class="row">
+      <span class="badge col-stage" style="background:${s.bg};color:${s.tc}">${s.label}</span>
+      <div class="r-main">
+        <div class="r-name">${t.name}<span class="cat">${t.cat}</span>${spChip}</div>
+        <div class="r-sub">${t.key} · ${t.js}${t.sp ? ' · 🗓 '+SPRINTS[t.sp].label : ''}</div>
+      </div>
+      <div class="r-assignee col-dev">${assigneeSelect('dev', t.key, t.who, me)}</div>
+      <div class="r-assignee col-qa">${assigneeSelect('qa', t.key, t.qa, me)}</div>
+      <a class="jira col-jira" href="${JIRA_BASE+t.key}" target="_blank" title="지라에서 열기">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4E5968" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <span class="col-exp">${expBtn}</span>
     </div>
-    <div class="r-assignee col-dev">${assigneeSelect('dev', t.key, t.who, me)}</div>
-    <div class="r-assignee col-qa">${assigneeSelect('qa', t.key, t.qa, me)}</div>
-    <a class="jira col-jira" href="${JIRA_BASE+t.key}" target="_blank" title="지라에서 열기">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4E5968" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-    </a>
+    ${subs && subs.length ? subPanelHTML(subs) : ''}
   </div>`;
 }
 
