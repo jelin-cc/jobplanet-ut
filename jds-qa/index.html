@@ -27,6 +27,8 @@
   .head .kicker { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700;
     color:#00A866; background:#E3F8ED; padding:5px 11px; border-radius:20px; margin-bottom:12px; }
   .head h1 { font-size:26px; font-weight:800; letter-spacing:-.6px; }
+  .title-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .head .asof { font-size:12px; font-weight:600; color:var(--tx4); background:var(--bg2); padding:5px 10px; border-radius:8px; white-space:nowrap; }
   .head .sub { margin-top:7px; font-size:14px; color:var(--tx4); }
   .head .sub a { color:var(--tx3); text-decoration:none; border-bottom:1px solid var(--line2); }
 
@@ -168,7 +170,7 @@
   .sub-cap { font-size:11.5px; font-weight:700; color:var(--tx4); margin:6px 0 8px; }
   .sub-item { display:flex; align-items:center; gap:12px; padding:8px 10px; border-radius:9px; }
   .sub-item:hover { background:var(--bg0); }
-  .sub-badge { flex:none; font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:20px; width:78px; text-align:center; }
+  .sub-badge { flex:none; font-size:10.5px; font-weight:700; padding:3px 11px; border-radius:20px; white-space:nowrap; text-align:center; }
   .sub-key { flex:none; font-size:12px; font-weight:700; color:var(--tx4); width:66px; }
   .sub-sum { flex:1; min-width:0; font-size:13px; color:var(--tx2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .sub-link { flex:none; width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; text-decoration:none; }
@@ -194,7 +196,7 @@
 <div class="wrap">
   <header class="head">
     <span class="kicker">● JDS Design System</span>
-    <h1>컴포넌트 QA 진척 대시보드</h1>
+    <div class="title-row"><h1>컴포넌트 QA 진척 대시보드</h1><span class="asof" id="asof"></span></div>
     <p class="sub">FE · iOS · Android 디자인 시스템 컴포넌트 QA 현황 · 기준 지라
       <a href="https://jobplanet.atlassian.net/browse/HMS-176" target="_blank">HMS-176</a> ·
       <a href="https://jobplanet.atlassian.net/browse/HMS-177" target="_blank">HMS-177</a></p>
@@ -204,7 +206,7 @@
   <section class="overall">
     <div class="overall-top">
       <div class="overall-pct" id="ovPct">0<small>%</small></div>
-      <div class="overall-meta">전체 <b id="ovTotal">0</b>건 중 <b id="ovDone">0</b>건 QA 완료<br>기준일 <b>2026-06-10</b></div>
+      <div class="overall-meta">전체 <b id="ovTotal">0</b>건 중 <b id="ovDone">0</b>건 QA 완료<br>기준 <b id="ovAsof">2026-06-10</b></div>
     </div>
     <div class="stack" id="ovStack"></div>
     <div class="legend">
@@ -279,16 +281,16 @@
 const SEED = [
   // FE
   {key:'HMS-174', name:'Tag (태그)', pf:'FE', cat:'컴포넌트', stage:'done', who:'강태완', js:'완료'},
-  {key:'RNC-226', name:'Button', pf:'FE', cat:'컴포넌트', stage:'qa', who:'채수민/FE', js:'In QA'},
+  {key:'RNC-226', name:'Button', pf:'FE', cat:'컴포넌트', stage:'done', who:'채수민/FE', js:'완료'},
   {key:'RNC-227', name:'Color 토큰 (Green)', pf:'FE', cat:'Foundation', stage:'done', who:'채수민/FE', js:'완료'},
   {key:'RNC-228', name:'Typography', pf:'FE', cat:'Foundation', stage:'done', who:'채수민/FE', js:'완료'},
-  {key:'RNC-230', name:'Icon Button', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
+  {key:'RNC-230', name:'Icon Button', pf:'FE', cat:'컴포넌트', stage:'qa', who:'채수민/FE', js:'In QA'},
   {key:'HMS-190', name:'Chromatic 스토리북 연결', pf:'FE', cat:'인프라', stage:'done', who:'강태완', js:'Ready for Release'},
-  {key:'RNC-316', name:'Chip', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
+  {key:'RNC-316', name:'Chip', pf:'FE', cat:'컴포넌트', stage:'qa', who:'채수민/FE', js:'In QA'},
   {key:'HMS-209', name:'Icon (아이콘)', pf:'FE', cat:'컴포넌트', stage:'qa', who:'민지희', js:'In QA'},
   {key:'RNC-345', name:'TextButton', pf:'FE', cat:'컴포넌트', stage:'done', who:'채수민/FE', js:'완료'},
   {key:'RNC-346', name:'Icon Emoji', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
-  {key:'RNC-348', name:'Search', pf:'FE', cat:'컴포넌트', stage:'qa', who:'채수민/FE', js:'In QA'},
+  {key:'RNC-348', name:'Search', pf:'FE', cat:'컴포넌트', stage:'done', who:'채수민/FE', js:'완료'},
   {key:'RNC-349', name:'Toast', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
   {key:'RNC-350', name:'Modal', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
   {key:'RNC-351', name:'Tab', pf:'FE', cat:'컴포넌트', stage:'done', who:'채수민/FE', js:'완료'},
@@ -324,6 +326,7 @@ const SEED = [
 ];
 
 const JIRA_BASE = 'https://jobplanet.atlassian.net/browse/';
+const ASOF = '2026-06-10 21:19';  // 지라 최신 반영 시각
 const ROSTER = ['강태완','채수민/FE','민지희','배효진','문지예','송레지나','한지민','최경미','최지원','송인경'];
 
 // 적용 스프린트 (지라 customfield_10020 현재 스프린트 기준)
@@ -623,6 +626,9 @@ function init() {
   document.getElementById('searchInput').addEventListener('input', e => { state.q = e.target.value.trim(); renderList(); });
 
   ['meSel','stageFilter','catFilter','sprintFilter'].forEach(id => enhanceSelect(document.getElementById(id)));
+
+  document.getElementById('asof').textContent = '🕘 ' + ASOF + ' 기준';
+  document.getElementById('ovAsof').textContent = ASOF;
 
   renderKPI();
   renderTabs();
