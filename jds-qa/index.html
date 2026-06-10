@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JDS 컴포넌트 QA 진척 대시보드</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<style>
+  :root {
+    --tx1:#191F28; --tx2:#333D4B; --tx3:#4E5968; --tx4:#8B95A1; --tx5:#B0B8C1;
+    --bg0:#FFFFFF; --bg1:#F9FAFB; --bg2:#F2F4F6; --bg3:#ECEDF0;
+    --line:#F2F4F6; --line2:#E5E8EB;
+    --blue:#3182F6; --green:#00C274; --amber:#F59E0B; --gray:#8B95A1;
+    --radius:16px;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    font-family:'Pretendard',system-ui,-apple-system,sans-serif;
+    background:var(--bg2); color:var(--tx1);
+    -webkit-font-smoothing:antialiased; line-height:1.5;
+  }
+  .wrap { max-width:960px; margin:0 auto; padding:32px 20px 80px; }
+
+  /* ===== Header ===== */
+  .head { margin-bottom:28px; }
+  .head .kicker { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700;
+    color:var(--blue); background:#EBF4FF; padding:5px 11px; border-radius:20px; margin-bottom:12px; }
+  .head h1 { font-size:26px; font-weight:800; letter-spacing:-.6px; }
+  .head .sub { margin-top:7px; font-size:14px; color:var(--tx4); }
+  .head .sub a { color:var(--tx3); text-decoration:none; border-bottom:1px solid var(--line2); }
+
+  /* ===== Overall KPI ===== */
+  .overall { background:var(--bg0); border-radius:var(--radius); padding:24px; margin-bottom:16px;
+    box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+  .overall-top { display:flex; align-items:flex-end; gap:14px; margin-bottom:18px; }
+  .overall-pct { font-size:44px; font-weight:800; letter-spacing:-1.5px; line-height:1; color:var(--tx1); }
+  .overall-pct small { font-size:18px; font-weight:700; color:var(--tx4); margin-left:2px; }
+  .overall-meta { font-size:13px; color:var(--tx4); padding-bottom:5px; }
+  .overall-meta b { color:var(--tx2); font-weight:700; }
+  .stack { display:flex; height:14px; border-radius:8px; overflow:hidden; background:var(--bg2); }
+  .stack > span { display:block; transition:width .4s ease; }
+  .legend { display:flex; flex-wrap:wrap; gap:14px; margin-top:14px; }
+  .legend span { display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--tx3); font-weight:500; }
+  .dot { width:9px; height:9px; border-radius:3px; flex:none; }
+
+  /* ===== Device cards ===== */
+  .devices { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:28px; }
+  .dev-card { background:var(--bg0); border-radius:14px; padding:18px; box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+  .dev-card h3 { font-size:14px; font-weight:700; color:var(--tx2); display:flex; align-items:center; gap:7px; }
+  .dev-card .pf-dot { width:8px; height:8px; border-radius:50%; }
+  .dev-card .pct { font-size:28px; font-weight:800; letter-spacing:-1px; margin:10px 0 3px; }
+  .dev-card .cnt { font-size:12.5px; color:var(--tx4); margin-bottom:12px; }
+  .dev-card .mini { display:flex; height:8px; border-radius:6px; overflow:hidden; background:var(--bg2); }
+  .dev-card .mini > span { display:block; }
+
+  /* ===== Toolbar ===== */
+  .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:16px; }
+  .field { display:flex; align-items:center; gap:7px; }
+  .field label { font-size:12.5px; color:var(--tx4); font-weight:600; }
+  select, .search input {
+    font-family:inherit; font-size:13.5px; color:var(--tx2); background:var(--bg0);
+    border:1.5px solid var(--line2); border-radius:9px; padding:9px 12px; cursor:pointer; outline:none;
+    transition:border-color .15s;
+  }
+  select:focus, .search input:focus { border-color:var(--blue); }
+  .search { position:relative; flex:1; min-width:180px; }
+  .search input { width:100%; cursor:text; padding-left:34px; }
+  .search svg { position:absolute; left:11px; top:50%; transform:translateY(-50%); }
+  .toggle { display:inline-flex; align-items:center; gap:8px; cursor:pointer; user-select:none;
+    font-size:13.5px; font-weight:600; color:var(--tx2); background:var(--bg0);
+    border:1.5px solid var(--line2); border-radius:9px; padding:8px 13px; transition:all .15s; }
+  .toggle.on { background:#EBF4FF; border-color:var(--blue); color:var(--blue); }
+  .toggle .sw { width:30px; height:18px; border-radius:20px; background:var(--bg3); position:relative; transition:background .15s; }
+  .toggle.on .sw { background:var(--blue); }
+  .toggle .sw::after { content:''; position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%;
+    background:#fff; transition:transform .15s; }
+  .toggle.on .sw::after { transform:translateX(12px); }
+
+  /* ===== Group ===== */
+  .group { margin-bottom:24px; }
+  .group-head { display:flex; align-items:center; gap:9px; padding:0 4px 10px; }
+  .group-head .pf-dot { width:10px; height:10px; border-radius:50%; }
+  .group-head h2 { font-size:16px; font-weight:700; letter-spacing:-.3px; }
+  .group-head .gcount { font-size:12.5px; color:var(--tx4); font-weight:600;
+    background:var(--bg2); padding:2px 9px; border-radius:20px; }
+
+  .rows { background:var(--bg0); border-radius:14px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+  .row { display:flex; align-items:center; gap:14px; padding:14px 18px; border-bottom:1px solid var(--line); }
+  .row:last-child { border-bottom:none; }
+  .row:hover { background:var(--bg1); }
+  .badge { flex:none; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:20px; width:62px; text-align:center; }
+  .r-main { flex:1; min-width:0; }
+  .r-name { font-size:14.5px; font-weight:600; color:var(--tx1); display:flex; align-items:center; gap:8px; }
+  .r-name .cat { font-size:11px; font-weight:600; color:var(--tx4); background:var(--bg2); padding:2px 7px; border-radius:6px; }
+  .r-name .sprint { font-size:11px; font-weight:700; padding:2px 8px; border-radius:6px; }
+  .r-sub { font-size:12px; color:var(--tx5); margin-top:3px; }
+  .r-assignee select { padding:7px 10px; font-size:12.5px; font-weight:600; min-width:104px; border-radius:8px; }
+  .r-assignee select.mine { background:#F0FAF5; border-color:var(--green); color:#00864F; }
+  .r-assignee select.empty { color:var(--tx5); }
+  .jira { flex:none; width:34px; height:34px; border-radius:9px; background:var(--bg2); display:flex; align-items:center; justify-content:center;
+    text-decoration:none; transition:background .15s; }
+  .jira:hover { background:var(--bg3); }
+
+  .empty-state { text-align:center; padding:50px 20px; color:var(--tx4); font-size:14px; }
+
+  .footer-note { margin-top:24px; font-size:12px; color:var(--tx5); text-align:center; line-height:1.7; }
+
+  @media (max-width:680px) {
+    .devices { grid-template-columns:1fr; }
+    .overall-pct { font-size:38px; }
+    .row { flex-wrap:wrap; }
+    .r-main { flex-basis:100%; order:2; }
+    .badge { order:1; }
+    .r-assignee { order:3; } .jira { order:4; margin-left:auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <span class="kicker">● JDS Design System</span>
+    <h1>컴포넌트 QA 진척 대시보드</h1>
+    <p class="sub">FE · iOS · Android 디자인 시스템 컴포넌트 QA 현황 · 기준 지라
+      <a href="https://jobplanet.atlassian.net/browse/HMS-176" target="_blank">HMS-176</a> ·
+      <a href="https://jobplanet.atlassian.net/browse/HMS-177" target="_blank">HMS-177</a></p>
+  </header>
+
+  <!-- Overall -->
+  <section class="overall">
+    <div class="overall-top">
+      <div class="overall-pct" id="ovPct">0<small>%</small></div>
+      <div class="overall-meta">전체 <b id="ovTotal">0</b>건 중 <b id="ovDone">0</b>건 QA 완료<br>기준일 <b>2026-06-10</b></div>
+    </div>
+    <div class="stack" id="ovStack"></div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--green)"></i>QA 완료</span>
+      <span><i class="dot" style="background:var(--blue)"></i>QA 중</span>
+      <span><i class="dot" style="background:var(--amber)"></i>QA 대기</span>
+      <span><i class="dot" style="background:var(--gray)"></i>개발 중</span>
+    </div>
+  </section>
+
+  <!-- Device cards -->
+  <section class="devices" id="devices"></section>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="field">
+      <label>나</label>
+      <select id="meSel"><option value="">선택 안 함</option></select>
+    </div>
+    <div class="toggle" id="mineToggle"><span class="sw"></span>내 담당만</div>
+    <div class="field">
+      <label>진행단계</label>
+      <select id="stageFilter">
+        <option value="">전체</option>
+        <option value="done">QA 완료</option>
+        <option value="qa">QA 중</option>
+        <option value="ready">QA 대기</option>
+        <option value="dev">개발 중</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>구분</label>
+      <select id="catFilter">
+        <option value="">전체</option>
+        <option value="컴포넌트">컴포넌트</option>
+        <option value="Foundation">Foundation</option>
+        <option value="인프라">인프라</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>스프린트</label>
+      <select id="sprintFilter">
+        <option value="">전체</option>
+        <option value="rc2">R&C Sprint2</option>
+        <option value="rc1">R&C Sprint1</option>
+        <option value="hm2">H&M Sprint2</option>
+        <option value="none">미지정</option>
+      </select>
+    </div>
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#B0B8C1" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+      <input id="searchInput" type="text" placeholder="컴포넌트 검색" />
+    </div>
+  </div>
+
+  <!-- List -->
+  <div id="list"></div>
+
+  <p class="footer-note">
+    담당자는 셀에서 직접 변경(셀프 지정)할 수 있으며, 변경값은 이 브라우저에 저장됩니다. (공유 저장은 백엔드 연동 시 적용)<br>
+    진행단계는 지라 기준 스냅샷입니다 · 매핑: 완료/Release→QA 완료, In QA→QA 중, Ready For QA→QA 대기, 그 외→개발 중
+  </p>
+</div>
+
+<script>
+/* ====================================================================
+   데이터 접근 레이어 (Data Layer)
+   - 지금은 내장 데이터 + localStorage. 이 객체만 교체하면 백엔드(지라/시트) 연동 가능.
+   ==================================================================== */
+const SEED = [
+  // FE
+  {key:'HMS-174', name:'Tag (태그)', pf:'FE', cat:'컴포넌트', stage:'done', who:'강태완', js:'완료'},
+  {key:'RNC-226', name:'Button', pf:'FE', cat:'컴포넌트', stage:'qa', who:'채수민/FE', js:'In QA'},
+  {key:'RNC-227', name:'Color 토큰 (Green)', pf:'FE', cat:'Foundation', stage:'done', who:'채수민/FE', js:'완료'},
+  {key:'RNC-228', name:'Typography', pf:'FE', cat:'Foundation', stage:'done', who:'채수민/FE', js:'완료'},
+  {key:'RNC-230', name:'Icon Button', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
+  {key:'HMS-190', name:'Chromatic 스토리북 연결', pf:'FE', cat:'인프라', stage:'done', who:'강태완', js:'Ready for Release'},
+  {key:'RNC-316', name:'Chip', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
+  {key:'HMS-209', name:'Icon (아이콘)', pf:'FE', cat:'컴포넌트', stage:'qa', who:'민지희', js:'In QA'},
+  {key:'RNC-345', name:'TextButton', pf:'FE', cat:'컴포넌트', stage:'done', who:'채수민/FE', js:'완료'},
+  {key:'RNC-346', name:'Icon Emoji', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
+  {key:'RNC-348', name:'Search', pf:'FE', cat:'컴포넌트', stage:'qa', who:'채수민/FE', js:'In QA'},
+  {key:'RNC-349', name:'Toast', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
+  {key:'RNC-350', name:'Modal', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
+  {key:'RNC-351', name:'Tab', pf:'FE', cat:'컴포넌트', stage:'done', who:'채수민/FE', js:'완료'},
+  {key:'RNC-352', name:'Checkbox', pf:'FE', cat:'컴포넌트', stage:'ready', who:'채수민/FE', js:'Ready For QA'},
+  {key:'RNC-355', name:'TextField', pf:'FE', cat:'컴포넌트', stage:'done', who:'채수민/FE', js:'완료'},
+  {key:'RNC-356', name:'HomeSearch', pf:'FE', cat:'컴포넌트', stage:'qa', who:'채수민/FE', js:'In QA'},
+  {key:'HMS-241', name:'Button Pagination', pf:'FE', cat:'컴포넌트', stage:'qa', who:'강태완', js:'In QA'},
+  // Android
+  {key:'RNC-195', name:'Typography & Color', pf:'Android', cat:'Foundation', stage:'ready', who:'배효진', js:'Ready For QA'},
+  {key:'HMS-193', name:'Icon / Graphic', pf:'Android', cat:'컴포넌트', stage:'qa', who:'문지예', js:'In QA'},
+  {key:'HMS-194', name:'Tag / Badge', pf:'Android', cat:'컴포넌트', stage:'qa', who:'문지예', js:'In QA'},
+  {key:'HMS-195', name:'Modal', pf:'Android', cat:'컴포넌트', stage:'dev', who:'문지예', js:'In Development'},
+  {key:'HMS-196', name:'Input (Search / Text Field)', pf:'Android', cat:'컴포넌트', stage:'qa', who:'문지예', js:'In QA'},
+  {key:'HMS-197', name:'Header', pf:'Android', cat:'컴포넌트', stage:'dev', who:'문지예', js:'해야 할 일'},
+  {key:'HMS-198', name:'Toast', pf:'Android', cat:'컴포넌트', stage:'qa', who:'문지예', js:'In QA'},
+  {key:'HMS-200', name:'Card', pf:'Android', cat:'컴포넌트', stage:'dev', who:'문지예', js:'Ready For Dev'},
+  {key:'HMS-201', name:'Chip / Divider', pf:'Android', cat:'컴포넌트', stage:'qa', who:'문지예', js:'In QA'},
+  {key:'HMS-202', name:'Tab', pf:'Android', cat:'컴포넌트', stage:'dev', who:'문지예', js:'In PR Review'},
+  {key:'HMS-204', name:'Button', pf:'Android', cat:'컴포넌트', stage:'qa', who:'문지예', js:'In QA'},
+  {key:'HMS-246', name:'Checkbox', pf:'Android', cat:'컴포넌트', stage:'dev', who:'문지예', js:'In PR Review'},
+  {key:'HMS-249', name:'디자인 QA용 카탈로그', pf:'Android', cat:'인프라', stage:'dev', who:'문지예', js:'In PR Review'},
+  {key:'HMS-265', name:'Dropdown', pf:'Android', cat:'컴포넌트', stage:'dev', who:'문지예', js:'해야 할 일'},
+  // iOS
+  {key:'HMS-168', name:'모듈 구조 설계', pf:'iOS', cat:'인프라', stage:'done', who:'송레지나', js:'Ready for Release'},
+  {key:'HMS-207', name:'Foundation', pf:'iOS', cat:'Foundation', stage:'ready', who:'송레지나', js:'Ready For QA'},
+  {key:'HMS-208', name:'Tag', pf:'iOS', cat:'컴포넌트', stage:'ready', who:'송레지나', js:'Ready For QA'},
+  {key:'RNC-320', name:'Button', pf:'iOS', cat:'컴포넌트', stage:'ready', who:'한지민', js:'Ready For QA'},
+  {key:'RNC-374', name:'Tab', pf:'iOS', cat:'컴포넌트', stage:'ready', who:'한지민', js:'Ready For QA'},
+  {key:'RNC-375', name:'Spacing', pf:'iOS', cat:'Foundation', stage:'dev', who:'한지민', js:'In Development'},
+  {key:'RNC-386', name:'Chip', pf:'iOS', cat:'컴포넌트', stage:'ready', who:'한지민', js:'Ready For QA'},
+  {key:'RNC-407', name:'Icon Button', pf:'iOS', cat:'컴포넌트', stage:'ready', who:'한지민', js:'Ready For QA'},
+  {key:'RNC-432', name:'Button isFullWidth 추가', pf:'iOS', cat:'컴포넌트', stage:'ready', who:'한지민', js:'Ready For QA'},
+];
+
+const JIRA_BASE = 'https://jobplanet.atlassian.net/browse/';
+const ROSTER = ['강태완','채수민/FE','민지희','배효진','문지예','송레지나','한지민'];
+
+// 적용 스프린트 (지라 customfield_10020 현재 스프린트 기준)
+const SPRINTS = {
+  rc1:{label:'R&C Sprint1 · Hello World', short:'R&C S1', color:'#3182F6', bg:'#EBF4FF'},
+  rc2:{label:'R&C Sprint2 · 리뷰피드 신설', short:'R&C S2', color:'#8B5CF6', bg:'#F3EEFE'},
+  hm2:{label:'H&M Sprint2 · 애자일하다', short:'H&M S2', color:'#00864F', bg:'#EAF8F1'},
+};
+const SPRINT_OF = {
+  'HMS-174':'hm2','RNC-226':'rc1','RNC-227':'rc1','RNC-228':'rc1','RNC-230':'rc1',
+  'HMS-190':'hm2','RNC-316':'rc1','HMS-209':'hm2','RNC-345':'rc2','RNC-346':'rc2',
+  'RNC-348':'rc2','RNC-349':'rc2','RNC-350':'rc2','RNC-351':'rc2','RNC-352':'rc2',
+  'RNC-355':'rc2','RNC-356':'rc2','HMS-241':'hm2',
+  'RNC-195':'rc2','HMS-193':'hm2','HMS-194':'hm2','HMS-195':'hm2','HMS-196':'hm2',
+  'HMS-197':'','HMS-198':'hm2','HMS-200':'hm2','HMS-201':'hm2','HMS-202':'hm2',
+  'HMS-204':'hm2','HMS-246':'hm2','HMS-249':'hm2','HMS-265':'',
+  'HMS-168':'hm2','HMS-207':'hm2','HMS-208':'hm2','RNC-320':'rc2','RNC-374':'rc2',
+  'RNC-375':'','RNC-386':'rc2','RNC-407':'rc2','RNC-432':'rc2',
+};
+const LS_ASSIGN = 'jds_qa_assignees_v1';
+const LS_ME = 'jds_qa_me_v1';
+
+const Data = {
+  _overrides: JSON.parse(localStorage.getItem(LS_ASSIGN) || '{}'),
+  all() {
+    return SEED.map(t => ({...t,
+      who: (this._overrides[t.key] !== undefined ? this._overrides[t.key] : t.who),
+      sp: SPRINT_OF[t.key] || ''}));
+  },
+  setAssignee(key, who) {
+    this._overrides[key] = who;
+    localStorage.setItem(LS_ASSIGN, JSON.stringify(this._overrides));
+  },
+  getMe() { return localStorage.getItem(LS_ME) || ''; },
+  setMe(v) { localStorage.setItem(LS_ME, v); },
+};
+
+/* ====================================================================
+   설정 / 상태
+   ==================================================================== */
+const STAGES = {
+  done:  {label:'QA 완료', color:'var(--green)', bg:'#EAF8F1', tc:'#00864F'},
+  qa:    {label:'QA 중',   color:'var(--blue)',  bg:'#EBF4FF', tc:'#1B64DA'},
+  ready: {label:'QA 대기', color:'var(--amber)', bg:'#FFF6E5', tc:'#B26A00'},
+  dev:   {label:'개발 중', color:'var(--gray)',  bg:'#F2F4F6', tc:'#6B7684'},
+};
+const PF_COLOR = {FE:'#3182F6', iOS:'#8B5CF6', Android:'#00C274'};
+const PF_ORDER = ['FE','iOS','Android'];
+
+const state = { mineOnly:false, stage:'', cat:'', sprint:'', q:'' };
+
+/* ====================================================================
+   집계 + 렌더
+   ==================================================================== */
+function counts(list) {
+  const c = {done:0, qa:0, ready:0, dev:0};
+  list.forEach(t => c[t.stage]++);
+  c.total = list.length;
+  c.pct = c.total ? Math.round(c.done / c.total * 100) : 0;
+  return c;
+}
+function stackBars(c, h) {
+  return ['done','qa','ready','dev'].map(s => {
+    const w = c.total ? (c[s] / c.total * 100) : 0;
+    return w > 0 ? `<span style="width:${w}%;background:${STAGES[s].color}"></span>` : '';
+  }).join('');
+}
+
+function renderKPI() {
+  const all = Data.all();
+  const c = counts(all);
+  document.getElementById('ovPct').innerHTML = c.pct + '<small>%</small>';
+  document.getElementById('ovTotal').textContent = c.total;
+  document.getElementById('ovDone').textContent = c.done;
+  document.getElementById('ovStack').innerHTML = stackBars(c);
+
+  const dv = document.getElementById('devices');
+  dv.innerHTML = PF_ORDER.map(pf => {
+    const c2 = counts(all.filter(t => t.pf === pf));
+    return `<div class="dev-card">
+      <h3><span class="pf-dot" style="background:${PF_COLOR[pf]}"></span>${pf}</h3>
+      <div class="pct" style="color:${PF_COLOR[pf]}">${c2.pct}%</div>
+      <div class="cnt">QA 완료 ${c2.done} / ${c2.total}건</div>
+      <div class="mini">${stackBars(c2)}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderList() {
+  const me = Data.getMe();
+  let list = Data.all();
+  if (state.mineOnly && me) list = list.filter(t => t.who === me);
+  if (state.stage) list = list.filter(t => t.stage === state.stage);
+  if (state.cat) list = list.filter(t => t.cat === state.cat);
+  if (state.sprint) list = list.filter(t => state.sprint === 'none' ? !t.sp : t.sp === state.sprint);
+  if (state.q) { const q = state.q.toLowerCase(); list = list.filter(t => t.name.toLowerCase().includes(q) || t.key.toLowerCase().includes(q)); }
+
+  const host = document.getElementById('list');
+  if (!list.length) { host.innerHTML = `<div class="empty-state">조건에 맞는 컴포넌트가 없어요.</div>`; return; }
+
+  host.innerHTML = PF_ORDER.map(pf => {
+    const rows = list.filter(t => t.pf === pf);
+    if (!rows.length) return '';
+    const c = counts(rows);
+    return `<div class="group">
+      <div class="group-head">
+        <span class="pf-dot" style="background:${PF_COLOR[pf]}"></span>
+        <h2>${pf}</h2>
+        <span class="gcount">${c.done}/${c.total} 완료</span>
+      </div>
+      <div class="rows">
+        ${rows.map(rowHTML.bind(null, me)).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  host.querySelectorAll('select[data-key]').forEach(sel => {
+    sel.addEventListener('change', e => {
+      Data.setAssignee(e.target.dataset.key, e.target.value);
+      renderList();
+    });
+  });
+}
+
+function rowHTML(me, t) {
+  const s = STAGES[t.stage];
+  const isMine = me && t.who === me;
+  const opts = ['<option value="">미지정</option>']
+    .concat(ROSTER.map(n => `<option value="${n}"${n===t.who?' selected':''}>${n}</option>`))
+    .join('');
+  const cls = t.who ? (isMine ? 'mine' : '') : 'empty';
+  const spChip = t.sp ? `<span class="sprint" style="color:${SPRINTS[t.sp].color};background:${SPRINTS[t.sp].bg}">${SPRINTS[t.sp].short}</span>` : '';
+  return `<div class="row">
+    <span class="badge" style="background:${s.bg};color:${s.tc}">${s.label}</span>
+    <div class="r-main">
+      <div class="r-name">${t.name}<span class="cat">${t.cat}</span>${spChip}</div>
+      <div class="r-sub">${t.key} · ${t.js}${t.sp ? ' · 🗓 '+SPRINTS[t.sp].label : ''}</div>
+    </div>
+    <div class="r-assignee">
+      <select data-key="${t.key}" class="${cls}">${opts}</select>
+    </div>
+    <a class="jira" href="${JIRA_BASE+t.key}" target="_blank" title="지라에서 열기">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4E5968" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </a>
+  </div>`;
+}
+
+/* ====================================================================
+   초기화 / 이벤트
+   ==================================================================== */
+function init() {
+  // 나 선택
+  const meSel = document.getElementById('meSel');
+  meSel.innerHTML = '<option value="">선택 안 함</option>' + ROSTER.map(n => `<option value="${n}">${n}</option>`).join('');
+  meSel.value = Data.getMe();
+  meSel.addEventListener('change', e => { Data.setMe(e.target.value); renderList(); });
+
+  const mt = document.getElementById('mineToggle');
+  mt.addEventListener('click', () => {
+    if (!Data.getMe()) { document.getElementById('meSel').focus(); return; }
+    state.mineOnly = !state.mineOnly;
+    mt.classList.toggle('on', state.mineOnly);
+    renderList();
+  });
+
+  document.getElementById('stageFilter').addEventListener('change', e => { state.stage = e.target.value; renderList(); });
+  document.getElementById('catFilter').addEventListener('change', e => { state.cat = e.target.value; renderList(); });
+  document.getElementById('sprintFilter').addEventListener('change', e => { state.sprint = e.target.value; renderList(); });
+  document.getElementById('searchInput').addEventListener('input', e => { state.q = e.target.value.trim(); renderList(); });
+
+  renderKPI();
+  renderList();
+}
+init();
+</script>
+</body>
+</html>
