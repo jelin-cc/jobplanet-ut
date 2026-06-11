@@ -1,6 +1,6 @@
 name: Sync JDS-QA from Jira
 
-# 매일 1회 지라(에픽 HMS-176/HMS-177 하위)에서 상태·담당·스프린트·QA·하위작업을 가져와
+# 1시간마다 지라(에픽 HMS-176/HMS-177 하위)에서 상태·담당·스프린트·QA·하위작업을 가져와
 # jds-qa/index.html 데이터를 갱신하고 GitHub Pages 로 바로 재배포한다.
 #
 # 필요 Secret (저장소 Settings → Secrets and variables → Actions):
@@ -12,7 +12,7 @@ name: Sync JDS-QA from Jira
 
 on:
   schedule:
-    - cron: '0 23 * * *'   # 매일 08:00 KST (= 23:00 UTC 전날)
+    - cron: '0 * * * *'   # 매시간 정각 (UTC 기준, 데이터 변경 있을 때만 커밋)
   workflow_dispatch: {}     # 깃허브 UI에서 수동 실행용
 
 permissions:
