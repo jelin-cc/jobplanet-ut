@@ -279,7 +279,7 @@
    - 지금은 내장 데이터 + localStorage. 이 객체만 교체하면 백엔드(지라/시트) 연동 가능.
    ==================================================================== */
 const SEED = [
-  {"key":"HMS-174","name":"Tag (태그)","pf":"FE","cat":"컴포넌트","stage":"ready","who":"강태완","js":"Ready For QA"},
+  {"key":"HMS-174","name":"Tag (태그)","pf":"FE","cat":"컴포넌트","stage":"done","who":"강태완","js":"완료"},
   {"key":"RNC-226","name":"Button","pf":"FE","cat":"컴포넌트","stage":"done","who":"채수민/FE","js":"완료"},
   {"key":"RNC-227","name":"Color 토큰 (Green)","pf":"FE","cat":"Foundation","stage":"done","who":"채수민/FE","js":"완료"},
   {"key":"RNC-228","name":"Typography","pf":"FE","cat":"Foundation","stage":"done","who":"채수민/FE","js":"완료"},
@@ -308,7 +308,7 @@ const SEED = [
   {"key":"HMS-201","name":"Chip / Divider","pf":"Android","cat":"컴포넌트","stage":"qa","who":"문지예","js":"In QA"},
   {"key":"HMS-202","name":"Tab","pf":"Android","cat":"컴포넌트","stage":"ready","who":"문지예","js":"Ready For QA"},
   {"key":"HMS-204","name":"Button","pf":"Android","cat":"컴포넌트","stage":"qa","who":"문지예","js":"In QA"},
-  {"key":"HMS-246","name":"Checkbox","pf":"Android","cat":"컴포넌트","stage":"ready","who":"문지예","js":"Ready For QA"},
+  {"key":"HMS-246","name":"Checkbox","pf":"Android","cat":"컴포넌트","stage":"done","who":"문지예","js":"완료"},
   {"key":"HMS-249","name":"디자인 QA용 카탈로그","pf":"Android","cat":"인프라","stage":"qa","who":"문지예","js":"In QA"},
   {"key":"HMS-265","name":"Dropdown","pf":"Android","cat":"컴포넌트","stage":"dev","who":"문지예","js":"해야 할 일"},
   {"key":"HMS-168","name":"모듈 구조 설계","pf":"iOS","cat":"인프라","stage":"done","who":"송레지나","js":"Ready for Release"},
@@ -324,7 +324,7 @@ const SEED = [
 ];
 
 const JIRA_BASE = 'https://jobplanet.atlassian.net/browse/';
-const ASOF = '2026-06-11 18:36';  // 지라 최신 반영 시각 (scripts/fetch-jira.mjs 자동 생성)
+const ASOF = '2026-06-11 19:34';  // 지라 최신 반영 시각 (scripts/fetch-jira.mjs 자동 생성)
 const ROSTER = ['강태완','채수민/FE','민지희','배효진','문지예','송레지나','한지민','최경미','최지원','송인경'];
 
 // 적용 스프린트 (지라 customfield_10020 현재 스프린트 기준)
@@ -407,7 +407,7 @@ const QA_OF = {
   "HMS-201":"최경미",
   "HMS-202":"최경미",
   "HMS-204":"최지원",
-  "HMS-246":"최경미",
+  "HMS-246":"최지원",
   "HMS-207":"송인경",
   "HMS-208":"최경미",
   "RNC-320":"송인경",
@@ -420,14 +420,14 @@ const QA_OF = {
 
 // 하위 작업 (지라 subtasks)
 const SUBTASKS = {
-  "HMS-174":[{"k":"HMS-231","s":"Large 사이즈 높이 수정","st":"완료"},{"k":"HMS-237","s":"태그 컬러 마다 아이콘 on/off 시 없음","st":"완료"},{"k":"HMS-248","s":"Small 사이즈 내 아이콘 크기 수정","st":"Ready For QA"}],
+  "HMS-174":[{"k":"HMS-231","s":"Large 사이즈 높이 수정","st":"완료"},{"k":"HMS-237","s":"태그 컬러 마다 아이콘 on/off 시 없음","st":"완료"},{"k":"HMS-248","s":"Small 사이즈 내 아이콘 크기 수정","st":"완료"}],
   "RNC-226":[{"k":"RNC-381","s":"[JDS-QA] 버튼 BG/폰트 색상 다르게 적용되어있음","st":"완료"},{"k":"RNC-383","s":"[JDS-QA] 버튼 sm/xs에서 아이콘 사이즈/위치 다르게 적용되어 있음","st":"완료"},{"k":"RNC-384","s":"[JDS-QA] 버튼 sm/xs에서 radius full 적용되지 않음","st":"완료"}],
-  "RNC-316":[{"k":"RNC-369","s":"호버 삭제","st":"완료"},{"k":"RNC-400","s":"이모지 확인","st":"Ready For QA"},{"k":"RNC-461","s":"멀티플라인 케이스 삭제","st":"Ready For QA"}],
+  "RNC-316":[{"k":"RNC-369","s":"호버 삭제","st":"완료"},{"k":"RNC-400","s":"이모지 확인","st":"In QA"},{"k":"RNC-461","s":"멀티플라인 케이스 삭제","st":"완료"}],
   "HMS-209":[{"k":"HMS-238","s":"check-20 아이콘 추가","st":"완료"}],
-  "RNC-346":[{"k":"RNC-462","s":"[JDS-QA] 등록되지 않은 이모지가 있음","st":"Ready For QA"}],
+  "RNC-346":[{"k":"RNC-462","s":"[JDS-QA] 등록되지 않은 이모지가 있음","st":"In QA"}],
   "RNC-348":[{"k":"RNC-413","s":"[JDS-QA] 폰트 및 아이콘 색상 다르게 적용되어 있음","st":"완료"}],
   "RNC-351":[{"k":"RNC-370","s":"탭 높이값 확인","st":"완료"}],
-  "RNC-352":[{"k":"RNC-367","s":"체크 아이콘 수정","st":"완료"},{"k":"RNC-368","s":"상태값 제거 및 수정 필요","st":"완료"},{"k":"RNC-463","s":"텍스트 컬러 확인","st":"Ready For QA"}],
+  "RNC-352":[{"k":"RNC-367","s":"체크 아이콘 수정","st":"완료"},{"k":"RNC-368","s":"상태값 제거 및 수정 필요","st":"완료"},{"k":"RNC-463","s":"텍스트 컬러 확인","st":"In QA"}],
   "RNC-356":[{"k":"RNC-385","s":"[JDS-QA] placeholder 폰트 및 아이콘 색상 다르게 적용되어 있음","st":"완료"}],
   "RNC-195":[{"k":"RNC-436","s":"컬러 확인","st":"In PR Review"}],
   "HMS-193":[{"k":"HMS-310","s":"JdsIconSize 추가 및 카탈로그 화면 추가","st":"해야 할 일"}],
@@ -436,7 +436,7 @@ const SUBTASKS = {
   "HMS-198":[{"k":"HMS-293","s":"패딩/텍스트 크기/아이콘 크기 확인","st":"Ready For QA"}],
   "HMS-201":[{"k":"HMS-287","s":"[Bug]chip 좌우 패딩 확인","st":"Ready For QA"},{"k":"HMS-288","s":"[Bug]Outlined type -> emoji option 제거","st":"Ready For QA"},{"k":"HMS-289","s":"[Bug]Chip Type 사이즈 확인","st":"Ready For QA"},{"k":"HMS-291","s":"[Bug]Select off 상태 폰트 웨이트 확인","st":"Ready For QA"},{"k":"HMS-292","s":"[Bug]Chip Removable -> stroke 컬러 확인","st":"Ready For QA"}],
   "HMS-204":[{"k":"HMS-296","s":"Icon Button 크기 수정","st":"Ready For QA"},{"k":"HMS-307","s":"[QA] 버튼 로딩 모션 추가 요청","st":"Ready For QA"}],
-  "HMS-246":[{"k":"HMS-308","s":"JdsCheckbox 추가 스펙 반영 작업","st":"Ready For QA"}],
+  "HMS-246":[{"k":"HMS-308","s":"JdsCheckbox 추가 스펙 반영 작업","st":"완료"}],
   "HMS-249":[{"k":"HMS-304","s":"JDS QA에 따른 디자인 카탈로그 수정","st":"Ready For QA"}],
   "HMS-207":[{"k":"HMS-302","s":"[Color] 컬러 수정","st":"Ready For QA"}],
   "HMS-208":[{"k":"HMS-300","s":"태그 사이즈 확인","st":"In QA"}],
