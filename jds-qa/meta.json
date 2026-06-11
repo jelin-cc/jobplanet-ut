@@ -1,0 +1,225 @@
+{
+  "_comment": "큐레이션(수기 유지) 데이터. name/pf/cat은 지라에 없는 분류값이라 여기서 관리. scripts/fetch-jira.mjs 가 이 파일 + 지라를 합쳐 index.html 데이터를 생성함.",
+  "epics": [
+    "HMS-176",
+    "HMS-177"
+  ],
+  "jql": "parent in (HMS-176, HMS-177) ORDER BY key ASC",
+  "qaRoster": [
+    "최경미",
+    "최지원",
+    "송인경"
+  ],
+  "sprintCodeByName": {
+    "[R&C]Sprint1. Hello World": "rc1",
+    "[R&C] Sprint2. 리뷰피드 신설": "rc2",
+    "[H&M]Sprint2. 애자일하다": "hm2"
+  },
+  "items": {
+    "HMS-174": {
+      "name": "Tag (태그)",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "RNC-226": {
+      "name": "Button",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "RNC-227": {
+      "name": "Color 토큰 (Green)",
+      "pf": "FE",
+      "cat": "Foundation"
+    },
+    "RNC-228": {
+      "name": "Typography",
+      "pf": "FE",
+      "cat": "Foundation"
+    },
+    "RNC-230": {
+      "name": "Icon Button",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "HMS-190": {
+      "name": "Chromatic 스토리북 연결",
+      "pf": "FE",
+      "cat": "인프라"
+    },
+    "RNC-316": {
+      "name": "Chip",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "HMS-209": {
+      "name": "Icon (아이콘)",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "RNC-345": {
+      "name": "TextButton",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "RNC-346": {
+      "name": "Icon Emoji",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "RNC-348": {
+      "name": "Search",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "RNC-349": {
+      "name": "Toast",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "RNC-350": {
+      "name": "Modal",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "RNC-351": {
+      "name": "Tab",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "RNC-352": {
+      "name": "Checkbox",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "RNC-355": {
+      "name": "TextField",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "RNC-356": {
+      "name": "HomeSearch",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "HMS-241": {
+      "name": "Button Pagination",
+      "pf": "FE",
+      "cat": "컴포넌트"
+    },
+    "RNC-195": {
+      "name": "Typography & Color",
+      "pf": "Android",
+      "cat": "Foundation"
+    },
+    "HMS-193": {
+      "name": "Icon / Graphic",
+      "pf": "Android",
+      "cat": "컴포넌트"
+    },
+    "HMS-194": {
+      "name": "Tag / Badge",
+      "pf": "Android",
+      "cat": "컴포넌트"
+    },
+    "HMS-195": {
+      "name": "Modal",
+      "pf": "Android",
+      "cat": "컴포넌트"
+    },
+    "HMS-196": {
+      "name": "Input (Search / Text Field)",
+      "pf": "Android",
+      "cat": "컴포넌트"
+    },
+    "HMS-197": {
+      "name": "Header",
+      "pf": "Android",
+      "cat": "컴포넌트"
+    },
+    "HMS-198": {
+      "name": "Toast",
+      "pf": "Android",
+      "cat": "컴포넌트"
+    },
+    "HMS-200": {
+      "name": "Card",
+      "pf": "Android",
+      "cat": "컴포넌트"
+    },
+    "HMS-201": {
+      "name": "Chip / Divider",
+      "pf": "Android",
+      "cat": "컴포넌트"
+    },
+    "HMS-202": {
+      "name": "Tab",
+      "pf": "Android",
+      "cat": "컴포넌트"
+    },
+    "HMS-204": {
+      "name": "Button",
+      "pf": "Android",
+      "cat": "컴포넌트"
+    },
+    "HMS-246": {
+      "name": "Checkbox",
+      "pf": "Android",
+      "cat": "컴포넌트"
+    },
+    "HMS-249": {
+      "name": "디자인 QA용 카탈로그",
+      "pf": "Android",
+      "cat": "인프라"
+    },
+    "HMS-265": {
+      "name": "Dropdown",
+      "pf": "Android",
+      "cat": "컴포넌트"
+    },
+    "HMS-168": {
+      "name": "모듈 구조 설계",
+      "pf": "iOS",
+      "cat": "인프라"
+    },
+    "HMS-207": {
+      "name": "Foundation",
+      "pf": "iOS",
+      "cat": "Foundation"
+    },
+    "HMS-208": {
+      "name": "Tag",
+      "pf": "iOS",
+      "cat": "컴포넌트"
+    },
+    "RNC-320": {
+      "name": "Button",
+      "pf": "iOS",
+      "cat": "컴포넌트"
+    },
+    "RNC-374": {
+      "name": "Tab",
+      "pf": "iOS",
+      "cat": "컴포넌트"
+    },
+    "RNC-375": {
+      "name": "Spacing",
+      "pf": "iOS",
+      "cat": "Foundation"
+    },
+    "RNC-386": {
+      "name": "Chip",
+      "pf": "iOS",
+      "cat": "컴포넌트"
+    },
+    "RNC-407": {
+      "name": "Icon Button",
+      "pf": "iOS",
+      "cat": "컴포넌트"
+    },
+    "RNC-432": {
+      "name": "Button isFullWidth 추가",
+      "pf": "iOS",
+      "cat": "컴포넌트"
+    }
+  }
+}

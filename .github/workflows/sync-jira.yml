@@ -1,0 +1,64 @@
+name: Sync JDS-QA from Jira
+
+# 매일 1회 지라(에픽 HMS-176/HMS-177 하위)에서 상태·담당·스프린트·QA·하위작업을 가져와
+# jds-qa/index.html 데이터를 갱신하고 GitHub Pages 로 바로 재배포한다.
+#
+# 필요 Secret (저장소 Settings → Secrets and variables → Actions):
+#   JIRA_EMAIL  : 아틀라시안 계정 이메일
+#   JIRA_TOKEN  : 아틀라시안 API 토큰 (id.atlassian.com → Security → Create API token)
+#
+# 참고: 봇이 GITHUB_TOKEN 으로 push 하면 pages.yml(on: push)이 트리거되지 않으므로
+#       이 워크플로 안에서 직접 Pages 배포까지 수행한다.
+
+on:
+  schedule:
+    - cron: '0 23 * * *'   # 매일 08:00 KST (= 23:00 UTC 전날)
+  workflow_dispatch: {}     # 깃허브 UI에서 수동 실행용
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 지라에서 데이터 갱신
+        env:
+          JIRA_HOST: jobplanet.atlassian.net
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+        run: node jds-qa/scripts/fetch-jira.mjs
+
+      - name: 변경분 커밋 (이력 보존)
+        run: |
+          if [[ -n "$(git status --porcelain jds-qa/index.html)" ]]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add jds-qa/index.html
+            git commit -m "chore(jds-qa): 지라 기준 데이터 자동 갱신 ($(TZ=Asia/Seoul date '+%Y-%m-%d %H:%M'))"
+            git push
+          else
+            echo "변경 없음 — 커밋 생략"
+          fi
+
+      - uses: actions/configure-pages@v4
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - id: deployment
+        uses: actions/deploy-pages@v4
