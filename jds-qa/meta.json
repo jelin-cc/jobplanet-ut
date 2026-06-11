@@ -13,7 +13,8 @@
   "sprintCodeByName": {
     "[R&C]Sprint1. Hello World": "rc1",
     "[R&C] Sprint2. 리뷰피드 신설": "rc2",
-    "[H&M]Sprint2. 애자일하다": "hm2"
+    "[H&M]Sprint2. 애자일하다": "hm2",
+    "[H&M]Sprint3. 이름이 필요한가": "hm3"
   },
   "items": {
     "HMS-174": {
@@ -218,6 +219,11 @@
     },
     "RNC-432": {
       "name": "Button isFullWidth 추가",
+      "pf": "iOS",
+      "cat": "컴포넌트"
+    },
+    "HMS-312": {
+      "name": "Divider",
       "pf": "iOS",
       "cat": "컴포넌트"
     }
