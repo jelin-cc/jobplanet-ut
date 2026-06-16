@@ -105,8 +105,9 @@
   .more{display:flex; align-items:center; gap:2px; color:var(--g400); font-size:13px; font-weight:600; white-space:nowrap;}
 
   /* horizontal carousel track */
-  .track{display:flex; gap:12px; overflow-x:auto; padding:0 0 4px; margin:0;
-         scroll-snap-type:x mandatory;}
+  /* 풀블리드 트랙: 스크롤 중엔 카드가 화면 양 끝까지 흘러가고, 스크롤 시작/끝에선 16px 여백에서 멈춤 */
+  .track{display:flex; gap:12px; overflow-x:auto; padding:0 16px 4px; margin:0 -16px;
+         scroll-padding:0 16px; scroll-snap-type:x mandatory;}
   .track::-webkit-scrollbar{display:none;}
   .track > *{scroll-snap-align:start; flex:0 0 auto;}
 
