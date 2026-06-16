@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Jobplanet Home A · Skeleton</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet" />
+<style>
+  :root{
+    --g100:#E5E6E9; --g50:#F3F3F4; --g30:#F9F9FB;
+  }
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+  body{font-family:'Pretendard',system-ui,sans-serif; background:#DDE1E6;
+       display:flex; justify-content:center; min-height:100vh;}
+
+  .frame{position:relative; width:393px; height:100vh; max-height:852px; overflow-y:auto; overflow-x:hidden;
+         background:linear-gradient(180deg, #DEF9EB 0, #DEF9EB 230px, #F9F9FB 470px) #F9F9FB;
+         box-shadow:0 20px 60px rgba(0,0,0,.25);}
+  .frame::-webkit-scrollbar{display:none;}
+
+  /* ===== shimmer block ===== */
+  .sk{background:#F3F3F4;
+      background-image:linear-gradient(90deg,#F3F3F4 0%,#F9F9FB 50%,#F3F3F4 100%);
+      background-size:200% 100%; background-repeat:no-repeat;
+      border-radius:6px; animation:sk 1.4s linear infinite;}
+  @keyframes sk{0%{background-position:-200% 0;} 100%{background-position:200% 0;}}
+
+  /* ===== header chrome ===== */
+  .statusbar{height:44px; padding:0 16px; display:flex; align-items:center; justify-content:space-between;
+             font-size:15px; font-weight:600; color:#242628;}
+  .statusbar .sb-ic{display:flex; gap:5px; align-items:center; color:#242628;}
+  .iconrow{display:flex; justify-content:flex-end; align-items:center; gap:10px; padding:4px 16px 0;}
+  .logorow{display:flex; justify-content:center; padding:60px 16px 18px;}
+  .searchwrap{display:flex; justify-content:center; padding:6px 16px 20px;}
+  .ticker{width:254px; margin:0 auto; display:flex; align-items:center; justify-content:space-between;}
+  .quick{display:flex; justify-content:space-between; gap:8px; padding:60px 16px 60px;}
+  .qitem{flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;}
+
+  .hot{margin:0 16px;}
+
+  /* ===== white sheet ===== */
+  .sheet{margin-top:20px; background:#fff; border-radius:20px 20px 0 0; box-shadow:0 -2px 16px rgba(0,0,0,.05);
+         padding:24px 0 100px; display:flex; flex-direction:column; gap:36px;}
+  .module{padding:0 16px;}
+  .mhead{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;}
+  .mhead .mleft{display:flex; align-items:center; gap:8px;}
+
+  /* horizontal track */
+  .track{display:flex; gap:12px; overflow-x:auto; padding:0 16px 4px; margin:0 -16px;}
+  .track::-webkit-scrollbar{display:none;}
+  .track > *{flex:0 0 auto;}
+
+  /* ===== job card skeleton ===== */
+  .jcard{width:280px; padding:16px 20px 20px; background:#fff; border:1px solid var(--g100); border-radius:12px;
+         display:flex; flex-direction:column;}
+  .jc-top{display:flex; align-items:center; gap:10px;}
+  .jc-bottom{margin-top:16px; display:flex; align-items:flex-end; justify-content:space-between; min-height:32px;}
+
+  /* ===== review card skeleton ===== */
+  .rcard{padding:24px; background:#fff; border:1px solid var(--g100); border-radius:16px;
+         display:flex; flex-direction:column; gap:16px; margin-bottom:16px;}
+  .module .rcard:last-child{margin-bottom:0;}
+  .rc-div{height:1px; background:var(--g50);}
+
+  /* ===== theme card skeleton ===== */
+  .theme-list{display:flex; flex-direction:column; gap:16px;}
+  .tcard{border-radius:20px; overflow:hidden; border:1px solid var(--g100); background:#fff;}
+  .tc-body{padding:20px;}
+
+  /* ===== popular card skeleton ===== */
+  .pcard{width:280px; height:220px; padding:20px; background:#fff; border:1px solid var(--g100);
+         border-radius:12px; display:flex; flex-direction:column; justify-content:space-between;}
+</style>
+</head>
+<body>
+  <div class="frame" id="frame">
+
+    <div class="statusbar">
+      <span>9:41</span>
+      <span class="sb-ic">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="25" height="13" viewBox="0 0 25 13" fill="none"><rect x="1" y="1" width="21" height="11" rx="3" stroke="currentColor" stroke-opacity=".4"/><rect x="3" y="3" width="17" height="7" rx="1.5" fill="currentColor"/><rect x="23" y="4.5" width="1.5" height="4" rx=".75" fill="currentColor" fill-opacity=".4"/></svg>
+      </span>
+    </div>
+
+    <div class="iconrow">
+      <div class="sk" style="width:24px;height:24px;border-radius:8px"></div>
+      <div class="sk" style="width:24px;height:24px;border-radius:8px"></div>
+    </div>
+
+    <div class="logorow"><div class="sk" style="width:120px;height:32px;border-radius:8px"></div></div>
+
+    <div class="searchwrap"><div class="sk" style="width:320px;height:56px;border-radius:999px"></div></div>
+
+    <div class="ticker">
+      <div class="sk" style="width:150px;height:16px"></div>
+      <div class="sk" style="width:48px;height:24px;border-radius:6px"></div>
+    </div>
+
+    <div class="quick" id="quick"></div>
+
+    <div class="hot"><div class="sk" style="width:100%;height:44px;border-radius:999px"></div></div>
+
+    <div class="sheet">
+      <div class="module"><div class="mhead"></div><div class="track" data-cards="job"></div></div>
+      <div class="module"><div class="mhead"></div><div class="track" data-cards="job"></div></div>
+      <div class="module"><div class="mhead"></div><div class="track" data-cards="job"></div></div>
+      <div class="module"><div class="mhead"></div><div id="reviewFeed"></div></div>
+      <div class="module"><div class="mhead"></div><div class="theme-list" id="themeList"></div></div>
+      <div class="module"><div class="mhead"></div><div class="track" id="popularTrack"></div></div>
+    </div>
+
+  </div>
+
+<script>
+  // ---- module head skeleton (icon + title / 전체보기) ----
+  const mhead = `<div class="mleft"><div class="sk" style="width:24px;height:24px;border-radius:7px"></div><div class="sk" style="width:128px;height:18px"></div></div><div class="sk" style="width:56px;height:14px"></div>`;
+  document.querySelectorAll('.mhead').forEach(el=>{ if(!el.children.length) el.innerHTML = mhead; });
+
+  // ---- quick menu skeleton (4) ----
+  document.getElementById('quick').innerHTML = Array.from({length:4}).map(()=>`
+    <div class="qitem"><div class="sk" style="width:60px;height:60px;border-radius:16px"></div><div class="sk" style="width:48px;height:14px"></div></div>`).join('');
+
+  // ---- job card skeleton ----
+  const jcard = `<div class="jcard">
+    <div class="jc-top">
+      <div class="sk" style="width:32px;height:32px;border-radius:8px"></div>
+      <div class="sk" style="width:84px;height:14px"></div>
+      <div class="sk" style="width:20px;height:20px;border-radius:6px;margin-left:auto"></div>
+    </div>
+    <div class="sk" style="width:100%;height:16px;margin-top:14px"></div>
+    <div class="sk" style="width:62%;height:16px;margin-top:8px"></div>
+    <div class="jc-bottom"><div class="sk" style="width:96px;height:20px;border-radius:6px"></div></div>
+  </div>`;
+  // 캐로셀: 최소 노출(화면 폭 + peek) 기준 2건
+  document.querySelectorAll('[data-cards="job"]').forEach(el=>{ el.innerHTML = jcard.repeat(2); });
+
+  // ---- review card skeleton (A: 연봉 언급 리뷰 카드) ----
+  const rcard = `<div class="rcard">
+    <div>
+      <div class="sk" style="width:100%;height:16px"></div>
+      <div class="sk" style="width:80%;height:16px;margin-top:8px"></div>
+      <div class="sk" style="width:55%;height:14px;margin-top:14px"></div>
+    </div>
+    <div class="sk" style="width:100%;height:44px;border-radius:8px"></div>
+    <div class="rc-div"></div>
+    <div style="display:flex;align-items:center;gap:6px"><div class="sk" style="width:32px;height:32px;border-radius:8px"></div><div class="sk" style="width:64px;height:14px"></div></div>
+  </div>`;
+  document.getElementById('reviewFeed').innerHTML = rcard.repeat(2);
+
+  // ---- theme card skeleton ----
+  const tcard = `<div class="tcard">
+    <div class="sk" style="width:100%;height:142px;border-radius:0"></div>
+    <div class="tc-body"><div class="sk" style="width:60%;height:18px"></div><div class="sk" style="width:78%;height:15px;margin-top:6px"></div></div>
+  </div>`;
+  document.getElementById('themeList').innerHTML = tcard.repeat(2);
+
+  // ---- popular post skeleton ----
+  const pcard = `<div class="pcard">
+    <div>
+      <div class="sk" style="width:90%;height:16px"></div>
+      <div class="sk" style="width:100%;height:16px;margin-top:8px"></div>
+      <div class="sk" style="width:70%;height:16px;margin-top:8px"></div>
+    </div>
+    <div class="sk" style="width:120px;height:14px"></div>
+  </div>`;
+  document.getElementById('popularTrack').innerHTML = pcard.repeat(2);
+</script>
+</body>
+</html>
