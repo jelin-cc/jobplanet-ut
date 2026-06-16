@@ -39,11 +39,11 @@
 
   /* hero band (bell/menu + logo) — opaque & whitens with header so no green seam appears */
   .iconrow,.logorow{background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #E2F5EC;}
-  .iconrow{display:flex; justify-content:flex-end; align-items:center; gap:6px; padding:4px 16px 6px;}
+  .iconrow{display:flex; justify-content:flex-end; align-items:center; gap:6px; padding:4px 16px 0;}
   .iconrow .ibtn{width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:var(--g800);}
 
   /* logo — scrolls away under statusbar */
-  .logorow{display:flex; justify-content:center; align-items:center; padding:0 16px 18px;}
+  .logorow{display:flex; justify-content:center; align-items:center; padding:60px 16px 18px;}
   .logo{height:36px; display:block;}
 
   /* search — sticks just under statusbar; hero above & content below slide under it */
@@ -79,7 +79,7 @@
   .qicon{width:60px; height:60px; border-radius:16px; background:#fff; display:flex; align-items:center;
          justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,.08);}
   .qicon svg{width:34px; height:34px;}
-  .qicon img{width:38px; height:38px; object-fit:contain;}
+  .qicon img{width:32px; height:32px; object-fit:contain;}
   .qlabel{font-size:13px; font-weight:600; color:var(--g800);}
 
   /* ===== HOT pill ===== */
@@ -261,7 +261,7 @@
 
       <div class="module">
         <div class="mhead">
-          <div class="mleft"><div class="mtitle"><img class="micon" src="https://jelin-cc.github.io/jobplanet-ut/emoji-jp-community.svg" alt="" />지원자가 몰리는 공고</div><span class="adbadge">광고 ⓘ</span></div>
+          <div class="mleft"><div class="mtitle"><img class="micon" src="https://jelin-cc.github.io/jobplanet-ut/emoji-service.svg" alt="" />지원자가 몰리는 공고</div><span class="adbadge">광고 ⓘ</span></div>
           <span class="more">전체보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
         </div>
         <div class="track" data-jobs="2"></div>
@@ -357,7 +357,15 @@
     {tags:[tagGreen]},
     {tags:[tagGreen], jk:true},
     {tags:[tagYellow, tagGreen]},
-  ];
+    {tags:[tagYellow]},
+    {tags:[tagGreen]},
+    {tags:[tagGreen], jk:true},
+    {tags:[tagYellow, tagGreen]},
+    {tags:[tagYellow]},
+    {tags:[tagGreen]},
+    {tags:[tagGreen], jk:true},
+    {tags:[tagYellow, tagGreen]},
+  ]; // 캐로셀 최대 12건
   document.querySelectorAll('[data-jobs]').forEach(el=>{
     el.innerHTML = jobSet.map(jobCard).join('');
   });
