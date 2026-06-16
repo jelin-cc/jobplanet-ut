@@ -28,45 +28,42 @@
   .frame::-webkit-scrollbar{display:none;}
 
   /* ===== sticky topbar ===== */
-  .topbar{position:sticky; top:0; z-index:50; padding:0 16px;
-          background:transparent; transition:background .28s ease, box-shadow .28s ease;}
-  .topbar.collapsed{background:#fff; box-shadow:0 4px 16px rgba(0,0,0,.08);}
+  .topbar{position:sticky; top:0; z-index:50; padding:0 16px; --p:0;
+          background:rgba(255,255,255,var(--p));
+          box-shadow:0 4px 16px rgba(0,0,0,calc(.08 * var(--p)));}
 
   .statusbar{height:44px; display:flex; align-items:center; justify-content:space-between;
              font-size:15px; font-weight:600; color:var(--g900);}
   .statusbar .sb-ic{display:flex; gap:5px; align-items:center;}
 
   .collapsible{overflow:hidden;
-    transition:max-height .3s ease, opacity .22s ease, margin .3s ease, padding .3s ease;}
-  .topbar.collapsed .collapsible{max-height:0 !important; opacity:0;
-    margin-top:0 !important; margin-bottom:0 !important; padding-top:0 !important; padding-bottom:0 !important;}
+    max-height:calc(var(--h) * (1 - var(--p)));
+    opacity:calc(1 - var(--p));}
 
   /* icon row (bell + menu) */
-  .iconrow{max-height:40px; display:flex; justify-content:flex-end; align-items:center; gap:6px;}
+  .iconrow{--h:40px; display:flex; justify-content:flex-end; align-items:center; gap:6px;}
   .iconrow .ibtn{width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:var(--g800);}
 
   /* logo */
-  .logorow{max-height:48px; display:flex; justify-content:center; align-items:center; padding-bottom:14px;}
+  .logorow{--h:48px; display:flex; justify-content:center; align-items:center; padding-bottom:14px;}
   .logo{font-size:26px; font-weight:800; color:var(--green-500); letter-spacing:-.5px;}
 
   /* search row */
-  .searchrow{display:flex; align-items:center; gap:8px; padding-bottom:14px;}
-  .topbar.collapsed .searchrow{padding-bottom:8px; padding-top:2px;}
-  .search{flex:1; height:56px; display:flex; align-items:center; gap:4px;
+  .searchrow{display:flex; align-items:center; gap:8px;
+             padding-bottom:calc(14px - 6px * var(--p)); padding-top:calc(2px * var(--p));}
+  .search{flex:1; height:calc(56px - 12px * var(--p)); display:flex; align-items:center; gap:4px;
           padding:0 18px 0 24px; background:#fff; border-radius:999px;
-          border:2px solid var(--green-500); box-shadow:0 0 24px rgba(184,235,208,.5);
-          transition:height .28s ease, box-shadow .28s ease;}
-  .topbar.collapsed .search{height:44px; box-shadow:none;}
+          border:2px solid var(--green-500);
+          box-shadow:0 0 24px rgba(184,235,208,calc(.5 - .5 * var(--p)));}
   .search input{flex:1; border:none; outline:none; font-size:15px; color:var(--g900);
                 font-family:inherit; background:transparent;}
   .search input::placeholder{color:var(--g400);}
   .search .s-ic{color:var(--g400); display:flex;}
   .menu-compact{width:24px; height:24px; align-items:center; justify-content:center; color:var(--g600);
-                display:flex; opacity:0; max-width:0; overflow:hidden; transition:opacity .2s ease, max-width .28s ease;}
-  .topbar.collapsed .menu-compact{opacity:1; max-width:28px;}
+                display:flex; overflow:hidden; opacity:var(--p); max-width:calc(28px * var(--p));}
 
   /* ranking ticker */
-  .ticker{max-height:40px; display:flex; align-items:center; gap:8px; padding:0 6px 14px;}
+  .ticker{--h:54px; display:flex; align-items:center; gap:8px; padding:0 6px 14px;}
   .ticker .rank{display:flex; align-items:center; gap:8px; flex:1;}
   .ticker .rnum{color:var(--green-500); font-size:14px; font-weight:600;}
   .ticker .rname{color:#000; font-size:14px; font-weight:600;}
@@ -77,7 +74,7 @@
                 background:#fff; border-radius:6px; box-shadow:0 4px 16px rgba(0,0,0,.08); color:var(--g600);}
 
   /* quick menu */
-  .quick{max-height:110px; display:flex; justify-content:center; gap:16px; padding:6px 0 22px;}
+  .quick{--h:120px; display:flex; justify-content:center; gap:16px; padding:6px 0 22px;}
   .qitem{width:72px; display:flex; flex-direction:column; align-items:center; gap:6px;}
   .qicon{width:60px; height:60px; border-radius:16px; background:#fff; display:flex; align-items:center;
          justify-content:center; font-size:30px; box-shadow:0 4px 16px rgba(0,0,0,.08);}
@@ -307,10 +304,13 @@
   // ===== collapse on scroll =====
   const frame = document.getElementById('frame');
   const topbar = document.getElementById('topbar');
-  frame.addEventListener('scroll', () => {
-    if (frame.scrollTop > 24) topbar.classList.add('collapsed');
-    else topbar.classList.remove('collapsed');
-  }, {passive:true});
+  const RANGE = 96; // 스크롤 0~96px 구간에서 헤더가 점진적으로 접힘
+  function onScroll(){
+    const p = Math.min(Math.max(frame.scrollTop / RANGE, 0), 1);
+    topbar.style.setProperty('--p', p.toFixed(3));
+  }
+  frame.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
 
   // ===== job cards =====
   const chev = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
