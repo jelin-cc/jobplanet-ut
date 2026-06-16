@@ -43,18 +43,17 @@
   .iconrow .ibtn{width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:var(--g800);}
 
   /* logo — scrolls away under statusbar */
-  .logorow{display:flex; justify-content:center; align-items:center; padding:0 16px 14px;}
-  .logo{font-family:'Montserrat',sans-serif; font-size:27px; font-weight:800;
-         color:var(--green-500); letter-spacing:-1.2px;}
+  .logorow{display:flex; justify-content:center; align-items:center; padding:0 16px 18px;}
+  .logo{height:36px; display:block;}
 
   /* search — sticks just under statusbar; hero above & content below slide under it */
-  .searchwrap{position:sticky; top:44px; z-index:55; display:flex; align-items:center; gap:8px;
-              padding:6px 16px calc(14px - 4px * var(--p));
+  .searchwrap{position:sticky; top:44px; z-index:55; display:flex; justify-content:center; align-items:center; gap:8px;
+              padding:6px 16px calc(20px - 6px * var(--p));
               background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #E2F5EC;
               box-shadow:0 6px 16px rgba(0,0,0,calc(.07 * var(--p)));}
-  .search{flex:1; height:calc(56px - 12px * var(--p)); display:flex; align-items:center; gap:4px;
-          padding:0 18px 0 24px; background:#fff; border-radius:999px;
-          border:2px solid var(--green-500);
+  .search{flex:0 1 320px; width:320px; max-width:100%; height:calc(56px - 12px * var(--p)); display:flex; align-items:center; gap:4px;
+          padding:0 18px 0 24px; border-radius:999px; border:2px solid transparent;
+          background:linear-gradient(#fff,#fff) padding-box, linear-gradient(95deg,#00C274 0%,#27B7C9 40%,#5B8DEF 72%,#9B7AFF 100%) border-box;
           box-shadow:0 0 24px rgba(184,235,208,calc(.5 - .5 * var(--p)));}
   .search input{flex:1; border:none; outline:none; font-size:15px; color:var(--g900);
                 font-family:inherit; background:transparent;}
@@ -64,7 +63,7 @@
                 display:flex; overflow:hidden; opacity:var(--p); max-width:calc(28px * var(--p));}
 
   /* ranking ticker */
-  .ticker{display:flex; align-items:center; gap:8px; padding:0 16px 14px;}
+  .ticker{width:254px; margin:0 auto; display:flex; align-items:center; gap:8px;}
   .ticker .rank{display:flex; align-items:center; gap:8px; flex:1;}
   .ticker .rnum{color:var(--green-500); font-size:14px; font-weight:600;}
   .ticker .rname{color:#000; font-size:14px; font-weight:600;}
@@ -75,15 +74,16 @@
                 background:#fff; border-radius:6px; box-shadow:0 4px 16px rgba(0,0,0,.08); color:var(--g600);}
 
   /* quick menu */
-  .quick{display:flex; justify-content:space-between; gap:8px; padding:6px 16px 22px;}
+  .quick{display:flex; justify-content:space-between; gap:8px; padding:60px 16px 60px;}
   .qitem{flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;}
   .qicon{width:60px; height:60px; border-radius:16px; background:#fff; display:flex; align-items:center;
          justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,.08);}
   .qicon svg{width:34px; height:34px;}
+  .qicon img{width:38px; height:38px; object-fit:contain;}
   .qlabel{font-size:13px; font-weight:600; color:var(--g800);}
 
   /* ===== HOT pill ===== */
-  .hot{margin:2px 16px 0; padding:12px 14px; background:var(--red-30); border-radius:999px;
+  .hot{margin:0 16px; padding:12px 14px; background:var(--red-30); border-radius:999px;
        box-shadow:0 4px 16px rgba(0,0,0,.08); display:flex; align-items:center; gap:8px;}
   .hot .htag{background:#fff; color:var(--red-400); font-size:12px; font-weight:600;
              padding:4px 10px; border-radius:999px;}
@@ -99,13 +99,13 @@
   .mhead{display:flex; align-items:center; gap:16px; margin-bottom:16px;}
   .mhead .mleft{flex:1; display:flex; align-items:center; gap:6px;}
   .mtitle{display:flex; align-items:center; gap:4px; font-size:18px; font-weight:700; color:var(--g900); line-height:26px;}
-  .mtitle .micon{font-size:22px;}
+  .mtitle .micon{width:24px; height:24px; object-fit:contain;}
   .adbadge{display:inline-flex; align-items:center; gap:1px; height:20px; padding:2px 6px;
            border:1px solid var(--g100); border-radius:6px; color:var(--g200); font-size:11px; font-weight:600;}
   .more{display:flex; align-items:center; gap:2px; color:var(--g400); font-size:13px; font-weight:600; white-space:nowrap;}
 
   /* horizontal carousel track */
-  .track{display:flex; gap:12px; overflow-x:auto; padding:0 16px 4px; margin:0 -16px;
+  .track{display:flex; gap:12px; overflow-x:auto; padding:0 0 4px; margin:0;
          scroll-snap-type:x mandatory;}
   .track::-webkit-scrollbar{display:none;}
   .track > *{scroll-snap-align:start; flex:0 0 auto;}
@@ -202,7 +202,7 @@
       </div>
 
       <div class="logorow">
-        <span class="logo">Jobplanet</span>
+        <img class="logo" src="https://jelin-cc.github.io/jobplanet-ut/jobplanet-wordmark.png" alt="Jobplanet" />
       </div>
 
       <div class="searchwrap" id="searchwrap">
@@ -224,51 +224,19 @@
 
       <div class="quick">
         <div class="qitem">
-          <div class="qicon">
-            <svg viewBox="0 0 36 36" fill="none">
-              <circle cx="14" cy="15" r="11" fill="#3FE9AA"/>
-              <circle cx="11.5" cy="13" r="2.4" fill="#fff"/><circle cx="12.3" cy="13.6" r="1.2" fill="#323438"/>
-              <circle cx="17.5" cy="12" r="2.4" fill="#fff"/><circle cx="18.3" cy="12.6" r="1.2" fill="#323438"/>
-              <circle cx="24" cy="22" r="9" fill="#FFCF5C"/>
-              <circle cx="21.5" cy="21" r="2" fill="#fff"/><circle cx="22.1" cy="21.5" r="1" fill="#323438"/>
-              <circle cx="26.5" cy="21.6" r="2" fill="#fff"/><circle cx="27.1" cy="22.1" r="1" fill="#323438"/>
-              <path d="M22 26q2 1.6 4 0" stroke="#323438" stroke-width="1.1" stroke-linecap="round"/>
-            </svg>
-          </div>
+          <div class="qicon"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-jp-community.svg" alt="" /></div>
           <div class="qlabel">커뮤니티</div>
         </div>
         <div class="qitem">
-          <div class="qicon">
-            <svg viewBox="0 0 36 36" fill="none">
-              <rect x="6" y="4" width="20" height="24" rx="3" fill="#A9C4FF"/>
-              <rect x="11" y="9" width="20" height="24" rx="3" fill="#8B97FF"/>
-              <rect x="15" y="15" width="6" height="2" rx="1" fill="#fff"/>
-              <rect x="15" y="20" width="12" height="2" rx="1" fill="#fff"/>
-              <rect x="15" y="25" width="12" height="2" rx="1" fill="#fff"/>
-            </svg>
-          </div>
+          <div class="qicon"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-jp-apply.svg" alt="" /></div>
           <div class="qlabel">지원현황</div>
         </div>
         <div class="qitem">
-          <div class="qicon">
-            <svg viewBox="0 0 36 36" fill="none">
-              <rect x="7" y="5" width="22" height="26" rx="3" fill="#FFD15C"/>
-              <rect x="11" y="3" width="16" height="20" rx="3" fill="#C8E4F0"/>
-              <rect x="6" y="14" width="24" height="17" rx="3" fill="#FED542"/>
-              <rect x="11" y="20" width="14" height="2" rx="1" fill="#fff"/>
-              <rect x="11" y="25" width="9" height="2" rx="1" fill="#fff"/>
-            </svg>
-          </div>
+          <div class="qicon"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-jp-resume.svg" alt="" /></div>
           <div class="qlabel">이력서 관리</div>
         </div>
         <div class="qitem">
-          <div class="qicon">
-            <svg viewBox="0 0 36 36" fill="none">
-              <path d="M13 9h10l-2.5 4h-5z" fill="#FFE075"/>
-              <ellipse cx="18" cy="22" rx="11" ry="9" fill="#FFC94D"/>
-              <path d="M18 16v12M14.5 19.5h5.5a2 2 0 0 1 0 4h-4a2 2 0 0 0 0 4h6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-            </svg>
-          </div>
+          <div class="qicon"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-moneybag.svg" alt="" /></div>
           <div class="qlabel">실연봉 비교</div>
         </div>
       </div>
@@ -285,7 +253,7 @@
 
       <div class="module">
         <div class="mhead">
-          <div class="mleft"><div class="mtitle"><span class="micon">📚</span>주목받는 채용 공고</div><span class="adbadge">광고 ⓘ</span></div>
+          <div class="mleft"><div class="mtitle"><img class="micon" src="https://jelin-cc.github.io/jobplanet-ut/emoji-eyes.svg" alt="" />주목받는 채용 공고</div><span class="adbadge">광고 ⓘ</span></div>
           <span class="more">전체보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
         </div>
         <div class="track" data-jobs="1"></div>
@@ -293,7 +261,7 @@
 
       <div class="module">
         <div class="mhead">
-          <div class="mleft"><div class="mtitle"><span class="micon">🟦</span>지원자가 몰리는 공고</div><span class="adbadge">광고 ⓘ</span></div>
+          <div class="mleft"><div class="mtitle"><img class="micon" src="https://jelin-cc.github.io/jobplanet-ut/emoji-jp-community.svg" alt="" />지원자가 몰리는 공고</div><span class="adbadge">광고 ⓘ</span></div>
           <span class="more">전체보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
         </div>
         <div class="track" data-jobs="2"></div>
@@ -301,7 +269,7 @@
 
       <div class="module">
         <div class="mhead">
-          <div class="mleft"><div class="mtitle"><span class="micon">🔥</span>요새 핫한 공고</div><span class="adbadge">광고 ⓘ</span></div>
+          <div class="mleft"><div class="mtitle"><img class="micon" src="https://jelin-cc.github.io/jobplanet-ut/emoji-fire.svg" alt="" />요새 핫한 공고</div><span class="adbadge">광고 ⓘ</span></div>
           <span class="more">전체보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
         </div>
         <div class="track" data-jobs="3"></div>
@@ -324,7 +292,7 @@
 
       <div class="module">
         <div class="mhead">
-          <div class="mleft"><div class="mtitle"><span class="micon">💬</span>실시간 인기글</div></div>
+          <div class="mleft"><div class="mtitle"><img class="micon" src="https://jelin-cc.github.io/jobplanet-ut/emoji-bubble.svg" alt="" />실시간 인기글</div></div>
           <span class="more">전체보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
         </div>
         <div class="track" id="popularTrack"></div>
