@@ -43,9 +43,9 @@
   /* compact header search — 스크롤 시 노출, 클릭 시 확장 */
   .header-search{width:220px; height:40px; padding:11px 16px; background:var(--g50); border-radius:999px;
                  display:flex; align-items:center; gap:4px; cursor:text; flex-shrink:0;
-                 opacity:0; pointer-events:none;
-                 transition:width .26s var(--ease), transform .26s var(--ease), opacity .22s var(--ease), background .2s var(--ease);}
-  .header-wrap.scrolled .header-search{opacity:1; pointer-events:auto;}
+                 opacity:0; transform:translateY(-10px); pointer-events:none;
+                 transition:width .26s var(--ease), transform .34s var(--ease), opacity .34s var(--ease), background .2s var(--ease);}
+  .header-wrap.scrolled .header-search{opacity:1; transform:translateY(0); pointer-events:auto;}
   .header-search:hover{background:#ededee;}
   .header-search input{flex:1; min-width:0; border:none; background:transparent; outline:none;
                        font-family:inherit; font-size:14px; color:var(--g900); caret-color:var(--green-500);}
@@ -84,12 +84,14 @@
   .dim.active{opacity:1; pointer-events:auto;}
 
   /* ===================== HERO ===================== */
-  .hero{background:linear-gradient(180deg, rgba(227,248,237,.80) 0%, rgba(242,251,247,.80) 55%, #fff 100%);
+  .hero{background:linear-gradient(180deg, rgba(227,248,237,.85) 0px, rgba(242,251,247,.80) 96px, #FFFFFF 188px);
         display:flex; flex-direction:column; align-items:center; padding:84px 0 64px;}
   .hero-title{font-size:32px; font-weight:700; line-height:44px; color:var(--g900); text-align:center; margin-bottom:28px;}
   .hero-title .accent{color:var(--green-500);}
-  .hero-search{width:672px; height:56px; padding:0 18px 0 24px; background:#fff; border-radius:999px;
-               border:2px solid var(--green-500); box-shadow:0 0 24px rgba(184,235,208,.5);
+  .hero-search{width:672px; height:56px; padding:0 18px 0 24px; border-radius:999px;
+               border:2px solid transparent;
+               background:linear-gradient(#fff,#fff) padding-box, linear-gradient(90deg,#00C274 0%,#5B9BF5 68%,#9B7AFF 100%) border-box;
+               box-shadow:0 0 24px rgba(184,235,208,.5);
                display:flex; align-items:center; gap:4px;}
   .hero-search input{flex:1; border:none; outline:none; background:transparent; font-family:inherit;
                      font-size:15px; color:var(--g900);}
