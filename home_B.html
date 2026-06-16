@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Jobplanet Home B</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --green-500:#00C274; --green-600:#00A866; --green-50:#E3F8ED;
+    --g900:#242628; --g800:#323438; --g700:#4B4C50; --g600:#57595B; --g500:#686A6D;
+    --g400:#85878C; --g300:#A4A6AD; --g200:#C5C7CC; --g100:#E5E6E9; --g50:#F3F3F4;
+    --red-400:#EF5350; --red-30:#FFF7F7;
+    --yellow-50:#FAF9EC; --yellow-600:#D79304;
+    --blue-50:#ECF6FE; --blue-600:#1E88E5;
+    --orange-500:#FF9800;
+    --jk:#083CCC; --jk-line:#96B1FD;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent; margin:0; padding:0;}
+  body{font-family:'Pretendard',system-ui,sans-serif; background:#DDE1E6;
+       display:flex; justify-content:center; min-height:100vh;}
+
+  /* ===== device frame / scroller ===== */
+  .frame{position:relative; width:393px; height:100vh; max-height:852px; overflow-y:auto; overflow-x:hidden;
+         --p:0;
+         background:linear-gradient(180deg, #DEF9EB 0, #DEF9EB 230px, #F9F9FB 470px) #F9F9FB;
+         background-attachment:local;
+         box-shadow:0 20px 60px rgba(0,0,0,.25);}
+  .frame::-webkit-scrollbar{display:none;}
+
+  /* ===== sticky header: statusbar + search stick; hero scrolls under (opaque) ===== */
+  .statusbar{position:sticky; top:0; z-index:60; height:44px; padding:0 16px;
+             display:flex; align-items:center; justify-content:space-between;
+             font-size:15px; font-weight:600; color:var(--g900);
+             background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #DEF9EB;}
+  .statusbar .sb-ic{display:flex; gap:5px; align-items:center;}
+
+  /* hero band (bell/menu + logo) — opaque & whitens with header so no green seam appears */
+  .iconrow,.logorow{background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #DEF9EB;}
+  .iconrow{display:flex; justify-content:flex-end; align-items:center; gap:6px; padding:4px 16px 0;}
+  .iconrow .ibtn{width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:var(--g800);}
+
+  /* logo — scrolls away under statusbar */
+  .logorow{display:flex; justify-content:center; align-items:center; padding:60px 16px 18px;}
+  .logo{height:36px; display:block;}
+
+  /* search — sticks just under statusbar; hero above & content below slide under it */
+  .searchwrap{position:sticky; top:44px; z-index:55; display:flex; justify-content:center; align-items:center; gap:8px;
+              padding:6px 16px calc(20px - 6px * var(--p));
+              background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #DEF9EB;
+              box-shadow:0 6px 16px rgba(0,0,0,calc(.07 * var(--p)));}
+  .search{flex:0 1 320px; width:320px; max-width:100%; height:calc(56px - 12px * var(--p)); display:flex; align-items:center; gap:4px;
+          padding:0 18px 0 24px; border-radius:999px; border:2px solid transparent;
+          background:linear-gradient(#fff,#fff) padding-box, linear-gradient(95deg,#00C274 0%,#27B7C9 40%,#5B8DEF 72%,#9B7AFF 100%) border-box;
+          box-shadow:0 0 24px rgba(184,235,208,calc(.5 - .5 * var(--p)));}
+  .search input{flex:1; border:none; outline:none; font-size:15px; color:var(--g900);
+                font-family:inherit; background:transparent;}
+  .search input::placeholder{color:var(--g400);}
+  .search .s-ic{color:var(--g400); display:flex;}
+  .menu-compact{width:24px; height:24px; align-items:center; justify-content:center; color:var(--g600);
+                display:flex; overflow:hidden; opacity:var(--p); max-width:calc(28px * var(--p));}
+
+  /* ranking ticker */
+  .ticker{width:254px; margin:0 auto; display:flex; align-items:center; gap:8px;}
+  .ticker .rank{display:flex; align-items:center; gap:8px; flex:1;}
+  .ticker .rnum{color:var(--green-500); font-size:14px; font-weight:600;}
+  .ticker .rname{color:#000; font-size:14px; font-weight:600;}
+  .ticker .newbadge{background:var(--green-50); color:var(--green-600); font-size:11px; font-weight:600;
+                    padding:2px 6px; border-radius:4px;}
+  .ticker .delta{display:flex; align-items:center; gap:2px; color:var(--red-400); font-size:13px; font-weight:600;}
+  .ticker .chev{width:24px; height:24px; display:flex; align-items:center; justify-content:center;
+                background:#fff; border-radius:6px; box-shadow:0 4px 16px rgba(0,0,0,.08); color:var(--g600);}
+
+  /* quick menu */
+  .quick{display:flex; justify-content:space-between; gap:8px; padding:60px 16px 60px;}
+  .qitem{flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;}
+  .qicon{width:60px; height:60px; display:flex; align-items:center; justify-content:center;}
+  .qicon svg{width:34px; height:34px;}
+  .qicon img{width:32px; height:32px; object-fit:contain;}
+  .qlabel{font-size:13px; font-weight:600; color:var(--g800);}
+
+  /* ===== HOT pill ===== */
+  .hot{margin:0 16px; padding:12px 14px; background:var(--red-30); border-radius:999px;
+       box-shadow:0 4px 16px rgba(0,0,0,.08); display:flex; align-items:center; gap:8px;}
+  .hot .htag{background:#fff; color:var(--red-400); font-size:12px; font-weight:600;
+             padding:4px 10px; border-radius:999px;}
+  .hot .htx{flex:1; color:var(--red-400); font-size:12px; font-weight:600;}
+  .hot .hchev{color:var(--g400); display:flex;}
+
+  /* ===== white sheet ===== */
+  .sheet{margin-top:20px; background:#fff; border-radius:20px 20px 0 0;
+         box-shadow:0 -2px 16px rgba(0,0,0,.05); padding:24px 0 100px;
+         display:flex; flex-direction:column; gap:36px;}
+
+  .module{padding:0 16px;}
+  .mhead{display:flex; align-items:center; gap:16px; margin-bottom:16px;}
+  .mhead .mleft{flex:1; display:flex; align-items:center; gap:6px;}
+  .mtitle{display:flex; align-items:center; gap:4px; font-size:18px; font-weight:700; color:var(--g900); line-height:26px;}
+  .mtitle .micon{width:24px; height:24px; object-fit:contain;}
+  .adbadge{display:inline-flex; align-items:center; gap:1px; height:20px; padding:2px 6px;
+           border:1px solid var(--g100); border-radius:6px; color:var(--g200); font-size:11px; font-weight:600;}
+  .more{display:flex; align-items:center; gap:2px; color:var(--g400); font-size:13px; font-weight:600; white-space:nowrap;}
+
+  /* horizontal carousel track */
+  /* 풀블리드 트랙: 스크롤 중엔 카드가 화면 양 끝까지 흘러가고, 스크롤 시작/끝에선 16px 여백에서 멈춤 */
+  .track{display:flex; gap:12px; overflow-x:auto; padding:0 16px 4px; margin:0 -16px;
+         scroll-padding:0 16px; scroll-snap-type:x mandatory;}
+  .track::-webkit-scrollbar{display:none;}
+  .track > *{scroll-snap-align:start; flex:0 0 auto;}
+
+  /* ===== job card ===== */
+  .jcard{width:280px; padding:16px 20px 20px; background:#fff; border:1px solid var(--g100);
+         border-radius:12px; display:flex; flex-direction:column;}
+  .jc-top{display:flex; align-items:center; gap:10px;}
+  .jc-co{flex:1; display:flex; align-items:center; gap:6px;}
+  .jc-logo{width:32px; height:32px; border-radius:8px; border:1px solid var(--g100); display:flex;
+           align-items:center; justify-content:center; font-size:8px; font-weight:700; color:var(--g400);}
+  .jc-coname{color:var(--g500); font-size:13px; font-weight:600;}
+  .jc-bm{color:var(--g200); display:flex;}
+  .jc-title{margin-top:6px; color:var(--g900); font-size:15px; font-weight:600; line-height:24px;
+            display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:48px;}
+  .jc-meta{margin-top:4px; display:flex; align-items:center; gap:4px; font-size:12px;}
+  .jc-dday{color:var(--red-400); font-weight:500;}
+  .jc-dot{color:var(--g300); font-size:11px;}
+  .jc-sub{color:var(--g300); font-weight:500;}
+  .jc-bottom{margin-top:14px; display:flex; align-items:flex-end; justify-content:space-between; gap:8px; min-height:24px;}
+  .jc-tags{display:flex; gap:4px; flex-wrap:wrap;}
+  .tag{height:20px; display:inline-flex; align-items:center; gap:2px; padding:2px 6px; border-radius:4px;
+       font-size:11px; font-weight:600;}
+  .tag.yellow{background:var(--yellow-50); color:var(--yellow-600);}
+  .tag.green{background:var(--green-50); color:var(--green-600);}
+  .jc-jk{height:32px; padding:0 10px; display:flex; align-items:center; background:#fff; border-radius:6px;
+         border:1px solid var(--jk-line); color:var(--jk); font-size:13px; font-weight:600; white-space:nowrap;}
+
+  /* ===== review feed card ===== */
+  .rcard{padding:24px; background:linear-gradient(180deg,#FFF3E0 0%,#fff 100%);
+         border-radius:16px; border:1px solid rgba(36,38,40,.10); display:flex; flex-direction:column; gap:16px;
+         margin-bottom:16px;}
+  .module .rcard:last-child{margin-bottom:0;}
+  .rc-quote{color:var(--g900); font-size:15px; font-weight:600; line-height:24px;}
+  .rc-snip{display:flex; align-items:center; gap:8px; margin-top:12px;}
+  .tag.blue{background:var(--blue-50); color:var(--blue-600);}
+  .rc-snip .rc-txt{flex:1; color:var(--g500); font-size:14px; line-height:22px;
+                   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .rc-detail{height:44px; display:flex; align-items:center; justify-content:center; gap:2px;
+             background:#fff; border:1px solid var(--g100); border-radius:8px;
+             color:var(--g700); font-size:12px; font-weight:600;}
+  .rc-div{height:1px; background:var(--g50);}
+  .rc-co{display:flex; align-items:center; gap:6px;}
+  .rc-co .jc-logo{width:32px; height:32px;}
+  .rc-co .name{color:var(--g800); font-size:14px; font-weight:600;}
+
+  /* ===== salary TOP card (B variant) ===== */
+  .scard{padding:20px; background:linear-gradient(180deg,#FFF3E0 0%,#fff 100%);
+         border-radius:16px; border:1px solid rgba(36,38,40,.10);
+         display:flex; flex-direction:column; gap:16px; margin-bottom:16px;}
+  .module .scard:last-child{margin-bottom:0;}
+  .sc-co{display:flex; align-items:center; gap:8px;}
+  .sc-logo{width:40px; height:40px; border-radius:12px; background:#fff; border:1px solid var(--g100);
+           display:flex; align-items:center; justify-content:center; overflow:hidden;}
+  .sc-name{color:var(--g800); font-size:14px; font-weight:600; line-height:22px;}
+  .sc-btn{height:48px; display:flex; align-items:center; justify-content:center; gap:2px;
+          background:#fff; border:1px solid var(--g100); border-radius:8px;
+          color:var(--g700); font-size:12px; font-weight:600;}
+
+  /* ===== theme card ===== */
+  .theme-list{display:flex; flex-direction:column; gap:16px;}
+  .tcard{border-radius:20px; overflow:hidden; border:1px solid rgba(36,38,40,.10);}
+  .tc-img{height:142px; padding:16px; display:flex; align-items:flex-start;
+          background:linear-gradient(135deg,#cfd8e3,#aeb8c7);}
+  .tc-pill{padding:4px 12px; background:rgba(0,0,0,.8); border-radius:999px;
+           color:#fff; font-size:13px; font-weight:600;}
+  .tc-body{padding:20px 20px 28px; background:#fff;}
+  .tc-title{color:var(--g900); font-size:18px; font-weight:700; line-height:26px;}
+  .tc-sub{color:var(--g400); font-size:15px; line-height:24px; margin-top:2px;}
+
+  /* ===== popular post card ===== */
+  .pcard{width:280px; height:220px; padding:20px 20px 14px; background:#fff; border:1px solid var(--g100);
+         border-radius:12px; display:flex; flex-direction:column; justify-content:space-between;}
+  .pc-body{color:var(--g800); font-size:16px; line-height:24px; overflow:hidden;
+           display:-webkit-box; -webkit-line-clamp:6; -webkit-box-orient:vertical;}
+  .pc-foot{display:flex; align-items:center; gap:20px; color:var(--g300); font-size:14px;}
+  .pc-foot .grp{display:flex; align-items:center; gap:12px;}
+  .pc-foot .it{display:flex; align-items:center; gap:6px;}
+  .pc-foot .view{flex:1; text-align:right;}
+
+  /* ===== bottom nav ===== */
+  .bottomnav{position:sticky; bottom:0; z-index:40; background:#fff; border-top:1px solid var(--g100);
+             display:flex; padding-bottom:8px;}
+  .nav-it{flex:1; padding:8px 0 4px; display:flex; flex-direction:column; align-items:center; gap:5px;
+          color:var(--g300); font-size:11px; font-weight:500;}
+  .nav-it.active{color:var(--g900);}
+  .nav-it.active svg{color:var(--g800);}
+  .home-ind{height:5px; width:140px; margin:6px auto 0; background:#1A1A1E; border-radius:10px;}
+</style>
+</head>
+<body>
+  <div class="frame" id="frame">
+
+    <!-- ===== sticky statusbar ===== -->
+    <div class="statusbar">
+        <span>9:41</span>
+        <span class="sb-ic">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.5c2.3 0 4.4.9 6 2.3l1-1.1A10.4 10.4 0 0 0 8.5 1 10.4 10.4 0 0 0 1.5 3.7l1 1.1A8.9 8.9 0 0 1 8.5 2.5Zm0 3.2c1.4 0 2.7.5 3.7 1.4l1-1.1a7.4 7.4 0 0 0-9.4 0l1 1.1a5.6 5.6 0 0 1 3.7-1.4Zm0 3.1 1.7 1.9 1.7-1.9a4.6 4.6 0 0 0-3.4 0Z"/></svg>
+          <svg width="25" height="13" viewBox="0 0 25 13" fill="none"><rect x="1" y="1" width="21" height="11" rx="3" stroke="currentColor" stroke-opacity=".4"/><rect x="3" y="3" width="17" height="7" rx="1.5" fill="currentColor"/><rect x="23" y="4.5" width="1.5" height="4" rx=".75" fill="currentColor" fill-opacity=".4"/></svg>
+        </span>
+    </div>
+
+      <div class="iconrow">
+        <span class="ibtn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+        <span class="ibtn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></span>
+      </div>
+
+      <div class="logorow">
+        <img class="logo" src="https://jelin-cc.github.io/jobplanet-ut/jobplanet-wordmark.png" alt="Jobplanet" />
+      </div>
+
+      <div class="searchwrap" id="searchwrap">
+        <div class="search">
+          <input type="text" placeholder="회사·직무 키워드를 검색해 보세요" />
+          <span class="s-ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><line x1="14" y1="14" x2="18" y2="18"/></svg></span>
+        </div>
+        <span class="menu-compact"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></span>
+      </div>
+
+      <div class="ticker">
+        <div class="rank">
+          <span class="rnum">3</span><span class="rname">무신사</span>
+          <span class="newbadge">NEW</span>
+        </div>
+        <span class="delta">2 <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 3l4 6H2z"/></svg></span>
+        <span class="chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+
+      <div class="quick">
+        <div class="qitem">
+          <div class="qicon"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-jp-community.svg" alt="" /></div>
+          <div class="qlabel">커뮤니티</div>
+        </div>
+        <div class="qitem">
+          <div class="qicon"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-jp-apply.svg" alt="" /></div>
+          <div class="qlabel">지원현황</div>
+        </div>
+        <div class="qitem">
+          <div class="qicon"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-jp-resume.svg" alt="" /></div>
+          <div class="qlabel">이력서 관리</div>
+        </div>
+        <div class="qitem">
+          <div class="qicon"><img src="https://jelin-cc.github.io/jobplanet-ut/emoji-moneybag.svg" alt="" /></div>
+          <div class="qlabel">실연봉 비교</div>
+        </div>
+      </div>
+
+    <!-- ===== HOT pill ===== -->
+    <div class="hot">
+      <span class="htag">HOT</span>
+      <span class="htx">곧 마감되는 공고를 모아봤어요!</span>
+      <span class="hchev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+    </div>
+
+    <!-- ===== white sheet ===== -->
+    <div class="sheet">
+
+      <div class="module">
+        <div class="mhead">
+          <div class="mleft"><div class="mtitle"><img class="micon" src="https://jelin-cc.github.io/jobplanet-ut/emoji-eyes.svg" alt="" />주목받는 채용 공고</div><span class="adbadge">광고 ⓘ</span></div>
+          <span class="more">전체보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </div>
+        <div class="track" data-jobs="1"></div>
+      </div>
+
+      <div class="module">
+        <div class="mhead">
+          <div class="mleft"><div class="mtitle"><img class="micon" src="https://jelin-cc.github.io/jobplanet-ut/emoji-service.svg" alt="" />지원자가 몰리는 공고</div><span class="adbadge">광고 ⓘ</span></div>
+          <span class="more">전체보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </div>
+        <div class="track" data-jobs="2"></div>
+      </div>
+
+      <div class="module">
+        <div class="mhead">
+          <div class="mleft"><div class="mtitle"><img class="micon" src="https://jelin-cc.github.io/jobplanet-ut/emoji-fire.svg" alt="" />요새 핫한 공고</div><span class="adbadge">광고 ⓘ</span></div>
+          <span class="more">전체보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </div>
+        <div class="track" data-jobs="3"></div>
+      </div>
+
+      <div class="module">
+        <div class="mhead">
+          <div class="mleft"><div class="mtitle"><img class="micon" src="https://jelin-cc.github.io/jobplanet-ut/emoji-moneybag.svg" alt="" /><span style="color:var(--orange-500)">#연봉</span> 언급 TOP 회사</div></div>
+          <span class="more">전체보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </div>
+        <div id="reviewFeed"></div>
+      </div>
+
+      <div class="module">
+        <div class="mhead">
+          <div class="mleft"><div class="mtitle">리뷰로 찾는 채용 공고</div></div>
+        </div>
+        <div class="theme-list" id="themeList"></div>
+      </div>
+
+      <div class="module">
+        <div class="mhead">
+          <div class="mleft"><div class="mtitle"><img class="micon" src="https://jelin-cc.github.io/jobplanet-ut/emoji-bubble.svg" alt="" />실시간 인기글</div></div>
+          <span class="more">전체보기 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </div>
+        <div class="track" id="popularTrack"></div>
+      </div>
+
+    </div>
+
+    <!-- ===== bottom nav ===== -->
+    <div class="bottomnav">
+      <div class="nav-it active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>홈</div>
+      <div class="nav-it"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="13" height="13" rx="2"/><path d="M3 8v11a2 2 0 0 0 2 2h11"/></svg>리뷰피드</div>
+      <div class="nav-it"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>채용공고</div>
+      <div class="nav-it"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>잡플위키</div>
+      <div class="nav-it"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>MY</div>
+    </div>
+    <div style="background:#fff"><div class="home-ind"></div></div>
+
+  </div>
+
+<script>
+  // ===== collapse on scroll =====
+  const frame = document.getElementById('frame');
+  const searchwrap = document.getElementById('searchwrap');
+  const WINDOW = 56; // 검색바가 헤더에 붙기 전 56px 구간에서만 전환
+  let pStart = 0, pStick = 1;
+  function recalc(){
+    pStick = Math.max(searchwrap.offsetTop - 44, 1); // 검색바가 헤더에 닿는 스크롤 지점
+    pStart = Math.max(pStick - WINDOW, 0);
+  }
+  function onScroll(){
+    const p = Math.min(Math.max((frame.scrollTop - pStart) / (pStick - pStart), 0), 1);
+    frame.style.setProperty('--p', p.toFixed(3));
+  }
+  recalc();
+  frame.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', () => { recalc(); onScroll(); });
+  onScroll();
+
+  // ===== job cards =====
+  const chev = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+  const bm = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg>';
+
+  const tagYellow = '<span class="tag yellow">🎁 축하금 100만원</span>';
+  const tagGreen  = '<span class="tag green">워라밸 4.0</span>';
+
+  function jobCard(opt){
+    const tags = (opt.tags||[]).join('');
+    const jk = opt.jk ? '<span class="jc-jk">잡코리아 지원</span>' : '';
+    return `<div class="jcard">
+      <div class="jc-top">
+        <div class="jc-co"><span class="jc-logo">toss</span><span class="jc-coname">비바퍼블리카</span></div>
+        <span class="jc-bm">${bm}</span>
+      </div>
+      <div class="jc-title">[비바퍼블리카] 커머스 부문 프로덕트 디자이너 (3년차 이상)</div>
+      <div class="jc-meta"><span class="jc-dday">D-6</span><span class="jc-dot">·</span><span class="jc-sub">경력무관</span><span class="jc-dot">·</span><span class="jc-sub">서울</span></div>
+      <div class="jc-bottom"><div class="jc-tags">${tags}</div>${jk}</div>
+    </div>`;
+  }
+
+  const jobSet = [
+    {tags:[tagYellow]},
+    {tags:[tagGreen]},
+    {tags:[tagGreen], jk:true},
+    {tags:[tagYellow, tagGreen]},
+    {tags:[tagYellow]},
+    {tags:[tagGreen]},
+    {tags:[tagGreen], jk:true},
+    {tags:[tagYellow, tagGreen]},
+    {tags:[tagYellow]},
+    {tags:[tagGreen]},
+    {tags:[tagGreen], jk:true},
+    {tags:[tagYellow, tagGreen]},
+  ]; // 캐로셀 최대 12건
+  document.querySelectorAll('[data-jobs]').forEach(el=>{
+    el.innerHTML = jobSet.map(jobCard).join('');
+  });
+
+  // ===== salary TOP feed (B variant) =====
+  const salaryTop = [
+    {name:'야놀자', logo:'<span style="color:#FF3478;font-size:9px;font-weight:800;letter-spacing:-.3px">yanolja</span>'},
+    {name:'당근', logo:'<span style="color:#FF6F0F;font-size:11px;font-weight:800;letter-spacing:-.3px">당근</span>'},
+    {name:'네이버파이넨셜', logo:'<span style="color:#03C75A;font-size:7px;font-weight:800;line-height:1.15;text-align:center">NAVER<br>FINANCIAL</span>'},
+  ];
+  document.getElementById('reviewFeed').innerHTML = salaryTop.map(s=>`
+    <div class="scard">
+      <div class="sc-co"><span class="sc-logo">${s.logo}</span><span class="sc-name">${s.name}</span></div>
+      <div class="sc-btn">자세히 보기 ${chev}</div>
+    </div>`).join('');
+
+  // ===== theme cards =====
+  const themes = [
+    {pill:'최고의 보상', t:'성과만큼 챙겨주는 곳', s:'복리후생부터 보너스까지 든든하게', g:'linear-gradient(135deg,#ffd9a8,#ffb27a)'},
+    {pill:'유연한 일터', t:'자율적으로 일하는 곳', s:'젊고 자유로운 사내문화', g:'linear-gradient(135deg,#a8d8ff,#7ab0ff)'},
+    {pill:'탄탄한 규모', t:'한 번쯤 다녀보고 싶은 곳', s:'안정적인 비즈니스 기반', g:'linear-gradient(135deg,#c9d2e0,#9aa7bd)'},
+    {pill:'믿고보는 동료', t:'함께하고 싶은 사람들이 모인 곳', s:'스마트한 동료, 수평한 관계', g:'linear-gradient(135deg,#bfe8d2,#8fd4ad)'},
+  ];
+  document.getElementById('themeList').innerHTML = themes.map(t=>`
+    <div class="tcard">
+      <div class="tc-img" style="background:${t.g}"><span class="tc-pill">${t.pill}</span></div>
+      <div class="tc-body"><div class="tc-title">${t.t}</div><div class="tc-sub">${t.s}</div></div>
+    </div>`).join('');
+
+  // ===== popular posts =====
+  const posts = [
+    {b:'점심메뉴추천<br><br>찌개·탕류: 김치찌개, 된장찌개, 순두부찌개, 부대찌개, 갈비탕, 감자탕, 설렁탕, 육개장, 곰탕, 해장국…', like:11, cmt:41, view:181},
+    {b:'신입 분들, 말투 하나만 바꿔도 일 잘하는 사람처럼 보여요 🔥<br><br>말투는 곧 인상이기 때문에 딱 두 가지만 고치면 신뢰도 급상승합니다.', like:7, cmt:32, view:192},
+    {b:'화장실갈 때 허락받아야 한다길래 도망쳤어요', like:12, cmt:17, view:21},
+    {b:'상사와 사내 연애 해보신분?<br>6년 동안 장기연애한 여자친구가 제 상사인데요. 회의만 들어가면 돌변합니다…', like:11, cmt:18, view:229},
+  ];
+  const heart = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>';
+  const comment = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 0 1-9 8 9 9 0 0 1-4-1L3 20l1.5-4.5A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg>';
+  document.getElementById('popularTrack').innerHTML = posts.map(p=>`
+    <div class="pcard">
+      <div class="pc-body">${p.b}</div>
+      <div class="pc-foot">
+        <div class="grp"><span class="it">${heart} ${p.like}</span><span class="it">${comment} ${p.cmt}</span></div>
+        <span class="view">조회 ${p.view}</span>
+      </div>
+    </div>`).join('');
+</script>
+</body>
+</html>
