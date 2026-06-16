@@ -37,7 +37,8 @@
              background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #E2F5EC;}
   .statusbar .sb-ic{display:flex; gap:5px; align-items:center;}
 
-  /* icon row (bell + menu) — scrolls away under statusbar */
+  /* hero band (bell/menu + logo) — opaque & whitens with header so no green seam appears */
+  .iconrow,.logorow{background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #E2F5EC;}
   .iconrow{display:flex; justify-content:flex-end; align-items:center; gap:6px; padding:4px 16px 6px;}
   .iconrow .ibtn{width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:var(--g800);}
 
@@ -63,7 +64,7 @@
                 display:flex; overflow:hidden; opacity:var(--p); max-width:calc(28px * var(--p));}
 
   /* ranking ticker */
-  .ticker{display:flex; align-items:center; gap:8px; padding:0 22px 14px;}
+  .ticker{display:flex; align-items:center; gap:8px; padding:0 16px 14px;}
   .ticker .rank{display:flex; align-items:center; gap:8px; flex:1;}
   .ticker .rnum{color:var(--green-500); font-size:14px; font-weight:600;}
   .ticker .rname{color:#000; font-size:14px; font-weight:600;}
@@ -82,7 +83,7 @@
   .qlabel{font-size:13px; font-weight:600; color:var(--g800);}
 
   /* ===== HOT pill ===== */
-  .hot{margin:2px 24px 0; padding:12px 14px; background:var(--red-30); border-radius:999px;
+  .hot{margin:2px 16px 0; padding:12px 14px; background:var(--red-30); border-radius:999px;
        box-shadow:0 4px 16px rgba(0,0,0,.08); display:flex; align-items:center; gap:8px;}
   .hot .htag{background:#fff; color:var(--red-400); font-size:12px; font-weight:600;
              padding:4px 10px; border-radius:999px;}
@@ -204,7 +205,7 @@
         <span class="logo">Jobplanet</span>
       </div>
 
-      <div class="searchwrap">
+      <div class="searchwrap" id="searchwrap">
         <div class="search">
           <input type="text" placeholder="회사·직무 키워드를 검색해 보세요" />
           <span class="s-ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><line x1="14" y1="14" x2="18" y2="18"/></svg></span>
@@ -346,12 +347,20 @@
 <script>
   // ===== collapse on scroll =====
   const frame = document.getElementById('frame');
-  const RANGE = 85; // 검색바가 헤더에 붙는 거리에 맞춰 배경/크기 전환
+  const searchwrap = document.getElementById('searchwrap');
+  const WINDOW = 56; // 검색바가 헤더에 붙기 전 56px 구간에서만 전환
+  let pStart = 0, pStick = 1;
+  function recalc(){
+    pStick = Math.max(searchwrap.offsetTop - 44, 1); // 검색바가 헤더에 닿는 스크롤 지점
+    pStart = Math.max(pStick - WINDOW, 0);
+  }
   function onScroll(){
-    const p = Math.min(Math.max(frame.scrollTop / RANGE, 0), 1);
+    const p = Math.min(Math.max((frame.scrollTop - pStart) / (pStick - pStart), 0), 1);
     frame.style.setProperty('--p', p.toFixed(3));
   }
+  recalc();
   frame.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', () => { recalc(); onScroll(); });
   onScroll();
 
   // ===== job cards =====
