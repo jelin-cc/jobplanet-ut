@@ -25,7 +25,7 @@
   /* ===== device frame / scroller ===== */
   .frame{position:relative; width:393px; height:100vh; max-height:852px; overflow-y:auto; overflow-x:hidden;
          --p:0;
-         background:linear-gradient(180deg,#E2F5EC 0,#E2F5EC 150px,#EFF4F2 300px,#F9F9FB 460px) #F9F9FB;
+         background:linear-gradient(180deg, rgba(215,249,231,.8) 0, rgba(255,255,255,.5) 322px, #F9F9FB 460px) #F9F9FB;
          background-attachment:local;
          box-shadow:0 20px 60px rgba(0,0,0,.25);}
   .frame::-webkit-scrollbar{display:none;}
@@ -34,11 +34,11 @@
   .statusbar{position:sticky; top:0; z-index:60; height:44px; padding:0 16px;
              display:flex; align-items:center; justify-content:space-between;
              font-size:15px; font-weight:600; color:var(--g900);
-             background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #E2F5EC;}
+             background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #DEF9EB;}
   .statusbar .sb-ic{display:flex; gap:5px; align-items:center;}
 
   /* hero band (bell/menu + logo) — opaque & whitens with header so no green seam appears */
-  .iconrow,.logorow{background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #E2F5EC;}
+  .iconrow,.logorow{background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #DEF9EB;}
   .iconrow{display:flex; justify-content:flex-end; align-items:center; gap:6px; padding:4px 16px 0;}
   .iconrow .ibtn{width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:var(--g800);}
 
@@ -49,7 +49,7 @@
   /* search — sticks just under statusbar; hero above & content below slide under it */
   .searchwrap{position:sticky; top:44px; z-index:55; display:flex; justify-content:center; align-items:center; gap:8px;
               padding:6px 16px calc(20px - 6px * var(--p));
-              background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #E2F5EC;
+              background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #DEF9EB;
               box-shadow:0 6px 16px rgba(0,0,0,calc(.07 * var(--p)));}
   .search{flex:0 1 320px; width:320px; max-width:100%; height:calc(56px - 12px * var(--p)); display:flex; align-items:center; gap:4px;
           padding:0 18px 0 24px; border-radius:999px; border:2px solid transparent;
@@ -76,8 +76,7 @@
   /* quick menu */
   .quick{display:flex; justify-content:space-between; gap:8px; padding:60px 16px 60px;}
   .qitem{flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;}
-  .qicon{width:60px; height:60px; border-radius:16px; background:#fff; display:flex; align-items:center;
-         justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,.08);}
+  .qicon{width:60px; height:60px; display:flex; align-items:center; justify-content:center;}
   .qicon svg{width:34px; height:34px;}
   .qicon img{width:32px; height:32px; object-fit:contain;}
   .qlabel{font-size:13px; font-weight:600; color:var(--g800);}
