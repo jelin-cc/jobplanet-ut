@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Jobplanet Home A</title>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet" />
 <style>
   :root{
     --green-500:#00C274; --green-600:#00A866; --green-50:#E3F8ED;
@@ -22,35 +24,33 @@
 
   /* ===== device frame / scroller ===== */
   .frame{position:relative; width:393px; height:100vh; max-height:852px; overflow-y:auto; overflow-x:hidden;
-         background:linear-gradient(180deg,#CFF6E2 0,#E2F5EC 180px,#F4F6F8 360px,#F9F9FB 520px) #F9F9FB;
+         --p:0;
+         background:linear-gradient(180deg,#E2F5EC 0,#E2F5EC 150px,#EFF4F2 300px,#F9F9FB 460px) #F9F9FB;
          background-attachment:local;
          box-shadow:0 20px 60px rgba(0,0,0,.25);}
   .frame::-webkit-scrollbar{display:none;}
 
-  /* ===== sticky topbar ===== */
-  .topbar{position:sticky; top:0; z-index:50; padding:0 16px; --p:0;
-          background:rgba(255,255,255,var(--p));
-          box-shadow:0 4px 16px rgba(0,0,0,calc(.08 * var(--p)));}
-
-  .statusbar{height:44px; display:flex; align-items:center; justify-content:space-between;
-             font-size:15px; font-weight:600; color:var(--g900);}
+  /* ===== sticky header: statusbar + search stick; hero scrolls under (opaque) ===== */
+  .statusbar{position:sticky; top:0; z-index:60; height:44px; padding:0 16px;
+             display:flex; align-items:center; justify-content:space-between;
+             font-size:15px; font-weight:600; color:var(--g900);
+             background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #E2F5EC;}
   .statusbar .sb-ic{display:flex; gap:5px; align-items:center;}
 
-  .collapsible{overflow:hidden;
-    max-height:calc(var(--h) * (1 - var(--p)));
-    opacity:calc(1 - var(--p));}
-
-  /* icon row (bell + menu) */
-  .iconrow{--h:40px; display:flex; justify-content:flex-end; align-items:center; gap:6px;}
+  /* icon row (bell + menu) — scrolls away under statusbar */
+  .iconrow{display:flex; justify-content:flex-end; align-items:center; gap:6px; padding:4px 16px 6px;}
   .iconrow .ibtn{width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:var(--g800);}
 
-  /* logo */
-  .logorow{--h:48px; display:flex; justify-content:center; align-items:center; padding-bottom:14px;}
-  .logo{font-size:26px; font-weight:800; color:var(--green-500); letter-spacing:-.5px;}
+  /* logo — scrolls away under statusbar */
+  .logorow{display:flex; justify-content:center; align-items:center; padding:0 16px 14px;}
+  .logo{font-family:'Montserrat',sans-serif; font-size:27px; font-weight:800;
+         color:var(--green-500); letter-spacing:-1.2px;}
 
-  /* search row */
-  .searchrow{display:flex; align-items:center; gap:8px;
-             padding-bottom:calc(14px - 6px * var(--p)); padding-top:calc(2px * var(--p));}
+  /* search — sticks just under statusbar; hero above & content below slide under it */
+  .searchwrap{position:sticky; top:44px; z-index:55; display:flex; align-items:center; gap:8px;
+              padding:6px 16px calc(14px - 4px * var(--p));
+              background:linear-gradient(rgba(255,255,255,var(--p)),rgba(255,255,255,var(--p))), #E2F5EC;
+              box-shadow:0 6px 16px rgba(0,0,0,calc(.07 * var(--p)));}
   .search{flex:1; height:calc(56px - 12px * var(--p)); display:flex; align-items:center; gap:4px;
           padding:0 18px 0 24px; background:#fff; border-radius:999px;
           border:2px solid var(--green-500);
@@ -63,7 +63,7 @@
                 display:flex; overflow:hidden; opacity:var(--p); max-width:calc(28px * var(--p));}
 
   /* ranking ticker */
-  .ticker{--h:54px; display:flex; align-items:center; gap:8px; padding:0 6px 14px;}
+  .ticker{display:flex; align-items:center; gap:8px; padding:0 22px 14px;}
   .ticker .rank{display:flex; align-items:center; gap:8px; flex:1;}
   .ticker .rnum{color:var(--green-500); font-size:14px; font-weight:600;}
   .ticker .rname{color:#000; font-size:14px; font-weight:600;}
@@ -74,10 +74,11 @@
                 background:#fff; border-radius:6px; box-shadow:0 4px 16px rgba(0,0,0,.08); color:var(--g600);}
 
   /* quick menu */
-  .quick{--h:120px; display:flex; justify-content:center; gap:16px; padding:6px 0 22px;}
-  .qitem{width:72px; display:flex; flex-direction:column; align-items:center; gap:6px;}
+  .quick{display:flex; justify-content:space-between; gap:8px; padding:6px 16px 22px;}
+  .qitem{flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;}
   .qicon{width:60px; height:60px; border-radius:16px; background:#fff; display:flex; align-items:center;
-         justify-content:center; font-size:30px; box-shadow:0 4px 16px rgba(0,0,0,.08);}
+         justify-content:center; box-shadow:0 4px 16px rgba(0,0,0,.08);}
+  .qicon svg{width:34px; height:34px;}
   .qlabel{font-size:13px; font-weight:600; color:var(--g800);}
 
   /* ===== HOT pill ===== */
@@ -184,27 +185,26 @@
 <body>
   <div class="frame" id="frame">
 
-    <!-- ===== sticky topbar ===== -->
-    <div class="topbar" id="topbar">
-      <div class="statusbar">
+    <!-- ===== sticky statusbar ===== -->
+    <div class="statusbar">
         <span>9:41</span>
         <span class="sb-ic">
           <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
           <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.5c2.3 0 4.4.9 6 2.3l1-1.1A10.4 10.4 0 0 0 8.5 1 10.4 10.4 0 0 0 1.5 3.7l1 1.1A8.9 8.9 0 0 1 8.5 2.5Zm0 3.2c1.4 0 2.7.5 3.7 1.4l1-1.1a7.4 7.4 0 0 0-9.4 0l1 1.1a5.6 5.6 0 0 1 3.7-1.4Zm0 3.1 1.7 1.9 1.7-1.9a4.6 4.6 0 0 0-3.4 0Z"/></svg>
           <svg width="25" height="13" viewBox="0 0 25 13" fill="none"><rect x="1" y="1" width="21" height="11" rx="3" stroke="currentColor" stroke-opacity=".4"/><rect x="3" y="3" width="17" height="7" rx="1.5" fill="currentColor"/><rect x="23" y="4.5" width="1.5" height="4" rx=".75" fill="currentColor" fill-opacity=".4"/></svg>
         </span>
-      </div>
+    </div>
 
-      <div class="collapsible iconrow">
+      <div class="iconrow">
         <span class="ibtn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
         <span class="ibtn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></span>
       </div>
 
-      <div class="collapsible logorow">
+      <div class="logorow">
         <span class="logo">Jobplanet</span>
       </div>
 
-      <div class="searchrow">
+      <div class="searchwrap">
         <div class="search">
           <input type="text" placeholder="회사·직무 키워드를 검색해 보세요" />
           <span class="s-ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><line x1="14" y1="14" x2="18" y2="18"/></svg></span>
@@ -212,7 +212,7 @@
         <span class="menu-compact"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></span>
       </div>
 
-      <div class="collapsible ticker">
+      <div class="ticker">
         <div class="rank">
           <span class="rnum">3</span><span class="rname">무신사</span>
           <span class="newbadge">NEW</span>
@@ -221,13 +221,56 @@
         <span class="chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
       </div>
 
-      <div class="collapsible quick">
-        <div class="qitem"><div class="qicon">💬</div><div class="qlabel">커뮤니티</div></div>
-        <div class="qitem"><div class="qicon">📋</div><div class="qlabel">지원현황</div></div>
-        <div class="qitem"><div class="qicon">📄</div><div class="qlabel">이력서 관리</div></div>
-        <div class="qitem"><div class="qicon">💰</div><div class="qlabel">실연봉 비교</div></div>
+      <div class="quick">
+        <div class="qitem">
+          <div class="qicon">
+            <svg viewBox="0 0 36 36" fill="none">
+              <circle cx="14" cy="15" r="11" fill="#3FE9AA"/>
+              <circle cx="11.5" cy="13" r="2.4" fill="#fff"/><circle cx="12.3" cy="13.6" r="1.2" fill="#323438"/>
+              <circle cx="17.5" cy="12" r="2.4" fill="#fff"/><circle cx="18.3" cy="12.6" r="1.2" fill="#323438"/>
+              <circle cx="24" cy="22" r="9" fill="#FFCF5C"/>
+              <circle cx="21.5" cy="21" r="2" fill="#fff"/><circle cx="22.1" cy="21.5" r="1" fill="#323438"/>
+              <circle cx="26.5" cy="21.6" r="2" fill="#fff"/><circle cx="27.1" cy="22.1" r="1" fill="#323438"/>
+              <path d="M22 26q2 1.6 4 0" stroke="#323438" stroke-width="1.1" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="qlabel">커뮤니티</div>
+        </div>
+        <div class="qitem">
+          <div class="qicon">
+            <svg viewBox="0 0 36 36" fill="none">
+              <rect x="6" y="4" width="20" height="24" rx="3" fill="#A9C4FF"/>
+              <rect x="11" y="9" width="20" height="24" rx="3" fill="#8B97FF"/>
+              <rect x="15" y="15" width="6" height="2" rx="1" fill="#fff"/>
+              <rect x="15" y="20" width="12" height="2" rx="1" fill="#fff"/>
+              <rect x="15" y="25" width="12" height="2" rx="1" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="qlabel">지원현황</div>
+        </div>
+        <div class="qitem">
+          <div class="qicon">
+            <svg viewBox="0 0 36 36" fill="none">
+              <rect x="7" y="5" width="22" height="26" rx="3" fill="#FFD15C"/>
+              <rect x="11" y="3" width="16" height="20" rx="3" fill="#C8E4F0"/>
+              <rect x="6" y="14" width="24" height="17" rx="3" fill="#FED542"/>
+              <rect x="11" y="20" width="14" height="2" rx="1" fill="#fff"/>
+              <rect x="11" y="25" width="9" height="2" rx="1" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="qlabel">이력서 관리</div>
+        </div>
+        <div class="qitem">
+          <div class="qicon">
+            <svg viewBox="0 0 36 36" fill="none">
+              <path d="M13 9h10l-2.5 4h-5z" fill="#FFE075"/>
+              <ellipse cx="18" cy="22" rx="11" ry="9" fill="#FFC94D"/>
+              <path d="M18 16v12M14.5 19.5h5.5a2 2 0 0 1 0 4h-4a2 2 0 0 0 0 4h6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+          <div class="qlabel">실연봉 비교</div>
+        </div>
       </div>
-    </div>
 
     <!-- ===== HOT pill ===== -->
     <div class="hot">
@@ -303,11 +346,10 @@
 <script>
   // ===== collapse on scroll =====
   const frame = document.getElementById('frame');
-  const topbar = document.getElementById('topbar');
-  const RANGE = 96; // 스크롤 0~96px 구간에서 헤더가 점진적으로 접힘
+  const RANGE = 85; // 검색바가 헤더에 붙는 거리에 맞춰 배경/크기 전환
   function onScroll(){
     const p = Math.min(Math.max(frame.scrollTop / RANGE, 0), 1);
-    topbar.style.setProperty('--p', p.toFixed(3));
+    frame.style.setProperty('--p', p.toFixed(3));
   }
   frame.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
