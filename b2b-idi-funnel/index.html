@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>채용 퍼널 단계별 페인포인트 & 인사이트 · 잡플래닛 B2B IDI</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --brand:#00C274; --brand-bg:#F0FAF5; --brand-ln:rgba(0,194,116,.18);
+  --tx:#191F28; --tx2:#333D4B; --tx3:#4E5968; --tx4:#8B95A1;
+  --bg:#fff; --bg2:#F7F8FA; --ln:#EAECEF; --ln2:#F2F4F6;
+  --blue:#3182F6; --blue-bg:#EBF4FF;
+  --rd:16px; --rd-sm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard',system-ui,sans-serif;background:var(--bg2);color:var(--tx);
+  -webkit-font-smoothing:antialiased;line-height:1.5;letter-spacing:-.2px;padding:48px 24px 80px}
+.wrap{max-width:1080px;margin:0 auto}
+
+/* ── header ── */
+.eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;
+  color:var(--brand);background:var(--brand-bg);padding:5px 12px;border-radius:20px;letter-spacing:0}
+h1{font-size:28px;font-weight:800;letter-spacing:-.8px;margin:16px 0 10px}
+.sub{font-size:15px;color:var(--tx3);max-width:680px}
+
+/* ── conclusion banner ── */
+.banner{margin:28px 0 40px;background:var(--tx);color:#fff;border-radius:var(--rd);
+  padding:24px 28px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.banner .lead{font-size:13px;font-weight:700;color:var(--brand);letter-spacing:0;margin-bottom:6px}
+.banner .big{font-size:19px;font-weight:700;letter-spacing:-.4px}
+.banner .big b{color:var(--brand)}
+.banner .stat{margin-left:auto;display:flex;gap:28px}
+.banner .stat .n{font-size:26px;font-weight:800;letter-spacing:-.5px}
+.banner .stat .l{font-size:12px;color:#B0B8C1;margin-top:2px}
+
+/* ── funnel rows ── */
+.stage{background:var(--bg);border:1px solid var(--ln);border-radius:var(--rd);
+  margin-bottom:16px;overflow:hidden;display:grid;grid-template-columns:168px 1fr}
+.stage-side{padding:24px 22px;border-right:1px solid var(--ln2);position:relative}
+.stage-side::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--sc,var(--brand))}
+.stage-no{font-size:12px;font-weight:700;color:var(--sc,var(--brand));letter-spacing:.4px}
+.stage-name{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:6px 0 4px}
+.stage-desc{font-size:12.5px;color:var(--tx4)}
+.stage-main{padding:24px 26px;display:grid;grid-template-columns:1fr 1fr;gap:26px}
+@media(max-width:860px){.stage{grid-template-columns:1fr}.stage-main{grid-template-columns:1fr;gap:18px}
+  .stage-side{border-right:none;border-bottom:1px solid var(--ln2)}}
+
+.block-label{font-size:11px;font-weight:700;letter-spacing:.3px;color:var(--tx4);
+  text-transform:uppercase;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.dot{width:6px;height:6px;border-radius:50%}
+.pain .dot{background:#EF4444}.insight .dot{background:var(--brand)}
+.block-title{font-size:15.5px;font-weight:700;color:var(--tx);letter-spacing:-.3px;line-height:1.45}
+.insight .block-title{color:var(--tx)}
+.insight .block-title em{font-style:normal;color:var(--brand);font-weight:800}
+
+/* evidence */
+.evi{margin-top:14px;padding-top:14px;border-top:1px dashed var(--ln)}
+.quote{font-size:13px;color:var(--tx3);line-height:1.55;padding-left:12px;
+  border-left:2px solid var(--ln);margin-bottom:8px}
+.quote:last-child{margin-bottom:0}
+.quote b{color:var(--tx2);font-weight:700}
+.who{font-size:11px;font-weight:700;color:var(--tx4);margin-left:4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{font-size:11.5px;font-weight:600;color:var(--tx3);background:var(--ln2);
+  padding:4px 9px;border-radius:7px}
+.chip.k{color:var(--brand);background:var(--brand-bg)}
+
+/* ── strategy strip ── */
+.strat{margin-top:40px;background:var(--bg);border:1px solid var(--brand-ln);border-radius:var(--rd);padding:26px 28px}
+.strat h2{font-size:18px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px}
+.strat .h-sub{font-size:13px;color:var(--tx3);margin-bottom:20px}
+.strat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:760px){.strat-grid{grid-template-columns:1fr}}
+.scard{background:var(--bg2);border-radius:var(--rd-sm);padding:16px 18px}
+.scard .t{font-size:14px;font-weight:700;margin-bottom:5px}
+.scard .d{font-size:13px;color:var(--tx3);line-height:1.55}
+.scard.win{background:var(--brand-bg)}.scard.win .t{color:var(--brand)}
+.scard.no .t{color:var(--tx4);text-decoration:line-through}
+
+.foot{margin-top:28px;font-size:12px;color:var(--tx4);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">잡플래닛 B2B · 2026 Q2 IDI</div>
+  <h1>채용 퍼널 단계별 메인 페인포인트 &amp; 인사이트</h1>
+  <p class="sub">인담자 8명 인터뷰를 채용 퍼널 흐름(유입 → 지원 → 전환 → 채용 후)에 맞춰, 단계마다 가장 큰 문제와 그에 대한 핵심 인사이트를 정리함.</p>
+
+  <!-- conclusion -->
+  <div class="banner">
+    <div>
+      <div class="lead">한 줄 결론</div>
+      <div class="big">잡플래닛은 이미 <b>'평판 보는 곳'</b>으로 들어와 있음. 이제 <b>'채용하는 곳'</b>으로 전환해야 함</div>
+    </div>
+    <div class="stat">
+      <div><div class="n">7<span style="font-size:15px;color:#8B95A1">/8</span></div><div class="l">지원 직전 평판 확인</div></div>
+      <div><div class="n" style="color:#EF4444">0</div><div class="l">채용 상품 결제자</div></div>
+    </div>
+  </div>
+
+  <!-- ① 유입 -->
+  <div class="stage" style="--sc:#3182F6">
+    <div class="stage-side">
+      <div class="stage-no">STAGE 01</div>
+      <div class="stage-name">유입</div>
+      <div class="stage-desc">지원자를 모으는 단계</div>
+    </div>
+    <div class="stage-main">
+      <div class="pain">
+        <div class="block-label"><span class="dot"></span>메인 페인포인트</div>
+        <div class="block-title">일반 직군은 지원자가 넘치지만, 특수·희소 직군(보안·ML·심전도·영상기획 등)은 일반 공고로는 오지 않아 직접 찾아 나서야 함.</div>
+      </div>
+      <div class="insight">
+        <div class="block-label"><span class="dot"></span>핵심 인사이트</div>
+        <div class="block-title">문제는 '낮은 인지도'가 아니라 <em>직군별 격차</em>임. 적합자를 끌어온 유일한 수단은 광고·공고가 아니라 <em>핀셋 콘텐츠</em>였음.</div>
+        <div class="evi">
+          <div class="quote">CTO가 쓴 논문을 보고 ML 엔지니어가 지원해 옴 <span class="who">P04</span></div>
+          <div class="quote">"직무 인터뷰를 보고 제 방향과 비슷해서 지원했어요" <span class="who">P08</span></div>
+          <div class="chips"><span class="chip">대기업 아웃바운드 100%</span><span class="chip">8/8명 공통</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② 지원 -->
+  <div class="stage" style="--sc:#00C274">
+    <div class="stage-side">
+      <div class="stage-no">STAGE 02</div>
+      <div class="stage-name">지원</div>
+      <div class="stage-desc">기업을 보고 지원을 결정 · 평판</div>
+    </div>
+    <div class="stage-main">
+      <div class="pain">
+        <div class="block-label"><span class="dot"></span>메인 페인포인트</div>
+        <div class="block-title">지원 직전 잡플래닛에서 평판을 확인하는데, 낮은 평점·부정 리뷰를 보고 망설이거나 이탈함. 직접 대응은 회사 방침에 막힘.</div>
+      </div>
+      <div class="insight">
+        <div class="block-label"><span class="dot"></span>핵심 인사이트</div>
+        <div class="block-title">평판은 채용에 <em>실제로 영향</em>을 줌. 관리하면 평점이 오르고, 놓으면 떨어짐. 외부 자격(원티드 우대기업)까지 좌우함. 직접 대응이 막힌 곳엔 <em>제3자 콘텐츠</em>가 기회.</div>
+        <div class="evi">
+          <div class="quote">"리뷰 관리 후 평점이 <b>0.3점 올랐고</b>, 개선된 상태로 입사했어요" <span class="who">P07</span></div>
+          <div class="quote">"해지하니 <b>0.9점 떨어졌어요</b>. 후보자가 줄까 봐 고민이에요" <span class="who">P03</span></div>
+          <div class="quote">"원티드 우대 기준이 잡플래닛 <b>3.0인데 못 넘겨</b> 몇 년째 신청을 못 해요" <span class="who">P03</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 전환 -->
+  <div class="stage" style="--sc:#F59E0B">
+    <div class="stage-side">
+      <div class="stage-no">STAGE 03</div>
+      <div class="stage-name">전환</div>
+      <div class="stage-desc">지원자 적합도 · 기업 페이지</div>
+    </div>
+    <div class="stage-main">
+      <div class="pain">
+        <div class="block-label"><span class="dot"></span>메인 페인포인트</div>
+        <div class="block-title">지원은 많지만 포지션에 맞지 않는 '허수'가 많아 거르는 일이 진짜 부담임. 기업 페이지는 빈약해 차별화할 콘텐츠도, 만들 시간도 없음.</div>
+      </div>
+      <div class="insight">
+        <div class="block-label"><span class="dot"></span>핵심 인사이트</div>
+        <div class="block-title">콘텐츠의 목적은 '전환율↑'이 아니라 <em>맞는 사람만 지원하게(컬처핏 매칭)</em>임. 또한 <em>ATS·문서 스크리닝 같은 기능으로 경쟁하면 효용가치가 낮음</em> — 이미 AI·현업에 위임돼 있어, 차별점은 복제할 수 없는 평판 데이터임.</div>
+        <div class="evi">
+          <div class="quote">"제공되는 리포트는 잘 안 쓰고, 제 양식으로 직접 정리해요" <span class="who">P06</span></div>
+          <div class="quote">"100명 지원하면 AI가 1차로 걸러서 5% 내외만 봐요" <span class="who">P02</span></div>
+          <div class="chips"><span class="chip">본인 단독 스크리닝 0명</span><span class="chip k">기능 경쟁 ✕ → 데이터로 차별화</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ 채용 후 -->
+  <div class="stage" style="--sc:#8B5CF6">
+    <div class="stage-side">
+      <div class="stage-no">STAGE 04</div>
+      <div class="stage-name">채용 후</div>
+      <div class="stage-desc">성과 증명 · 결재 정당화</div>
+    </div>
+    <div class="stage-main">
+      <div class="pain">
+        <div class="block-label"><span class="dot"></span>메인 페인포인트</div>
+        <div class="block-title">효과를 숫자로 증명하지 못해 결제를 보류·해지하거나 아예 제안조차 못 함. 윗선(본부장·CHRO)에 들이밀 근거가 없음.</div>
+      </div>
+      <div class="insight">
+        <div class="block-label"><span class="dot"></span>핵심 인사이트</div>
+        <div class="block-title">진짜 장벽은 상품 매력이 아니라 <em>'결재 정당화'</em>임(8명 중 6명). 무기는 ROI를 보여주는 증명 대시보드와, 문턱을 낮추는 <em>저가 진입(5~10만 원대)</em>.</div>
+        <div class="evi">
+          <div class="quote">"35만 원을 주는데, 그래서 아웃풋이 뭐예요?" <span class="who">P02</span></div>
+          <div class="quote">"수치로 명확하게 보이지 않으면 보통은 보류해요" <span class="who">P04</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- strategy -->
+  <div class="strat">
+    <h2>그래서, 무엇에 베팅할 것인가</h2>
+    <div class="h-sub">복제 가능한 기능 경쟁은 피하고, 잡플래닛만의 자산에 집중</div>
+    <div class="strat-grid">
+      <div class="scard win"><div class="t">✓ 평판 데이터 · 외부 자격 게이트</div><div class="d">자체 AI로 복제할 수 없는 핵심 자산. 평점이 채용과 외부 자격(원티드 3.0)으로 이어진다는 ROI 증명.</div></div>
+      <div class="scard win"><div class="t">✓ 제3자 제작 콘텐츠</div><div class="d">자체 제작은 신뢰받기 어려움. 잡플래닛이 대신 만들어 '맞는 사람만 지원'하게.</div></div>
+      <div class="scard no"><div class="t">ATS · 문서 스크리닝 · 통합 리포트</div><div class="d">이미 AI·현업·수기로 해결 중. 복제 가능하고 효용가치 낮음 → 티어 차별 기능에서 제외.</div></div>
+      <div class="scard no"><div class="t">수상 배지 · 리뷰 댓글 강화</div><div class="d">구매 동기 약하고 역효과 우려. 무료 라벨·공식 코멘트·제3자 콘텐츠로 우회.</div></div>
+    </div>
+  </div>
+
+  <div class="foot">잡플래닛 B2B · 2026 Q2 IDI 결과 종합 · 인담자 8명(P01–P08) 인터뷰 기반 · 평판 항목은 교차검증 필요</div>
+
+</div>
+</body>
+</html>
