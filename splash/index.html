@@ -17,13 +17,12 @@
 
   html,body{
     height:100%;
-    background:#0e0f12;            /* 프레임 밖 여백 (공유 시 기기 무드) */
+    background:#0e0f12;
     font-family:-apple-system,BlinkMacSystemFont,"SF Pro","Helvetica Neue",sans-serif;
     overflow:hidden;
     display:flex;align-items:center;justify-content:center;
   }
 
-  /* 393x852 디바이스 프레임 */
   .frame{
     position:relative;
     width:var(--frame-w);
@@ -33,59 +32,87 @@
     cursor:pointer;
   }
 
-  /* 화면을 꽉 채워야 할 때(모바일 단독 뷰)는 프레임을 100%로 */
   @media (max-width:420px){
     html,body{background:var(--bg);}
     .frame{width:100vw;height:100vh;}
   }
 
-  /* ===== 스플래시 스테이지 ===== */
   .stage{
     position:absolute;inset:0;
     display:flex;align-items:center;justify-content:center;
     background:var(--bg);
   }
 
-  .logo{
-    width:188px;
-    height:auto;
-    transform-origin:center;
-    opacity:0;
+  /* 퇴장(전체 확대+페이드)을 담당하는 래퍼 */
+  .logo-wrap{
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
     will-change:transform,opacity;
-    /* 진입 → 정지 → 퇴장 을 하나의 키프레임 사이클로 (무한 반복) */
-    animation:logoCycle 3.6s cubic-bezier(.22,.61,.36,1) infinite;
+    animation:exit 3.6s cubic-bezier(.22,.61,.36,1) infinite;
   }
 
-  /* 로고 아래로 은은하게 깔리는 워드/그로스 라인 (옵션 디테일) */
+  .logo{
+    width:232px;
+    height:auto;
+    display:block;
+    overflow:visible;
+  }
+
+  /* 심볼: 회전 스윕 인 (자기 중심 기준) */
+  .sym{
+    transform-box:fill-box;
+    transform-origin:center;
+    will-change:transform,opacity;
+    animation:symIn 3.6s cubic-bezier(.22,.61,.36,1) infinite;
+  }
+
+  /* 워드마크: 살짝 늦게 왼→오른쪽으로 밀려나며 페이드 인 */
+  .word{
+    transform-box:fill-box;
+    transform-origin:left center;
+    will-change:transform,opacity;
+    animation:wordIn 3.6s cubic-bezier(.22,.61,.36,1) infinite;
+  }
+
+  /* 심볼 뒤 은은한 그린 글로우 펄스 */
   .pulse{
     position:absolute;
-    width:188px;height:188px;
+    left:18%;top:50%;
+    width:150px;height:150px;
+    transform:translate(-50%,-50%);
     border-radius:50%;
-    background:radial-gradient(circle, rgba(0,194,116,.10) 0%, rgba(0,194,116,0) 60%);
+    background:radial-gradient(circle, rgba(0,194,116,.12) 0%, rgba(0,194,116,0) 62%);
     opacity:0;
     animation:pulseCycle 3.6s ease-out infinite;
+    pointer-events:none;
   }
 
-  @keyframes logoCycle{
-    /* 진입: 살짝 작게+아래에서 위로 떠오르며 페이드 인 */
-    0%   { opacity:0; transform:scale(.94) translateY(8px); filter:blur(2px); }
-    16%  { opacity:1; transform:scale(1)   translateY(0);   filter:blur(0); }
-    /* 정지 (브랜드 인지 구간) */
-    62%  { opacity:1; transform:scale(1)   translateY(0);   filter:blur(0); }
-    /* 퇴장: 살짝 확대되며 페이드 아웃 (앱 진입 느낌) */
-    80%  { opacity:0; transform:scale(1.06) translateY(-2px); filter:blur(0); }
-    100% { opacity:0; transform:scale(1.06) translateY(-2px); }
+  @keyframes symIn{
+    0%   { opacity:0; transform:rotate(-14deg) scale(.88); }
+    18%  { opacity:1; transform:rotate(0deg)   scale(1); }
+    100% { opacity:1; transform:rotate(0deg)   scale(1); }
+  }
+
+  @keyframes wordIn{
+    0%,8% { opacity:0; transform:translateX(-16px); }
+    26%   { opacity:1; transform:translateX(0); }
+    100%  { opacity:1; transform:translateX(0); }
+  }
+
+  @keyframes exit{
+    0%,64% { opacity:1; transform:scale(1); }
+    80%    { opacity:0; transform:scale(1.05); }
+    100%   { opacity:0; transform:scale(1.05); }
   }
 
   @keyframes pulseCycle{
-    0%   { opacity:0; transform:scale(.7); }
-    18%  { opacity:1; transform:scale(1); }
-    55%  { opacity:.6; transform:scale(1.04); }
-    78%  { opacity:0; transform:scale(1.25); }
-    100% { opacity:0; }
+    0%   { opacity:0; transform:translate(-50%,-50%) scale(.7); }
+    20%  { opacity:1; transform:translate(-50%,-50%) scale(1); }
+    55%  { opacity:.6; transform:translate(-50%,-50%) scale(1.05); }
+    72%  { opacity:0; transform:translate(-50%,-50%) scale(1.25); }
+    100% { opacity:0; transform:translate(-50%,-50%) scale(1.25); }
   }
 
-  /* 재생 안내(공유용) — 5초 후 자동 숨김 */
   .hint{
     position:absolute;left:0;right:0;bottom:34px;
     text-align:center;
@@ -96,26 +123,34 @@
   }
   .hint.gone{opacity:0;}
 
-  /* 클릭 시 즉시 리플레이를 위한 reset 트릭 */
-  .replay .logo{animation:none;}
-  .replay .pulse{animation:none;}
+  .replay .sym,.replay .word,.replay .logo-wrap,.replay .pulse{animation:none;}
 </style>
 </head>
 <body>
   <div class="frame" id="frame" title="탭하면 처음부터 다시 재생">
     <div class="stage">
       <div class="pulse"></div>
-      <svg class="logo" viewBox="82 348 230 53" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="잡플래닛">
-        <path d="M282.161 360.192C275.353 360.192 269.694 365.269 268.535 371.961C268.392 372.788 268.313 373.632 268.313 374.5C268.313 375.368 268.392 376.212 268.535 377.039C269.694 383.731 275.353 388.808 282.161 388.808C287.058 388.808 291.586 386.717 294.568 383.173L289.546 380.159C287.755 382.033 285.106 383.279 282.161 383.154C278.547 383.002 275.473 380.509 274.448 377.034H295.786C295.93 376.208 296.008 375.363 296.008 374.495C296.008 373.628 295.93 372.783 295.786 371.957C294.628 365.264 288.969 360.187 282.161 360.187V360.192ZM274.448 371.961C275.473 368.491 278.542 365.961 282.161 365.961C285.78 365.961 288.96 368.2 289.924 371.961H274.448Z" fill="#00C274"/>
-        <path d="M311.24 366.884V361.346H306.163V356.716L300.162 355.576V361.346H296.931V366.884H300.162V381.566C300.162 385.434 302.876 387.728 306.126 388.425C308.272 388.887 309.943 388.799 311.24 388.799V382.859C311.24 382.859 309.805 382.979 308.503 382.651C306.924 382.254 306.163 381.4 306.163 379.789V366.884H311.24Z" fill="#00C274"/>
-        <path d="M93.8378 376.808C93.8378 379.868 91.3592 382.346 88.2989 382.346H82.76V388.808H88.2989C94.9271 388.808 100.3 383.436 100.3 376.808V352.193L93.8378 350.961V376.808Z" fill="#00C274"/>
-        <path d="M117.84 360.192C109.938 360.192 103.531 366.598 103.531 374.5C103.531 382.402 109.938 388.808 117.84 388.808C125.742 388.808 132.149 382.402 132.149 374.5C132.149 366.598 125.742 360.192 117.84 360.192ZM117.84 382.808C113.256 382.808 109.531 379.079 109.531 374.5C109.531 369.921 113.256 366.192 117.84 366.192C122.423 366.192 126.148 369.921 126.148 374.5C126.148 379.079 122.423 382.808 117.84 382.808Z" fill="#00C274"/>
-        <path d="M149.227 360.192C146.328 360.192 143.633 361.055 141.38 362.536V351.27L134.918 350.038V388.808H141.38V386.464C143.633 387.945 146.328 388.808 149.227 388.808C157.129 388.808 163.536 382.402 163.536 374.5C163.536 366.598 157.129 360.192 149.227 360.192ZM149.227 382.808C144.643 382.808 140.918 379.079 140.918 374.5C140.918 369.921 144.643 366.192 149.227 366.192C153.81 366.192 157.535 369.921 157.535 374.5C157.535 379.079 153.81 382.808 149.227 382.808Z" fill="#00C274"/>
-        <path d="M198.154 388.808H204.616V351.27L198.154 350.038V388.808Z" fill="#00C274"/>
-        <path d="M230.003 362.855C227.658 361.179 224.792 360.192 221.694 360.192C213.792 360.192 207.385 366.598 207.385 374.5C207.385 382.402 213.792 388.808 221.694 388.808C224.792 388.808 227.658 387.821 230.003 386.145V388.808H236.003V360.192H230.003V362.855ZM221.694 382.808C217.111 382.808 213.386 379.079 213.386 374.5C213.386 369.921 217.111 366.192 221.694 366.192C226.278 366.192 230.003 369.921 230.003 374.5C230.003 379.079 226.278 382.808 221.694 382.808Z" fill="#00C274"/>
-        <path d="M253.183 360.653H252.98C250.843 360.653 248.835 361.193 247.081 362.149V360.192H240.619V388.808H246.85V372.885C246.85 369.441 249.638 366.654 253.081 366.654C256.525 366.654 259.313 369.441 259.313 372.885V388.808H265.544V373.014C265.544 366.187 260.01 360.653 253.183 360.653Z" fill="#00C274"/>
-        <path d="M181.076 360.192C178.177 360.192 175.481 361.055 173.229 362.536V360.192H166.767V398.962H173.229V386.464C175.481 387.945 178.177 388.808 181.076 388.808C188.978 388.808 195.385 382.402 195.385 374.5C195.385 366.598 188.978 360.192 181.076 360.192ZM181.076 382.808C176.492 382.808 172.767 379.079 172.767 374.5C172.767 369.921 176.492 366.192 181.076 366.192C185.659 366.192 189.384 369.921 189.384 374.5C189.384 379.079 185.659 382.808 181.076 382.808Z" fill="#00C274"/>
-      </svg>
+      <div class="logo-wrap">
+        <svg class="logo" viewBox="0 0 619 114" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="잡플래닛">
+          <!-- 워드마크 -->
+          <g class="word" fill="#00C274">
+            <path d="M556,30c-14.75,0-27.01,11-29.52,25.5-.31,1.79-.48,3.62-.48,5.5s.17,3.71.48,5.5c2.51,14.5,14.77,25.5,29.52,25.5,10.61,0,20.42-4.53,26.88-12.21l-10.88-6.53c-3.88,4.06-9.62,6.76-16,6.49-7.83-.33-14.49-5.73-16.71-13.26h46.23c.31-1.79.48-3.62.48-5.5s-.17-3.71-.48-5.5c-2.51-14.5-14.77-25.5-29.52-25.5ZM539.29,55.5c2.22-7.52,8.87-13,16.71-13s14.73,4.85,16.82,13h-33.53Z"/>
+            <path d="M619,44.5v-12h-11v-10.03l-13-2.47v12.5h-7v12h7v31.81c0,8.38,5.88,13.35,12.92,14.86,4.65,1,8.27.81,11.08.81v-12.87s-3.11.26-5.93-.45c-3.42-.86-5.07-2.71-5.07-6.2v-27.96h11Z"/>
+            <path d="M148,66c0,6.63-5.37,12-12,12h-12v14h12c14.36,0,26-11.64,26-26V12.67l-14-2.67v56Z"/>
+            <path d="M200,30c-17.12,0-31,13.88-31,31s13.88,31,31,31,31-13.88,31-31-13.88-31-31-31ZM200,79c-9.93,0-18-8.08-18-18s8.07-18,18-18,18,8.08,18,18-8.07,18-18,18Z"/>
+            <path d="M268,30c-6.28,0-12.12,1.87-17,5.08V10.67l-14-2.67v84h14v-5.08c4.88,3.21,10.72,5.08,17,5.08,17.12,0,31-13.88,31-31s-13.88-31-31-31ZM268,79c-9.93,0-18-8.08-18-18s8.07-18,18-18,18,8.08,18,18-8.07,18-18,18Z"/>
+            <polygon points="374 92 388 92 388 10.67 374 8 374 92"/>
+            <path d="M443,35.77c-5.08-3.63-11.29-5.77-18-5.77-17.12,0-31,13.88-31,31s13.88,31,31,31c6.71,0,12.92-2.14,18-5.77v5.77h13V30h-13v5.77ZM425,79c-9.93,0-18-8.08-18-18s8.07-18,18-18,18,8.08,18,18-8.07,18-18,18Z"/>
+            <path d="M493.22,31h-.44c-4.63,0-8.98,1.17-12.78,3.24v-4.24h-14v62h13.5v-34.5c0-7.46,6.04-13.5,13.5-13.5s13.5,6.04,13.5,13.5v34.5h13.5v-34.22c0-14.79-11.99-26.78-26.78-26.78Z"/>
+            <path d="M337,30c-6.28,0-12.12,1.87-17,5.08v-5.08h-14v84h14v-27.08c4.88,3.21,10.72,5.08,17,5.08,17.12,0,31-13.88,31-31s-13.88-31-31-31ZM337,79c-9.93,0-18-8.08-18-18s8.07-18,18-18,18,8.08,18,18-8.07,18-18,18Z"/>
+          </g>
+          <!-- 심볼 -->
+          <g class="sym" fill="#00C274">
+            <path d="M20.43,82.94c-2.81,0-5.58-.14-8.31-.42,9.16,10.7,22.74,17.48,37.91,17.48,27.59,0,49.96-22.42,49.96-50.07,0-6.86-1.38-13.4-3.87-19.35-11.58,30.6-41.09,52.36-75.69,52.36Z"/>
+            <path d="M71.87,50.47c5.51-4.66,13.96-13.03,20.97-26.37-1.98-3.3-10.49-16.57-27.98-21.99-2.66-.83-19.3-5.7-36.9,2.99-3.06,1.51-12.08,6.36-19.08,16.62C.6,33.85-2.6,50.26,2.35,59.07c1.97,3.51,4.88,5.79,4.88,5.79,4.09,3.21,8.49,3.78,10.45,4.03,5.39.7,30.61,1.54,54.19-18.42Z"/>
+          </g>
+        </svg>
+      </div>
     </div>
     <div class="hint" id="hint">탭하면 다시 재생</div>
   </div>
@@ -124,15 +159,12 @@
   const frame = document.getElementById('frame');
   const hint  = document.getElementById('hint');
 
-  // 탭하면 애니메이션 처음부터 리플레이
   frame.addEventListener('click', () => {
     frame.classList.add('replay');
-    // 리플로우 강제 → 애니메이션 재시작
     void frame.offsetWidth;
     frame.classList.remove('replay');
   });
 
-  // 진입 후 5초 뒤 안내 문구 페이드아웃
   setTimeout(() => hint.classList.add('gone'), 5000);
 </script>
 </body>
