@@ -119,14 +119,14 @@ ul,li{list-style:none}
   display:flex;align-items:center;justify-content:space-between;gap:8px;
   background:var(--white);position:relative;z-index:3;
 }
-.sh-left{display:flex;align-items:center;gap:8px;min-width:0}
+.sh-left{display:flex;align-items:center;gap:0;min-width:0}
 .sh-back{
-  width:20px;height:20px;display:flex;align-items:center;justify-content:center;
+  height:20px;display:flex;align-items:center;justify-content:center;
   color:var(--gray-800);flex:0 0 auto;
-  width:0;opacity:0;transform:translateX(-6px);overflow:hidden;
-  transition:width .26s var(--ease-out),opacity .2s ease,transform .26s var(--ease-out);
+  width:0;margin-right:0;opacity:0;transform:translateX(-6px);overflow:hidden;
+  transition:width .26s var(--ease-out),margin-right .26s var(--ease-out),opacity .2s ease,transform .26s var(--ease-out);
 }
-.sheet[data-depth="job"] .sh-back{width:20px;opacity:1;transform:none}
+.sheet[data-depth="job"] .sh-back{width:20px;margin-right:8px;opacity:1;transform:none}
 .sh-title{font-size:20px;font-weight:700;line-height:28px;color:var(--gray-900);transition:opacity .16s ease}
 .sh-title.fade{opacity:0}
 .sh-close{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--gray-300);flex:0 0 auto}
@@ -577,8 +577,8 @@ function renderChips(){
 // 칩 X: 눌린 칩만 축소 후 제거 → 나머지는 FLIP으로 자연스럽게 재배치
 chipsEl.addEventListener('click', e=>{
   const jchip = e.target.closest('.chip.j');
-  const gwrap = e.target.closest('.gwrap');
-  const target = jchip || gwrap;
+  const gchip = e.target.closest('.chip.g');
+  const target = jchip || (gchip && gchip.closest('.gwrap'));
   if(!target) return;
   target.animate([{transform:'scale(1)',opacity:1},{transform:'scale(.8)',opacity:0}],
     {duration:160, easing:'ease-in', fill:'forwards'});
@@ -676,6 +676,11 @@ function toggleSpec(on){ $('#spec').classList.toggle('show', on); }
 
 /* ============ 초기화 ============ */
 buildGroupPane();
+$('#paneJobInner').addEventListener('click', e=>{
+  const row = e.target.closest('.jrow'); if(!row) return;
+  const j = row.dataset.job;
+  if(j==='__all__') toggleGroupAll(curGid); else toggleJob(curGid, j);
+});
 renderBgList();
 renderAll();
 setTimeout(openSheet, 400);
