@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>직군/직무 필터 프로토타입</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --green-500:#00C274;
+  --green-bg:#E7F8F0;
+  --gray-900:#242628;
+  --gray-800:#323438;
+  --gray-600:#57595B;
+  --gray-400:#8B8D94;
+  --gray-300:#A4A6AD;
+  --gray-200:#C5C7CC;
+  --gray-100:#E5E6E9;
+  --gray-50:#F3F3F4;
+  --gray-30:#F9F9FB;
+  --white:#fff;
+
+  /* 모션 토큰 */
+  --ease-sheet:cubic-bezier(.32,.72,0,1);
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --ease-pop:cubic-bezier(.34,1.4,.64,1);
+  --d-sheet:340ms;
+  --d-page:320ms;
+  --d-chip-in:220ms;
+  --d-chip-out:160ms;
+  --d-move:280ms;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  background:#EDEEF0;
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;color:var(--gray-900);
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+ul,li{list-style:none}
+
+/* ===== 디바이스 프레임 ===== */
+.phone{
+  position:relative;width:393px;height:852px;
+  background:var(--white);overflow:hidden;
+  border-radius:44px;
+  box-shadow:0 24px 60px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.06);
+}
+@media (max-width:460px), (max-height:900px){
+  body{align-items:flex-start}
+  .phone{border-radius:0;box-shadow:none}
+}
+
+/* ===== 상태바 ===== */
+.statusbar{
+  position:absolute;top:0;left:0;width:393px;height:44px;z-index:5;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 21px;pointer-events:none;
+}
+.statusbar .time{font-size:16px;font-weight:600;letter-spacing:-.3px;padding-top:4px}
+.statusbar .icons{display:flex;align-items:center;gap:5px;padding-top:4px}
+
+/* ===== 배경 화면 ===== */
+.bg{position:absolute;inset:0;background:var(--white);display:flex;flex-direction:column}
+.bg-top{padding:44px 20px 0}
+.bg-title{font-size:22px;font-weight:700;line-height:30px;padding:12px 0 4px}
+.bg-sub{font-size:13px;color:var(--gray-400);line-height:20px;padding-bottom:14px}
+.filterbar{display:flex;gap:8px;padding:0 0 14px;overflow-x:auto;scrollbar-width:none}
+.filterbar::-webkit-scrollbar{display:none}
+.fchip{
+  flex:0 0 auto;height:36px;padding:0 14px;border-radius:100px;
+  border:1px solid var(--gray-100);background:var(--white);
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:14px;font-weight:600;color:var(--gray-600);white-space:nowrap;
+  transition:background .18s ease,border-color .18s ease,color .18s ease;
+}
+.fchip.on{background:var(--gray-900);border-color:var(--gray-900);color:#fff}
+.fchip .cnt{color:var(--green-500);font-weight:700}
+.fchip.on .cnt{color:#5BE3AE}
+.bg-list{flex:1;overflow-y:auto;padding:4px 20px 20px;border-top:1px solid var(--gray-50)}
+.jcard{padding:16px 0;border-bottom:1px solid var(--gray-50)}
+.jcard .co{font-size:12px;color:var(--gray-400);line-height:18px}
+.jcard .tt{font-size:15px;font-weight:600;line-height:22px;margin-top:2px}
+.jcard .mt{font-size:12px;color:var(--gray-400);line-height:18px;margin-top:6px}
+.bg-empty{padding:40px 0;text-align:center;font-size:14px;color:var(--gray-300);line-height:22px}
+
+/* 스펙 버튼 */
+.spec-btn{
+  position:absolute;right:14px;top:52px;z-index:6;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--gray-50);color:var(--gray-600);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;
+}
+
+/* ===== 딤 ===== */
+.dim{
+  position:absolute;inset:0;background:rgba(0,0,0,.8);z-index:10;
+  opacity:0;visibility:hidden;transition:opacity var(--d-sheet) var(--ease-sheet),visibility 0s linear var(--d-sheet);
+}
+.dim.show{opacity:1;visibility:visible;transition:opacity var(--d-sheet) var(--ease-sheet),visibility 0s}
+
+/* ===== 바텀시트 ===== */
+.sheet{
+  position:absolute;left:0;bottom:0;width:393px;height:674px;z-index:11;
+  background:var(--white);border-radius:16px 16px 0 0;overflow:hidden;
+  transform:translateY(100%);
+  transition:transform var(--d-sheet) var(--ease-sheet);
+  display:flex;flex-direction:column;
+}
+.sheet.show{transform:translateY(0)}
+
+/* 헤더 */
+.sh-head{
+  flex:0 0 auto;height:60px;padding:20px 20px 12px;
+  border-bottom:1px solid var(--gray-100);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  background:var(--white);position:relative;z-index:3;
+}
+.sh-left{display:flex;align-items:center;gap:8px;min-width:0}
+.sh-back{
+  width:20px;height:20px;display:flex;align-items:center;justify-content:center;
+  color:var(--gray-800);flex:0 0 auto;
+  width:0;opacity:0;transform:translateX(-6px);overflow:hidden;
+  transition:width .26s var(--ease-out),opacity .2s ease,transform .26s var(--ease-out);
+}
+.sheet[data-depth="job"] .sh-back{width:20px;opacity:1;transform:none}
+.sh-title{font-size:20px;font-weight:700;line-height:28px;color:var(--gray-900);transition:opacity .16s ease}
+.sh-title.fade{opacity:0}
+.sh-close{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--gray-300);flex:0 0 auto}
+
+/* 페인 */
+.panes{position:relative;flex:1;overflow:hidden}
+.pane{
+  position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  background:var(--white);
+  padding-bottom:var(--footer-h,112px);
+  transition:transform var(--d-page) var(--ease-sheet),opacity var(--d-page) var(--ease-sheet);
+  will-change:transform;
+}
+.pane::-webkit-scrollbar{display:none}
+.pane-job{transform:translateX(100%)}
+.sheet[data-depth="job"] .pane-group{transform:translateX(-28%);opacity:.35}
+.sheet[data-depth="job"] .pane-job{transform:translateX(0)}
+
+/* 직군 행 */
+.grow{
+  position:relative;height:49px;padding:0 28px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  transition:background .15s ease;
+}
+.grow::after{content:"";position:absolute;left:28px;right:28px;bottom:0;height:1px;background:var(--gray-50)}
+.grow:active{background:var(--gray-30)}
+.grow .nm{font-size:15px;font-weight:400;line-height:24px;color:var(--gray-800)}
+.grow .rt{display:flex;align-items:center;gap:8px;color:var(--gray-300)}
+.badge{
+  min-width:24px;height:24px;padding:0 7px;border-radius:6px;
+  background:var(--green-bg);color:var(--green-500);
+  font-size:13px;font-weight:600;line-height:24px;text-align:center;
+  animation:badgePop var(--d-chip-in) var(--ease-pop);
+}
+@keyframes badgePop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.grow .allcheck{color:var(--green-500);display:none}
+.grow.all-on .allcheck{display:block;animation:badgePop var(--d-chip-in) var(--ease-pop)}
+
+/* 직무 행 */
+.pane-job-inner{padding:12px 16px 0}
+.jrow{
+  min-height:48px;padding:11px 12px;
+  display:flex;align-items:flex-start;gap:8px;
+  transition:background .15s ease;border-radius:8px;
+}
+.jrow:active{background:var(--gray-30)}
+.cbwrap{height:24px;padding:2px 0;display:flex;align-items:center;flex:0 0 auto}
+.cb{
+  width:20px;height:20px;border-radius:4px;
+  border:1px solid var(--gray-200);background:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .18s var(--ease-out),border-color .18s var(--ease-out);
+}
+.cb svg{opacity:0;transform:scale(.4);transition:opacity .16s ease,transform .22s var(--ease-pop)}
+.jrow.on .cb{background:var(--green-500);border-color:var(--green-500)}
+.jrow.on .cb svg{opacity:1;transform:scale(1)}
+.jrow .lb{flex:1;font-size:15px;font-weight:400;line-height:24px;color:var(--gray-800);word-break:keep-all}
+
+/* ===== 푸터 ===== */
+.footer{
+  position:absolute;left:0;bottom:0;width:393px;z-index:4;
+  box-shadow:0 -4px 12px rgba(0,0,0,.08);
+  display:flex;flex-direction:column;
+  background:var(--white);
+}
+.selpanel{
+  background:var(--gray-30);border-radius:16px 16px 0 0;overflow:hidden;
+  display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows var(--d-page) var(--ease-sheet);
+}
+.sheet[data-depth="job"] .selpanel{grid-template-rows:1fr}
+.selpanel-in{overflow:hidden;min-height:0}
+.sel-head{padding:12px 16px 4px;font-size:13px;font-weight:600;line-height:20px;color:var(--gray-900)}
+.sel-head .n{color:var(--green-500)}
+.chips{
+  padding:6px 16px;height:82px;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  display:flex;flex-wrap:wrap;align-content:flex-start;gap:6px;
+  transition:height var(--d-page) var(--ease-sheet),padding var(--d-page) var(--ease-sheet);
+}
+.chips::-webkit-scrollbar{display:none}
+.chips.empty{height:8px;padding-top:0;padding-bottom:0}
+.gwrap{display:flex;align-items:center;gap:6px}
+.chip{
+  height:32px;padding:0 12px;border-radius:100px;
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:13px;line-height:20px;white-space:nowrap;
+}
+.chip.g{background:var(--gray-900);color:#fff;font-weight:400}
+.chip.j{background:var(--white);color:var(--gray-900);font-weight:600;box-shadow:inset 0 0 0 1px var(--gray-100)}
+.chip .x{display:flex;align-items:center;justify-content:center;width:14px;height:14px;flex:0 0 auto}
+.gsep{width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:var(--gray-300);flex:0 0 auto}
+
+.btns{display:flex;gap:8px;padding:16px 20px;background:var(--white)}
+.btn{
+  flex:1;height:48px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:600;line-height:24px;
+  transition:transform .12s ease,filter .15s ease;
+}
+.btn:active{transform:scale(.98)}
+.btn.sec{background:var(--gray-50);color:var(--gray-600)}
+.btn.pri{background:var(--green-500);color:#fff}
+.btn.pri:disabled,.btn.pri[aria-disabled="true"]{filter:none}
+.homebar{height:32px;background:var(--white);display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px}
+.homebar i{display:block;width:140px;height:5px;border-radius:10px;background:#1A1A1E}
+
+/* ===== 토스트 ===== */
+.toast{
+  position:absolute;left:50%;top:64px;z-index:30;
+  transform:translate(-50%,-12px);opacity:0;pointer-events:none;
+  background:#111;color:#fff;border-radius:100px;
+  padding:10px 16px;font-size:13px;font-weight:500;white-space:nowrap;
+  transition:opacity .2s ease,transform .28s var(--ease-out);
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ===== 스펙 패널 ===== */
+.spec{
+  position:absolute;inset:0;z-index:40;background:rgba(0,0,0,.5);
+  opacity:0;visibility:hidden;transition:opacity .24s ease,visibility 0s linear .24s;
+}
+.spec.show{opacity:1;visibility:visible;transition:opacity .24s ease,visibility 0s}
+.spec-card{
+  position:absolute;left:0;right:0;bottom:0;max-height:78%;
+  background:#fff;border-radius:16px 16px 0 0;padding:20px 20px 28px;
+  overflow-y:auto;transform:translateY(100%);
+  transition:transform var(--d-sheet) var(--ease-sheet);
+}
+.spec.show .spec-card{transform:translateY(0)}
+.spec-card h3{font-size:17px;font-weight:700;margin-bottom:12px}
+.spec-card h4{font-size:13px;font-weight:700;color:var(--green-500);margin:16px 0 6px}
+.spec-card p,.spec-card li{font-size:13px;line-height:21px;color:var(--gray-600)}
+.spec-card li{padding-left:11px;position:relative;margin-bottom:3px}
+.spec-card li::before{content:"-";position:absolute;left:0;color:var(--gray-300)}
+.spec-card code{background:var(--gray-50);border-radius:4px;padding:1px 5px;font-size:12px;color:var(--gray-800)}
+.spec-close{width:100%;height:44px;border-radius:10px;background:var(--gray-50);color:var(--gray-600);font-weight:600;font-size:15px;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- 배경 -->
+  <div class="bg">
+    <div class="bg-top">
+      <div class="bg-title">채용정보</div>
+      <div class="bg-sub" id="bgCount">전체 공고 1,284건</div>
+      <div class="filterbar">
+        <button class="fchip" id="fchipJob" onclick="openSheet()">
+          <span id="fchipJobLabel">직무</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <button class="fchip">지역<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <button class="fchip">경력<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <button class="fchip">기업형태<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+    </div>
+    <div class="bg-list" id="bgList"></div>
+  </div>
+
+  <!-- 상태바 -->
+  <div class="statusbar">
+    <div class="time">9:41</div>
+    <div class="icons">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="7.5" width="3" height="4.5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 11.2 6 8.8a3 3 0 0 1 4 0l-2 2.4Z"/><path d="M11.5 6.6a5.4 5.4 0 0 0-7 0L3.2 5.1a7.4 7.4 0 0 1 9.6 0l-1.3 1.5Z"/><path d="M14.4 3.2a9.6 9.6 0 0 0-12.8 0L.3 1.7a11.6 11.6 0 0 1 15.4 0l-1.3 1.5Z"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="19" height="8" rx="1.5" fill="currentColor"/><path d="M24 4v4a2 2 0 0 0 0-4Z" fill="currentColor" fill-opacity=".35"/></svg>
+    </div>
+  </div>
+  <button class="spec-btn" onclick="toggleSpec(true)">?</button>
+
+  <!-- 딤 -->
+  <div class="dim" id="dim" onclick="closeSheet()"></div>
+
+  <!-- 바텀시트 -->
+  <div class="sheet" id="sheet" data-depth="group">
+    <div class="sh-head">
+      <div class="sh-left">
+        <button class="sh-back" id="btnBack" onclick="goGroup()" aria-label="뒤로">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 5 8 12 15 19"/></svg>
+        </button>
+        <div class="sh-title" id="shTitle">직군</div>
+      </div>
+      <button class="sh-close" onclick="closeSheet()" aria-label="닫기">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+      </button>
+    </div>
+
+    <div class="panes">
+      <div class="pane pane-group" id="paneGroup"></div>
+      <div class="pane pane-job" id="paneJob"><div class="pane-job-inner" id="paneJobInner"></div></div>
+    </div>
+
+    <div class="footer" id="footer">
+      <div class="selpanel">
+        <div class="selpanel-in">
+          <div class="sel-head">선택한 직무 <span class="n" id="selCount">0</span></div>
+          <div class="chips empty" id="chips"></div>
+        </div>
+      </div>
+      <div class="btns">
+        <button class="btn sec" onclick="resetAll()">초기화</button>
+        <button class="btn pri" onclick="apply()">공고 보기</button>
+      </div>
+      <div class="homebar"><i></i></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- 모션 스펙 -->
+  <div class="spec" id="spec" onclick="if(event.target===this)toggleSpec(false)">
+    <div class="spec-card">
+      <h3>직군/직무 필터 동작 · 모션 스펙</h3>
+      <p>개발 전달용 프로토타입입니다. 아래 규칙 그대로 구현되어 있습니다.</p>
+
+      <h4>1. 화면 구조 (2뎁스 푸시)</h4>
+      <ul>
+        <li>1뎁스 = 직군 목록, 2뎁스 = 해당 직군의 직무 목록</li>
+        <li>전환은 좌우 푸시. 나가는 화면은 <code>translateX(-28%)</code> + <code>opacity .35</code>, 들어오는 화면은 <code>translateX(100%) → 0</code></li>
+        <li>duration <code>320ms</code> / easing <code>cubic-bezier(.32,.72,0,1)</code></li>
+        <li>뒤로가기 아이콘은 2뎁스에서만 노출, 폭 0 → 20px로 확장</li>
+      </ul>
+
+      <h4>2. 선택 규칙</h4>
+      <ul>
+        <li>1뎁스 "전체"는 단일 선택. 누르면 기존 선택이 모두 해제되고 전체만 체크됨</li>
+        <li>2뎁스 "OO 전체"를 켜면 해당 직군의 개별 직무 체크가 모두 해제됨(그룹 단위 1개로 취급)</li>
+        <li>개별 직무를 켜면 "OO 전체"는 자동 해제됨</li>
+        <li>선택 0개가 되면 1뎁스 "전체"가 자동으로 체크됨</li>
+        <li>선택한 직무 카운트 = 직군별(전체 선택 시 1) + 개별 직무 수의 합</li>
+      </ul>
+
+      <h4>3. 선택한 직무 영역</h4>
+      <ul>
+        <li>2뎁스에서만 노출. 1뎁스에서는 접힘(<code>grid-template-rows 0fr → 1fr</code>, 320ms)</li>
+        <li>칩 구조: [직군 칩(다크)] &gt; [직무 칩(화이트)] ... 직군 단위로 묶임</li>
+        <li>직군 전체 선택 시에는 다크 칩 하나만 노출되고 화살표/직무 칩 없음</li>
+        <li><b>정렬</b>: 가장 최근에 선택한 직무가 맨 앞. 해당 직군 그룹도 맨 앞으로 이동</li>
+        <li>칩 영역 높이 82px 고정, 초과 시 세로 스크롤</li>
+      </ul>
+
+      <h4>4. 칩 모션</h4>
+      <ul>
+        <li>추가: <code>scale(.8)+opacity 0 → 1</code>, 220ms, <code>cubic-bezier(.34,1.4,.64,1)</code></li>
+        <li>삭제: 누른 칩만 <code>scale(.8)+opacity 0</code>으로 160ms 축소 후 제거</li>
+        <li>재배치: FLIP 방식으로 남은 칩이 280ms 동안 새 위치로 이동(점프 없음)</li>
+        <li>직군 칩(다크) X = 해당 직군의 선택 전체 삭제</li>
+      </ul>
+
+      <h4>5. 기타</h4>
+      <ul>
+        <li>1뎁스 직군 행의 초록 배지 = 그 직군에서 선택한 개수(전체 선택 시 1)</li>
+        <li>초기화: 현재 화면 유지, 선택만 전부 해제</li>
+        <li>공고 보기: 시트 닫고 필터 칩에 결과 반영</li>
+        <li>시트 등장: <code>translateY(100%) → 0</code>, 340ms</li>
+      </ul>
+      <button class="spec-close" onclick="toggleSpec(false)">닫기</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============ 데이터 ============ */
+const GROUPS = [
+  {id:'dev', name:'개발', jobs:['CTO (Chief Technology Officer)','DBA(Database Admin.)','ERP','iOS 개발','QA(Quality Assurance)','VR 엔지니어','게임개발','기술지원','네트워크/보안','백엔드 개발','소프트웨어 개발','안드로이드 개발','웹개발','웹디자인','퍼블리셔','프론트엔드 개발']},
+  {id:'edu', name:'교육', jobs:['교사','교육기획','내부강사','유아교육','입시/학원','평생교육','학습지/방문교사']},
+  {id:'fin', name:'금융/재무', jobs:['IR','감사','금융사무','리스크관리','보험','세무','여신/신용분석','자금','재무회계','투자/증권','회계']},
+  {id:'biz', name:'기획/경영', jobs:['PM/PO','경영기획','사업개발','사업기획','서비스기획','전략기획','컨설팅','프로젝트 관리']},
+  {id:'data',name:'데이터', jobs:['AI/머신러닝','BI/데이터시각화','데이터 분석','데이터 사이언티스트','데이터 엔지니어','빅데이터','통계분석']},
+  {id:'des', name:'디자인', jobs:['UI/UX/GUI디자인','건축/설계디자인','광고/시각디자인','그래픽디자인','금속/공예디자인','브랜드디자인','애니메이션디자인','영상/모션디자인','웹디자인','제품/산업디자인','캐릭터디자인','편집디자인','패션디자인','3D디자인']},
+  {id:'mkt', name:'마케팅/시장조사', jobs:['CRM마케팅','SNS마케팅','광고기획','그로스마케팅','마케팅기획','브랜드마케팅','시장조사','콘텐츠마케팅','퍼포먼스마케팅']},
+  {id:'med', name:'미디어/홍보', jobs:['PR/홍보','기자','방송제작','사진/영상','아나운서','에디터','출판/편집','콘텐츠제작']},
+  {id:'law', name:'법률/법무', jobs:['법률사무','법무','변리사','변호사','컴플라이언스','특허']},
+  {id:'sal', name:'영업', jobs:['B2B영업','B2C영업','기술영업','영업관리','제휴/파트너십','해외영업']},
+  {id:'hr',  name:'인사/총무', jobs:['HRBP','교육/조직문화','노무','인사기획','채용','총무']},
+  {id:'cs',  name:'고객상담/TM', jobs:['CS기획','VOC관리','고객상담','아웃바운드','인바운드']},
+  {id:'mfg', name:'생산/제조', jobs:['공정관리','생산관리','설비/보전','안전관리','품질관리']},
+];
+const GMAP = Object.fromEntries(GROUPS.map(g=>[g.id,g]));
+
+/* ============ 상태 ============ */
+// sel: [{gid, all:false, jobs:[직무명, ...]}] - 배열 순서 = 칩 노출 순서(최근 선택이 앞)
+let sel = [];
+let depth = 'group';   // 'group' | 'job'
+let curGid = null;
+
+const $ = s=>document.querySelector(s);
+const sheet=$('#sheet'), dim=$('#dim'), chipsEl=$('#chips');
+
+function findSel(gid){ return sel.find(s=>s.gid===gid); }
+function groupCount(s){ return s.all ? 1 : s.jobs.length; }
+function totalCount(){ return sel.reduce((a,s)=>a+groupCount(s),0); }
+function toFront(s){ sel = [s, ...sel.filter(x=>x!==s)]; }
+
+/* ============ 선택 조작 ============ */
+function toggleAllRow(){          // 1뎁스 "전체"
+  if(sel.length===0) return;
+  sel = [];
+  renderAll();
+}
+
+function toggleGroupAll(gid){     // 2뎁스 "OO 전체"
+  let s = findSel(gid);
+  if(s && s.all){ removeGroup(gid); return; }
+  if(!s){ s={gid, all:true, jobs:[]}; sel.unshift(s); }
+  else { s.all=true; s.jobs=[]; toFront(s); }
+  renderAll();
+}
+
+function toggleJob(gid, job){     // 2뎁스 개별 직무
+  let s = findSel(gid);
+  if(s && !s.all && s.jobs.includes(job)){
+    s.jobs = s.jobs.filter(j=>j!==job);
+    if(!s.jobs.length) sel = sel.filter(x=>x!==s);
+    renderAll();
+    return;
+  }
+  if(!s){ s={gid, all:false, jobs:[job]}; sel.unshift(s); }
+  else { s.all=false; s.jobs=[job, ...s.jobs.filter(j=>j!==job)]; toFront(s); }
+  renderAll();
+}
+
+function removeGroup(gid){ sel = sel.filter(s=>s.gid!==gid); renderAll(); }
+function removeJob(gid, job){
+  const s=findSel(gid); if(!s) return;
+  s.jobs = s.jobs.filter(j=>j!==job);
+  if(!s.jobs.length) sel = sel.filter(x=>x!==s);
+  renderAll();
+}
+function resetAll(){ if(!sel.length){ toast('선택한 직무가 없습니다'); return; } sel=[]; renderAll(); }
+
+/* ============ 렌더: 1뎁스 ============ */
+// 한 번만 그리고 이후엔 상태만 동기화 → 체크/배지 모션이 살아 있음
+function buildGroupPane(){
+  let html = `<div class="grow" data-all="1">
+      <span class="nm">전체</span>
+      <span class="rt"><span class="allcheck">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </span></span>
+    </div>`;
+  GROUPS.forEach(g=>{
+    html += `<div class="grow" data-gid="${g.id}">
+      <span class="nm">${g.name}</span>
+      <span class="rt">
+        <span class="badge-slot"></span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 16 12 9 18"/></svg>
+      </span>
+    </div>`;
+  });
+  const pane=$('#paneGroup');
+  pane.innerHTML = html;
+  pane.addEventListener('click', e=>{
+    const row = e.target.closest('.grow'); if(!row) return;
+    if(row.dataset.all) toggleAllRow(); else goJob(row.dataset.gid);
+  });
+}
+function syncGroupPane(){
+  const pane=$('#paneGroup');
+  pane.querySelector('[data-all]').classList.toggle('all-on', sel.length===0);
+  GROUPS.forEach(g=>{
+    const slot = pane.querySelector(`[data-gid="${g.id}"] .badge-slot`);
+    const s=findSel(g.id), c=s?groupCount(s):0;
+    const cur = slot.firstElementChild;
+    if(!c){ slot.innerHTML=''; return; }
+    if(!cur) slot.innerHTML = `<span class="badge">${c}</span>`;
+    else if(cur.textContent !== String(c)) cur.textContent = c;
+  });
+}
+
+/* ============ 렌더: 2뎁스 ============ */
+const CHECK_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+function renderJobPane(){
+  if(!curGid) return;
+  const inner=$('#paneJobInner'), g=GMAP[curGid];
+  if(inner.dataset.gid !== curGid){
+    inner.dataset.gid = curGid;
+    let html = `<div class="jrow" data-job="__all__">
+        <span class="cbwrap"><span class="cb">${CHECK_SVG}</span></span>
+        <span class="lb">${g.name} 전체</span>
+      </div>`;
+    g.jobs.forEach(j=>{
+      html += `<div class="jrow" data-job="${esc(j)}">
+        <span class="cbwrap"><span class="cb">${CHECK_SVG}</span></span>
+        <span class="lb">${j}</span>
+      </div>`;
+    });
+    inner.innerHTML = html;
+  }
+  syncJobPane();
+}
+function syncJobPane(){
+  const s=findSel(curGid);
+  $('#paneJobInner').querySelectorAll('.jrow').forEach(row=>{
+    const j=row.dataset.job;
+    const on = j==='__all__' ? !!(s&&s.all) : !!(s && !s.all && s.jobs.includes(j));
+    row.classList.toggle('on', on);
+  });
+}
+function esc(t){ return t.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+/* ============ 렌더: 칩 (FLIP) ============ */
+const X_SVG = c=>`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>`;
+const ARROW_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 16 12 9 18"/></svg>`;
+
+function buildChipsHTML(){
+  return sel.map(s=>{
+    const g=GMAP[s.gid];
+    if(s.all){
+      return `<div class="gwrap" data-key="g:${s.gid}" data-gid="${s.gid}">
+        <button class="chip g">${g.name} 전체 <span class="x">${X_SVG('#fff')}</span></button>
+      </div>`;
+    }
+    const head = `<div class="gwrap" data-key="g:${s.gid}" data-gid="${s.gid}">
+        <button class="chip g">${g.name} <span class="x">${X_SVG('#fff')}</span></button>
+        <span class="gsep">${ARROW_SVG}</span>
+      </div>`;
+    const jobs = s.jobs.map(j=>
+      `<button class="chip j" data-key="j:${s.gid}:${j}" data-gid="${s.gid}" data-job="${esc(j)}">${j} <span class="x">${X_SVG('#242628')}</span></button>`
+    ).join('');
+    return head+jobs;
+  }).join('');
+}
+
+function renderChips(){
+  const prev = new Map();
+  chipsEl.querySelectorAll('[data-key]').forEach(el=>prev.set(el.dataset.key, el.getBoundingClientRect()));
+
+  chipsEl.innerHTML = buildChipsHTML();
+  chipsEl.classList.toggle('empty', sel.length===0);
+  $('#selCount').textContent = totalCount();
+
+  chipsEl.querySelectorAll('[data-key]').forEach(el=>{
+    const b = prev.get(el.dataset.key);
+    const n = el.getBoundingClientRect();
+    if(b){
+      const dx=b.left-n.left, dy=b.top-n.top;
+      if(dx||dy) el.animate(
+        [{transform:`translate(${dx}px,${dy}px)`},{transform:'translate(0,0)'}],
+        {duration:280, easing:'cubic-bezier(.22,1,.36,1)'});
+    }else{
+      el.animate([{transform:'scale(.8)',opacity:0},{transform:'scale(1)',opacity:1}],
+        {duration:220, easing:'cubic-bezier(.34,1.4,.64,1)'});
+    }
+  });
+}
+
+// 칩 X: 눌린 칩만 축소 후 제거 → 나머지는 FLIP으로 자연스럽게 재배치
+chipsEl.addEventListener('click', e=>{
+  const jchip = e.target.closest('.chip.j');
+  const gwrap = e.target.closest('.gwrap');
+  const target = jchip || gwrap;
+  if(!target) return;
+  target.animate([{transform:'scale(1)',opacity:1},{transform:'scale(.8)',opacity:0}],
+    {duration:160, easing:'ease-in', fill:'forwards'});
+  const gid=target.dataset.gid, job=target.dataset.job;
+  setTimeout(()=>{ jchip ? removeJob(gid, job) : removeGroup(gid); }, 150);
+});
+
+/* ============ 푸터 높이 ============ */
+// 시트 하단 오버레이 높이(패널 애니메이션 중에도 값이 튀지 않도록 계산값 사용)
+function syncFooter(){
+  const base = 80 + 32;                       // 버튼 영역 + 홈 인디케이터
+  const panel = depth==='job' ? 36 + (sel.length ? 82 : 8) : 0;
+  document.documentElement.style.setProperty('--footer-h', (base+panel)+'px');
+}
+
+/* ============ 렌더 총괄 ============ */
+function renderAll(){
+  syncGroupPane();
+  if(curGid) renderJobPane();
+  renderChips();
+  syncFooter();
+  syncBgChip();
+}
+
+/* ============ 네비게이션 ============ */
+function setTitle(t){
+  const el=$('#shTitle');
+  el.classList.add('fade');
+  setTimeout(()=>{ el.textContent=t; el.classList.remove('fade'); },140);
+}
+function goJob(gid){
+  curGid=gid; depth='job';
+  renderJobPane();
+  $('#paneJob').scrollTop = 0;
+  setTitle('직무');
+  sheet.dataset.depth='job';
+  syncFooter();
+}
+function goGroup(){
+  depth='group';
+  sheet.dataset.depth='group';
+  setTitle('직군');
+  syncFooter();
+}
+function openSheet(){
+  dim.classList.add('show'); sheet.classList.add('show');
+  syncFooter();
+}
+function closeSheet(){
+  dim.classList.remove('show'); sheet.classList.remove('show');
+}
+function apply(){
+  closeSheet();
+  const n=totalCount();
+  toast(n ? `직무 ${n}개 조건으로 공고를 조회합니다` : '직무 조건 없이 전체 공고를 조회합니다');
+  renderBgList();
+}
+
+/* ============ 배경 반영 ============ */
+function syncBgChip(){
+  const n=totalCount();
+  const chip=$('#fchipJob'), label=$('#fchipJobLabel');
+  if(!n){ chip.classList.remove('on'); label.textContent='직무'; }
+  else{
+    chip.classList.add('on');
+    const first = sel[0];
+    const name = first.all ? GMAP[first.gid].name+' 전체' : first.jobs[0];
+    label.innerHTML = n>1 ? `${name} <span class="cnt">+${n-1}</span>` : name;
+  }
+}
+const CO=['(주)토스뱅크','카카오엔터프라이즈','우아한형제들','당근마켓','네이버클라우드','컬리','무신사','뱅크샐러드','리디','쏘카'];
+const TT=['서비스 기획자 채용','시니어 백엔드 개발자','프로덕트 디자이너','데이터 분석가','QA 엔지니어','브랜드 마케터','iOS 개발자','그로스 마케팅 매니저'];
+function renderBgList(){
+  const n=totalCount();
+  const cnt = n? 84+n*17 : 1284;
+  $('#bgCount').textContent = `전체 공고 ${cnt.toLocaleString()}건`;
+  let html='';
+  for(let i=0;i<8;i++){
+    html+=`<div class="jcard">
+      <div class="co">${CO[i%CO.length]}</div>
+      <div class="tt">${TT[i%TT.length]}</div>
+      <div class="mt">서울 강남구 · 경력 3~7년 · 대졸이상</div>
+    </div>`;
+  }
+  $('#bgList').innerHTML=html;
+}
+
+/* ============ 토스트 ============ */
+let tTimer;
+function toast(msg){
+  const el=$('#toast'); el.textContent=msg; el.classList.add('show');
+  clearTimeout(tTimer); tTimer=setTimeout(()=>el.classList.remove('show'),2200);
+}
+function toggleSpec(on){ $('#spec').classList.toggle('show', on); }
+
+/* ============ 초기화 ============ */
+buildGroupPane();
+renderBgList();
+renderAll();
+setTimeout(openSheet, 400);
+</script>
+</body>
+</html>
