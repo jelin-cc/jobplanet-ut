@@ -41,6 +41,17 @@ body{
   background:#EAFBF3;color:var(--brand);
 }
 .sec-head h2{font-size:19px;font-weight:700;letter-spacing:-.4px}
+.toggle{
+  margin-left:auto;display:inline-flex;gap:2px;padding:3px;
+  background:#E1E6EA;border-radius:10px;align-self:center;
+}
+.toggle button{
+  border:0;background:transparent;cursor:pointer;font-family:inherit;
+  font-size:12.5px;font-weight:600;letter-spacing:-.2px;color:var(--tx3);
+  padding:6px 12px;border-radius:8px;transition:background .15s,color .15s,box-shadow .15s;
+}
+.toggle button:hover{color:var(--tx2)}
+.toggle button.on{background:#fff;color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.1)}
 .sec-desc{font-size:13.5px;color:var(--tx2);line-height:1.7;margin-bottom:14px}
 .sec-desc b{color:var(--tx);font-weight:600}
 
@@ -113,6 +124,8 @@ body{
   background:var(--brand);transform:scaleX(0);transition:transform .2s;
 }
 .b .tabs button.on::after{transform:scaleX(1)}
+.b .tabs.left{display:flex;justify-content:flex-start;gap:30px}
+.b .tabs.left button{width:auto}
 .b .body{background:#fff;padding:6px var(--pad) var(--pad)}
 .b .card{background:var(--panel);border-radius:var(--rd)}
 .b .card .go{background:#fff}
@@ -167,8 +180,13 @@ body{
     <div class="sec-head">
       <span class="sec-tag">시안 B</span>
       <h2>언더라인 탭 · 선만 남기고 다 지우기</h2>
+      <div class="toggle" id="b-align">
+        <button class="on" data-align="fill">가운데 정렬 (fill)</button>
+        <button data-align="left">왼쪽 정렬</button>
+      </div>
     </div>
-    <p class="sec-desc">감싸는 박스와 가로 전체 선을 없애고, <b>선택된 항목 아래 칸 폭을 꽉 채운 그린 밑줄</b>만 남겼습니다. 필터바는 카드와 같은 흰 배경이라 이어져 보이고, 카드를 연회색 면으로 처리해 위계를 뒤집었습니다. 셋 중 가장 가볍습니다.</p>
+    <p class="sec-desc">감싸는 박스와 가로 전체 선을 없애고 <b>선택된 항목 아래 그린 밑줄</b>만 남겼습니다. 필터바는 카드와 같은 흰 배경이라 이어져 보이고, 카드를 연회색 면으로 처리해 위계를 뒤집었습니다.<br>
+    <b>가운데 정렬(fill)</b>은 밑줄이 칸 폭을 꽉 채워 상단 탭 경계와 맞아떨어지고, <b>왼쪽 정렬</b>은 밑줄이 글자 폭이라 항목이 늘어나도 확장이 자연스럽습니다. 오른쪽 토글로 비교해 보세요.</p>
     <div class="frame b" data-v="b">
       <div class="scroller">
         <div class="top"></div>
@@ -248,6 +266,15 @@ function cardHTML(it){
     <span class="go">리뷰보기 ${CHEV}</span>
   </div>`;
 }
+
+// 시안 B 정렬 토글
+const bAlign = document.getElementById('b-align');
+bAlign.addEventListener('click', e=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  bAlign.querySelectorAll('button').forEach(b=>b.classList.toggle('on', b===btn));
+  document.querySelector('.b .tabs').classList.toggle('left', btn.dataset.align==='left');
+});
 
 document.querySelectorAll('.frame').forEach(frame=>{
   let cur = 'IT';
