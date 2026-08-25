@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>서브 탭 리디자인 시안</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --mint:#A9F0D1;
+  --brand:#00C274;
+  --brand-lt:#EAFBF3;
+  --ink:#191F28;
+  --tx:#191F28;
+  --tx2:#4E5968;
+  --tx3:#8B95A1;
+  --tx4:#B0B8C1;
+  --bg:#fff;
+  --panel:#F5F7F8;
+  --ln:#E9ECEF;
+  --ln2:#F2F4F6;
+  --rd:16px;
+  --rd-sm:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Pretendard,-apple-system,system-ui,sans-serif;
+  background:#F0F2F4;color:var(--tx);
+  -webkit-font-smoothing:antialiased;
+  padding:48px 24px 96px;
+}
+.wrap{max-width:1160px;margin:0 auto}
+
+/* ── 페이지 헤더 ── */
+.page-head{margin-bottom:40px}
+.page-head h1{font-size:26px;font-weight:700;letter-spacing:-.5px}
+.page-head p{margin-top:8px;font-size:14px;color:var(--tx2);line-height:1.6}
+
+/* ── 섹션 ── */
+.sec{margin-bottom:56px}
+.sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.sec-tag{
+  display:inline-flex;align-items:center;
+  padding:4px 10px;border-radius:20px;
+  font-size:12px;font-weight:700;letter-spacing:-.2px;
+  background:var(--brand-lt);color:var(--brand);
+}
+.sec-tag.gray{background:var(--ln2);color:var(--tx3)}
+.sec-head h2{font-size:19px;font-weight:700;letter-spacing:-.4px}
+.sec-desc{font-size:13.5px;color:var(--tx2);line-height:1.7;margin-bottom:16px}
+.sec-desc b{color:var(--tx);font-weight:600}
+
+/* ── 프리뷰 프레임 ── */
+.frame{
+  background:#fff;border-radius:20px;overflow:hidden;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+}
+
+/* ── 공통: 상단 민트 헤더 탭 ── */
+.top{background:var(--mint);padding:14px 0;display:flex;justify-content:center;gap:8px}
+.top button{
+  border:0;background:transparent;cursor:pointer;
+  font-family:inherit;font-size:15px;font-weight:600;letter-spacing:-.3px;
+  color:#12362A;padding:11px 30px;border-radius:24px;
+  transition:background .15s;
+}
+.top button:hover{background:rgba(0,0,0,.05)}
+.top button.on{background:var(--ink);color:#fff}
+.top button.on:hover{background:var(--ink)}
+
+/* ── 카드 공통 ── */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{padding:26px 24px 22px;display:flex;flex-direction:column;min-height:250px}
+.card .co{font-size:14px;font-weight:600;color:var(--tx2);letter-spacing:-.2px}
+.card .qm{margin:14px 0 8px;font-size:20px;line-height:1;color:var(--tx4);font-weight:700}
+.card .q{font-size:17px;font-weight:700;line-height:1.45;letter-spacing:-.4px;color:var(--tx)}
+.card .d{margin-top:12px;font-size:13px;line-height:1.55;color:var(--tx3);letter-spacing:-.2px}
+.card .go{
+  margin-top:auto;align-self:flex-end;
+  display:inline-flex;align-items:center;gap:3px;
+  padding:8px 14px;border-radius:20px;
+  font-size:13px;font-weight:600;color:var(--tx2);
+  background:var(--ln2);transition:background .15s,color .15s;cursor:pointer;
+}
+.card .go:hover{background:var(--brand-lt);color:var(--brand)}
+.card .go svg{width:14px;height:14px}
+
+/* ══════════ AS-IS ══════════ */
+.asis .chiprow{padding:20px 0;display:flex;justify-content:center;gap:10px;background:#fff}
+.asis .chip{
+  border:1px solid var(--ln);background:#fff;cursor:pointer;
+  font-family:inherit;font-size:14px;font-weight:500;letter-spacing:-.3px;
+  color:var(--tx2);padding:9px 18px;border-radius:20px;
+}
+.asis .chip.on{border-color:var(--brand);background:var(--brand-lt);color:var(--brand);font-weight:600}
+.asis .divider{height:1px;background:var(--ln)}
+.asis .body{padding:32px 40px 40px;background:#fff}
+.asis .card{background:#fff;border:1px solid var(--ln);border-radius:var(--rd)}
+
+/* ══════════ A. 세그먼트 컨트롤 ══════════ */
+.a .panel{background:var(--panel);padding:20px 20px 24px}
+.a .seg{
+  display:inline-flex;gap:2px;padding:4px;margin:0 auto 20px;
+  background:#EBEEF1;border-radius:14px;
+}
+.a .segwrap{display:flex;justify-content:center}
+.a .seg button{
+  border:0;background:transparent;cursor:pointer;font-family:inherit;
+  font-size:14px;font-weight:600;letter-spacing:-.3px;color:var(--tx3);
+  padding:9px 22px;border-radius:11px;transition:background .18s,color .18s,box-shadow .18s;
+}
+.a .seg button:hover{color:var(--tx2)}
+.a .seg button.on{background:#fff;color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.a .cards{padding:0 4px}
+.a .card{background:#fff;border-radius:var(--rd);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+
+/* ══════════ B. 언더라인 탭 + 단일 패널 ══════════ */
+.b .outer{padding:24px 20px 28px;background:#fff}
+.b .panel{
+  border:1px solid var(--ln);border-radius:20px;overflow:hidden;background:#fff;
+}
+.b .tabs{display:flex;gap:4px;padding:6px 20px 0;border-bottom:1px solid var(--ln2)}
+.b .tabs button{
+  position:relative;border:0;background:transparent;cursor:pointer;font-family:inherit;
+  font-size:14.5px;font-weight:600;letter-spacing:-.3px;color:var(--tx3);
+  padding:14px 16px 13px;transition:color .15s;
+}
+.b .tabs button:hover{color:var(--tx2)}
+.b .tabs button.on{color:var(--tx)}
+.b .tabs button::after{
+  content:'';position:absolute;left:16px;right:16px;bottom:-1px;height:2px;
+  background:var(--brand);border-radius:2px;
+  transform:scaleX(0);transition:transform .2s;
+}
+.b .tabs button.on::after{transform:scaleX(1)}
+.b .cards{padding:20px;gap:12px}
+.b .card{background:var(--panel);border-radius:var(--rd-sm)}
+.b .card .go{background:#fff}
+
+/* ══════════ C. 연결형 탭 ══════════ */
+.c .stage{background:#fff;padding:0 20px 28px}
+.c .tabs{display:flex;gap:2px;padding-left:20px}
+.c .tabs button{
+  border:0;background:transparent;cursor:pointer;font-family:inherit;
+  font-size:14.5px;font-weight:600;letter-spacing:-.3px;color:var(--tx3);
+  padding:14px 22px 15px;border-radius:14px 14px 0 0;
+  transition:background .15s,color .15s;
+}
+.c .tabs button:hover{color:var(--tx2);background:#FAFBFC}
+.c .tabs button.on{background:var(--panel);color:var(--tx)}
+.c .tabs button.on:hover{background:var(--panel)}
+.c .panel{
+  background:var(--panel);border-radius:0 20px 20px 20px;padding:22px;
+}
+.c .cards{gap:14px}
+.c .card{background:#fff;border-radius:var(--rd)}
+
+@media (max-width:900px){
+  .cards{grid-template-columns:1fr}
+  .top{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="page-head">
+    <h1>서브 필터 영역 리디자인 시안</h1>
+    <p>헤더 아래 칩 4개를 다른 형식으로 바꾸고, 필터와 카드가 <b>하나의 덩어리</b>로 읽히도록 재구성했습니다.<br>탭을 눌러보면 카드가 실제로 전환됩니다.</p>
+  </div>
+
+  <!-- AS-IS -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-tag gray">현재</span>
+      <h2>칩 + 회색 구분선</h2>
+    </div>
+    <p class="sec-desc">칩 줄과 카드 사이의 <b>가로 전체 1px 라인</b>이 두 영역을 잘라놓아, 필터와 결과가 별개 섹션으로 읽힘. 칩 테두리와 카드 테두리가 같은 회색이라 위계도 흐릿함.</p>
+    <div class="frame asis" data-v="asis">
+      <div class="top"></div>
+      <div class="chiprow"></div>
+      <div class="divider"></div>
+      <div class="body"><div class="cards"></div></div>
+    </div>
+  </section>
+
+  <!-- A -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-tag">시안 A</span>
+      <h2>세그먼트 컨트롤 + 회색 패널로 묶기</h2>
+    </div>
+    <p class="sec-desc">칩을 <b>세그먼트 컨트롤</b>(하나의 트랙 안 4분할)로 바꾸고, 구분선을 지운 뒤 필터와 카드를 <b>같은 연회색 패널</b> 위에 올렸습니다. 카드는 흰색으로 띄워서 선택된 세그먼트(흰 알약)와 같은 톤 → 필터·결과가 한 세트로 보임.</p>
+    <div class="frame a" data-v="a">
+      <div class="top"></div>
+      <div class="panel">
+        <div class="segwrap"><div class="seg"></div></div>
+        <div class="cards"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-tag">시안 B</span>
+      <h2>언더라인 탭 + 단일 카드 컨테이너</h2>
+    </div>
+    <p class="sec-desc">필터를 <b>언더라인 탭</b>으로 바꾸고, 전체를 <b>테두리 1개짜리 컨테이너</b> 안에 넣었습니다. 회색 선은 컨테이너 폭 안에서만 끝나 "탭의 밑줄"로 읽히고, 카드는 테두리를 빼고 연회색 면으로 처리해 컨테이너 안 내용물로 종속됩니다.</p>
+    <div class="frame b" data-v="b">
+      <div class="top"></div>
+      <div class="outer">
+        <div class="panel">
+          <div class="tabs"></div>
+          <div class="cards"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-tag">시안 C</span>
+      <h2>연결형 탭 (선택 탭이 카드 면과 이어짐)</h2>
+    </div>
+    <p class="sec-desc">선택된 탭이 <b>아래 패널과 같은 배경색으로 이어져</b> 물리적으로 한 면이 됩니다. 어느 필터의 결과인지 시선으로 바로 연결되고, 구분선이 아예 필요 없어짐. 상단 검정 pill(1차 탭)과 위계도 자연스럽게 나뉨.</p>
+    <div class="frame c" data-v="c">
+      <div class="top"></div>
+      <div class="stage">
+        <div class="tabs"></div>
+        <div class="panel"><div class="cards"></div></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const TOP = ['종합 대상','산업 부문','직무 부문','지난 수상기업'];
+const FILTERS = ['제조·화학','IT','유통·무역','미디어·디자인'];
+
+const DATA = {
+  '제조·화학': [
+    {co:'포스코', q:'현장에서 배우는 깊이가 다른 회사', d:'국내 1위 철강 기업, 친환경 소재로 전환 중'},
+    {co:'LG화학', q:'연구 인프라 하나는 국내 최고 수준', d:'배터리 소재부터 바이오까지 확장한 화학 기업'},
+    {co:'한화솔루션', q:'태양광 사업 성장세가 눈에 보인다', d:'글로벌 태양광 모듈 점유율 상위 기업'}
+  ],
+  'IT': [
+    {co:'SK텔레콤', q:'워라밸이 딴 데랑 비교도 안 됨, 기회만 되면 꼭 들어가야 한다', d:'AI 회사로 체질을 바꾸는 중인 국내 1위 이동통신 기업'},
+    {co:'당근', q:'투명하게 공유하는 문화, 내 인생 최고의 성장 경험을 준 회사', d:'동네 중고거래에서 지역 생활 플랫폼으로 판을 넓힌 기업'},
+    {co:'로보티즈', q:'대기업으로 성장할 잠재력을 지닌, 대한민국 로봇 사업을 선도하는 기업', d:'로봇 관절 부품 국내 1위, 2025년 매출 29.6% 성장하며 흑자 전환'}
+  ],
+  '유통·무역': [
+    {co:'쿠팡', q:'속도만큼은 어디서도 못 겪어볼 경험', d:'국내 이커머스 거래액 1위 물류·유통 기업'},
+    {co:'이마트', q:'복지 제도가 촘촘하게 잘 짜여 있다', d:'대형마트 기반 오프라인 유통 선두 기업'},
+    {co:'CJ대한통운', q:'물류 자동화를 실제로 굴려보는 재미', d:'풀필먼트·택배 인프라를 갖춘 종합 물류 기업'}
+  ],
+  '미디어·디자인': [
+    {co:'CJ ENM', q:'만든 콘텐츠가 바로 반응으로 돌아온다', d:'방송·영화·음악을 아우르는 종합 콘텐츠 기업'},
+    {co:'스튜디오드래곤', q:'작품 단위로 몰입해서 일하는 구조', d:'드라마 기획·제작 국내 최대 스튜디오'},
+    {co:'우아한형제들', q:'디자이너 목소리가 제품에 실제로 반영됨', d:'배달 앱을 넘어 푸드테크로 확장한 기업'}
+  ]
+};
+
+const CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+
+function cardHTML(it){
+  return `<div class="card">
+    <div class="co">${it.co}</div>
+    <div class="qm">&ldquo;</div>
+    <div class="q">${it.q}</div>
+    <div class="d">${it.d}</div>
+    <span class="go">리뷰보기 ${CHEV}</span>
+  </div>`;
+}
+
+function renderCards(frame, key){
+  frame.querySelector('.cards').innerHTML = DATA[key].map(cardHTML).join('');
+}
+
+document.querySelectorAll('.frame').forEach(frame=>{
+  const v = frame.dataset.v;
+  let cur = 'IT';
+
+  // 상단 1차 탭 (공통, 산업 부문 고정 활성)
+  frame.querySelector('.top').innerHTML =
+    TOP.map((t,i)=>`<button class="${i===1?'on':''}">${t}</button>`).join('');
+
+  // 2차 필터
+  const holder = frame.querySelector(v==='asis' ? '.chiprow' : (v==='a' ? '.seg' : '.tabs'));
+  const cls = v==='asis' ? 'chip' : '';
+  holder.innerHTML = FILTERS.map(f=>
+    `<button class="${cls} ${f===cur?'on':''}" data-f="${f}">${f}</button>`
+  ).join('');
+
+  holder.addEventListener('click', e=>{
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    cur = btn.dataset.f;
+    holder.querySelectorAll('button').forEach(b=>b.classList.toggle('on', b===btn));
+    renderCards(frame, cur);
+  });
+
+  renderCards(frame, cur);
+});
+</script>
+</body>
+</html>
