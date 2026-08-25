@@ -15,10 +15,10 @@
   --tx2:#4E5968;
   --tx3:#8B95A1;
   --tx4:#B0B8C1;
-  --bg:#fff;
   --panel:#F5F7F8;
   --ln:#E9ECEF;
   --ln2:#F2F4F6;
+  --pad:24px;       /* 상·하단 탭 공통 좌우 인셋 — 이 값이 정렬 기준 */
   --rd:16px;
   --rd-sm:12px;
 }
@@ -45,7 +45,6 @@ body{
   font-size:12px;font-weight:700;letter-spacing:-.2px;
   background:var(--brand-lt);color:var(--brand);
 }
-.sec-tag.gray{background:var(--ln2);color:var(--tx3)}
 .sec-head h2{font-size:19px;font-weight:700;letter-spacing:-.4px}
 .sec-desc{font-size:13.5px;color:var(--tx2);line-height:1.7;margin-bottom:16px}
 .sec-desc b{color:var(--tx);font-weight:600}
@@ -56,17 +55,28 @@ body{
   box-shadow:0 2px 12px rgba(0,0,0,.06);
 }
 
-/* ── 공통: 상단 민트 헤더 탭 ── */
-.top{background:var(--mint);padding:14px 0;display:flex;justify-content:center;gap:8px}
+/* ── 상단 1차 탭 (민트) : 4등분 fill ── */
+.top{
+  background:var(--mint);padding:12px var(--pad);
+  display:grid;grid-template-columns:repeat(4,1fr);gap:4px;
+}
 .top button{
-  border:0;background:transparent;cursor:pointer;
+  border:0;background:transparent;cursor:pointer;width:100%;
   font-family:inherit;font-size:15px;font-weight:600;letter-spacing:-.3px;
-  color:#12362A;padding:11px 30px;border-radius:24px;
+  color:#12362A;padding:12px 0;border-radius:24px;
   transition:background .15s;
 }
 .top button:hover{background:rgba(0,0,0,.05)}
 .top button.on{background:var(--ink);color:#fff}
 .top button.on:hover{background:var(--ink)}
+
+/* ── 2차 탭 공통 : 4등분 fill ── */
+.f4{display:grid;grid-template-columns:repeat(4,1fr)}
+.f4 button{
+  border:0;background:transparent;cursor:pointer;width:100%;
+  font-family:inherit;font-size:14.5px;font-weight:600;letter-spacing:-.3px;
+  color:var(--tx3);
+}
 
 /* ── 카드 공통 ── */
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -85,51 +95,24 @@ body{
 .card .go:hover{background:var(--brand-lt);color:var(--brand)}
 .card .go svg{width:14px;height:14px}
 
-/* ══════════ AS-IS ══════════ */
-.asis .chiprow{padding:20px 0;display:flex;justify-content:center;gap:10px;background:#fff}
-.asis .chip{
-  border:1px solid var(--ln);background:#fff;cursor:pointer;
-  font-family:inherit;font-size:14px;font-weight:500;letter-spacing:-.3px;
-  color:var(--tx2);padding:9px 18px;border-radius:20px;
-}
-.asis .chip.on{border-color:var(--brand);background:var(--brand-lt);color:var(--brand);font-weight:600}
-.asis .divider{height:1px;background:var(--ln)}
-.asis .body{padding:32px 40px 40px;background:#fff}
-.asis .card{background:#fff;border:1px solid var(--ln);border-radius:var(--rd)}
-
-/* ══════════ A. 세그먼트 컨트롤 ══════════ */
-.a .panel{background:var(--panel);padding:20px 20px 24px}
-.a .seg{
-  display:inline-flex;gap:2px;padding:4px;margin:0 auto 20px;
-  background:#EBEEF1;border-radius:14px;
-}
-.a .segwrap{display:flex;justify-content:center}
-.a .seg button{
-  border:0;background:transparent;cursor:pointer;font-family:inherit;
-  font-size:14px;font-weight:600;letter-spacing:-.3px;color:var(--tx3);
-  padding:9px 22px;border-radius:11px;transition:background .18s,color .18s,box-shadow .18s;
-}
+/* ══════════ A. 세그먼트 컨트롤 (fill) ══════════ */
+.a .panel{background:var(--panel);padding:20px var(--pad) var(--pad)}
+.a .seg{background:#E7EBEE;border-radius:14px;padding:4px;gap:2px;margin-bottom:20px}
+.a .seg button{padding:11px 0;border-radius:11px;transition:background .18s,color .18s,box-shadow .18s}
 .a .seg button:hover{color:var(--tx2)}
 .a .seg button.on{background:#fff;color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.a .cards{padding:0 4px}
 .a .card{background:#fff;border-radius:var(--rd);box-shadow:0 1px 3px rgba(0,0,0,.06)}
 
-/* ══════════ B. 언더라인 탭 + 단일 패널 ══════════ */
-.b .outer{padding:24px 20px 28px;background:#fff}
-.b .panel{
-  border:1px solid var(--ln);border-radius:20px;overflow:hidden;background:#fff;
-}
-.b .tabs{display:flex;gap:4px;padding:6px 20px 0;border-bottom:1px solid var(--ln2)}
-.b .tabs button{
-  position:relative;border:0;background:transparent;cursor:pointer;font-family:inherit;
-  font-size:14.5px;font-weight:600;letter-spacing:-.3px;color:var(--tx3);
-  padding:14px 16px 13px;transition:color .15s;
-}
+/* ══════════ B. 언더라인 탭 + 단일 컨테이너 (fill) ══════════ */
+.b .outer{padding:20px var(--pad) var(--pad)}
+.b .panel{border:1px solid var(--ln);border-radius:20px;overflow:hidden;background:#fff}
+.b .tabs{border-bottom:1px solid var(--ln2)}
+.b .tabs button{position:relative;padding:16px 0 15px;transition:color .15s}
 .b .tabs button:hover{color:var(--tx2)}
 .b .tabs button.on{color:var(--tx)}
 .b .tabs button::after{
-  content:'';position:absolute;left:16px;right:16px;bottom:-1px;height:2px;
-  background:var(--brand);border-radius:2px;
+  content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;
+  background:var(--brand);
   transform:scaleX(0);transition:transform .2s;
 }
 .b .tabs button.on::after{transform:scaleX(1)}
@@ -137,27 +120,25 @@ body{
 .b .card{background:var(--panel);border-radius:var(--rd-sm)}
 .b .card .go{background:#fff}
 
-/* ══════════ C. 연결형 탭 ══════════ */
-.c .stage{background:#fff;padding:0 20px 28px}
-.c .tabs{display:flex;gap:2px;padding-left:20px}
+/* ══════════ C. 연결형 탭 (fill) ══════════ */
+.c .stage{padding:0 var(--pad) var(--pad)}
+.c .tabs{gap:2px}
 .c .tabs button{
-  border:0;background:transparent;cursor:pointer;font-family:inherit;
-  font-size:14.5px;font-weight:600;letter-spacing:-.3px;color:var(--tx3);
-  padding:14px 22px 15px;border-radius:14px 14px 0 0;
+  padding:15px 0 16px;border-radius:14px 14px 0 0;
   transition:background .15s,color .15s;
 }
 .c .tabs button:hover{color:var(--tx2);background:#FAFBFC}
 .c .tabs button.on{background:var(--panel);color:var(--tx)}
 .c .tabs button.on:hover{background:var(--panel)}
-.c .panel{
-  background:var(--panel);border-radius:0 20px 20px 20px;padding:22px;
-}
+.c .panel{background:var(--panel);border-radius:20px;padding:20px;transition:border-radius .2s}
+.c .panel.first{border-top-left-radius:0}
+.c .panel.last{border-top-right-radius:0}
 .c .cards{gap:14px}
 .c .card{background:#fff;border-radius:var(--rd)}
 
 @media (max-width:900px){
   .cards{grid-template-columns:1fr}
-  .top{flex-wrap:wrap}
+  .top button,.f4 button{font-size:13px}
 }
 </style>
 </head>
@@ -166,23 +147,8 @@ body{
 
   <div class="page-head">
     <h1>서브 필터 영역 리디자인 시안</h1>
-    <p>헤더 아래 칩 4개를 다른 형식으로 바꾸고, 필터와 카드가 <b>하나의 덩어리</b>로 읽히도록 재구성했습니다.<br>탭을 눌러보면 카드가 실제로 전환됩니다.</p>
+    <p>2차 필터를 상단 탭과 <b>같은 4등분 그리드로 꽉 채워(fill)</b> 좌우 폭과 항목 경계를 정렬했습니다. 필터와 카드를 하나의 면으로 묶어 구분선을 없앴습니다.<br>탭을 눌러보면 카드가 실제로 전환됩니다.</p>
   </div>
-
-  <!-- AS-IS -->
-  <section class="sec">
-    <div class="sec-head">
-      <span class="sec-tag gray">현재</span>
-      <h2>칩 + 회색 구분선</h2>
-    </div>
-    <p class="sec-desc">칩 줄과 카드 사이의 <b>가로 전체 1px 라인</b>이 두 영역을 잘라놓아, 필터와 결과가 별개 섹션으로 읽힘. 칩 테두리와 카드 테두리가 같은 회색이라 위계도 흐릿함.</p>
-    <div class="frame asis" data-v="asis">
-      <div class="top"></div>
-      <div class="chiprow"></div>
-      <div class="divider"></div>
-      <div class="body"><div class="cards"></div></div>
-    </div>
-  </section>
 
   <!-- A -->
   <section class="sec">
@@ -190,11 +156,11 @@ body{
       <span class="sec-tag">시안 A</span>
       <h2>세그먼트 컨트롤 + 회색 패널로 묶기</h2>
     </div>
-    <p class="sec-desc">칩을 <b>세그먼트 컨트롤</b>(하나의 트랙 안 4분할)로 바꾸고, 구분선을 지운 뒤 필터와 카드를 <b>같은 연회색 패널</b> 위에 올렸습니다. 카드는 흰색으로 띄워서 선택된 세그먼트(흰 알약)와 같은 톤 → 필터·결과가 한 세트로 보임.</p>
+    <p class="sec-desc">칩을 <b>가로 꽉 찬 세그먼트 컨트롤</b>로 바꾸고, 구분선을 지운 뒤 필터와 카드를 <b>같은 연회색 패널</b> 위에 올렸습니다. 선택된 세그먼트(흰 알약)와 카드가 같은 톤이라 필터·결과가 한 세트로 읽힙니다.</p>
     <div class="frame a" data-v="a">
       <div class="top"></div>
       <div class="panel">
-        <div class="segwrap"><div class="seg"></div></div>
+        <div class="seg f4"></div>
         <div class="cards"></div>
       </div>
     </div>
@@ -206,12 +172,12 @@ body{
       <span class="sec-tag">시안 B</span>
       <h2>언더라인 탭 + 단일 카드 컨테이너</h2>
     </div>
-    <p class="sec-desc">필터를 <b>언더라인 탭</b>으로 바꾸고, 전체를 <b>테두리 1개짜리 컨테이너</b> 안에 넣었습니다. 회색 선은 컨테이너 폭 안에서만 끝나 "탭의 밑줄"로 읽히고, 카드는 테두리를 빼고 연회색 면으로 처리해 컨테이너 안 내용물로 종속됩니다.</p>
+    <p class="sec-desc">필터를 <b>4등분 언더라인 탭</b>으로 바꾸고 전체를 <b>테두리 1개짜리 컨테이너</b>에 넣었습니다. 회색 선이 컨테이너 폭 안에서만 끝나 "탭의 밑줄"로 읽히고, 카드는 테두리를 빼고 연회색 면으로 처리해 컨테이너의 내용물로 종속됩니다.</p>
     <div class="frame b" data-v="b">
       <div class="top"></div>
       <div class="outer">
         <div class="panel">
-          <div class="tabs"></div>
+          <div class="tabs f4"></div>
           <div class="cards"></div>
         </div>
       </div>
@@ -224,11 +190,11 @@ body{
       <span class="sec-tag">시안 C</span>
       <h2>연결형 탭 (선택 탭이 카드 면과 이어짐)</h2>
     </div>
-    <p class="sec-desc">선택된 탭이 <b>아래 패널과 같은 배경색으로 이어져</b> 물리적으로 한 면이 됩니다. 어느 필터의 결과인지 시선으로 바로 연결되고, 구분선이 아예 필요 없어짐. 상단 검정 pill(1차 탭)과 위계도 자연스럽게 나뉨.</p>
+    <p class="sec-desc">4등분한 탭 중 선택된 것이 <b>아래 패널과 같은 배경색으로 이어져</b> 물리적으로 한 면이 됩니다. 상단 검정 pill과 탭 폭이 정확히 맞아떨어져 어느 필터의 결과인지 시선으로 바로 연결되고, 구분선이 아예 필요 없어집니다.</p>
     <div class="frame c" data-v="c">
       <div class="top"></div>
       <div class="stage">
-        <div class="tabs"></div>
+        <div class="tabs f4"></div>
         <div class="panel"><div class="cards"></div></div>
       </div>
     </div>
@@ -275,23 +241,31 @@ function cardHTML(it){
   </div>`;
 }
 
+// 시안 C: 선택 탭이 양 끝일 때만 패널 모서리를 붙여 이어지게
+function syncPanel(frame, holder){
+  const panel = frame.querySelector('.c .panel');
+  if(!panel) return;
+  const btns = [...holder.querySelectorAll('button')];
+  const i = btns.findIndex(b=>b.classList.contains('on'));
+  panel.classList.toggle('first', i===0);
+  panel.classList.toggle('last', i===btns.length-1);
+}
+
 function renderCards(frame, key){
   frame.querySelector('.cards').innerHTML = DATA[key].map(cardHTML).join('');
 }
 
 document.querySelectorAll('.frame').forEach(frame=>{
-  const v = frame.dataset.v;
   let cur = 'IT';
 
-  // 상단 1차 탭 (공통, 산업 부문 고정 활성)
+  // 상단 1차 탭 (산업 부문 고정 활성)
   frame.querySelector('.top').innerHTML =
     TOP.map((t,i)=>`<button class="${i===1?'on':''}">${t}</button>`).join('');
 
   // 2차 필터
-  const holder = frame.querySelector(v==='asis' ? '.chiprow' : (v==='a' ? '.seg' : '.tabs'));
-  const cls = v==='asis' ? 'chip' : '';
+  const holder = frame.querySelector('.f4');
   holder.innerHTML = FILTERS.map(f=>
-    `<button class="${cls} ${f===cur?'on':''}" data-f="${f}">${f}</button>`
+    `<button class="${f===cur?'on':''}" data-f="${f}">${f}</button>`
   ).join('');
 
   holder.addEventListener('click', e=>{
@@ -299,9 +273,11 @@ document.querySelectorAll('.frame').forEach(frame=>{
     if(!btn) return;
     cur = btn.dataset.f;
     holder.querySelectorAll('button').forEach(b=>b.classList.toggle('on', b===btn));
+    syncPanel(frame, holder);
     renderCards(frame, cur);
   });
 
+  syncPanel(frame, holder);
   renderCards(frame, cur);
 });
 </script>
