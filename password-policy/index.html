@@ -8,7 +8,7 @@
 :root{
   --green:#00C274; --green-700:#00A862; --login:#00C362;
   --blue:#2196F3; --blue-50:#ECF6FE;
-  --red:#E5484D;
+  --red:#F44336;
   --g900:#242628; --g700:#323438; --g500:#686A6D; --g300:#A4A6AD; --g200:#C5C7CC; --g100:#E5E6E9;
   --bg:#F3F3F4;
   --sd:0 1px 4px rgba(30,40,58,.04);
@@ -23,7 +23,33 @@ body{
 .screen{display:none}
 .screen.on{display:flex}
 
-/* 화면 전환 버튼 — 프로토타입 이동용이라 시안에는 없는 요소 */
+/* 환경 토글 · 화면 전환 버튼 — 프로토타입 이동용이라 시안에는 없는 요소 */
+.envbar{
+  position:fixed;top:32px;left:32px;display:flex;gap:4px;padding:4px;
+  background:#fff;border:1px solid var(--g100);border-radius:10px;box-shadow:var(--sd)
+}
+.envbar button{
+  border:0;background:transparent;font:inherit;font-size:13px;font-weight:600;line-height:20px;
+  color:var(--g300);padding:7px 14px;border-radius:7px;cursor:pointer;transition:.15s
+}
+.envbar button:hover:not(:disabled):not(.on){color:var(--g700)}
+.envbar button.on{background:var(--g700);color:#fff}
+.envbar button:disabled{color:var(--g200);cursor:not-allowed}
+
+/* 모웹 — 시안 배경이 흰색이라 페이지 전체를 흰색으로 둔다 */
+body.env-mw{background:#fff}
+.mw{width:360px;margin:0 auto;padding:40px 20px 60px;flex-direction:column;align-items:center}
+.mwlogo{width:141.67px;height:34px;display:block;margin-bottom:28px}
+.mw .btn{width:320px}
+.mw .hr{width:320px;margin:20px 0}
+.mwbody{display:flex;flex-direction:column;gap:40px;width:320px}
+.mwtop{display:flex;flex-direction:column;gap:20px;width:320px}
+.notice.orange{
+  height:46px;padding:12px 16px;background:#FFFAF5;border:1px solid #FFE0B2;border-radius:8px;
+  color:var(--g700);font-size:12px;font-weight:500;line-height:18px
+}
+
+
 .nav{
   position:fixed;top:32px;right:32px;display:flex;align-items:center;gap:6px;
   padding:10px 16px;background:#fff;border:1px solid var(--g100);border-radius:8px;box-shadow:var(--sd);
@@ -85,7 +111,7 @@ body{
 
 .fields{display:flex;flex-direction:column;gap:10px}
 .group{display:flex;flex-direction:column;gap:10px}
-.field{display:flex;flex-direction:column;gap:4px}
+.field{display:flex;flex-direction:column;gap:2px}
 .ipt{
   display:flex;align-items:center;gap:4px;padding:12px 12px 12px 16px;background:#fff;
   border-radius:8px;box-shadow:inset 0 0 0 1px var(--g100);transition:box-shadow .12s
@@ -140,6 +166,11 @@ body{
 </style>
 </head>
 <body>
+<div class="envbar" id="envbar">
+  <button type="button" data-env="pc" class="on">PC</button>
+  <button type="button" data-env="mw">모웹</button>
+  <button type="button" data-env="app" disabled title="모바일 시안 반영 예정">모바일</button>
+</div>
 <button class="nav" type="button" id="navBtn"></button>
 
 <div class="wrap screen on" id="screenSignup">
@@ -307,6 +338,65 @@ body{
 
 </div>
 
+<!-- 모웹 · 회원가입 -->
+<div class="mw screen" id="mwSignup">
+  <img class="mwlogo" src="jobplanet-wordmark.png" alt="Jobplanet">
+
+  <button class="btn kakao" type="button">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.9 3 2.8 6.3 2.8 10.3c0 2.6 1.7 4.9 4.3 6.2l-1.1 4c-.1.4.3.6.6.4l4.7-3.1c.2 0 .5 0 .7 0 5.1 0 9.2-3.3 9.2-7.4S17.1 3 12 3z"/></svg>
+    카카오 로그인
+  </button>
+
+  <div class="hr"></div>
+
+  <div class="mwbody">
+    <div class="group">
+      <div class="field">
+        <div class="ipt"><input type="text" placeholder="이메일 주소" autocomplete="off"></div>
+      </div>
+      <div class="field">
+        <div class="ipt" id="MW_wPw"><input type="password" id="MW_iPw" placeholder="비밀번호 (영문/숫자/특수문자 포함)" autocomplete="new-password"></div>
+        <div class="msg" id="MW_mPw"></div>
+      </div>
+      <div class="field">
+        <div class="ipt" id="MW_wPw2"><input type="password" id="MW_iPw2" placeholder="비밀번호 재입력" autocomplete="new-password"></div>
+        <div class="msg" id="MW_mPw2"></div>
+      </div>
+
+      <button class="btn email" type="button" id="MW_btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18a1 1 0 0 1 1 1v.3l-10 5.9-10-5.9V6a1 1 0 0 1 1-1zm-1 3.6V18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V8.6l-9.5 5.6a1 1 0 0 1-1 0L2 8.6z"/></svg>
+        이메일로 가입하기
+      </button>
+      <div class="done" id="MW_done">가입 조건을 모두 충족했어요</div>
+    </div>
+
+    <div class="foot"><span>이미 회원이세요?</span><a href="#">로그인</a></div>
+  </div>
+</div>
+
+<!-- 모웹 · 비밀번호 변경 -->
+<div class="mw screen" id="mwChange">
+  <img class="mwlogo" src="jobplanet-wordmark.png" alt="Jobplanet">
+
+  <div class="mwtop">
+    <div class="notice orange">새로운 비밀번호를 입력해 주세요.</div>
+
+    <div class="group">
+      <div class="field">
+        <div class="ipt" id="MN_wPw"><input type="password" id="MN_iPw" placeholder="새 비밀번호 (영문/숫자/특수문자 포함)" autocomplete="new-password"></div>
+        <div class="msg" id="MN_mPw"></div>
+      </div>
+      <div class="field">
+        <div class="ipt" id="MN_wPw2"><input type="password" id="MN_iPw2" placeholder="새 비밀번호 재입력" autocomplete="new-password"></div>
+        <div class="msg" id="MN_mPw2"></div>
+      </div>
+
+      <button class="btn email" type="button" id="MN_btn">비밀번호 변경</button>
+      <div class="done" id="MN_done">비밀번호를 변경했어요</div>
+    </div>
+  </div>
+</div>
+
 <script>
 const MIN = 8;
 const COPY = {
@@ -401,6 +491,8 @@ function makeForm(prefix){
 makeForm('P');
 makeForm('C');
 makeForm('N');
+makeForm('MW');
+makeForm('MN');
 
 /* 산업군 셀렉트 — 미선택 상태는 placeholder 색을 유지한다 */
 document.querySelectorAll('.ipt select').forEach(s=>{
@@ -417,18 +509,30 @@ document.querySelectorAll('.tab').forEach(b=>{
   };
 });
 
-/* 화면 전환 — 회원가입 ↔ 비밀번호 변경 */
+/* 환경(PC·모웹) × 화면(회원가입·비밀번호 변경) 전환 */
 const ARROW = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>';
 const navBtn = $('navBtn');
-function goScreen(name){
+const SCREEN = {
+  pc:{Signup:'screenSignup', Change:'screenChange'},
+  mw:{Signup:'mwSignup',     Change:'mwChange'}
+};
+let env = 'pc', screen = 'Signup';
+
+function show(){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
-  $('screen'+name).classList.add('on');
-  navBtn.dataset.go = name==='Signup' ? 'Change' : 'Signup';
-  navBtn.innerHTML = (name==='Signup' ? '비밀번호 변경' : '회원가입') + ARROW;
+  $(SCREEN[env][screen]).classList.add('on');
+  document.body.classList.toggle('env-mw', env==='mw');
+  document.querySelectorAll('#envbar button').forEach(b=>b.classList.toggle('on', b.dataset.env===env));
+  navBtn.innerHTML = (screen==='Signup' ? '비밀번호 변경' : '회원가입') + ARROW;
   window.scrollTo(0,0);
 }
-navBtn.onclick = ()=> goScreen(navBtn.dataset.go);
-goScreen('Signup');
+
+navBtn.onclick = ()=>{ screen = screen==='Signup' ? 'Change' : 'Signup'; show(); };
+document.querySelectorAll('#envbar button').forEach(b=>{
+  if(b.disabled) return;
+  b.onclick = ()=>{ env = b.dataset.env; show(); };
+});
+show();
 </script>
 </body>
 </html>
