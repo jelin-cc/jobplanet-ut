@@ -7,6 +7,7 @@
 <style>
 :root{
   --green:#00C274; --green-700:#00A862; --login:#00C362;
+  --blue:#2196F3; --blue-50:#ECF6FE;
   --red:#E5484D;
   --g900:#242628; --g700:#323438; --g500:#686A6D; --g300:#A4A6AD; --g200:#C5C7CC; --g100:#E5E6E9;
   --bg:#F3F3F4;
@@ -19,14 +20,24 @@ body{
   padding:70px 20px 80px;
 }
 .wrap{width:360px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.screen{display:none}
+.screen.on{display:flex}
 
-/* 로고 · 안내 · 탭 : 카드 위 영역 (gap 30) */
+/* 화면 전환 버튼 — 프로토타입 이동용이라 시안에는 없는 요소 */
+.nav{
+  position:fixed;top:32px;right:32px;display:flex;align-items:center;gap:6px;
+  padding:10px 16px;background:#fff;border:1px solid var(--g100);border-radius:8px;box-shadow:var(--sd);
+  font:inherit;font-size:14px;font-weight:600;line-height:22px;color:var(--g700);cursor:pointer;transition:.15s
+}
+.nav:hover{border-color:var(--g300)}
+.nav svg{flex:none;color:var(--g300)}
+
+/* 로고 · 안내 · 탭 */
 .top{display:flex;flex-direction:column;align-items:center;gap:30px}
 .brand{display:flex;flex-direction:column;align-items:center;gap:20px;width:248px}
 .brand img{width:142px;height:34px;display:block}
 .lead{text-align:center;font-size:14px;font-weight:400;line-height:22px;color:var(--g500)}
 
-/* 탭 바 : 카드와 분리된 흰색 박스 */
 .tabs{display:flex;width:360px;height:52px;background:#fff;border-radius:12px;box-shadow:var(--sd)}
 .tab{
   flex:1;height:52px;border:0;background:transparent;font:inherit;
@@ -38,8 +49,25 @@ body{
 /* 카드 */
 .card{width:360px;background:#fff;border-radius:12px;box-shadow:var(--sd);padding:28px 0;display:flex;flex-direction:column;gap:20px}
 .card h2{padding:0 32px;font-size:20px;font-weight:700;line-height:28px;color:var(--g700)}
+
+/* 비밀번호 변경 화면 */
+.wrap.change{gap:32px;margin-top:-2px}
+.card.change{padding:28px 32px 32px}
+.cbody{display:flex;flex-direction:column;gap:20px;width:296px}
+.chead{display:flex;flex-direction:column;gap:14px}
+.chead h2{padding:0;font-size:20px;font-weight:700;line-height:28px;color:var(--g700)}
+.chead p{font-size:14px;font-weight:400;line-height:22px;color:var(--g500)}
 .body{display:flex;flex-direction:column;align-items:center;gap:24px}
-.form{width:296px;display:flex;flex-direction:column;gap:20px}
+.pane{display:none;width:296px}
+.pane.on{display:flex;flex-direction:column}
+
+/* 개인회원 폼 */
+#paneP{gap:20px}
+/* 기업회원 폼 */
+#paneC{gap:16px}
+.csections{display:flex;flex-direction:column;gap:28px}
+.cgroups{display:flex;flex-direction:column;align-items:flex-end;gap:24px}
+.cgroup{display:flex;flex-direction:column;gap:10px;width:100%}
 
 .btn{
   width:100%;height:48px;border:0;border-radius:10px;font:inherit;
@@ -59,11 +87,18 @@ body{
 .group{display:flex;flex-direction:column;gap:10px}
 .field{display:flex;flex-direction:column;gap:4px}
 .ipt{
-  display:flex;align-items:center;padding:12px 12px 12px 16px;background:#fff;
+  display:flex;align-items:center;gap:4px;padding:12px 12px 12px 16px;background:#fff;
   border-radius:8px;box-shadow:inset 0 0 0 1px var(--g100);transition:box-shadow .12s
 }
-.ipt input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:16px;font-weight:400;line-height:24px;color:var(--g900)}
+.ipt.sel{padding-left:20px}
+.ipt input,.ipt select{
+  flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;
+  font-size:16px;font-weight:400;line-height:24px;color:var(--g900)
+}
+.ipt select{appearance:none;cursor:pointer}
+.ipt select.empty{color:var(--g200)}
 .ipt input::placeholder{color:var(--g200)}
+.ipt .ic{flex:none;width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:var(--g200)}
 .ipt.err{box-shadow:inset 0 0 0 1px var(--red)}
 .ipt.ok{box-shadow:inset 0 0 0 1px var(--green)}
 .msg:empty{display:none}
@@ -71,18 +106,43 @@ body{
 .msg.err{color:var(--red)}
 .msg.ok{color:var(--green)}
 
+/* 기업회원 전용 */
+.notice{
+  display:flex;align-items:center;gap:4px;height:36px;padding:9px 16px;
+  background:var(--blue-50);border-radius:8px;
+  font-size:12px;font-weight:600;line-height:18px;color:var(--blue)
+}
+.notice svg{flex:none}
+.altlink{
+  align-self:flex-end;font-size:12px;font-weight:500;line-height:18px;color:var(--g500);
+  text-decoration:underline;text-underline-offset:2px
+}
+.attach{
+  flex:none;padding:5px 8px;border:1px solid var(--green);border-radius:4px;background:#fff;
+  font:inherit;font-size:12px;font-weight:500;line-height:18px;color:var(--green);cursor:pointer
+}
+.checkrow{display:flex;align-items:flex-start;gap:4px}
+.checkrow input{
+  appearance:none;flex:none;width:16px;height:16px;margin:4px;border-radius:3px;
+  box-shadow:inset 0 0 0 1.5px var(--g200);background:#fff;cursor:pointer;transition:.12s
+}
+.checkrow input:checked{background:var(--green);box-shadow:inset 0 0 0 1.5px var(--green)}
+.checkrow label{font-size:14px;font-weight:400;line-height:22px;color:var(--g500);padding-top:3px;cursor:pointer}
+
 .foot{display:flex;align-items:center;justify-content:center;gap:12px;font-size:14px;font-weight:400;line-height:22px;color:var(--g700)}
 .foot a{color:var(--login);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 
 .done{
-  width:296px;margin:-4px auto 0;padding:12px 14px;background:#f2fbf7;border-radius:8px;
+  padding:12px 14px;background:#f2fbf7;border-radius:8px;
   font-size:14px;font-weight:600;line-height:22px;color:var(--green-700);text-align:center;display:none
 }
 .done.on{display:block}
 </style>
 </head>
 <body>
-<div class="wrap">
+<button class="nav" type="button" id="navBtn"></button>
+
+<div class="wrap screen on" id="screenSignup">
 
   <div class="top">
     <div class="brand">
@@ -90,16 +150,17 @@ body{
       <p class="lead">잡플래닛은 회원님의 익명성을 보장하기 위해<br>어떠한 개인정보도 노출하지 않습니다.</p>
     </div>
     <div class="tabs">
-      <button class="tab on" data-tab="personal">개인회원</button>
-      <button class="tab" data-tab="company">기업회원</button>
+      <button class="tab on" data-tab="P">개인회원</button>
+      <button class="tab" data-tab="C">기업회원</button>
     </div>
   </div>
 
   <div class="card">
     <h2>회원가입</h2>
     <div class="body">
-      <div class="form">
 
+      <!-- 개인회원 -->
+      <div class="pane on" id="paneP">
         <button class="btn kakao" type="button">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.9 3 2.8 6.3 2.8 10.3c0 2.6 1.7 4.9 4.3 6.2l-1.1 4c-.1.4.3.6.6.4l4.7-3.1c.2 0 .5 0 .7 0 5.1 0 9.2-3.3 9.2-7.4S17.1 3 12 3z"/></svg>
           카카오로 시작하기
@@ -110,30 +171,137 @@ body{
         <div class="group">
           <div class="fields">
             <div class="field">
-              <div class="ipt" id="wEmail"><input type="text" id="iEmail" placeholder="이메일 주소" autocomplete="off"></div>
+              <div class="ipt"><input type="text" placeholder="이메일 주소" autocomplete="off"></div>
             </div>
             <div class="field">
-              <div class="ipt" id="wPw"><input type="password" id="iPw" placeholder="비밀번호 (영문/숫자/특수문자 포함)" autocomplete="new-password"></div>
-              <div class="msg" id="mPw"></div>
+              <div class="ipt" id="P_wPw"><input type="password" id="P_iPw" placeholder="비밀번호 (영문/숫자/특수문자 포함)" autocomplete="new-password"></div>
+              <div class="msg" id="P_mPw"></div>
             </div>
             <div class="field">
-              <div class="ipt" id="wPw2"><input type="password" id="iPw2" placeholder="비밀번호 재입력" autocomplete="new-password"></div>
-              <div class="msg" id="mPw2"></div>
+              <div class="ipt" id="P_wPw2"><input type="password" id="P_iPw2" placeholder="비밀번호 재입력" autocomplete="new-password"></div>
+              <div class="msg" id="P_mPw2"></div>
             </div>
           </div>
 
-          <button class="btn email" type="button" id="btnSubmit">
+          <button class="btn email" type="button" id="P_btn">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18a1 1 0 0 1 1 1v.3l-10 5.9-10-5.9V6a1 1 0 0 1 1-1zm-1 3.6V18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V8.6l-9.5 5.6a1 1 0 0 1-1 0L2 8.6z"/></svg>
             이메일로 가입하기
           </button>
+          <div class="done" id="P_done">가입 조건을 모두 충족했어요</div>
         </div>
       </div>
 
-      <div class="done" id="done">가입 조건을 모두 충족했어요</div>
+      <!-- 기업회원 -->
+      <div class="pane" id="paneC">
+        <div class="notice">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M7 1.75C4.1005 1.75 1.75 4.1005 1.75 7C1.75 9.89949 4.1005 12.25 7 12.25C9.89949 12.25 12.25 9.89949 12.25 7C12.25 4.1005 9.89949 1.75 7 1.75ZM0.583333 7C0.583333 3.45617 3.45617 0.583333 7 0.583333C10.5438 0.583333 13.4167 3.45617 13.4167 7C13.4167 10.5438 10.5438 13.4167 7 13.4167C3.45617 13.4167 0.583333 10.5438 0.583333 7Z" fill="#2196F3"/>
+            <path d="M6.88003 9.47949C7.22974 9.47949 7.51187 9.75623 7.51187 10.1123C7.51162 10.4647 7.23304 10.751 6.88003 10.751C6.53064 10.7508 6.24162 10.468 6.24136 10.1123C6.24136 9.75292 6.53397 9.47968 6.88003 9.47949ZM7.07144 3.5C7.70229 3.50006 8.27478 3.68853 8.69449 4.04492C9.1183 4.40481 9.37022 4.92307 9.37027 5.53809C9.37027 6.07424 9.21061 6.49635 8.9357 6.83887C8.66746 7.17303 8.3013 7.4159 7.91519 7.62305L7.91324 7.62402C7.6605 7.75793 7.5408 7.85574 7.47867 7.93945C7.42598 8.01048 7.39761 8.09497 7.39761 8.25684V8.40137C7.39741 8.72281 7.1361 8.9834 6.81461 8.9834C6.49333 8.98314 6.23278 8.72265 6.23257 8.40137V8.22949C6.23258 7.86409 6.30794 7.55939 6.50308 7.29492C6.69045 7.04101 6.96801 6.85359 7.30679 6.6748C7.64054 6.49108 7.85889 6.32834 7.99527 6.15625C8.12351 5.99429 8.19156 5.80811 8.19156 5.54492C8.19152 5.27736 8.08387 5.05753 7.89957 4.90039C7.71196 4.74048 7.42961 4.63384 7.07144 4.63379C6.74545 4.63379 6.51702 4.71145 6.34683 4.8291C6.17403 4.94858 6.03798 5.12541 5.92398 5.36035C5.79186 5.63262 5.46129 5.79979 5.14468 5.66992C4.86337 5.55428 4.69152 5.22154 4.83511 4.91016C5.0163 4.51761 5.28342 4.162 5.65836 3.90527C6.03519 3.64733 6.50556 3.5 7.07144 3.5Z" fill="#2196F3"/>
+          </svg>
+          명함에 기재된 이메일로 가입해주세요.
+        </div>
+
+        <div class="csections">
+          <div class="cgroups">
+
+            <div class="cgroup">
+              <div class="field">
+                <div class="ipt"><input type="text" placeholder="회사 이메일 주소" autocomplete="off"></div>
+              </div>
+              <div class="field">
+                <div class="ipt" id="C_wPw"><input type="password" id="C_iPw" placeholder="비밀번호 (영문/숫자/특수문자 포함)" autocomplete="new-password"></div>
+                <div class="msg" id="C_mPw"></div>
+              </div>
+              <div class="field">
+                <div class="ipt" id="C_wPw2"><input type="password" id="C_iPw2" placeholder="비밀번호 재입력" autocomplete="new-password"></div>
+                <div class="msg" id="C_mPw2"></div>
+              </div>
+              <a class="altlink" href="#">이미 사용중인 계정 이용하기</a>
+            </div>
+
+            <div class="cgroup">
+              <div class="ipt"><input type="text" placeholder="기업명" autocomplete="off"></div>
+              <div class="ipt sel">
+                <select class="empty">
+                  <option value="" selected>1차 산업군</option>
+                  <option>IT · 웹 · 통신</option>
+                  <option>제조 · 화학</option>
+                  <option>금융 · 은행</option>
+                </select>
+                <span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+              </div>
+              <div class="ipt sel">
+                <select class="empty">
+                  <option value="" selected>2차 산업군</option>
+                  <option>솔루션 · SI · ERP</option>
+                  <option>게임</option>
+                  <option>이커머스</option>
+                </select>
+                <span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+              </div>
+              <div class="ipt"><input type="text" placeholder="사업자등록번호 (&ldquo;-&rdquo; 제외)" autocomplete="off"></div>
+            </div>
+
+            <div class="cgroup">
+              <div class="ipt"><input type="text" placeholder="담당자 이름 (실명)" autocomplete="off"></div>
+              <div class="ipt">
+                <input type="text" placeholder="연락처 (&ldquo;-&rdquo; 제외)" autocomplete="off">
+                <span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span>
+              </div>
+              <div class="ipt">
+                <input type="text" placeholder="명함 이미지" autocomplete="off" readonly>
+                <button class="attach" type="button">첨부하기</button>
+              </div>
+            </div>
+
+          </div>
+
+          <button class="btn email" type="button" id="C_btn">기업회원 가입하기</button>
+          <div class="done" id="C_done">가입 조건을 모두 충족했어요</div>
+        </div>
+
+        <div class="checkrow">
+          <input type="checkbox" id="cAgree">
+          <label for="cAgree">기업 브랜딩과 채용에 자세한 설명을 원합니다.</label>
+        </div>
+      </div>
 
       <div class="hr full"></div>
 
       <div class="foot"><span>이미 회원이세요?</span><a href="#">로그인</a></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 비밀번호 변경 -->
+<div class="wrap change screen" id="screenChange">
+
+  <div class="brand">
+    <img src="jobplanet-wordmark.png" alt="Jobplanet">
+    <p class="lead">잡플래닛은 회원님의 익명성을 보장하기 위해<br>어떠한 개인정보도 노출하지 않습니다.</p>
+  </div>
+
+  <div class="card change">
+    <div class="cbody">
+      <div class="chead">
+        <h2>비밀번호 변경</h2>
+        <p>새로운 비밀번호를 입력해 주세요.</p>
+      </div>
+
+      <div class="group">
+        <div class="field">
+          <div class="ipt" id="N_wPw"><input type="password" id="N_iPw" placeholder="새 비밀번호 (영문/숫자/특수문자 포함)" autocomplete="new-password"></div>
+          <div class="msg" id="N_mPw"></div>
+        </div>
+        <div class="field">
+          <div class="ipt" id="N_wPw2"><input type="password" id="N_iPw2" placeholder="새 비밀번호 재입력" autocomplete="new-password"></div>
+          <div class="msg" id="N_mPw2"></div>
+        </div>
+
+        <button class="btn email" type="button" id="N_btn">비밀번호 변경하기</button>
+        <div class="done" id="N_done">비밀번호를 변경했어요</div>
+      </div>
     </div>
   </div>
 
@@ -150,10 +318,7 @@ const COPY = {
   pw2Ok:'비밀번호가 일치해요'
 };
 
-const S = { touched:{pw:false,pw2:false}, focus:null, submitted:false };
-
 const $ = id => document.getElementById(id);
-const iPw = $('iPw'), iPw2 = $('iPw2');
 
 /* 영문 + 숫자 + 특수문자 모두 포함하고 8자 이상 */
 function isValid(v){
@@ -163,70 +328,107 @@ function isValid(v){
     && /[!-\/:-@\[-`{-~]/.test(v);
 }
 
-function paint(wrapId, msgId, state, text){
-  const w = $(wrapId), m = $(msgId);
+function paint(w, m, state, text){
   w.classList.toggle('err', state==='err');
   w.classList.toggle('ok',  state==='ok');
   m.className = 'msg' + (state==='none' ? '' : ' ' + state);
   m.textContent = state==='none' ? '' : text;
 }
 
-function render(){
-  const pw = iPw.value, pw2 = iPw2.value;
+/* 개인회원·기업회원이 같은 규칙을 공유한다. 폼별로 인스턴스만 만든다 */
+function makeForm(prefix){
+  const F = {
+    iPw:$(prefix+'_iPw'), iPw2:$(prefix+'_iPw2'),
+    wPw:$(prefix+'_wPw'), wPw2:$(prefix+'_wPw2'),
+    mPw:$(prefix+'_mPw'), mPw2:$(prefix+'_mPw2'),
+    done:$(prefix+'_done'), btn:$(prefix+'_btn'),
+    touched:{pw:false,pw2:false}, focus:null, submitted:false
+  };
 
-  /* 비밀번호
-     - 조건 미충족: 포커스 아웃 이후(또는 제출 후) 빨간 문구
-     - 조건 충족: 포커스 중일 때만 초록 문구, 포커스가 빠지면 기본 상태 */
-  if(!pw){
-    if(S.submitted) paint('wPw','mPw','err',COPY.pwEmpty);
-    else paint('wPw','mPw','none');
-  } else if(!isValid(pw)){
-    if(S.touched.pw || S.submitted) paint('wPw','mPw','err',COPY.pwInvalid);
-    else paint('wPw','mPw','none');
-  } else {
-    if(S.focus==='pw') paint('wPw','mPw','ok',COPY.pwOk);
-    else paint('wPw','mPw','none');
-  }
+  F.render = function(){
+    const pw = F.iPw.value, pw2 = F.iPw2.value;
 
-  /* 비밀번호 재입력
-     - 불일치: 본란 길이만큼 쳤거나 포커스 아웃 이후 빨간 문구
-     - 일치: 포커스 중일 때만 초록 문구 */
-  if(!pw2){
-    if(S.submitted) paint('wPw2','mPw2','err',COPY.pw2Empty);
-    else paint('wPw2','mPw2','none');
-  } else if(pw2 !== pw){
-    if(pw2.length >= pw.length || S.touched.pw2 || S.submitted) paint('wPw2','mPw2','err',COPY.pw2Mismatch);
-    else paint('wPw2','mPw2','none');
-  } else {
-    if(S.focus==='pw2') paint('wPw2','mPw2','ok',COPY.pw2Ok);
-    else paint('wPw2','mPw2','none');
-  }
+    /* 비밀번호
+       - 조건 미충족: 포커스 아웃 이후(또는 제출 후) 빨간 문구
+       - 조건 충족: 포커스 중일 때만 초록 문구, 포커스가 빠지면 기본 상태 */
+    if(!pw){
+      if(F.submitted) paint(F.wPw,F.mPw,'err',COPY.pwEmpty);
+      else paint(F.wPw,F.mPw,'none');
+    } else if(!isValid(pw)){
+      if(F.touched.pw || F.submitted) paint(F.wPw,F.mPw,'err',COPY.pwInvalid);
+      else paint(F.wPw,F.mPw,'none');
+    } else {
+      if(F.focus==='pw') paint(F.wPw,F.mPw,'ok',COPY.pwOk);
+      else paint(F.wPw,F.mPw,'none');
+    }
 
-  $('done').classList.toggle('on', S.submitted && isValid(pw) && pw2===pw);
+    /* 비밀번호 재입력
+       - 불일치: 본란 길이만큼 쳤거나 포커스 아웃 이후 빨간 문구
+       - 일치: 포커스 중일 때만 초록 문구 */
+    if(!pw2){
+      if(F.submitted) paint(F.wPw2,F.mPw2,'err',COPY.pw2Empty);
+      else paint(F.wPw2,F.mPw2,'none');
+    } else if(pw2 !== pw){
+      if(pw2.length >= pw.length || F.touched.pw2 || F.submitted) paint(F.wPw2,F.mPw2,'err',COPY.pw2Mismatch);
+      else paint(F.wPw2,F.mPw2,'none');
+    } else {
+      if(F.focus==='pw2') paint(F.wPw2,F.mPw2,'ok',COPY.pw2Ok);
+      else paint(F.wPw2,F.mPw2,'none');
+    }
+
+    F.done.classList.toggle('on', F.submitted && isValid(pw) && pw2===pw);
+  };
+
+  [['pw',F.iPw],['pw2',F.iPw2]].forEach(([key,el])=>{
+    el.addEventListener('input', F.render);
+    el.addEventListener('focus', ()=>{ F.focus=key; F.render(); });
+    el.addEventListener('blur',  ()=>{ F.touched[key]=true; F.focus=null; F.render(); });
+  });
+
+  F.btn.onclick = ()=>{
+    F.submitted = true;
+    F.touched = {pw:true, pw2:true};
+    F.render();
+    const scope = F.btn.closest('.pane') || F.btn.closest('.screen');
+    const first = scope.querySelector('.ipt.err input');
+    if(first) first.focus();
+  };
+
+  F.render();
+  return F;
 }
 
-[['pw',iPw],['pw2',iPw2]].forEach(([key,el])=>{
-  el.addEventListener('input', render);
-  el.addEventListener('focus', ()=>{ S.focus=key; render(); });
-  el.addEventListener('blur',  ()=>{ S.touched[key]=true; S.focus=null; render(); });
+makeForm('P');
+makeForm('C');
+makeForm('N');
+
+/* 산업군 셀렉트 — 미선택 상태는 placeholder 색을 유지한다 */
+document.querySelectorAll('.ipt select').forEach(s=>{
+  s.onchange = ()=> s.classList.toggle('empty', !s.value);
 });
 
-$('btnSubmit').onclick = ()=>{
-  S.submitted = true;
-  S.touched = {pw:true, pw2:true};
-  render();
-  const first = document.querySelector('.ipt.err input');
-  if(first) first.focus();
-};
-
+/* 탭 전환 */
 document.querySelectorAll('.tab').forEach(b=>{
   b.onclick = ()=>{
     document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
     b.classList.add('on');
+    document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+    $('pane'+b.dataset.tab).classList.add('on');
   };
 });
 
-render();
+/* 화면 전환 — 회원가입 ↔ 비밀번호 변경 */
+const ARROW = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>';
+const navBtn = $('navBtn');
+function goScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  $('screen'+name).classList.add('on');
+  navBtn.dataset.go = name==='Signup' ? 'Change' : 'Signup';
+  navBtn.innerHTML = (name==='Signup' ? '비밀번호 변경' : '회원가입') + ARROW;
+  window.scrollTo(0,0);
+}
+navBtn.onclick = ()=> goScreen(navBtn.dataset.go);
+goScreen('Signup');
 </script>
 </body>
 </html>
