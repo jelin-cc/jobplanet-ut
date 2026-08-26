@@ -95,6 +95,57 @@ body.env-mw{background:#fff}
 .iosdivline{position:absolute;left:0;width:375px;height:1px;background:var(--g100)}
 .ioshome{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;width:134px;height:5px;border-radius:100px;background:#000}
 
+/* 모바일 안드로이드 — 360x800. iOS와 치수·타이포가 달라 따로 둔다 */
+.aosdev{
+  position:relative;width:360px;height:800px;background:#fff;overflow:hidden;
+  border-radius:20px;box-shadow:0 4px 24px rgba(30,40,58,.10);
+  font-family:'Noto Sans KR','Pretendard',system-ui,sans-serif
+}
+.aossheet{position:absolute;left:0;top:671px;width:360px;height:88px;background:#F9F9FB}
+.aosbar{
+  position:absolute;left:0;top:0;width:360px;height:52px;padding:0 24px 10px;
+  display:flex;align-items:flex-end;justify-content:space-between
+}
+.aosbar .tm{font-family:Roboto,system-ui,sans-serif;font-size:14px;font-weight:500;line-height:20px;color:#1F1F1F;letter-spacing:.14px}
+.aosbar .ri{position:relative;width:46px;height:17px}
+.aosbar .ri img{position:absolute;top:0}
+.aosbar .ri .w{left:0;width:17px;height:17px}
+.aosbar .ri .s{left:16px;width:17px;height:17px}
+.aosbar .ri .b{left:38px;top:1px;width:8px;height:15px}
+.aosapp{position:absolute;left:0;top:52px;width:360px;height:56px;background:#fff}
+.aosapp .t{
+  position:absolute;left:0;right:0;top:0;height:56px;display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:500;color:var(--g700)
+}
+.aosapp .ico{position:absolute;top:18px;width:20px;height:20px}
+.aosapp .ico.back{left:16px}
+.aosapp .ico.help{right:16px}
+
+.aosfields{position:absolute;left:20px;top:128px;width:320px;display:flex;flex-direction:column;gap:28px}
+.aosfield{display:flex;flex-direction:column;gap:4px}
+.aosfield .lb{padding-bottom:4px;font-size:12px;font-weight:400;line-height:18px;color:var(--g700)}
+.aosfield .rw{display:flex;align-items:center;gap:4px}
+.aosfield input{
+  flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;
+  font-size:16px;font-weight:400;line-height:24px;color:var(--g700)
+}
+.aosfield input::placeholder{color:var(--g200)}
+.aosfield .ln{height:1px;background:var(--g100);transition:background .12s}
+.aosfield.err .ln{background:var(--red)}
+.aosfield.ok .ln{background:var(--green)}
+
+.aosbtn{
+  position:absolute;left:20px;width:320px;height:48px;border:0;border-radius:6px;
+  padding:12px 16px;font:inherit;font-size:16px;font-weight:700;line-height:24px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s
+}
+.aosbtn .gi{position:absolute;left:16px;top:12px;width:24px;height:24px}
+.aosbtn.mail{background:#BBECC8;color:#fff;cursor:not-allowed}
+.aosbtn.mail.able{background:var(--green);cursor:pointer}
+.aosbtn.kko{background:#FEE500;color:#191919}
+.aosdivline{position:absolute;left:0;width:360px;height:1px;background:var(--g100)}
+.aosnav{position:absolute;left:0;top:758px;width:360px;height:42px;display:block}
+
 
 .nav{
   position:fixed;top:32px;right:32px;display:flex;align-items:center;gap:6px;
@@ -217,7 +268,7 @@ body.env-mw{background:#fff}
   <button type="button" data-env="pc" class="on">PC</button>
   <button type="button" data-env="mw">모웹</button>
   <button type="button" data-env="ios">iOS</button>
-  <button type="button" data-env="aos" disabled title="안드로이드 시안 반영 예정">AOS</button>
+  <button type="button" data-env="aos">AOS</button>
 </div>
 <button class="nav" type="button" id="navBtn"></button>
 
@@ -497,6 +548,59 @@ body.env-mw{background:#fff}
   </div>
 </div>
 
+<!-- 모바일 안드로이드 · 회원가입 -->
+<div class="ios screen" id="aosSignup">
+  <div class="aosdev">
+    <div class="aossheet"></div>
+
+    <div class="aosbar">
+      <span class="tm">9:30</span>
+      <span class="ri">
+        <img class="w" src="aos-wifi.svg" alt="">
+        <img class="s" src="aos-signal.svg" alt="">
+        <img class="b" src="aos-battery.svg" alt="">
+      </span>
+    </div>
+
+    <div class="aosapp">
+      <img class="ico back" src="aos-back.svg" alt="뒤로">
+      <div class="t">회원가입</div>
+      <img class="ico help" src="aos-help.svg" alt="도움말">
+    </div>
+
+    <div class="aosfields">
+      <div class="aosfield">
+        <div class="lb">이메일</div>
+        <div class="rw"><input type="text" id="A_iEmail" placeholder="이메일 주소" autocomplete="off"></div>
+        <div class="ln"></div>
+      </div>
+      <div class="aosfield" id="A_wPw">
+        <div class="lb">비밀번호</div>
+        <div class="rw"><input type="password" id="A_iPw" placeholder="비밀번호 (영문/숫자/특수문자 포함)" autocomplete="new-password"></div>
+        <div class="ln"></div>
+        <div class="msg" id="A_mPw"></div>
+      </div>
+      <div class="aosfield" id="A_wPw2">
+        <div class="lb">비밀번호 확인</div>
+        <div class="rw"><input type="password" id="A_iPw2" placeholder="비밀번호 재입력" autocomplete="new-password"></div>
+        <div class="ln"></div>
+        <div class="msg" id="A_mPw2"></div>
+      </div>
+    </div>
+
+    <button class="aosbtn mail" type="button" id="A_btn" style="top:602px" disabled>
+      <img class="gi" src="aos-mail.svg" alt="">이메일로 가입하기
+    </button>
+    <div class="aosdivline" style="top:671px"></div>
+    <button class="aosbtn kko" type="button" style="top:691px">
+      <img class="gi" src="aos-kakao.svg" alt="">카카오로 시작하기
+    </button>
+
+    <img class="aosnav" src="aos-nav.svg" alt="">
+    <div class="done" id="A_done" style="position:absolute;left:20px;top:520px;width:320px">가입 조건을 모두 충족했어요</div>
+  </div>
+</div>
+
 <script>
 const MIN = 8;
 const COPY = {
@@ -590,20 +694,23 @@ makeForm('P');
 makeForm('C');
 makeForm('N');
 makeForm('MW');
-const iosForm = makeForm('I');
-
-/* iOS는 조건을 모두 채우기 전까지 가입 버튼이 비활성이다 (Figma 43:16793, Green100) */
-function syncIosBtn(){
-  const ok = $('I_iEmail').value.trim() && isValid($('I_iPw').value) && $('I_iPw2').value === $('I_iPw').value;
-  $('I_btn').classList.toggle('able', !!ok);
-  $('I_btn').disabled = !ok;
-}
-['I_iEmail','I_iPw','I_iPw2'].forEach(id=>{
-  $(id).addEventListener('input', syncIosBtn);
-  $(id).addEventListener('blur', syncIosBtn);
-});
-syncIosBtn();
 makeForm('MN');
+makeForm('I');
+makeForm('A');
+
+/* 앱(iOS·AOS)은 조건을 모두 채우기 전까지 가입 버튼이 비활성이다 (Figma Green100 #BBECC8) */
+function bindDisabledBtn(prefix){
+  const em=$(prefix+'_iEmail'), pw=$(prefix+'_iPw'), pw2=$(prefix+'_iPw2'), btn=$(prefix+'_btn');
+  const sync = ()=>{
+    const ok = em.value.trim() && isValid(pw.value) && pw2.value === pw.value;
+    btn.classList.toggle('able', !!ok);
+    btn.disabled = !ok;
+  };
+  [em,pw,pw2].forEach(el=>{ el.addEventListener('input', sync); el.addEventListener('blur', sync); });
+  sync();
+}
+bindDisabledBtn('I');
+bindDisabledBtn('A');
 
 /* 산업군 셀렉트 — 미선택 상태는 placeholder 색을 유지한다 */
 document.querySelectorAll('.ipt select').forEach(s=>{
@@ -626,7 +733,8 @@ const navBtn = $('navBtn');
 const SCREEN = {
   pc: {Signup:'screenSignup', Change:'screenChange'},
   mw: {Signup:'mwSignup',     Change:'mwChange'},
-  ios:{Signup:'iosSignup'}   /* iOS 비밀번호 변경 시안은 아직 없음 */
+  ios:{Signup:'iosSignup'},  /* 앱은 비밀번호 변경 시안이 아직 없음 */
+  aos:{Signup:'aosSignup'}
 };
 let env = 'pc', screen = 'Signup';
 
