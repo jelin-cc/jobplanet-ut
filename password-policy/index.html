@@ -625,7 +625,9 @@ function isValid(v){
   return v.length >= MIN
     && /[a-zA-Z]/.test(v)
     && /[0-9]/.test(v)
-    && /[!-\/:-@\[-`{-~]/.test(v);
+    /* 특수문자 32종: ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
+       한글 자판의 ₩ 키는 보통 \ 로 입력되지만, ₩(U+20A9)로 들어오는 경우도 함께 허용한다 */
+    && /[!-\/:-@\[-`{-~₩]/.test(v);
 }
 
 function paint(w, m, state, text){
