@@ -623,6 +623,7 @@ const $ = id => document.getElementById(id);
 /* 영문 + 숫자 + 특수문자 모두 포함하고 10자 이상. 모든 환경·화면이 이 함수 하나를 공유한다 */
 function isValid(v){
   return v.length >= MIN
+    && !/\s/.test(v)
     && /[a-zA-Z]/.test(v)
     && /[0-9]/.test(v)
     /* 특수문자 32종: ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
@@ -695,6 +696,23 @@ function makeForm(prefix){
   F.render();
   return F;
 }
+
+/* 비밀번호에는 공백을 쓸 수 없다. 에러 문구로 알리는 대신 입력 자체를 막는다.
+   타이핑·붙여넣기 모두 차단하며, 엔터도 반영되지 않는다.
+   makeForm보다 먼저 걸어야 판정이 공백을 걷어낸 값으로 이뤄진다 */
+document.querySelectorAll('input[type="password"]').forEach(el=>{
+  el.addEventListener('keydown', e=>{
+    if(e.key === ' ' || e.key === 'Spacebar' || e.key === 'Enter') e.preventDefault();
+  });
+  el.addEventListener('input', ()=>{
+    if(!/\s/.test(el.value)) return;
+    const pos = el.selectionStart, before = el.value;
+    el.value = before.replace(/\s+/g, '');
+    const shift = before.length - el.value.length;
+    const next = Math.max(0, pos - shift);
+    el.setSelectionRange(next, next);
+  });
+});
 
 makeForm('P');
 makeForm('C');
