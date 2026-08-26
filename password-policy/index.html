@@ -130,6 +130,12 @@ body.env-mw{background:#fff}
   font-size:16px;font-weight:400;line-height:24px;color:var(--g700)
 }
 .aosfield input::placeholder{color:var(--g200)}
+.aosfield .clr{
+  flex:none;width:24px;height:24px;padding:4px;border:0;background:transparent;
+  cursor:pointer;line-height:0;visibility:hidden
+}
+.aosfield .clr svg{display:block;width:16px;height:16px;color:var(--g200)}
+.aosfield.filled .clr{visibility:visible}
 .aosfield .ln{height:1px;background:var(--g100);transition:background .12s}
 .aosfield.err .ln{background:var(--red)}
 .aosfield.ok .ln{background:var(--green)}
@@ -571,18 +577,18 @@ body.env-mw{background:#fff}
     <div class="aosfields">
       <div class="aosfield">
         <div class="lb">이메일</div>
-        <div class="rw"><input type="text" id="A_iEmail" placeholder="이메일 주소" autocomplete="off"></div>
+        <div class="rw"><input type="text" id="A_iEmail" placeholder="이메일 주소" autocomplete="off"><button class="clr" type="button" aria-label="입력값 지우기"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .667A7.333 7.333 0 1 1 .667 8 7.333 7.333 0 0 1 8 .667zm2.2 4.07L8 6.94 5.8 4.737l-1.063 1.06L6.94 8l-2.203 2.2L5.8 11.263 8 9.06l2.2 2.203 1.063-1.063L9.06 8l2.203-2.203z"/></svg></button></div>
         <div class="ln"></div>
       </div>
       <div class="aosfield" id="A_wPw">
         <div class="lb">비밀번호</div>
-        <div class="rw"><input type="password" id="A_iPw" placeholder="비밀번호 (영문/숫자/특수문자 포함)" autocomplete="new-password"></div>
+        <div class="rw"><input type="password" id="A_iPw" placeholder="비밀번호 (영문/숫자/특수문자 포함)" autocomplete="new-password"><button class="clr" type="button" aria-label="입력값 지우기"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .667A7.333 7.333 0 1 1 .667 8 7.333 7.333 0 0 1 8 .667zm2.2 4.07L8 6.94 5.8 4.737l-1.063 1.06L6.94 8l-2.203 2.2L5.8 11.263 8 9.06l2.2 2.203 1.063-1.063L9.06 8l2.203-2.203z"/></svg></button></div>
         <div class="ln"></div>
         <div class="msg" id="A_mPw"></div>
       </div>
       <div class="aosfield" id="A_wPw2">
         <div class="lb">비밀번호 확인</div>
-        <div class="rw"><input type="password" id="A_iPw2" placeholder="비밀번호 재입력" autocomplete="new-password"></div>
+        <div class="rw"><input type="password" id="A_iPw2" placeholder="비밀번호 재입력" autocomplete="new-password"><button class="clr" type="button" aria-label="입력값 지우기"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .667A7.333 7.333 0 1 1 .667 8 7.333 7.333 0 0 1 8 .667zm2.2 4.07L8 6.94 5.8 4.737l-1.063 1.06L6.94 8l-2.203 2.2L5.8 11.263 8 9.06l2.2 2.203 1.063-1.063L9.06 8l2.203-2.203z"/></svg></button></div>
         <div class="ln"></div>
         <div class="msg" id="A_mPw2"></div>
       </div>
@@ -656,14 +662,12 @@ function makeForm(prefix){
       else paint(F.wPw,F.mPw,'none');
     }
 
-    /* 비밀번호 재입력 — 여기도 실시간이지만, 본란 길이에 못 미치는 동안은 침묵한다.
-       한 글자 칠 때마다 불일치가 떴다 사라지는 것을 막기 위해서다 */
+    /* 비밀번호 재입력 — 본란과 완전히 같은 정책이다. 치는 즉시 판정한다 */
     if(!pw2){
       if(F.submitted) paint(F.wPw2,F.mPw2,'err',COPY.pw2Empty);
       else paint(F.wPw2,F.mPw2,'none');
     } else if(pw2 !== pw){
-      if(pw2.length >= pw.length || F.submitted) paint(F.wPw2,F.mPw2,'err',COPY.pw2Mismatch);
-      else paint(F.wPw2,F.mPw2,'none');
+      paint(F.wPw2,F.mPw2,'err',COPY.pw2Mismatch);
     } else {
       if(F.focus==='pw2') paint(F.wPw2,F.mPw2,'ok',COPY.pw2Ok);
       else paint(F.wPw2,F.mPw2,'none');
@@ -711,6 +715,20 @@ function bindDisabledBtn(prefix){
 }
 bindDisabledBtn('I');
 bindDisabledBtn('A');
+
+/* 안드로이드 필드의 지우기(X) 아이콘 — 값이 있을 때만 보인다 (Figma 55:20549 외) */
+document.querySelectorAll('.aosfield').forEach(f=>{
+  const el=f.querySelector('input'), btn=f.querySelector('.clr');
+  if(!el||!btn) return;
+  const sync = ()=> f.classList.toggle('filled', !!el.value);
+  el.addEventListener('input', sync);
+  btn.onclick = ()=>{
+    el.value='';
+    el.dispatchEvent(new Event('input'));
+    el.focus();
+  };
+  sync();
+});
 
 /* 산업군 셀렉트 — 미선택 상태는 placeholder 색을 유지한다 */
 document.querySelectorAll('.ipt select').forEach(s=>{
