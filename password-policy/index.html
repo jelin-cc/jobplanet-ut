@@ -226,7 +226,7 @@ body.env-mw{background:#fff}
   <div class="top">
     <div class="brand">
       <img src="jobplanet-wordmark.png" alt="Jobplanet">
-      <p class="lead">잡플래닛은 회원님의 익명성을 보장하기 위해<br>어떠한 개인정보도 노출하지 않습니다.</p>
+      <p class="lead">잡플래닛은 회원님의 익명성을 보장하기 위해<br>어떠한 개인정보도 노출하지 않아요.</p>
     </div>
     <div class="tabs">
       <button class="tab on" data-tab="P">개인회원</button>
@@ -341,7 +341,7 @@ body.env-mw{background:#fff}
 
         <div class="checkrow">
           <input type="checkbox" id="cAgree">
-          <label for="cAgree">기업 브랜딩과 채용에 자세한 설명을 원합니다.</label>
+          <label for="cAgree">기업 브랜딩과 채용에 자세한 설명을 원해요.</label>
         </div>
       </div>
 
@@ -358,7 +358,7 @@ body.env-mw{background:#fff}
 
   <div class="brand">
     <img src="jobplanet-wordmark.png" alt="Jobplanet">
-    <p class="lead">잡플래닛은 회원님의 익명성을 보장하기 위해<br>어떠한 개인정보도 노출하지 않습니다.</p>
+    <p class="lead">잡플래닛은 회원님의 익명성을 보장하기 위해<br>어떠한 개인정보도 노출하지 않아요.</p>
   </div>
 
   <div class="card change">
@@ -532,34 +532,33 @@ function makeForm(prefix){
     wPw:$(prefix+'_wPw'), wPw2:$(prefix+'_wPw2'),
     mPw:$(prefix+'_mPw'), mPw2:$(prefix+'_mPw2'),
     done:$(prefix+'_done'), btn:$(prefix+'_btn'),
-    touched:{pw:false,pw2:false}, focus:null, submitted:false
+    focus:null, submitted:false
   };
 
   F.render = function(){
     const pw = F.iPw.value, pw2 = F.iPw2.value;
 
-    /* 비밀번호
-       - 조건 미충족: 포커스 아웃 이후(또는 제출 후) 빨간 문구
+    /* 비밀번호 — 치는 동안 바로 판정한다. 포커스 아웃을 기다리지 않는다
+       - 빈칸: 아무 문구도 띄우지 않는다 (제출을 눌렀을 때만 예외)
+       - 조건 미충족: 입력 즉시 빨간 문구
        - 조건 충족: 포커스 중일 때만 초록 문구, 포커스가 빠지면 기본 상태 */
     if(!pw){
       if(F.submitted) paint(F.wPw,F.mPw,'err',COPY.pwEmpty);
       else paint(F.wPw,F.mPw,'none');
     } else if(!isValid(pw)){
-      if(F.touched.pw || F.submitted) paint(F.wPw,F.mPw,'err',COPY.pwInvalid);
-      else paint(F.wPw,F.mPw,'none');
+      paint(F.wPw,F.mPw,'err',COPY.pwInvalid);
     } else {
       if(F.focus==='pw') paint(F.wPw,F.mPw,'ok',COPY.pwOk);
       else paint(F.wPw,F.mPw,'none');
     }
 
-    /* 비밀번호 재입력
-       - 불일치: 본란 길이만큼 쳤거나 포커스 아웃 이후 빨간 문구
-       - 일치: 포커스 중일 때만 초록 문구 */
+    /* 비밀번호 재입력 — 여기도 실시간이지만, 본란 길이에 못 미치는 동안은 침묵한다.
+       한 글자 칠 때마다 불일치가 떴다 사라지는 것을 막기 위해서다 */
     if(!pw2){
       if(F.submitted) paint(F.wPw2,F.mPw2,'err',COPY.pw2Empty);
       else paint(F.wPw2,F.mPw2,'none');
     } else if(pw2 !== pw){
-      if(pw2.length >= pw.length || F.touched.pw2 || F.submitted) paint(F.wPw2,F.mPw2,'err',COPY.pw2Mismatch);
+      if(pw2.length >= pw.length || F.submitted) paint(F.wPw2,F.mPw2,'err',COPY.pw2Mismatch);
       else paint(F.wPw2,F.mPw2,'none');
     } else {
       if(F.focus==='pw2') paint(F.wPw2,F.mPw2,'ok',COPY.pw2Ok);
@@ -572,12 +571,11 @@ function makeForm(prefix){
   [['pw',F.iPw],['pw2',F.iPw2]].forEach(([key,el])=>{
     el.addEventListener('input', F.render);
     el.addEventListener('focus', ()=>{ F.focus=key; F.render(); });
-    el.addEventListener('blur',  ()=>{ F.touched[key]=true; F.focus=null; F.render(); });
+    el.addEventListener('blur',  ()=>{ F.focus=null; F.render(); });
   });
 
   F.btn.onclick = ()=>{
     F.submitted = true;
-    F.touched = {pw:true, pw2:true};
     F.render();
     const scope = F.btn.closest('.pane') || F.btn.closest('.screen');
     const first = scope.querySelector('.err input');
