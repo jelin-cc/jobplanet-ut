@@ -608,10 +608,10 @@ body.env-mw{background:#fff}
 </div>
 
 <script>
-const MIN = 8, MAX = 32;   /* 32자를 넘으면 입력 자체가 막힌다 (input maxlength) */
+const MIN = 10, MAX = 32;   /* 32자를 넘으면 입력 자체가 막힌다 (input maxlength) */
 const COPY = {
   pwEmpty:'비밀번호를 입력해 주세요',
-  pwInvalid:'영문, 숫자, 특수문자를 포함해 8자 이상 입력해 주세요',
+  pwInvalid:'영문, 숫자, 특수문자를 포함해 10자 이상 입력해 주세요',
   pwOk:'사용할 수 있는 비밀번호예요',
   pw2Empty:'비밀번호를 한 번 더 입력해 주세요',
   pw2Mismatch:'비밀번호가 일치하지 않아요',
@@ -620,7 +620,7 @@ const COPY = {
 
 const $ = id => document.getElementById(id);
 
-/* 영문 + 숫자 + 특수문자 모두 포함하고 8자 이상 */
+/* 영문 + 숫자 + 특수문자 모두 포함하고 10자 이상. 모든 환경·화면이 이 함수 하나를 공유한다 */
 function isValid(v){
   return v.length >= MIN
     && /[a-zA-Z]/.test(v)
