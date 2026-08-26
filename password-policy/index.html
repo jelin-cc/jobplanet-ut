@@ -748,18 +748,22 @@ document.querySelectorAll('.tab').forEach(b=>{
 /* 환경(PC·모웹) × 화면(회원가입·비밀번호 변경) 전환 */
 const ARROW = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>';
 const navBtn = $('navBtn');
+/* 비밀번호 변경은 두 가지뿐이다.
+   PC는 카드형(26:6295), 모웹·모바일은 공통 화면(43:16142) 하나를 같이 쓴다 */
 const SCREEN = {
   pc: {Signup:'screenSignup', Change:'screenChange'},
   mw: {Signup:'mwSignup',     Change:'mwChange'},
-  ios:{Signup:'iosSignup'},  /* 앱은 비밀번호 변경 시안이 아직 없음 */
-  aos:{Signup:'aosSignup'}
+  ios:{Signup:'iosSignup',    Change:'mwChange'},
+  aos:{Signup:'aosSignup',    Change:'mwChange'}
 };
 let env = 'pc', screen = 'Signup';
 
 function show(){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
-  $(SCREEN[env][screen]).classList.add('on');
-  document.body.classList.toggle('env-mw', env==='mw');
+  const el = $(SCREEN[env][screen]);
+  el.classList.add('on');
+  /* 공통 변경 화면은 어느 환경에서 열든 시안대로 배경이 흰색이다 */
+  document.body.classList.toggle('env-mw', el.classList.contains('mw'));
   document.querySelectorAll('#envbar button').forEach(b=>b.classList.toggle('on', b.dataset.env===env));
   navBtn.innerHTML = (screen==='Signup' ? '비밀번호 변경' : '회원가입') + ARROW;
   navBtn.hidden = !SCREEN[env].Change;   /* 화면이 하나뿐인 환경에서는 전환 버튼을 감춘다 */
