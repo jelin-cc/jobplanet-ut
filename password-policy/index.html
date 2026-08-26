@@ -49,12 +49,59 @@ body.env-mw{background:#fff}
   color:var(--g700);font-size:12px;font-weight:500;line-height:18px
 }
 
+/* 모바일 iOS — 375x812 기기 프레임. 바깥 모서리·그림자는 화면을 구분하려고 두른 것이라 시안에는 없다 */
+.ios{width:100%;justify-content:center}
+.iosdev{
+  position:relative;width:375px;height:812px;background:#fff;overflow:hidden;
+  border-radius:20px;box-shadow:0 4px 24px rgba(30,40,58,.10);
+  font-family:'Apple SD Gothic Neo','Pretendard',system-ui,sans-serif
+}
+.iossheet{position:absolute;left:0;top:570px;width:375px;height:242px;background:#F9F9FB}
+.iosbar{position:absolute;left:0;top:0;width:375px;height:44px;background:#fff}
+.iosbar .l{position:absolute;left:33.45px;top:22px;width:28.426px;height:11.089px}
+.iosbar .r{position:absolute;right:11.67px;top:22px;width:66.661px;height:11.336px}
+.iosapp{position:absolute;left:0;top:44px;width:375px;height:44px;background:#fff}
+.iosapp .t{
+  position:absolute;left:0;right:0;top:0;height:44px;display:flex;align-items:center;justify-content:center;
+  font-size:17px;font-weight:700;line-height:26px;color:var(--g700);padding-bottom:6px
+}
+.iosapp .ico{position:absolute;top:12px;width:20px;height:20px}
+.iosapp .ico.back{left:16px}
+.iosapp .ico.info{right:16px}
+
+.iosfields{position:absolute;left:20px;top:116px;width:335px;display:flex;flex-direction:column;gap:30px}
+.iosfield{display:flex;flex-direction:column;gap:4px}
+.iosfield .lb{padding-bottom:4px;font-size:12px;font-weight:400;line-height:20px;color:var(--g700)}
+.iosfield .rw{display:flex;align-items:center;gap:4px}
+.iosfield input{
+  flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;
+  font-size:16px;font-weight:400;line-height:24px;color:var(--g700)
+}
+.iosfield input::placeholder{color:var(--g200)}
+.iosfield .ln{height:1px;background:var(--g100);transition:background .12s}
+.iosfield.err .ln{background:var(--red)}
+.iosfield.ok .ln{background:var(--green)}
+
+.iosbtn{
+  position:absolute;left:20px;width:335px;height:48px;border:0;border-radius:8px;
+  padding:12px 16px 10px;font:inherit;font-size:17px;font-weight:700;line-height:26px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s
+}
+.iosbtn .gi{position:absolute;left:16px;top:12px;width:24px;height:24px}
+.iosbtn.mail{background:#BBECC8;color:#fff;cursor:not-allowed}
+.iosbtn.mail.able{background:var(--green);cursor:pointer}
+.iosbtn.kko{background:#FEE500;color:#191919}
+.iosbtn.apl{background:#000;color:#fff}
+.iosdivline{position:absolute;left:0;width:375px;height:1px;background:var(--g100)}
+.ioshome{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;width:134px;height:5px;border-radius:100px;background:#000}
+
 
 .nav{
   position:fixed;top:32px;right:32px;display:flex;align-items:center;gap:6px;
   padding:10px 16px;background:#fff;border:1px solid var(--g100);border-radius:8px;box-shadow:var(--sd);
   font:inherit;font-size:14px;font-weight:600;line-height:22px;color:var(--g700);cursor:pointer;transition:.15s
 }
+.nav[hidden]{display:none}
 .nav:hover{border-color:var(--g300)}
 .nav svg{flex:none;color:var(--g300)}
 
@@ -169,7 +216,8 @@ body.env-mw{background:#fff}
 <div class="envbar" id="envbar">
   <button type="button" data-env="pc" class="on">PC</button>
   <button type="button" data-env="mw">모웹</button>
-  <button type="button" data-env="app" disabled title="모바일 시안 반영 예정">모바일</button>
+  <button type="button" data-env="ios">iOS</button>
+  <button type="button" data-env="aos" disabled title="안드로이드 시안 반영 예정">AOS</button>
 </div>
 <button class="nav" type="button" id="navBtn"></button>
 
@@ -397,6 +445,58 @@ body.env-mw{background:#fff}
   </div>
 </div>
 
+<!-- 모바일 iOS · 회원가입 -->
+<div class="ios screen" id="iosSignup">
+  <div class="iosdev">
+    <div class="iossheet"></div>
+
+    <div class="iosbar">
+      <img class="l" src="ios-left.svg" alt="9:41">
+      <img class="r" src="ios-right.svg" alt="">
+    </div>
+
+    <div class="iosapp">
+      <img class="ico back" src="ios-back.svg" alt="뒤로">
+      <div class="t">회원가입</div>
+      <img class="ico info" src="ios-info.svg" alt="안내">
+    </div>
+
+    <div class="iosfields">
+      <div class="iosfield">
+        <div class="lb">이메일</div>
+        <div class="rw"><input type="text" id="I_iEmail" placeholder="이메일 주소" autocomplete="off"></div>
+        <div class="ln"></div>
+      </div>
+      <div class="iosfield" id="I_wPw">
+        <div class="lb">비밀번호</div>
+        <div class="rw"><input type="password" id="I_iPw" placeholder="비밀번호 (영문/숫자/특수문자 포함)" autocomplete="new-password"></div>
+        <div class="ln"></div>
+        <div class="msg" id="I_mPw"></div>
+      </div>
+      <div class="iosfield" id="I_wPw2">
+        <div class="lb">비밀번호 확인</div>
+        <div class="rw"><input type="password" id="I_iPw2" placeholder="비밀번호 재입력" autocomplete="new-password"></div>
+        <div class="ln"></div>
+        <div class="msg" id="I_mPw2"></div>
+      </div>
+    </div>
+
+    <button class="iosbtn mail" type="button" id="I_btn" style="top:550px" disabled>
+      <img class="gi" src="ios-mail.svg" alt="">이메일로 가입하기
+    </button>
+    <div class="iosdivline" style="top:618px"></div>
+    <button class="iosbtn kko" type="button" style="top:643px">
+      <img class="gi" src="ios-kakao.svg" alt="">카카오로 시작하기
+    </button>
+    <button class="iosbtn apl" type="button" style="top:710px">
+      <img class="gi" src="ios-apple.svg" alt="" style="width:16.11px;height:19.8px;left:20px;top:12px">애플로 시작하기
+    </button>
+
+    <div class="ioshome"></div>
+    <div class="done" id="I_done" style="position:absolute;left:20px;top:480px;width:335px">가입 조건을 모두 충족했어요</div>
+  </div>
+</div>
+
 <script>
 const MIN = 8;
 const COPY = {
@@ -480,7 +580,7 @@ function makeForm(prefix){
     F.touched = {pw:true, pw2:true};
     F.render();
     const scope = F.btn.closest('.pane') || F.btn.closest('.screen');
-    const first = scope.querySelector('.ipt.err input');
+    const first = scope.querySelector('.err input');
     if(first) first.focus();
   };
 
@@ -492,6 +592,19 @@ makeForm('P');
 makeForm('C');
 makeForm('N');
 makeForm('MW');
+const iosForm = makeForm('I');
+
+/* iOS는 조건을 모두 채우기 전까지 가입 버튼이 비활성이다 (Figma 43:16793, Green100) */
+function syncIosBtn(){
+  const ok = $('I_iEmail').value.trim() && isValid($('I_iPw').value) && $('I_iPw2').value === $('I_iPw').value;
+  $('I_btn').classList.toggle('able', !!ok);
+  $('I_btn').disabled = !ok;
+}
+['I_iEmail','I_iPw','I_iPw2'].forEach(id=>{
+  $(id).addEventListener('input', syncIosBtn);
+  $(id).addEventListener('blur', syncIosBtn);
+});
+syncIosBtn();
 makeForm('MN');
 
 /* 산업군 셀렉트 — 미선택 상태는 placeholder 색을 유지한다 */
@@ -513,8 +626,9 @@ document.querySelectorAll('.tab').forEach(b=>{
 const ARROW = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>';
 const navBtn = $('navBtn');
 const SCREEN = {
-  pc:{Signup:'screenSignup', Change:'screenChange'},
-  mw:{Signup:'mwSignup',     Change:'mwChange'}
+  pc: {Signup:'screenSignup', Change:'screenChange'},
+  mw: {Signup:'mwSignup',     Change:'mwChange'},
+  ios:{Signup:'iosSignup'}   /* iOS 비밀번호 변경 시안은 아직 없음 */
 };
 let env = 'pc', screen = 'Signup';
 
@@ -524,13 +638,14 @@ function show(){
   document.body.classList.toggle('env-mw', env==='mw');
   document.querySelectorAll('#envbar button').forEach(b=>b.classList.toggle('on', b.dataset.env===env));
   navBtn.innerHTML = (screen==='Signup' ? '비밀번호 변경' : '회원가입') + ARROW;
+  navBtn.hidden = !SCREEN[env].Change;   /* 화면이 하나뿐인 환경에서는 전환 버튼을 감춘다 */
   window.scrollTo(0,0);
 }
 
 navBtn.onclick = ()=>{ screen = screen==='Signup' ? 'Change' : 'Signup'; show(); };
 document.querySelectorAll('#envbar button').forEach(b=>{
   if(b.disabled) return;
-  b.onclick = ()=>{ env = b.dataset.env; show(); };
+  b.onclick = ()=>{ env = b.dataset.env; if(!SCREEN[env][screen]) screen='Signup'; show(); };
 });
 show();
 </script>
